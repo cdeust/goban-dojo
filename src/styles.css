@@ -1258,3 +1258,40 @@ progress {
   height: 0.4rem;
   accent-color: var(--kaya);
 }
+
+/* ───────────────────────────── lignes de force ───────────────────────────── */
+
+.impact {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Instant du récit : le reste de la scène s'assombrit autour de la pierre. */
+.impact--moment {
+  background: radial-gradient(circle at 50% 45%, transparent 12%, rgb(11 9 8 / 0.5) 70%);
+}
+
+.impact__lines {
+  position: absolute;
+  width: min(70vmin, 44rem);
+  height: min(70vmin, 44rem);
+  translate: -50% -50%;
+  overflow: visible;
+}
+
+.impact--moment .impact__lines {
+  width: min(120vmin, 80rem);
+  height: min(120vmin, 80rem);
+}
+
+.impact__lines line {
+  stroke: var(--paper);
+  stroke-linecap: round;
+}
+
+.impact--menace .impact__lines line {
+  stroke: #f3c9b8;
+}

@@ -1,4 +1,12 @@
-import { Board, PASS, pointFromSgf, type Color, type IllegalReason } from './board.ts';
+import {
+  Board,
+  PASS,
+  neighbours,
+  opposite,
+  pointFromSgf,
+  type Color,
+  type IllegalReason,
+} from './board.ts';
 
 /** Partie telle que servie à l'application (public/data/games.json). */
 export interface GameRecord {
@@ -175,5 +183,50 @@ export function prisonersAt(t: Timeline, n: number): { B: number; W: number } {
   for (const s of t.stones) {
     if (s.capturedAt <= n) out[s.color === 'B' ? 'W' : 'B']++;
   }
+  return out;
+}
+
+/** Goban après les `n` premiers coups. */
+export function boardAt(setupBlack: number[], moves: Move[], n: number): Board {
+  const board = new Board();
+  for (const p of setupBlack) board.setup(p, 'B');
+  for (let i = 0; i < n && i < moves.length; i++) {
+    const m = moves[i] as Move;
+    board.play(m.color, m.point);
+  }
+  return board;
+}
+
+/** Ce qu'un coup fait peser sur l'adversaire. */
+export interface Threat {
+  /** Pierres adverses que ce coup vient de mettre en atari (une seule liberté). */
+  atari: number[];
+  /** Nombre de pierres capturées par ce coup. */
+  captured: number;
+}
+
+/**
+ * Menace créée par le coup `n` : les groupes adverses voisins de la pierre posée qui
+ * n'ont plus qu'une liberté, et les pierres qu'elle capture.
+ */
+export function threatOf(setupBlack: number[], moves: Move[], n: number): Threat {
+  const move = moves[n - 1];
+  if (!move || move.point === PASS) return { atari: [], captured: 0 };
+  const board = boardAt(setupBlack, moves, n - 1);
+  const captured = board.play(move.color, move.point).captures.length;
+  const atari = new Set<number>();
+  for (const q of neighbours(move.point)) {
+    if (board.get(q) === opposite(move.color) && board.libertyCount(q) === 1) {
+      for (const s of board.stonesOf(q)) atari.add(s);
+    }
+  }
+  return { atari: [...atari].sort((a, b) => a - b), captured };
+}
+
+/** Toutes les pierres, des deux couleurs, dont le groupe n'a plus qu'une liberté. */
+export function atariStones(board: Board): number[] {
+  const out: number[] = [];
+  for (let p = 0; p < 361; p++)
+    if (board.get(p) !== null && board.libertyCount(p) === 1) out.push(p);
   return out;
 }

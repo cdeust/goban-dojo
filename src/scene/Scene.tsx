@@ -2,6 +2,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { useCurrentGame, useStore } from '../state/store.ts';
+import { Aura } from './Aura.tsx';
 import { BoardInput } from './BoardInput.tsx';
 import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
@@ -42,6 +43,7 @@ export function Scene() {
       <Goban />
       <Bowls />
       {game && <Stones key={game.id} seed={game.id} />}
+      <Aura />
       <BoardInput />
       <CameraRig />
       <RenderProbe />

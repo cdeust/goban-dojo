@@ -6,6 +6,7 @@ import { useStore } from './state/store.ts';
 import { Dock } from './ui/Dock.tsx';
 import { GameCard } from './ui/GameCard.tsx';
 import { HelpDialog } from './ui/HelpDialog.tsx';
+import { ImpactLines } from './ui/ImpactLines.tsx';
 import { Intro } from './ui/Intro.tsx';
 import { LiveRegion } from './ui/LiveRegion.tsx';
 import { ModePanel } from './ui/ModePanel.tsx';
@@ -49,6 +50,7 @@ export function App() {
             <>
               <TopBar />
               <GameCard />
+              <ImpactLines />
               <MomentCaption />
               <ModePanel />
               <Dock />

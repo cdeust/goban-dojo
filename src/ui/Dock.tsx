@@ -119,6 +119,7 @@ function Transport() {
   const showNumbers = useStore((s) => s.showNumbers);
   const sound = useStore((s) => s.sound);
   const continuous = useStore((s) => s.continuous);
+  const effects = useStore((s) => s.effects);
   const mode = useStore((s) => s.mode);
   const setMode = useStore((s) => s.setMode);
   const { step, togglePlay, setMove, setSpeed, setView, toggle, selectGame, setPlaying } =
@@ -276,6 +277,15 @@ function Transport() {
             }}
           >
             Son
+          </button>
+          <button
+            type="button"
+            className="seg"
+            aria-pressed={effects}
+            title="Aura des pierres en atari, éclat et lignes de force des coups qui menacent"
+            onClick={() => toggle('effects')}
+          >
+            Effets
           </button>
           <button
             type="button"

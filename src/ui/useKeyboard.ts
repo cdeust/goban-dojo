@@ -10,6 +10,7 @@ export const SHORTCUTS: [string, string][] = [
   ['1 2 3', 'Vue du joueur · de trois-quarts · de dessus'],
   ['N', 'Numéros des coups'],
   ['M', 'Son'],
+  ['E', 'Effets de mise en scène'],
   ['Clic sur le goban', 'Modes « Deviner » et « Explorer » : proposer ou poser un coup'],
 ];
 
@@ -62,6 +63,10 @@ export function useKeyboard(): void {
         case 'n':
         case 'N':
           s.toggle('showNumbers');
+          break;
+        case 'e':
+        case 'E':
+          s.toggle('effects');
           break;
         case 'm':
         case 'M':

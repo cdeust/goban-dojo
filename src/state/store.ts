@@ -1,14 +1,18 @@
 import { create } from 'zustand';
-import { Board, PASS, SIZE, opposite, type Color } from '../domain/board.ts';
+import { PASS, SIZE, opposite, type Board, type Color } from '../domain/board.ts';
 import {
+  atariStones,
+  boardAt,
   buildTimeline,
   decodeMoves,
   decodePoints,
   type Dataset,
   type GameRecord,
+  threatOf,
   type Move,
   type Timeline,
 } from '../domain/game.ts';
+import { momentFor } from '../story/chapters.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
 export type PanelName = 'recit' | 'parties' | null;
@@ -25,6 +29,19 @@ export interface Zone {
   y0: number;
   x1: number;
   y1: number;
+}
+
+/**
+ * Poids dramatique d'un coup qui vient de frapper le goban :
+ * « coup » ordinaire, « menace » (il met en atari ou capture), « moment » (instant du récit).
+ */
+export type ImpactKind = 'coup' | 'menace' | 'moment';
+
+export interface Impact {
+  /** Numéro d'ordre : deux impacts au même point restent distincts. */
+  seq: number;
+  point: number;
+  kind: ImpactKind;
 }
 
 export type GuessResult =
@@ -104,6 +121,10 @@ interface State {
   view: ViewName;
   showNumbers: boolean;
   sound: boolean;
+  /** Effets de mise en scène : aura des pierres en atari, éclat et lignes de force à l'impact. */
+  effects: boolean;
+  /** Dernière pierre à avoir frappé le goban (renseigné par la scène). */
+  impact: Impact | null;
   /** L'écran d'ouverture a été franchi. */
   entered: boolean;
   panel: PanelName;
@@ -124,7 +145,9 @@ interface State {
   setPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
   setView: (view: ViewName) => void;
-  toggle: (key: 'showNumbers' | 'sound' | 'continuous') => void;
+  toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects') => void;
+  /** La scène signale que la pierre du coup affiché vient de toucher le goban. */
+  notifyImpact: (point: number) => void;
   setPanel: (panel: PanelName) => void;
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
@@ -181,9 +204,7 @@ export function nextColor(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'var
 function boardOf(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>): Board | null {
   const game = s.dataset?.games[s.gameIndex];
   if (!game) return null;
-  const board = new Board();
-  for (const p of decodePoints(game.setupBlack)) board.setup(p, 'B');
-  for (const m of timelineOf(game).moves.slice(0, s.move)) board.play(m.color, m.point);
+  const board = boardAt(decodePoints(game.setupBlack), timelineOf(game).moves, s.move);
   for (const m of s.variation) board.play(m.color, m.point);
   return board;
 }
@@ -263,6 +284,8 @@ export const useStore = create<State>((set, get) => ({
   view: 'trois-quarts',
   showNumbers: false,
   sound: true,
+  effects: true,
+  impact: null,
   entered: false,
   panel: null,
   chapterIndex: 0,
@@ -337,6 +360,21 @@ export const useStore = create<State>((set, get) => ({
   toggle: (key) => set((s) => ({ [key]: !s[key] }) as Partial<State>),
   setPanel: (panel) => set({ panel }),
   setChapter: (index) => set({ chapterIndex: index }),
+
+  notifyImpact: (point) => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    const d = displayOf(s);
+    if (!game || !d) return;
+    const threat = threatOf(decodePoints(game.setupBlack), d.timeline.moves, d.move);
+    const kind: ImpactKind =
+      s.variation.length === 0 && momentFor(game.id, s.move)
+        ? 'moment'
+        : threat.atari.length > 0 || threat.captured > 0
+          ? 'menace'
+          : 'coup';
+    set({ impact: { seq: (s.impact?.seq ?? 0) + 1, point, kind } });
+  },
 
   setMode: (mode) =>
     set((s) => ({
@@ -450,3 +488,9 @@ export const useStore = create<State>((set, get) => ({
 
 export const useCurrentGame = (): GameRecord | null =>
   useStore((s) => s.dataset?.games[s.gameIndex] ?? null);
+
+/** Pierres en atari dans la position affichée. */
+export function atariOf(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>): number[] {
+  const board = boardOf(s);
+  return board ? atariStones(board) : [];
+}

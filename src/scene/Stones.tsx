@@ -311,7 +311,7 @@ export function Stones({ seed }: { seed: string }) {
     };
 
     /** Geste de pose : la pierre sort du bol, vient au-dessus de l'intersection, puis frappe. */
-    const place = (i: number, duration: number, sound: boolean): void => {
+    const place = (i: number, duration: number, sound: boolean, emphatic: boolean): void => {
       stop(i);
       const stone = stones()[i]!;
       const p = L.pose[i]!;
@@ -350,7 +350,9 @@ export function Stones({ seed }: { seed: string }) {
         onComplete: () => {
           settle(i, to, 1);
           touch();
-          if (sound) playStone('place');
+          // Un coup qui capture est frappé plus fort.
+          if (sound) playStone('place', to.x / 21, emphatic ? 1.3 : 1);
+          useStore.getState().notifyImpact(stone.point);
           wobble(i);
         },
       });
@@ -386,7 +388,7 @@ export function Stones({ seed }: { seed: string }) {
           L.running[i] = undefined;
           settle(i, to, opts.endScale);
           touch();
-          if (opts.sound) playStone('capture');
+          if (opts.sound) playStone('capture', to.x / 32);
         },
       });
     };
@@ -463,7 +465,7 @@ export function Stones({ seed }: { seed: string }) {
         // Un coup en avant : le geste doit tenir dans l'intervalle de lecture.
         const duration = playing ? Math.min(PLACE_DURATION, (1 / speed) * 0.85) : PLACE_DURATION;
         const i = timeline.stoneOfMove[n] ?? -1;
-        if (i >= 0) place(i, duration, sound);
+        if (i >= 0) place(i, duration, sound, (timeline.capturesAt[n]?.length ?? 0) > 0);
         (timeline.capturesAt[n] ?? []).forEach((c, k) =>
           fly(c, IN_LID, {
             duration: Math.min(CAPTURE_DURATION, duration * 1.4),

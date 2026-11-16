@@ -160,6 +160,11 @@ test('vues, numéros et boîte d’aide', async ({ page }) => {
   const top = page.getByRole('button', { name: 'Dessus' });
   await top.click();
   await expect(top).toHaveAttribute('aria-pressed', 'true');
+  // Les effets de mise en scène sont actifs par défaut et se coupent d'un clic.
+  const effects = page.getByRole('button', { name: 'Effets' });
+  await expect(effects).toHaveAttribute('aria-pressed', 'true');
+  await effects.click();
+  await expect(effects).toHaveAttribute('aria-pressed', 'false');
   const numbers = page.getByRole('button', { name: 'Numéros' });
   await numbers.click();
   await expect(numbers).toHaveAttribute('aria-pressed', 'true');

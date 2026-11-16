@@ -78,6 +78,11 @@ export class Board {
     this.cells[p] = color ? code(color) : EMPTY;
   }
 
+  /** Pierres du groupe qui occupe p (vide si le point est libre). */
+  stonesOf(p: number): number[] {
+    return this.cells[p] === EMPTY ? [] : this.group(p).stones;
+  }
+
   /** Renvoie le groupe contenant p et indique s'il possède au moins une liberté. */
   private group(p: number): { stones: number[]; hasLiberty: boolean } {
     const colour = this.cells[p];
@@ -136,7 +141,8 @@ export class Board {
     return illegal ? { captures, illegal } : { captures };
   }
 
-  private libertyCount(p: number): number {
+  /** Nombre de libertés du groupe qui occupe p (0 si le point est vide). */
+  libertyCount(p: number): number {
     if (this.cells[p] === EMPTY) return 0;
     const g = this.group(p);
     const libs = new Set<number>();
