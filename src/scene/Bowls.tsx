@@ -14,7 +14,9 @@ const MOUND = 46;
 /** Réserve de pierres visible dans un bol : un monticule affleurant sous le bord. */
 function Mound({ color }: { color: Color }) {
   const { geometry, black, white } = useStoneAssets();
+  const outlined = useLook() === 'manga';
   const ref = useRef<THREE.InstancedMesh>(null);
+  const outline = useRef<THREE.InstancedMesh>(null);
 
   useLayoutEffect(() => {
     const mesh = ref.current;
@@ -24,6 +26,8 @@ function Mound({ color }: { color: Color }) {
     const m = new THREE.Matrix4();
     const q = new THREE.Quaternion();
     const e = new THREE.Euler();
+    const p = new THREE.Vector3();
+    const s = new THREE.Vector3();
     for (let i = 0; i < MOUND; i++) {
       // Spirale de Vogel : répartition régulière sur un disque, bombée au centre.
       const r = 4.5 * Math.sqrt((i + 0.5) / MOUND);
@@ -31,23 +35,25 @@ function Mound({ color }: { color: Color }) {
       const y = 5.6 + (1 - (r / 4.5) ** 2) * 1.3 + rnd() * 0.5;
       e.set((rnd() - 0.5) * 1.1, rnd() * 6.28, (rnd() - 0.5) * 1.1);
       q.setFromEuler(e);
-      m.compose(
-        new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r),
-        q,
-        new THREE.Vector3(d, d, d),
-      );
-      mesh.setMatrixAt(i, m);
+      p.set(Math.cos(a) * r, y, Math.sin(a) * r);
+      mesh.setMatrixAt(i, m.compose(p, q, s.setScalar(d)));
+      // Contour : chaque pierre du tas reste lisible, même blanche sur blanche.
+      outline.current?.setMatrixAt(i, m.compose(p, q, s.setScalar(d * OUTLINE.stone)));
     }
     mesh.instanceMatrix.needsUpdate = true;
-  }, [color]);
+    if (outline.current) outline.current.instanceMatrix.needsUpdate = true;
+  }, [color, outlined]);
 
   return (
-    <instancedMesh
-      ref={ref}
-      args={[geometry, color === 'B' ? black : white, MOUND]}
-      castShadow
-      receiveShadow
-    />
+    <>
+      {outlined && <instancedMesh ref={outline} args={[geometry, inkMaterial(), MOUND]} />}
+      <instancedMesh
+        ref={ref}
+        args={[geometry, color === 'B' ? black : white, MOUND]}
+        castShadow
+        receiveShadow
+      />
+    </>
   );
 }
 

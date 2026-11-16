@@ -4,7 +4,9 @@ import { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { OUTLINE, inkMaterial, toon, useLook } from './look.ts';
-import { PAPER, screentoneTexture, tatamiTexture } from './textures.ts';
+import { tatamiInkTexture } from './roomTextures.ts';
+import { PAPER, tatamiTexture } from './textures.ts';
+import { Washitsu } from './Washitsu.tsx';
 
 const FLOOR = 900;
 const MAT_WIDTH = 91;
@@ -29,10 +31,13 @@ export function Room() {
   const { floor, cushion, cushionMaterial } = useMemo(() => {
     const cushion = new RoundedBoxGeometry(56, 6, 56, 6, 2.6);
     if (manga) {
-      const map = screentoneTexture(anisotropy);
-      map.repeat.set(FLOOR / 22, FLOOR / 22);
+      const map = tatamiInkTexture();
+      const rx = FLOOR / MAT_WIDTH;
+      const rz = FLOOR / MAT_LENGTH;
+      map.repeat.set(rx, rz);
+      map.offset.set(0.5 - rx / 2, 0.5 - rz / 2);
       return {
-        floor: toon('#ffffff', [0.78, 1], map),
+        floor: toon('#ffffff', [0.8, 1], map),
         cushion,
         cushionMaterial: toon('#39405c', [0.55, 0.8, 1]),
       };
@@ -61,10 +66,12 @@ export function Room() {
     <>
       <color attach="background" args={[manga ? PAPER : NIGHT]} />
       {manga ? (
-        <fog attach="fog" args={[PAPER, 260, 640]} />
+        <fog attach="fog" args={[PAPER, 520, 1100]} />
       ) : (
-        <fogExp2 attach="fog" args={[NIGHT, 0.0052]} />
+        <fogExp2 attach="fog" args={[NIGHT, 0.0019]} />
       )}
+
+      <Washitsu />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow material={floor}>
         <planeGeometry args={[FLOOR, FLOOR]} />
@@ -98,7 +105,7 @@ export function Room() {
       </directionalLight>
       {!manga && (
         <>
-          <hemisphereLight args={['#ffe6c4', '#2b2118', 0.26]} />
+          <hemisphereLight args={['#ffe6c4', '#2b2118', 0.7]} />
           {/* Lueur chaude d'une lampe, derrière Blanc. */}
           <pointLight
             position={[60, 70, -90]}

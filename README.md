@@ -28,6 +28,8 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   au reflet net. Le rendu réaliste (kaya, ardoise, coquillage, tatamis) reste disponible d’un
   bouton ; les deux styles partagent géométrie, animations et effets, et ne diffèrent que par
   `src/scene/look.ts` et les matériaux qu’il fournit.
+- **Un salon à tatamis** : shōji éclairés, tokonoma et son rouleau peint, fusuma à la branche de
+  pin, poteaux, lampe de papier — dessinés par le code, comme le reste.
 - **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
   (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
   bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et

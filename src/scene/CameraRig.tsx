@@ -11,12 +11,13 @@ const TARGET = new THREE.Vector3(0, BOARD_TOP - 1, 0);
 
 /** Position de l'œil pour chaque point de vue, relative au centre du goban (cm). */
 const VIEWS: Record<ViewName | 'ouverture', [number, number, number]> = {
-  // Assis en seiza derrière Noir.
-  joueur: [0, 60, 74],
-  'trois-quarts': [56, 50, 74],
+  // Assis en seiza derrière Noir : le regard porte jusqu'au fond de la pièce.
+  joueur: [0, 47, 88],
+  // De côté, assez bas pour que les shōji et le tokonoma entrent dans l'image.
+  'trois-quarts': [74, 35, 98],
   // À la verticale : la position se lit comme un kifu.
   dessus: [0, 128, 0.6],
-  ouverture: [-78, 40, 96],
+  ouverture: [-70, 30, 128],
 };
 
 /** Caméra : transitions entre points de vue animées par Motion, orbite libre à la souris. */

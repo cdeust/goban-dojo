@@ -9,7 +9,8 @@ import {
   boardEndTexture,
   boardSideTexture,
   boardTopTexture,
-  hatchTexture,
+  inkBoardEndTexture,
+  inkBoardSideTexture,
   inkBoardTopTexture,
 } from './textures.ts';
 
@@ -25,8 +26,8 @@ export function Goban() {
     // les faces ±z montrent donc le bois de bout.
     if (look === 'manga') {
       const top = toon('#ffffff', [0.86, 1], inkBoardTopTexture(anisotropy));
-      const side = toon('#ffffff', [0.7, 1], hatchTexture(anisotropy, '#dcb873'));
-      const end = toon('#ffffff', [0.7, 1], hatchTexture(anisotropy, '#d3ad66', true));
+      const side = toon('#ffffff', [0.78, 1], inkBoardSideTexture(anisotropy));
+      const end = toon('#ffffff', [0.78, 1], inkBoardEndTexture(anisotropy));
       return {
         body,
         leg,

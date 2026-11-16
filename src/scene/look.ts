@@ -48,9 +48,9 @@ export function inkMaterial(): THREE.MeshBasicMaterial {
 
 /** Grossissement de la copie qui fait le contour, selon la taille de l'objet. */
 export const OUTLINE = {
-  stone: 1.075,
-  board: 1.012,
-  leg: 1.07,
-  bowl: 1.035,
-  cushion: 1.02,
+  stone: 1.045,
+  board: 1.006,
+  leg: 1.04,
+  bowl: 1.02,
+  cushion: 1.012,
 } as const;

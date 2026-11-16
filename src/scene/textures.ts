@@ -374,3 +374,47 @@ export function screentoneTexture(anisotropy: number): THREE.CanvasTexture {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
+
+/** Flanc du goban à l'encre : aplat, fil du bois en longs traits horizontaux. */
+export function inkBoardSideTexture(anisotropy: number): THREE.CanvasTexture {
+  const [c, ctx] = canvas(1024, 512);
+  const rnd = mulberry32(1846);
+  ctx.fillStyle = '#e2b56a';
+  ctx.fillRect(0, 0, 1024, 512);
+  ctx.strokeStyle = 'rgba(112,70,26,0.42)';
+  for (let y = 14; y < 512; y += 20 + rnd() * 26) {
+    ctx.lineWidth = 1.2 + rnd() * 1.6;
+    for (let x = rnd() * 120; x < 1024;) {
+      const len = 160 + rnd() * 520;
+      ctx.beginPath();
+      ctx.moveTo(x, y + Math.sin(x * 0.006) * 5);
+      ctx.bezierCurveTo(
+        x + len / 3,
+        y - 4,
+        x + (2 * len) / 3,
+        y + 6,
+        Math.min(1024, x + len),
+        y + Math.sin((x + len) * 0.006) * 5,
+      );
+      ctx.stroke();
+      x += len + 40 + rnd() * 200;
+    }
+  }
+  return finish(c, anisotropy);
+}
+
+/** Bois de bout à l'encre : les cernes de croissance, en grands arcs. */
+export function inkBoardEndTexture(anisotropy: number): THREE.CanvasTexture {
+  const [c, ctx] = canvas(1024, 512);
+  const rnd = mulberry32(1862);
+  ctx.fillStyle = '#dcab5e';
+  ctx.fillRect(0, 0, 1024, 512);
+  ctx.strokeStyle = 'rgba(112,70,26,0.5)';
+  for (let r = 1180; r < 1900; r += 18 + rnd() * 22) {
+    ctx.lineWidth = 1.2 + rnd() * 2;
+    ctx.beginPath();
+    ctx.arc(430, 1740, r, Math.PI * 1.1, Math.PI * 1.9);
+    ctx.stroke();
+  }
+  return finish(c, anisotropy);
+}
