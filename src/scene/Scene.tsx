@@ -7,6 +7,7 @@ import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
 import { Goban } from './Goban.tsx';
 import { Marks } from './Marks.tsx';
+import { PlayersSpike } from './PlayersSpike.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 
@@ -50,6 +51,7 @@ export function Scene() {
       <Bowls />
       {game && <Stones key={game.id} seed={game.id} />}
       <Marks />
+      {new URLSearchParams(window.location.search).has('essai') && <PlayersSpike />}
       <BoardInput />
       <CameraRig />
       <RenderProbe />
