@@ -1,0 +1,277 @@
+import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { GameRecord } from '../domain/game.ts';
+import { CHAPTERS, chapterIndexOf, gamesOfChapter } from '../story/chapters.ts';
+import { formatDate, outcomeFor, prettyName } from '../story/format.ts';
+import { moveCount, useStore } from '../state/store.ts';
+import { IconClose, IconPlay } from './icons.tsx';
+
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+
+/** Volet latéral : le récit chapitre par chapitre, ou la liste complète des parties. */
+export function Panel() {
+  const panel = useStore((s) => s.panel);
+  const setPanel = useStore((s) => s.setPanel);
+  return (
+    <AnimatePresence initial={false}>
+      {panel && (
+        <motion.aside
+          id="panel"
+          className="panel"
+          aria-label={panel === 'recit' ? 'Récit' : 'Parties'}
+          initial={{ opacity: 0, x: -24 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -24 }}
+          transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
+        >
+          <div className="panel__tabs">
+            <button
+              type="button"
+              className="tab"
+              aria-pressed={panel === 'recit'}
+              onClick={() => setPanel('recit')}
+            >
+              Récit
+            </button>
+            <button
+              type="button"
+              className="tab"
+              aria-pressed={panel === 'parties'}
+              onClick={() => setPanel('parties')}
+            >
+              Parties
+            </button>
+            <button
+              type="button"
+              className="icon-button panel__close"
+              aria-label="Fermer le volet"
+              onClick={() => setPanel(null)}
+            >
+              <IconClose />
+            </button>
+          </div>
+          {panel === 'recit' ? <Story /> : <Library />}
+        </motion.aside>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function Story() {
+  const games = useStore((s) => s.dataset?.games);
+  const chapterIndex = useStore((s) => s.chapterIndex);
+  const gameIndex = useStore((s) => s.gameIndex);
+  const setChapter = useStore((s) => s.setChapter);
+  const selectGame = useStore((s) => s.selectGame);
+  const setPanel = useStore((s) => s.setPanel);
+  const chapter = CHAPTERS[chapterIndex];
+  const scroller = useRef<HTMLDivElement>(null);
+
+  const inChapter = useMemo(
+    () => (games ? gamesOfChapter(games, chapterIndex) : []),
+    [games, chapterIndex],
+  );
+
+  useEffect(() => {
+    scroller.current?.scrollTo({ top: 0 });
+  }, [chapterIndex]);
+
+  if (!chapter || !games) return null;
+
+  const go = (index: number): void => {
+    setChapter(index);
+    const first = gamesOfChapter(games, index)[0];
+    if (first) selectGame(games.indexOf(first));
+    else {
+      // Chapitre sans partie : le goban reste vide.
+      useStore.getState().setPlaying(false);
+      useStore.getState().setMove(0);
+    }
+  };
+
+  return (
+    <div className="panel__body" ref={scroller}>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.article
+          key={chapter.id}
+          className="chapter"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          <p className="chapter__index">
+            Chapitre {ROMAN[chapterIndex]} <span aria-hidden="true">·</span>{' '}
+            {chapter.from === chapter.to ? chapter.from : `${chapter.from} – ${chapter.to}`}
+          </p>
+          <p className="chapter__kanji" lang="ja" aria-hidden="true">
+            {chapter.kanji}
+          </p>
+          <p className="chapter__reading">{chapter.reading}</p>
+          <h2 className="chapter__title">{chapter.title}</h2>
+          {chapter.paragraphs.map((p) => (
+            <p key={p} className="chapter__text">
+              {p}
+            </p>
+          ))}
+
+          {chapter.featured.length > 0 && (
+            <>
+              <h3 className="chapter__sub">À revoir</h3>
+              <ul className="featured">
+                {chapter.featured.map((f) => {
+                  const index = games.findIndex((g) => g.id === f.gameId);
+                  if (index < 0) return null;
+                  return (
+                    <li key={f.gameId + f.label}>
+                      <button
+                        type="button"
+                        className="featured__button"
+                        aria-current={index === gameIndex ? 'true' : undefined}
+                        onClick={() => selectGame(index, { play: true })}
+                      >
+                        <IconPlay />
+                        <span>{f.label}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
+          {inChapter.length > 0 && (
+            <button type="button" className="link" onClick={() => setPanel('parties')}>
+              Les {inChapter.length} parties de ces années →
+            </button>
+          )}
+        </motion.article>
+      </AnimatePresence>
+
+      <nav className="chapter-nav" aria-label="Chapitres">
+        <button
+          type="button"
+          className="chip"
+          disabled={chapterIndex === 0}
+          onClick={() => go(chapterIndex - 1)}
+        >
+          ← Précédent
+        </button>
+        <button
+          type="button"
+          className="chip chip--accent"
+          disabled={chapterIndex === CHAPTERS.length - 1}
+          onClick={() => go(chapterIndex + 1)}
+        >
+          Suivant →
+        </button>
+      </nav>
+    </div>
+  );
+}
+
+function Row({ game, index, current }: { game: GameRecord; index: number; current: boolean }) {
+  const selectGame = useStore((s) => s.selectGame);
+  const outcome = outcomeFor(game);
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (current) ref.current?.scrollIntoView({ block: 'nearest' });
+  }, [current]);
+  return (
+    <li>
+      <button
+        ref={ref}
+        type="button"
+        className="row"
+        aria-current={current ? 'true' : undefined}
+        onClick={() => selectGame(index, { play: true })}
+      >
+        <span className="row__mark" title={outcome.label}>
+          <span aria-hidden="true">{outcome.mark}</span>
+          <span className="sr-only">{outcome.label}</span>
+        </span>
+        <span className="row__main">
+          <span className="row__opponent">{prettyName(game.opponent)}</span>
+          <span className="row__meta">
+            <time dateTime={game.date}>{formatDate(game.date)}</time>
+            {' · '}
+            {game.shusaku === 'B' ? 'noir' : 'blanc'}
+            {game.handicap > 0 && ` · ${game.handicap} p.`}
+            {' · '}
+            {moveCount(game)} coups
+          </span>
+          {game.event && <span className="row__event">{game.event}</span>}
+        </span>
+      </button>
+    </li>
+  );
+}
+
+function Library() {
+  const games = useStore((s) => s.dataset?.games);
+  const gameIndex = useStore((s) => s.gameIndex);
+  const [query, setQuery] = useState('');
+
+  const groups = useMemo(() => {
+    if (!games) return [];
+    const q = query.trim().toLowerCase();
+    const matches = (g: GameRecord): boolean =>
+      q === '' ||
+      `${g.opponent} ${prettyName(g.opponent)} ${g.date} ${g.event ?? ''} ${g.place ?? ''}`
+        .toLowerCase()
+        .includes(q);
+    const out = CHAPTERS.map((c, ci) => ({
+      key: c.id,
+      title: c.title,
+      years: c.from === c.to ? String(c.from) : `${c.from} – ${c.to}`,
+      items: games
+        .map((g, i) => ({ g, i }))
+        .filter(({ g }) => chapterIndexOf(g) === ci && matches(g)),
+    }));
+    out.push({
+      key: 'incertaines',
+      title: 'Dates incertaines',
+      years: 'date de la source incompatible avec sa biographie',
+      items: games
+        .map((g, i) => ({ g, i }))
+        .filter(({ g }) => chapterIndexOf(g) === -1 && matches(g)),
+    });
+    return out.filter((grp) => grp.items.length > 0);
+  }, [games, query]);
+
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+
+  return (
+    <div className="panel__body">
+      <label className="search">
+        <span className="sr-only">Chercher un adversaire, une année, un lieu</span>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Adversaire, année, lieu…"
+          autoComplete="off"
+          spellCheck={false}
+        />
+      </label>
+      <p className="library__count" role="status">
+        {total} partie{total > 1 ? 's' : ''}
+        <span className="library__legend" aria-hidden="true">
+          {' '}
+          · ○ victoire ● défaite ＝ jigo
+        </span>
+      </p>
+      {groups.map((grp) => (
+        <section key={grp.key} className="group">
+          <h3 className="group__title">
+            {grp.title} <span className="group__years">{grp.years}</span>
+          </h3>
+          <ul className="rows">
+            {grp.items.map(({ g, i }) => (
+              <Row key={g.id} game={g} index={i} current={i === gameIndex} />
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}

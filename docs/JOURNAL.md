@@ -1,0 +1,32 @@
+# Journal des expériences
+
+Une ligne par expérience, une seule variable à la fois, échecs compris. Dates : 16 novembre 2026.
+
+| #   | Hypothèse ou changement                                                    | Mesure                                                           | Résultat                                                                                         |
+| --- | -------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1   | Le dépôt PGD contient un corpus exploitable de Shūsaku                     | 460 chemins, 458 contenus distincts, empreintes git vérifiées    | retenu comme source                                                                              |
+| 2   | Tous les fichiers ont Shūsaku pour joueur                                  | le pipeline échoue sur une fête de promotion où il ne joue pas   | **échec** → 2 fichiers exclus, listés dans le rapport                                            |
+| 3   | Dédoublonnage par signature des 30 premiers coups, invariante par symétrie | 458 → 396 parties                                                | partiel                                                                                          |
+| 4   | Seconde passe : même adversaire, même longueur, ≥ 90 % de coups identiques | 1 paire fusionnée (98,2 %) → 395                                 | retenu                                                                                           |
+| 5   | Quatre paires restent, identiques coup pour coup mais non fusionnées       | cause : pierres de handicap énumérées dans un ordre différent    | **défaut corrigé** (tri, puis signature incluant la mise en place) → 391                         |
+| 6   | Le corpus se rejoue selon les règles                                       | 75 193 coups, 0 illégal                                          | validé                                                                                           |
+| 7   | Le corpus recoupe l’histoire                                               | 19/19 oshirogo, 23 parties de sanjūbango, coup 127 en K11        | validé, figé en tests                                                                            |
+| 8   | TypeScript 7 avec typescript-eslint 8.73                                   | dépendance paire non satisfaite (`<6.1.0`)                       | **échec** → TypeScript 6.0.3                                                                     |
+| 9   | Premier rendu : goban, pierres instanciées, Motion                         | captures Chromium                                                | fonctionne ; le dock mord sur le goban                                                           |
+| 10  | Canvas arrêté au-dessus du dock, caméras reculées, vignette                | captures des trois vues                                          | cadrage correct                                                                                  |
+| 11  | Lumière plus rasante, ombres moins floues                                  | captures                                                         | relief des pierres plus lisible                                                                  |
+| 12  | CSP stricte sur la version construite                                      | l’e2e relève 10 polices bloquées : Vite les intégrait en `data:` | **défaut corrigé** (`assetsInlineLimit: 0`)                                                      |
+| 13  | Police japonaise complète embarquée                                        | CSS de 280 Ko (244 règles `@font-face`), `dist` de 19 Mo         | **abandonné** → sous-ensembles latins, Mincho du système pour les kanji : CSS 16 Ko, `dist` 2 Mo |
+| 14  | Lecture automatique à 8 coups/s                                            | 36 coups en 5 s avec GPU ; 7 en 15 s en rendu logiciel           | l’application est correcte ; seuil du test abaissé pour le rendu logiciel                        |
+| 15  | Relire les pixels du canvas WebGL depuis le test                           | 0 pixel éclairé : le tampon est vidé après affichage             | **échec** → contrôle par le poids de la capture PNG                                              |
+
+## Limites connues
+
+- Les pierres ne se poussent pas entre elles : leur diamètre est réduit de 2 % par rapport à la
+  cote réelle pour éviter l’interpénétration (voir `src/scene/dimensions.ts`).
+- À 8 coups/s, une pierre capturée peut encore être en vol quand une autre est rejouée au même
+  point (reprise de ko).
+- Le rendu n’a été contrôlé que sous Chromium (GPU Apple, et rendu logiciel en test).
+  Firefox et Safari n’ont pas été essayés.
+- Aucun commentaire de partie : le corpus n’en contient pas d’exploitable. Seule la partie de
+  l’oreille rouge porte des légendes, tirées des sources citées.

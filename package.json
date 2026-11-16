@@ -1,0 +1,53 @@
+{
+  "name": "shusaku-goban",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Goban 3D pour revivre les parties de Hon'inbō Shūsaku (1829-1862), de ses débuts à sa mort.",
+  "type": "module",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "pnpm data:build && vite build",
+    "preview": "vite preview",
+    "data:fetch": "node scripts/fetch-sources.ts",
+    "data:build": "node scripts/build-data.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "sbom": "node scripts/sbom.ts",
+    "audit:deps": "pnpm audit --prod",
+    "check": "pnpm data:build && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm audit:deps && vite build && pnpm e2e"
+  },
+  "dependencies": {
+    "@fontsource/shippori-mincho": "5.3.0",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
+    "motion": "14.14.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0",
+    "zustand": "5.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "eslint": "10.15.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-security": "4.2.1",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.73.0",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  }
+}
