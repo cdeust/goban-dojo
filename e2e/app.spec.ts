@@ -235,3 +235,41 @@ test('mode « explorer » : un clic sur le goban pose un coup hors de la partie'
   await expect(panel).toContainText('Position après le coup 0');
   expect(w.problems).toEqual([]);
 });
+
+test('évaluation des coups : le réseau se charge, juge le coup de la partie et un coup exploré', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const w = watch(page);
+  await page.addInitScript(() => {
+    (window as unknown as { __csp: string[] }).__csp = [];
+    document.addEventListener('securitypolicyviolation', (e) =>
+      (window as unknown as { __csp: string[] }).__csp.push(
+        `${e.violatedDirective} ${e.blockedURI}`,
+      ),
+    );
+  });
+  await enter(page);
+  await page.getByRole('button', { name: 'Fermer le volet' }).click();
+  await page.getByRole('button', { name: 'Explorer' }).click();
+  const panel = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await panel.getByRole('button', { name: 'Évaluer les coups' }).click();
+  // Le premier coup de l'enfant de dix ans, R16, est un coin : le réseau ne le distingue pas du meilleur.
+  await expect(panel.locator('.mode__actual')).toContainText('noir a joué R16', {
+    timeout: 90_000,
+  });
+  await expect(panel.locator('.mode__actual .verdict')).toHaveText(/bon coup/, { timeout: 90_000 });
+  // Un coup au centre du goban vide, lui, perd nettement.
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
+  const box = await page.locator('canvas').boundingBox();
+  if (!box) throw new Error('canvas introuvable');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expect(panel).toContainText('1 coup hors de la partie', { timeout: 15_000 });
+  const verdict = panel.locator('.mode__moves .verdict');
+  await expect(verdict).toHaveText(/bon coup|discutable|erreur probable/, { timeout: 90_000 });
+  await expect(panel).toContainText(/mène d’environ|position équilibrée/);
+  expect(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).toEqual([]);
+  expect(w.foreign).toEqual([]);
+  expect(w.problems).toEqual([]);
+});

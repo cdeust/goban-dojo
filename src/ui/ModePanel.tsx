@@ -1,5 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { PASS, pointToHuman } from '../domain/board.ts';
+import { loadEngine, useEngine } from '../engine/client.ts';
+import { GOOD_BELOW, type Judgement, type Verdict } from '../engine/judge.ts';
+import { useJudgements } from '../engine/useJudgements.ts';
 import { colorName, prettyName } from '../story/format.ts';
 import {
   GUESS_POINTS,
@@ -87,7 +90,69 @@ function Guess() {
   );
 }
 
-/** Panneau du mode « explorer » : coups ajoutés, retour à la partie. */
+const VERDICT_LABEL: Record<Verdict, string> = {
+  bon: 'bon coup',
+  discutable: 'discutable',
+  erreur: 'erreur probable',
+};
+
+/** Verdict du réseau sur un coup : catégorie, perte arrondie, et le coup qu'il préférait. */
+function VerdictTag({ judgement }: { judgement: Judgement | undefined }) {
+  if (!judgement) return <span className="verdict verdict--pending">calcul…</span>;
+  const { verdict, loss, best, rank } = judgement;
+  return (
+    <span className={`verdict verdict--${verdict}`}>
+      {VERDICT_LABEL[verdict]}
+      {verdict !== 'bon' && ` · ≈ ${Math.round(loss)} pts`}
+      {rank === 1
+        ? ' · 1ᵉʳ choix du réseau'
+        : loss >= GOOD_BELOW && ` · plutôt ${pointToHuman(best)}`}
+    </span>
+  );
+}
+
+const leadLabel = (blackLead: number): string => {
+  const n = Math.round(Math.abs(blackLead));
+  return n === 0
+    ? 'position équilibrée'
+    : `${blackLead > 0 ? 'Noir' : 'Blanc'} mène d’environ ${n} point${n > 1 ? 's' : ''}`;
+};
+
+/** Activation et état du moteur d'évaluation. */
+function EngineControl() {
+  const status = useEngine((s) => s.status);
+  const progress = useEngine((s) => s.progress);
+  const error = useEngine((s) => s.error);
+  if (status === 'ready') return null;
+  if (status === 'loading') {
+    return (
+      <p className="mode__note">
+        <label>
+          Chargement du réseau…{' '}
+          <progress value={progress} max={1}>
+            {Math.round(progress * 100)} %
+          </progress>
+        </label>
+      </p>
+    );
+  }
+  return (
+    <>
+      <div className="mode__actions">
+        <button type="button" className="chip chip--accent" onClick={loadEngine}>
+          Évaluer les coups
+        </button>
+      </div>
+      <p className="mode__note">
+        {status === 'failed'
+          ? `Le moteur n’a pas pu démarrer (${error}).`
+          : 'Charge un réseau de neurones KataGo (16 Mo) qui tourne sur votre appareil : rien n’est envoyé ailleurs.'}
+      </p>
+    </>
+  );
+}
+
+/** Panneau du mode « explorer » : coups ajoutés, jugement du réseau, retour à la partie. */
 function Explore() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
@@ -96,8 +161,11 @@ function Explore() {
   const undo = useStore((s) => s.undoVariation);
   const clear = useStore((s) => s.clearVariation);
   const color = useStore((s) => nextColor(s));
+  const engineReady = useEngine((s) => s.status === 'ready');
+  const judgements = useJudgements(game, move, variation);
   if (!game) return null;
   const actual = timelineOf(game).moves[move];
+  const last = judgements.explored.at(-1);
   return (
     <>
       <h2 className="mode__title">Explorer une autre suite</h2>
@@ -106,6 +174,18 @@ function Explore() {
           ? `Position après le coup ${move}. Posez un coup sur le goban : ${colorName(color)} joue.`
           : `${variation.length} coup${variation.length > 1 ? 's' : ''} hors de la partie. ${colorName(color)} joue.`}
       </p>
+      {actual && actual.point !== PASS && (
+        <p className="mode__actual">
+          Dans la partie, {colorName(actual.color).toLowerCase()} a joué{' '}
+          {pointToHuman(actual.point)}
+          {engineReady && (
+            <>
+              {' '}
+              <VerdictTag judgement={judgements.actual} />
+            </>
+          )}
+        </p>
+      )}
       {variation.length > 0 && (
         <ol className="mode__moves" start={move + 1}>
           {variation.map((m, i) => (
@@ -115,19 +195,17 @@ function Explore() {
                 aria-hidden="true"
               />
               <span className="sr-only">{colorName(m.color)} </span>
-              {pointToHuman(m.point)}
+              <b>{pointToHuman(m.point)}</b>
+              {engineReady && <VerdictTag judgement={judgements.explored[i]} />}
             </li>
           ))}
         </ol>
       )}
-      {variation.length === 0 && actual && actual.point !== PASS && (
-        <p className="mode__note">
-          Dans la partie, {colorName(actual.color).toLowerCase()} a joué{' '}
-          {pointToHuman(actual.point)}.
-        </p>
+      {engineReady && last && (
+        <p className="mode__lead-estimate">Après ce coup : {leadLabel(last.blackLeadAfter)}.</p>
       )}
       <p className="mode__feedback" role="status" aria-live="polite">
-        {notice}
+        {notice ?? (judgements.error ? `Évaluation impossible (${judgements.error}).` : null)}
       </p>
       <div className="mode__actions">
         <button type="button" className="chip" disabled={variation.length === 0} onClick={undo}>
@@ -137,9 +215,11 @@ function Explore() {
           Revenir à la partie
         </button>
       </div>
+      <EngineControl />
       <p className="mode__note">
-        Les règles sont appliquées (captures, ko, suicide). Les coups ne sont pas évalués : aucun
-        moteur de go n’est encore intégré.
+        {engineReady
+          ? 'Jugement d’un réseau KataGo interrogé sans lecture en profondeur : son erreur moyenne est d’environ 2 points. Un « bon coup » est un coup qu’il ne sait pas distinguer du meilleur.'
+          : 'Les règles sont appliquées (captures, ko, suicide).'}
       </p>
     </>
   );

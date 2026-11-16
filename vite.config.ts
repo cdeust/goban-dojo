@@ -9,7 +9,9 @@ import { defineConfig } from 'vitest/config';
  */
 const CSP = [
   "default-src 'none'",
-  "script-src 'self'",
+  // 'wasm-unsafe-eval' : nécessaire pour compiler le moteur d'inférence WebAssembly (et rien d'autre :
+  // ni eval, ni script en ligne).
+  "script-src 'self' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
@@ -34,6 +36,7 @@ const csp = (): Plugin => ({
 export default defineConfig({
   base: './',
   plugins: [react(), csp()],
+  worker: { format: 'es' },
   build: {
     target: 'es2023',
     sourcemap: false,

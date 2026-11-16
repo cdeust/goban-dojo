@@ -30,6 +30,13 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
 | 24  | Une date CWI est toujours numérique                                                          | « Summer 1857 » fait échouer le pipeline                                                                                | **défaut corrigé** : date à l’année, mention conservée                                                                                |
 | 25  | Scène en grille sans largeur de colonne explicite                                            | volet ouvert, le dock déborde à droite de l’écran                                                                       | **défaut corrigé** : `grid-template-columns: minmax(0, 1fr)`                                                                          |
 | 26  | Test e2e de lecture automatique sous forte charge machine                                    | 3 coups en 30 s au lieu de plus de 3                                                                                    | seuil et délai assouplis ; la cadence réelle (35 coups en 5 s à 8×) se mesure avec `scripts/dev/playcheck.ts`                         |
+| 27  | Un réseau KataGo peut juger un coup dans le navigateur (mission déléguée)                    | réseau officiel converti en ONNX, 45 à 65 ms par inférence sous Chromium, CSP respectée avec `'wasm-unsafe-eval'`       | faisable                                                                                                                              |
+| 28  | Le plus petit réseau (b6c96, 4 Mo) suffit                                                    | erreur moyenne 3,4 points, corrélation 0,53 avec la référence                                                           | **échec** → b10c128 (1,85 point, 0,92)                                                                                                |
+| 29  | Régénérer moi-même la référence native pour le b10c128                                       | l’exécution du binaire KataGo compilé par la mission a été refusée par le garde-fou de permissions                      | **non fait** : le test s’appuie sur la référence b6c96 produite pendant l’étude                                                       |
+| 30  | Le portage TypeScript de l’encodeur est fidèle                                               | 53 positions : même premier choix, écarts < 10⁻⁴ avec KataGo natif                                                      | validé, figé en test                                                                                                                  |
+| 31  | Un coin en premier coup est classé parmi les 8 premiers choix                                | rang 12 : huit points 3-4 passent avant les quatre 4-4                                                                  | **attente fausse**, test corrigé                                                                                                      |
+| 32  | Évaluation de bout en bout sous CSP                                                          | réseau chargé et vérifié, coup jugé, aucune violation, aucune requête sortante                                          | validé (e2e)                                                                                                                          |
+| 33  | Garde d’architecture (dependency-cruiser), sur le modèle d’architect-os                      | 3 imports interdits injectés, 3 détectés ; code réel : 0 violation                                                      | en place dans `pnpm check` et la CI                                                                                                   |
 
 ## Limites connues
 
@@ -39,6 +46,7 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
   point (reprise de ko).
 - Le rendu n’a été contrôlé que sous Chromium (GPU Apple, et rendu logiciel en test).
   Firefox et Safari n’ont pas été essayés.
-- Les coups explorés ne sont pas évalués : aucun moteur de go n’est intégré.
+- Le jugement des coups vient d’un réseau interrogé sans lecture : voir `docs/MOTEUR.md`.
+- Pas de tests de mutation : la garde d’architecture est en place, pas encore la mesure de la force des tests.
 - Aucun commentaire de partie : le corpus n’en contient pas d’exploitable. Seule la partie de
   l’oreille rouge porte des légendes, tirées des sources citées.

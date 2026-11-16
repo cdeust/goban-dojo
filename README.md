@@ -20,8 +20,10 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
   premier coup, 2 après un indice, 1 après deux, puis le coup est montré.
 - **Explorer une autre suite** (mode « Explorer ») : à partir de n’importe quelle position, posez
-  vos propres coups, captures et ko compris, puis revenez à la partie. Les coups ne sont pas
-  encore évalués : aucun moteur de go n’est intégré.
+  vos propres coups, captures et ko compris, puis revenez à la partie. Sur demande, un réseau de
+  neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
+  probable — et le compare au coup réellement joué. Voir [docs/MOTEUR.md](docs/MOTEUR.md) pour ce
+  que vaut ce jugement.
 - **Trois points de vue** (joueur, trois-quarts, dessus) et l’orbite libre, les numéros de coups
   façon kifu, la lecture continue d’une partie à la suivante, une recherche par adversaire, année
   ou lieu.
@@ -83,7 +85,8 @@ src/state/store.ts ──► src/replay (horloge, son) ──► src/scene (thre
 ```
 
 `src/domain` ne dépend de rien et sert à la fois au pipeline de données, à l’application et aux
-tests. Dans la scène, chaque pierre physique est une instance dont l’état cible (dans le bol, sur
+tests ; `src/engine` (encodage des positions, jugement des coups) ne dépend que du domaine. Ces
+frontières sont vérifiées par `pnpm arch`, qui échoue sur tout import interdit ou cyclique. Dans la scène, chaque pierre physique est une instance dont l’état cible (dans le bol, sur
 le goban, prisonnière) se déduit du numéro de coup ; Motion anime le passage d’un état à l’autre.
 
 ## Qualité et sécurité
@@ -100,4 +103,5 @@ le goban, prisonnière) se déduit du numéro de coup ; Motion anime le passage 
 Le code est sous licence MIT. Les textes biographiques sont rédigés à partir de Wikipédia
 (CC BY-SA 4.0), cité. Les kifus sont des parties du XIXᵉ siècle ; les fichiers SGF proviennent
 de deux collections qui ne déclarent pas de licence — voir [docs/DONNEES.md](docs/DONNEES.md).
-La police Shippori Mincho est sous SIL OFL 1.1.
+La police Shippori Mincho est sous SIL OFL 1.1. Le réseau de neurones et le code porté de KataGo
+sont décrits dans [public/engine/LICENCE.txt](public/engine/LICENCE.txt).

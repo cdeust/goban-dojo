@@ -1209,3 +1209,52 @@ kbd {
   color: var(--paper-faint);
   overflow-wrap: anywhere;
 }
+
+.mode__moves {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.mode__actual {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--paper-dim);
+}
+
+.mode__lead-estimate {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--paper-dim);
+}
+
+.verdict {
+  margin-left: 0.3rem;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.verdict--bon {
+  color: #9ccf8a;
+}
+
+.verdict--discutable {
+  color: var(--kaya);
+}
+
+.verdict--erreur {
+  color: var(--vermilion);
+}
+
+.verdict--pending {
+  color: var(--paper-faint);
+  border-style: dashed;
+}
+
+progress {
+  width: 100%;
+  height: 0.4rem;
+  accent-color: var(--kaya);
+}

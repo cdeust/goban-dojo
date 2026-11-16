@@ -35,6 +35,8 @@ jobs:
       - run: pnpm typecheck
       - name: Lint et analyse statique de sécurité (SAST)
         run: pnpm lint --max-warnings 0
+      - name: Garde d'architecture (couches, frontières, cycles)
+        run: pnpm arch
       - run: pnpm format:check
       - run: pnpm test
       - name: Audit des dépendances

@@ -1,0 +1,33 @@
+kata1-b10c128-s1141046784-d204142634.onnx
+
+Réseau de neurones de KataGo (10 blocs, 128 canaux), téléchargé depuis
+https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b10c128-s1141046784-d204142634.txt.gz
+(SHA-256 du fichier d'origine : 3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4) et converti au format ONNX, sans modification
+des poids, par l'outil officiel `katago dumponnx` de KataGo v1.18.2.
+
+Ce réseau provient de l'entraînement « g170 » de KataGo, dont les données sont placées dans le
+domaine public (CC0) : https://katagoarchive.org/g170/LICENSE.txt
+Les réseaux distribués par katagotraining.org sont par ailleurs couverts par la licence suivante
+(https://katagotraining.org/network_license/), reproduite par précaution :
+
+KataGo Neural Network License
+
+Copyright 2026 David J Wu ("lightvector") and/or other KataGo contributors.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of the neural net
+files or training weight files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+L'encodage des positions (src/engine/features.ts) est un portage de code de KataGo, sous licence
+MIT : https://github.com/lightvector/KataGo/blob/master/LICENSE
