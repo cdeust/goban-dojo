@@ -10,12 +10,22 @@ import { Marks } from './Marks.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 
-/** Marque le canvas dès qu'une image contenant de la géométrie a été dessinée (repère pour les tests). */
+/**
+ * Marque le canvas dès qu'une image contenant de la géométrie a été dessinée (repère pour les
+ * tests). Le compteur de triangles se lit avant le rendu de l'image en cours : tant qu'il est
+ * nul, on redemande une image, sans quoi une scène rendue à la demande et montée après
+ * l'ouverture ne dessinerait qu'une fois et ne serait jamais marquée.
+ */
 function RenderProbe() {
   const gl = useThree((s) => s.gl);
+  const invalidate = useThree((s) => s.invalidate);
   const done = useRef(false);
   useFrame(() => {
-    if (done.current || gl.info.render.triangles === 0) return;
+    if (done.current) return;
+    if (gl.info.render.triangles === 0) {
+      invalidate();
+      return;
+    }
     done.current = true;
     gl.domElement.dataset.rendered = 'true';
   });

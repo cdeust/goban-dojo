@@ -169,6 +169,14 @@ describe('recoupement avec l’histoire', () => {
     expect(vsShuwa.every((g) => g.shusaku === 'B')).toBe(true);
   });
 
+  it('garde le titre de Meijin de Jōwa et signale les divergences connues de la source', () => {
+    expect(byId.get('s152')).toMatchObject({ white: 'Honinbo Jowa', whiteRank: 'Meijin' });
+    expect(byId.get('s269')?.note).toContain('193');
+    expect(byId.get('s269')?.moves.length).toBe(220 * 3);
+    expect(byId.get('s306')?.note).toContain('2 points');
+    expect(byId.get('s306')?.result).toMatchObject({ winner: 'B', margin: 4 });
+  });
+
   it('la dernière partie connue, le 19 juin 1862, est inachevée', () => {
     expect(games.at(-1)).toMatchObject({ id: 's471', opponent: 'Narabayashi Kurakichi' });
     expect(games.at(-1)?.result.winner).toBe('unfinished');

@@ -36,7 +36,7 @@ export const SOURCES: Source[] = [
     label: 'Professional Go Dataset (PGD)',
     url: 'https://github.com/wangjinzhuo/pgd/tree/b1e006b49dc286f8c513953e5caad0901cd2e895',
     detail:
-      'J. Wang, W. Wang, R. Wang, W. Gao, AAAI 2017 — lieux et circonstances de 195 parties, commit b1e006b',
+      'J. Wang, W. Wang, R. Wang, W. Gao, AAAI 2017 — lieux et circonstances de 188 parties, commit b1e006b',
   },
 ];
 

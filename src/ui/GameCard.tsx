@@ -76,6 +76,12 @@ export function GameCard() {
               <dd lang="en">{game.place}</dd>
             </>
           )}
+          {game.note && (
+            <>
+              <dt>Note</dt>
+              <dd>{game.note}</dd>
+            </>
+          )}
           <dt>Issue</dt>
           <dd className={finished ? 'card__result card__result--final' : 'card__result'}>
             {formatResult(game.result)}

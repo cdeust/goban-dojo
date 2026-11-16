@@ -377,10 +377,14 @@ export const useStore = create<State>((set, get) => ({
     const d = displayOf(s);
     if (!game || !d) return;
     const marks = marksOf(s);
+    // Seul compte ce que CE coup accomplit : un piège ou un atari déjà en place ailleurs sur le
+    // goban ne donne aucun relief au coup suivant.
+    const caught = new Set(marks.trapped);
+    const traps = marks.threat.atari.some((p) => caught.has(p));
     const kind: ImpactKind =
       s.variation.length === 0 && momentFor(game.id, s.move)
         ? 'moment'
-        : marks.trapped.length > 0
+        : traps
           ? 'piege'
           : marks.threat.atari.length > 0 || marks.threat.captured > 0
             ? 'menace'

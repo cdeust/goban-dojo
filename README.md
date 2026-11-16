@@ -71,7 +71,7 @@ pnpm check
 
 Le corpus vient de la collection « Games by Shusaku » d’A. E. Brouwer (CWI) : 470 fichiers SGF
 dérivés du recueil 本因坊秀策全集, avec pour chaque partie la date japonaise et sa conversion
-grégorienne. Le _Professional Go Dataset_ complète le lieu et les circonstances de 195 parties.
+grégorienne. Le _Professional Go Dataset_ complète le lieu et les circonstances de 188 parties.
 Les deux sources sont épinglées et vérifiées par empreinte. Le détail du traitement, les
 contrôles et les réserves sont dans [docs/DONNEES.md](docs/DONNEES.md). En bref :
 

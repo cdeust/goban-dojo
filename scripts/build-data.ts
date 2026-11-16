@@ -71,7 +71,10 @@ const cleanText = (s: string | undefined): string | undefined => {
 };
 
 const cleanRank = (s: string | undefined): string | undefined => {
-  const m = /^(\d)\s*(p|d|dan)$/i.exec((s ?? '').trim());
+  const t = (s ?? '').trim();
+  // Titre, et non grade en dan : Hon'inbō Jōwa est inscrit « Meijin ».
+  if (/^meijin$/i.test(t)) return 'Meijin';
+  const m = /^(\d)\s*(p|d|dan)$/i.exec(t);
   return m ? `${m[1]}${m[1] === '1' ? 'er' : 'e'} dan` : undefined;
 };
 
@@ -161,6 +164,16 @@ function eventOf(ev: string | undefined, round: string | undefined): string | un
   if (/^10-game match$/i.test(t)) return `Jūbango (match en dix parties)${game}`;
   return t;
 }
+
+/**
+ * Divergences connues entre le kifu retenu et d'autres relevés de la même partie. Le corpus
+ * suit le kifu ; la divergence est signalée au lecteur plutôt que tranchée.
+ */
+const DISCREPANCIES: Record<string, string> = {
+  '269': 'Kifu de 220 coups ; l’index de la collection et une autre transcription en comptent 193.',
+  '306':
+    'Le kifu donne Noir gagnant de 4 points ; l’index de la collection et une autre transcription donnent 2 points, Noir connectant le ko.',
+};
 
 /** Régimes de handicap sans pierres (propriété OH de la collection). */
 const REGIMES: Record<string, string> = {
@@ -260,6 +273,7 @@ for (const [hash, name] of cwiManifest) {
     result: parseResult(prop(r, 'RE')),
     ...(event ? { event } : {}),
     ...(place ? { place } : {}),
+    ...(DISCREPANCIES[number] ? { note: DISCREPANCIES[number] } : {}),
     sources: [label],
   };
   main.push({ number, record, moves: body.moves });
@@ -289,7 +303,6 @@ interface Extra {
   moves: Move[];
   handicap: number;
   place?: string;
-  note?: string;
   okonomi: boolean;
 }
 
@@ -305,25 +318,21 @@ for (const [sha, paths] of [...pgdBySha].sort(([a], [b]) => a.localeCompare(b)))
   const bytes = readFileSync(join(root, 'data', 'pgd', 'raw', `${sha}.sgf`));
   if (blobSha(bytes) !== sha) throw new Error(`empreinte inattendue pour pgd:${paths[0]}`);
   let text: string;
-  let legacy = false;
   try {
     text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
   } catch {
-    // Un fichier est encodé en GB2312 : seuls ses commentaires en dépendent, on ne les exploite pas.
+    // Un fichier est encodé en GB2312 : seuls ses commentaires en dépendent, et on ne les lit pas.
     text = new TextDecoder('latin1').decode(bytes);
-    legacy = true;
   }
   const path = paths[0] as string;
   const body = readBody(text, `pgd:${path}`);
   const r = body.rootNode;
   const place = cleanText(prop(r, 'PC'));
-  const note = legacy ? undefined : cleanText(prop(r, 'C') ?? prop(r, 'GC'));
   extras.push({
     path,
     moves: body.moves,
     handicap: body.setupBlack.length,
     ...(place ? { place } : {}),
-    ...(note && note !== place ? { note } : {}),
     okonomi: /o-konomi/i.test(prop(r, 'EV') ?? ''),
   });
 }
@@ -340,18 +349,14 @@ for (const g of main) {
     .map((t) => t.place)
     .filter(Boolean)
     .sort((a, b) => (b as string).length - (a as string).length)[0];
-  const note = twins.map((t) => t.note).filter(Boolean)[0];
   const before = JSON.stringify(g.record);
   if (place && (!g.record.place || place.length > g.record.place.length)) g.record.place = place;
-  if (note) g.record.note = note;
   if (twins.some((t) => t.okonomi) && g.record.event?.startsWith('Oshirogo')) {
     g.record.event = 'Oshirogo — okonomi-go (partie du château)';
   }
   if (JSON.stringify(g.record) !== before) {
     enriched++;
-    g.record.sources.push(
-      ...twins.filter((t) => t.place || t.note || t.okonomi).map((t) => `pgd:${t.path}`),
-    );
+    g.record.sources.push(...twins.filter((t) => t.place || t.okonomi).map((t) => `pgd:${t.path}`));
   }
 }
 const pgdUnmatched = extras

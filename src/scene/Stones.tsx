@@ -522,19 +522,18 @@ export function Stones({ seed }: { seed: string }) {
   const scratch = useMemo(
     () => ({
       m: new THREE.Matrix4(),
-      zero: new THREE.Matrix4().makeScale(0, 0, 0),
       q: new THREE.Quaternion(),
       e: new THREE.Euler(0, 0, 0, 'YXZ'),
       v: new THREE.Vector3(),
       s: new THREE.Vector3(),
       flat: new THREE.Quaternion(),
-      used: { B: 0, W: 0, n: 0 },
     }),
     [],
   );
 
   useLayoutEffect(() => {
-    // Avant la première image : toutes les instances à l'échelle nulle.
+    // Avant la première image, et à chaque changement de style : rien n'est dessiné tant que
+    // les positions n'ont pas été écrites.
     for (const mesh of [
       blackRef.current,
       whiteRef.current,
@@ -542,12 +541,11 @@ export function Stones({ seed }: { seed: string }) {
       outlineRef.current,
     ]) {
       if (!mesh) continue;
-      for (let i = 0; i < mesh.count; i++) mesh.setMatrixAt(i, scratch.zero);
-      mesh.instanceMatrix.needsUpdate = true;
+      mesh.count = 0;
       mesh.frustumCulled = false;
     }
     dirty.current = true;
-  }, [seed, scratch, outlined]);
+  }, [seed, outlined]);
 
   useFrame(() => {
     if (!dirty.current) return;
@@ -559,7 +557,7 @@ export function Stones({ seed }: { seed: string }) {
     const L = live.current;
     const timeline = L.timeline;
     if (!black || !white || !numbers || !timeline) return;
-    const { m, zero, q, e, v, s, flat, used } = scratch;
+    const { m, q, e, v, s, flat } = scratch;
     const numbered = showNumbersRef.current;
     timeline.stones.forEach((stone, i) => {
       const p = L.pose[i];
@@ -581,17 +579,13 @@ export function Stones({ seed }: { seed: string }) {
         numbers.setMatrixAt(i, m);
       }
     });
-    // Efface les instances libérées par une position devenue plus courte.
+    // On ne dessine que les pierres de la position : les emplacements libres ne coûtent rien.
     const { B, W } = timeline.counts;
-    for (let i = B; i < used.B; i++) black.setMatrixAt(i, zero);
-    for (let i = W; i < used.W; i++) white.setMatrixAt(i, zero);
-    for (let i = timeline.stones.length; i < used.n; i++) {
-      numbers.setMatrixAt(i, zero);
-      outline?.setMatrixAt(i, zero);
-    }
-    used.B = Math.min(B, STONE_CAPACITY);
-    used.W = Math.min(W, STONE_CAPACITY);
-    used.n = Math.min(timeline.stones.length, STONE_CAPACITY * 2);
+    const total = Math.min(timeline.stones.length, STONE_CAPACITY * 2);
+    black.count = Math.min(B, STONE_CAPACITY);
+    white.count = Math.min(W, STONE_CAPACITY);
+    numbers.count = total;
+    if (outline) outline.count = total;
     black.instanceMatrix.needsUpdate = true;
     white.instanceMatrix.needsUpdate = true;
     numbers.instanceMatrix.needsUpdate = true;

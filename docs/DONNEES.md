@@ -52,7 +52,7 @@ produisent un `games.json` identique à l’octet près, ce que la CI vérifie �
 | Doublons internes                       | 0                                        |
 | Parties à handicap (2, 3, 4, 5 pierres) | 88, 25, 4, 2                             |
 | En tête-à-tête : victoires / décidées   | 275 / 400, plus 13 jigo et 51 inachevées |
-| Parties enrichies par PGD               | 195                                      |
+| Parties enrichies par PGD               | 188                                      |
 | Dates au jour, au mois, à l’année       | 452, 13, 4                               |
 
 Toutes les parties de PGD où Shūsaku joue se retrouvent dans la collection CWI ; les deux seuls
@@ -81,6 +81,10 @@ fichiers PGD sans équivalent sont des fêtes de promotion où il ne joue pas.
   s’arrête où s’arrête le kifu.
 - **Variantes de transcription.** Pour quatre parties, PGD et CWI divergent sur l’ordre de
   quelques coups ; la version CWI est retenue, sans que la bonne ait été établie.
+- **Deux divergences signalées.** Pour la partie du château du 20 décembre 1850 (s269), le kifu
+  compte 220 coups, l’index de la collection et PGD 193. Pour la partie du 17 novembre 1851 contre
+  Shūwa (s306), le kifu donne Noir +4, l’index et PGD Noir +2. Le corpus suit le kifu et affiche la
+  divergence dans le cartouche de la partie.
 - **Total connu.** Wikipédia (fr) cite 388 parties, chiffre d’une édition ancienne des œuvres
   complètes ; le recueil dont dérive ce corpus en compte 471.
 - **Licence.** Ni la collection CWI ni PGD ne déclarent de licence. Les coups de parties jouées

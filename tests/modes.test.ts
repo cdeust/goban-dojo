@@ -252,4 +252,26 @@ describe('poids dramatique d’un coup', () => {
     s().notifyImpact(P('ep'));
     expect(s().impact?.kind).toBe('piege');
   });
+
+  it('un coup joué ailleurs pendant qu’un piège ou un atari est en place reste un coup ordinaire', () => {
+    s().setMode('explorer');
+    s().setMove(0);
+    // Le shicho de d4 est en place…
+    for (const c of ['cp', 'dp', 'dq', 'aa', 'co', 'ab', 'ep']) s().clickPoint(P(c));
+    s().notifyImpact(P('ep'));
+    expect(s().impact?.kind).toBe('piege');
+    // … Blanc joue dans le coin opposé (hors de la diagonale de fuite, pour ne pas casser le
+    // shicho), puis Noir aussi : aucun de ces deux coups n'y est pour rien.
+    s().clickPoint(P('ss'));
+    s().notifyImpact(P('ss'));
+    expect(s().impact?.kind).toBe('coup');
+    s().clickPoint(P('pp'));
+    // Le piège est toujours là, et c'est de nouveau à Blanc de jouer.
+    expect(marksOf(s()).trapped).toEqual([P('dp')]);
+    s().notifyImpact(P('pp'));
+    expect(s().impact?.kind).toBe('coup');
+    // La pierre de d4 est toujours marquée sur le goban : la menace, elle, demeure.
+    const m = marksOf(s());
+    expect([...m.atari, ...m.trapped]).toContain(P('dp'));
+  });
 });
