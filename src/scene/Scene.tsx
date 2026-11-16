@@ -1,11 +1,25 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useRef } from 'react';
 import * as THREE from 'three';
 import { useCurrentGame, useStore } from '../state/store.ts';
+import { BoardInput } from './BoardInput.tsx';
 import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
 import { Goban } from './Goban.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
+
+/** Marque le canvas dès qu'une image contenant de la géométrie a été dessinée (repère pour les tests). */
+function RenderProbe() {
+  const gl = useThree((s) => s.gl);
+  const done = useRef(false);
+  useFrame(() => {
+    if (done.current || gl.info.render.triangles === 0) return;
+    done.current = true;
+    gl.domElement.dataset.rendered = 'true';
+  });
+  return null;
+}
 
 export function Scene() {
   const game = useCurrentGame();
@@ -27,8 +41,10 @@ export function Scene() {
       <Room />
       <Goban />
       <Bowls />
-      {game && <Stones key={game.id} game={game} />}
+      {game && <Stones key={game.id} seed={game.id} />}
+      <BoardInput />
       <CameraRig />
+      <RenderProbe />
     </Canvas>
   );
 }

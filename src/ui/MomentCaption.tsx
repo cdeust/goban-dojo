@@ -8,7 +8,9 @@ import { timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 export function MomentCaption() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
-  if (!game) return null;
+  const mode = useStore((s) => s.mode);
+  // Les modes interactifs occupent cet emplacement, et une légende y trahirait le coup à deviner.
+  if (!game || mode !== 'lecture') return null;
   const moment = momentFor(game.id, move);
   const last = move > 0 ? timelineOf(game).moves[move - 1] : undefined;
   const pass = last?.point === PASS ? `${colorName(last.color)} passe.` : null;

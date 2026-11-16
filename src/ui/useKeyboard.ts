@@ -10,6 +10,7 @@ export const SHORTCUTS: [string, string][] = [
   ['1 2 3', 'Vue du joueur · de trois-quarts · de dessus'],
   ['N', 'Numéros des coups'],
   ['M', 'Son'],
+  ['Clic sur le goban', 'Modes « Deviner » et « Explorer » : proposer ou poser un coup'],
 ];
 
 /** Raccourcis clavier globaux, inactifs dans les champs de saisie et les boîtes de dialogue. */

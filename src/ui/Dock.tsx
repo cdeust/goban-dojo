@@ -2,7 +2,14 @@ import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { unlockAudio } from '../replay/sound.ts';
 import { CHAPTERS } from '../story/chapters.ts';
-import { SPEEDS, moveCount, useCurrentGame, useStore, type ViewName } from '../state/store.ts';
+import {
+  SPEEDS,
+  moveCount,
+  useCurrentGame,
+  useStore,
+  type Mode,
+  type ViewName,
+} from '../state/store.ts';
 import {
   IconFirst,
   IconLast,
@@ -93,6 +100,12 @@ const VIEW_LABELS: [ViewName, string][] = [
   ['dessus', 'Dessus'],
 ];
 
+const MODE_LABELS: [Mode, string, string][] = [
+  ['lecture', 'Regarder', 'Regarder la partie se dérouler'],
+  ['deviner', 'Deviner', 'Chercher soi-même les coups de Shūsaku'],
+  ['explorer', 'Explorer', 'Essayer d’autres coups à partir de cette position'],
+];
+
 const speedLabel = (s: number): string => (s === 0.5 ? '½×' : `${s}×`);
 
 /** Commandes de lecture. */
@@ -107,6 +120,8 @@ function Transport() {
   const showNumbers = useStore((s) => s.showNumbers);
   const sound = useStore((s) => s.sound);
   const continuous = useStore((s) => s.continuous);
+  const mode = useStore((s) => s.mode);
+  const setMode = useStore((s) => s.setMode);
   const { step, togglePlay, setMove, setSpeed, setView, toggle, selectGame, setPlaying } =
     useStore.getState();
   if (!game || !games) return null;
@@ -197,6 +212,21 @@ function Transport() {
           >
             <IconNextGame />
           </button>
+        </div>
+
+        <div className="transport__group" role="group" aria-label="Mode">
+          {MODE_LABELS.map(([m, label, title]) => (
+            <button
+              key={m}
+              type="button"
+              className="seg"
+              aria-pressed={mode === m}
+              title={title}
+              onClick={() => setMode(m)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         <div className="transport__group" role="group" aria-label="Vitesse">

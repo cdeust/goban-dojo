@@ -53,11 +53,9 @@ test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le ré
   await page.getByRole('button', { name: 'Entrer' }).click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
   await expect(page.locator('canvas')).toBeVisible();
-  // WebGL a bien produit une image : une scène rendue pèse des centaines de kilo-octets en PNG,
-  // un canvas resté vide n'en pèse que quelques-uns.
-  await page.waitForTimeout(1500);
-  const png = await page.locator('canvas').screenshot();
-  expect(png.byteLength).toBeGreaterThan(100_000);
+  // WebGL a bien dessiné la scène : le moteur marque le canvas après sa première image non vide.
+  // (Une capture d'écran du canvas est trop lente en rendu logiciel sur les machines de CI.)
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
   expect(w.problems).toEqual([]);
   expect(w.foreign).toEqual([]);
 });
@@ -194,4 +192,43 @@ test('écran étroit : les commandes restent accessibles', async ({ page }) => {
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
   expect(overflow).toBe(false);
+});
+
+test('mode « deviner » : indice, coup montré, bilan', async ({ page }) => {
+  const w = watch(page);
+  await enter(page);
+  await page.getByRole('button', { name: 'Fermer le volet' }).click();
+  await page.getByRole('button', { name: 'Deviner' }).click();
+  const panel = page.getByRole('region', { name: 'Jouer comme Shūsaku' });
+  // Première partie : Shūsaku (noir) a trois pierres de handicap, Blanc commence et joue seul.
+  await expect(panel).toContainText('joue-t-il le coup 2', { timeout: 15_000 });
+  await panel.getByRole('button', { name: 'Un indice' }).click();
+  await panel.getByRole('button', { name: 'Montrer le coup' }).click();
+  await expect(panel).toContainText('Shūsaku a joué');
+  await expect(panel).toContainText('0 / 1');
+  // L'adversaire répond de lui-même, puis c'est de nouveau à Shūsaku.
+  await expect(panel).toContainText('joue-t-il le coup 4', { timeout: 15_000 });
+  expect(w.problems).toEqual([]);
+});
+
+test('mode « explorer » : un clic sur le goban pose un coup hors de la partie', async ({
+  page,
+}) => {
+  // Sans animation, la caméra est en place immédiatement : le centre du canvas vise le goban.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const w = watch(page);
+  await enter(page);
+  await page.getByRole('button', { name: 'Fermer le volet' }).click();
+  await page.getByRole('button', { name: 'Explorer' }).click();
+  const panel = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await expect(panel).toContainText('Position après le coup 0');
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
+  const box = await page.locator('canvas').boundingBox();
+  if (!box) throw new Error('canvas introuvable');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expect(panel).toContainText('1 coup hors de la partie', { timeout: 15_000 });
+  await expect(page.getByTestId('live')).toContainText('Exploration, coup 1 : Blanc');
+  await panel.getByRole('button', { name: 'Revenir à la partie' }).click();
+  await expect(panel).toContainText('Position après le coup 0');
+  expect(w.problems).toEqual([]);
 });

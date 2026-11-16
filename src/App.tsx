@@ -1,5 +1,6 @@
 import { MotionConfig } from 'motion/react';
 import { lazy, Suspense, useEffect } from 'react';
+import { useGuessDriver } from './replay/useGuessDriver.ts';
 import { usePlayback } from './replay/usePlayback.ts';
 import { useStore } from './state/store.ts';
 import { Dock } from './ui/Dock.tsx';
@@ -7,6 +8,7 @@ import { GameCard } from './ui/GameCard.tsx';
 import { HelpDialog } from './ui/HelpDialog.tsx';
 import { Intro } from './ui/Intro.tsx';
 import { LiveRegion } from './ui/LiveRegion.tsx';
+import { ModePanel } from './ui/ModePanel.tsx';
 import { MomentCaption } from './ui/MomentCaption.tsx';
 import { Panel } from './ui/Panel.tsx';
 import { TopBar } from './ui/TopBar.tsx';
@@ -26,6 +28,7 @@ export function App() {
     void load();
   }, [load]);
   usePlayback();
+  useGuessDriver();
   useKeyboard();
 
   return (
@@ -47,6 +50,7 @@ export function App() {
               <TopBar />
               <GameCard />
               <MomentCaption />
+              <ModePanel />
               <Dock />
             </>
           )}

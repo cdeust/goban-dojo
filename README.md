@@ -16,6 +16,12 @@ au château d’Edo (1861) — puis le goban vide de 1862.
 - **Une relecture animée par [Motion](https://motion.dev)** : la pierre sort du bol, vient au-dessus
   de l’intersection, frappe et oscille un instant ; les pierres capturées s’envolent vers le
   couvercle de l’adversaire ; revenir en arrière rejoue le geste à l’envers.
+- **Jouer comme Shūsaku** (mode « Deviner ») : la partie s’arrête à chacun de ses coups et vous
+  demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
+  premier coup, 2 après un indice, 1 après deux, puis le coup est montré.
+- **Explorer une autre suite** (mode « Explorer ») : à partir de n’importe quelle position, posez
+  vos propres coups, captures et ko compris, puis revenez à la partie. Les coups ne sont pas
+  encore évalués : aucun moteur de go n’est intégré.
 - **Trois points de vue** (joueur, trois-quarts, dessus) et l’orbite libre, les numéros de coups
   façon kifu, la lecture continue d’une partie à la suivante, une recherche par adversaire, année
   ou lieu.
