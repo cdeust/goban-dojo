@@ -10,8 +10,10 @@ import {
   type GameRecord,
   threatOf,
   type Move,
+  type Threat,
   type Timeline,
 } from '../domain/game.ts';
+import { trappedStones } from '../engine/features.ts';
 import { momentFor } from '../story/chapters.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
@@ -32,10 +34,14 @@ export interface Zone {
 }
 
 /**
- * Poids dramatique d'un coup qui vient de frapper le goban :
- * « coup » ordinaire, « menace » (il met en atari ou capture), « moment » (instant du récit).
+ * Ce qu'un coup qui vient de frapper le goban a de remarquable, du plus fort au plus faible :
+ * « moment » (instant du récit), « piege » (il enferme des pierres dans un shicho qui fonctionne),
+ * « menace » (il met en atari ou capture), « connexion » (il relie deux groupes), « coup ».
  */
-export type ImpactKind = 'coup' | 'menace' | 'moment';
+export type ImpactKind = 'coup' | 'connexion' | 'menace' | 'piege' | 'moment';
+
+/** Style de rendu de la scène. */
+export type Look = 'manga' | 'realiste';
 
 export interface Impact {
   /** Numéro d'ordre : deux impacts au même point restent distincts. */
@@ -121,8 +127,9 @@ interface State {
   view: ViewName;
   showNumbers: boolean;
   sound: boolean;
-  /** Effets de mise en scène : aura des pierres en atari, éclat et lignes de force à l'impact. */
+  /** Effets de mise en scène : marques d'atari, de piège et de connexion, lignes de force. */
   effects: boolean;
+  look: Look;
   /** Dernière pierre à avoir frappé le goban (renseigné par la scène). */
   impact: Impact | null;
   /** L'écran d'ouverture a été franchi. */
@@ -145,6 +152,7 @@ interface State {
   setPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
   setView: (view: ViewName) => void;
+  setLook: (look: Look) => void;
   toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects') => void;
   /** La scène signale que la pierre du coup affiché vient de toucher le goban. */
   notifyImpact: (point: number) => void;
@@ -285,6 +293,7 @@ export const useStore = create<State>((set, get) => ({
   showNumbers: false,
   sound: true,
   effects: true,
+  look: 'manga',
   impact: null,
   entered: false,
   panel: null,
@@ -357,6 +366,7 @@ export const useStore = create<State>((set, get) => ({
 
   setSpeed: (speed) => set({ speed }),
   setView: (view) => set({ view }),
+  setLook: (look) => set({ look }),
   toggle: (key) => set((s) => ({ [key]: !s[key] }) as Partial<State>),
   setPanel: (panel) => set({ panel }),
   setChapter: (index) => set({ chapterIndex: index }),
@@ -366,13 +376,17 @@ export const useStore = create<State>((set, get) => ({
     const game = s.dataset?.games[s.gameIndex];
     const d = displayOf(s);
     if (!game || !d) return;
-    const threat = threatOf(decodePoints(game.setupBlack), d.timeline.moves, d.move);
+    const marks = marksOf(s);
     const kind: ImpactKind =
       s.variation.length === 0 && momentFor(game.id, s.move)
         ? 'moment'
-        : threat.atari.length > 0 || threat.captured > 0
-          ? 'menace'
-          : 'coup';
+        : marks.trapped.length > 0
+          ? 'piege'
+          : marks.threat.atari.length > 0 || marks.threat.captured > 0
+            ? 'menace'
+            : marks.threat.connects.length > 0
+              ? 'connexion'
+              : 'coup';
     set({ impact: { seq: (s.impact?.seq ?? 0) + 1, point, kind } });
   },
 
@@ -489,8 +503,37 @@ export const useStore = create<State>((set, get) => ({
 export const useCurrentGame = (): GameRecord | null =>
   useStore((s) => s.dataset?.games[s.gameIndex] ?? null);
 
-/** Pierres en atari dans la position affichée. */
-export function atariOf(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>): number[] {
-  const board = boardOf(s);
-  return board ? atariStones(board) : [];
+/** Ce que la scène donne à voir de la position affichée. */
+export interface Marks {
+  /** Pierres en atari (hors pierres piégées). */
+  atari: number[];
+  /** Pierres du joueur au trait prises dans un shicho qui fonctionne. */
+  trapped: number[];
+  /** Effet du dernier coup : atari créés, captures, groupes reliés. */
+  threat: Threat;
+  /** Point du dernier coup, ou -1. */
+  last: number;
+}
+
+const NO_THREAT: Threat = { atari: [], captured: 0, connects: [] };
+let marksCache: { key: unknown; move: number; marks: Marks } | null = null;
+
+export function marksOf(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>): Marks {
+  const game = s.dataset?.games[s.gameIndex];
+  const d = displayOf(s);
+  if (!game || !d) return { atari: [], trapped: [], threat: NO_THREAT, last: -1 };
+  if (marksCache && marksCache.key === d.timeline && marksCache.move === d.move)
+    return marksCache.marks;
+  const setup = decodePoints(game.setupBlack);
+  const moves = d.timeline.moves.slice(0, d.move);
+  const trapped = trappedStones({ setupBlack: setup, moves, next: nextColor(s) });
+  const caught = new Set(trapped);
+  const marks: Marks = {
+    atari: atariStones(boardAt(setup, moves, moves.length)).filter((p) => !caught.has(p)),
+    trapped,
+    threat: threatOf(setup, moves, moves.length),
+    last: moves.at(-1)?.point ?? -1,
+  };
+  marksCache = { key: d.timeline, move: d.move, marks };
+  return marks;
 }

@@ -197,22 +197,33 @@ export function boardAt(setupBlack: number[], moves: Move[], n: number): Board {
   return board;
 }
 
-/** Ce qu'un coup fait peser sur l'adversaire. */
+/** Ce qu'un coup accomplit, au-delà de poser une pierre. */
 export interface Threat {
   /** Pierres adverses que ce coup vient de mettre en atari (une seule liberté). */
   atari: number[];
   /** Nombre de pierres capturées par ce coup. */
   captured: number;
+  /**
+   * Pierres amies voisines que ce coup relie alors qu'elles appartenaient à des groupes
+   * distincts (vide si le coup ne relie rien).
+   */
+  connects: number[];
 }
 
 /**
- * Menace créée par le coup `n` : les groupes adverses voisins de la pierre posée qui
- * n'ont plus qu'une liberté, et les pierres qu'elle capture.
+ * Effet du coup `n` : les groupes adverses voisins de la pierre posée qui n'ont plus qu'une
+ * liberté, les pierres qu'elle capture, et les groupes amis qu'elle relie.
  */
 export function threatOf(setupBlack: number[], moves: Move[], n: number): Threat {
   const move = moves[n - 1];
-  if (!move || move.point === PASS) return { atari: [], captured: 0 };
+  if (!move || move.point === PASS) return { atari: [], captured: 0, connects: [] };
   const board = boardAt(setupBlack, moves, n - 1);
+
+  // Avant de jouer : les pierres amies voisines, et le groupe de chacune.
+  const friends = neighbours(move.point).filter((q) => board.get(q) === move.color);
+  const groups = new Set(friends.map((q) => Math.min(...board.stonesOf(q))));
+  const connects = groups.size >= 2 ? [...friends].sort((a, b) => a - b) : [];
+
   const captured = board.play(move.color, move.point).captures.length;
   const atari = new Set<number>();
   for (const q of neighbours(move.point)) {
@@ -220,7 +231,7 @@ export function threatOf(setupBlack: number[], moves: Move[], n: number): Threat
       for (const s of board.stonesOf(q)) atari.add(s);
     }
   }
-  return { atari: [...atari].sort((a, b) => a - b), captured };
+  return { atari: [...atari].sort((a, b) => a - b), captured, connects };
 }
 
 /** Toutes les pierres, des deux couleurs, dont le groupe n'a plus qu'une liberté. */

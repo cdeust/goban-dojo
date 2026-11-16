@@ -42,6 +42,7 @@ export function ImpactLines() {
         <motion.div
           key={burst.impact.seq}
           className={`impact impact--${burst.impact.kind}`}
+          data-kind={burst.impact.kind}
           aria-hidden="true"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

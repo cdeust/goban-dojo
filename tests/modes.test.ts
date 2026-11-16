@@ -6,7 +6,7 @@ import type { Dataset } from '../src/domain/game.ts';
 import {
   HINT_SIZES,
   MAX_VARIATION,
-  atariOf,
+  marksOf,
   displayOf,
   hintZone,
   nextColor,
@@ -217,13 +217,39 @@ describe('poids dramatique d’un coup', () => {
 
   it('recense les pierres en atari de la position affichée, exploration comprise', () => {
     s().setMove(46);
-    const before = atariOf(s());
+    const before = marksOf(s());
     s().setMove(47);
-    expect(atariOf(s()).length).toBe(before.length + 3);
+    const after = marksOf(s());
+    expect(after.threat.atari).toHaveLength(3);
+    expect(after.atari.length + after.trapped.length).toBe(
+      before.atari.length + before.trapped.length + 3,
+    );
+    expect(after.last).toBe(timelineOf(dataset.games[RED_EAR]!).moves[46]?.point);
     // Une pierre blanche isolée, cernée de trois côtés par l'exploration, passe en atari.
     s().setMode('explorer');
     s().setMove(2);
     for (const c of ['cc', 'aa', 'ec', 'ab', 'dd']) s().clickPoint(P(c));
-    expect(atariOf(s())).toContain(P('dc'));
+    const m = marksOf(s());
+    expect([...m.atari, ...m.trapped]).toContain(P('dc'));
+  });
+
+  it('classe un coup qui relie deux groupes comme une connexion', () => {
+    s().setMode('explorer');
+    s().setMove(0);
+    // Noir d4 et f4, Blanc ailleurs, puis Noir e4 relie.
+    for (const c of ['dp', 'aa', 'fp', 'ab', 'ep']) s().clickPoint(P(c));
+    expect(marksOf(s()).threat.connects).toEqual([P('dp'), P('fp')]);
+    s().notifyImpact(P('ep'));
+    expect(s().impact?.kind).toBe('connexion');
+  });
+
+  it('classe un shicho qui fonctionne comme un piège', () => {
+    s().setMode('explorer');
+    s().setMove(0);
+    // Blanc d4 cerné par c4, d3, puis e4 : il ne lui reste que d5, et la fuite ne mène nulle part.
+    for (const c of ['cp', 'dp', 'dq', 'aa', 'co', 'ab', 'ep']) s().clickPoint(P(c));
+    expect(marksOf(s()).trapped).toEqual([P('dp')]);
+    s().notifyImpact(P('ep'));
+    expect(s().impact?.kind).toBe('piege');
   });
 });

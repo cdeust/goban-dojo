@@ -24,9 +24,15 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
   probable — et le compare au coup réellement joué. Voir [docs/MOTEUR.md](docs/MOTEUR.md) pour ce
   que vaut ce jugement.
-- **Une mise en scène qui suit le jeu** : une lueur bat sous les pierres en atari ; un coup qui
-  menace ou capture frappe plus fort, avec un éclat et des lignes de force ; au coup 127 de la
-  partie de l’oreille rouge, la scène s’assombrit autour de la pierre. Tout se coupe d’un bouton.
+- **Un rendu manga**, par défaut : aplats, contours à l’encre, trames et hachures, pierres noires
+  au reflet net. Le rendu réaliste (kaya, ardoise, coquillage, tatamis) reste disponible d’un
+  bouton ; les deux styles partagent géométrie, animations et effets, et ne diffèrent que par
+  `src/scene/look.ts` et les matériaux qu’il fournit.
+- **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
+  (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
+  bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et
+  des lignes de force ; au coup 127 de la partie de l’oreille rouge, la scène s’assombrit autour
+  de la pierre. Tout se coupe d’un bouton.
 - **Le son d’une pierre sur du bois massif**, par synthèse modale (choc bref, résonances fixes du
   plateau, acoustique d’une pièce calme) : aucun fichier audio. Les réglages sont une seule table,
   dans `src/replay/sound.ts`.

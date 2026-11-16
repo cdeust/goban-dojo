@@ -297,3 +297,23 @@ export function encodePosition(position: EnginePosition): Encoded {
   legal[PASS_INDEX] = 1;
   return { spatial, global, legal };
 }
+
+/**
+ * Pierres du joueur au trait qui sont prises au piège : leur groupe est en atari et ne peut pas
+ * s'échapper, même en jouant le premier (shicho qui fonctionne, ou capture immédiate).
+ */
+export function trappedStones(position: EnginePosition): number[] {
+  const board = new NetBoard();
+  for (const p of position.setupBlack) board.c[p] = BLACK;
+  for (const m of position.moves) board.play(m.point, stoneOf(m.color));
+  const pla = stoneOf(position.next);
+  const out: number[] = [];
+  const done = new Uint8Array(AREA);
+  for (let p = 0; p < AREA; p++) {
+    if (board.c[p] !== pla || done[p]) continue;
+    const chain = board.chain(p);
+    for (const s of chain.stones) done[s] = 1;
+    if (chain.libs.length === 1 && ladderCaptured(board, p, true)) out.push(...chain.stones);
+  }
+  return out.sort((a, b) => a - b);
+}

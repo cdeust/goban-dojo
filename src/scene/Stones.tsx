@@ -17,6 +17,7 @@ import {
   STONE_THICKNESS,
   pointToWorld,
 } from './dimensions.ts';
+import { OUTLINE, inkMaterial, useLook } from './look.ts';
 import { useStoneAssets } from './materials.ts';
 import { hashString, mulberry32 } from './random.ts';
 import { ATLAS_COLUMNS, ATLAS_ROWS, numberAtlas } from './textures.ts';
@@ -121,6 +122,8 @@ export function Stones({ seed }: { seed: string }) {
   const invalidate = useThree((s) => s.invalidate);
   const showNumbers = useStore((s) => s.showNumbers);
 
+  const outlined = useLook() === 'manga';
+  const outlineRef = useRef<THREE.InstancedMesh>(null);
   const blackRef = useRef<THREE.InstancedMesh>(null);
   const whiteRef = useRef<THREE.InstancedMesh>(null);
   const numbersRef = useRef<THREE.InstancedMesh>(null);
@@ -532,13 +535,19 @@ export function Stones({ seed }: { seed: string }) {
 
   useLayoutEffect(() => {
     // Avant la première image : toutes les instances à l'échelle nulle.
-    for (const mesh of [blackRef.current, whiteRef.current, numbersRef.current]) {
+    for (const mesh of [
+      blackRef.current,
+      whiteRef.current,
+      numbersRef.current,
+      outlineRef.current,
+    ]) {
       if (!mesh) continue;
       for (let i = 0; i < mesh.count; i++) mesh.setMatrixAt(i, scratch.zero);
       mesh.instanceMatrix.needsUpdate = true;
       mesh.frustumCulled = false;
     }
-  }, [seed, scratch]);
+    dirty.current = true;
+  }, [seed, scratch, outlined]);
 
   useFrame(() => {
     if (!dirty.current) return;
@@ -546,6 +555,7 @@ export function Stones({ seed }: { seed: string }) {
     const black = blackRef.current;
     const white = whiteRef.current;
     const numbers = numbersRef.current;
+    const outline = outlineRef.current;
     const L = live.current;
     const timeline = L.timeline;
     if (!black || !white || !numbers || !timeline) return;
@@ -559,6 +569,12 @@ export function Stones({ seed }: { seed: string }) {
       q.setFromEuler(e);
       m.compose(v.set(p.x, p.y, p.z), q, s.set(d, d, d));
       (stone.color === 'B' ? black : white).setMatrixAt(stone.slot, m);
+      // Contour : la même pierre, un peu plus grande, dont on ne voit que la face arrière.
+      if (outline && i < STONE_CAPACITY * 2) {
+        const o = d * OUTLINE.stone;
+        m.compose(v.set(p.x, p.y - 0.02 * p.s, p.z), q, s.set(o, o, o));
+        outline.setMatrixAt(i, m);
+      }
       if (i < STONE_CAPACITY * 2) {
         const k = numbered && stone.placedAt > 0 && L.phase[i] === ON_BOARD ? p.s : 0;
         m.compose(v.set(p.x, p.y + STONE_THICKNESS + 0.012, p.z), flat, s.set(k, k, k));
@@ -569,17 +585,27 @@ export function Stones({ seed }: { seed: string }) {
     const { B, W } = timeline.counts;
     for (let i = B; i < used.B; i++) black.setMatrixAt(i, zero);
     for (let i = W; i < used.W; i++) white.setMatrixAt(i, zero);
-    for (let i = timeline.stones.length; i < used.n; i++) numbers.setMatrixAt(i, zero);
+    for (let i = timeline.stones.length; i < used.n; i++) {
+      numbers.setMatrixAt(i, zero);
+      outline?.setMatrixAt(i, zero);
+    }
     used.B = Math.min(B, STONE_CAPACITY);
     used.W = Math.min(W, STONE_CAPACITY);
     used.n = Math.min(timeline.stones.length, STONE_CAPACITY * 2);
     black.instanceMatrix.needsUpdate = true;
     white.instanceMatrix.needsUpdate = true;
     numbers.instanceMatrix.needsUpdate = true;
+    if (outline) outline.instanceMatrix.needsUpdate = true;
   });
 
   return (
     <group>
+      {outlined && (
+        <instancedMesh
+          ref={outlineRef}
+          args={[assets.geometry, inkMaterial(), STONE_CAPACITY * 2]}
+        />
+      )}
       <instancedMesh
         ref={blackRef}
         args={[assets.geometry, assets.black, STONE_CAPACITY]}

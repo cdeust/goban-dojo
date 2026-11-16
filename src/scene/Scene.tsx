@@ -1,12 +1,12 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
-import * as THREE from 'three';
 import { useCurrentGame, useStore } from '../state/store.ts';
-import { Aura } from './Aura.tsx';
+
 import { BoardInput } from './BoardInput.tsx';
 import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
 import { Goban } from './Goban.tsx';
+import { Marks } from './Marks.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 
@@ -33,17 +33,13 @@ export function Scene() {
       frameloop={entered ? 'demand' : 'always'}
       camera={{ fov: 30, near: 4, far: 1600, position: [-78, 66, 96] }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
-      onCreated={({ gl }) => {
-        gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 1.05;
-      }}
       aria-hidden="true"
     >
       <Room />
       <Goban />
       <Bowls />
       {game && <Stones key={game.id} seed={game.id} />}
-      <Aura />
+      <Marks />
       <BoardInput />
       <CameraRig />
       <RenderProbe />

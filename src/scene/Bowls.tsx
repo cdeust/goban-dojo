@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import type { Color } from '../domain/board.ts';
 import { BOWL, LID, STONE_DIAMETER_BLACK, STONE_DIAMETER_WHITE } from './dimensions.ts';
 import { bowlGeometry, lidGeometry } from './geometry.ts';
+import { OUTLINE, inkMaterial, toon, useLook } from './look.ts';
 import { useStoneAssets } from './materials.ts';
 import { mulberry32 } from './random.ts';
 import { bowlTexture } from './textures.ts';
@@ -53,12 +54,20 @@ function Mound({ color }: { color: Color }) {
 /** Les deux bols et leurs couvercles retournés, à la droite de chaque joueur. */
 export function Bowls() {
   const anisotropy = useThree((s) => s.gl.capabilities.getMaxAnisotropy());
+  const look = useLook();
   const { bowl, lid, material } = useMemo(() => {
+    const bowl = bowlGeometry();
+    const lid = lidGeometry();
+    if (look === 'manga') {
+      const material = toon('#7a4f33', [0.45, 0.72, 1]);
+      material.side = THREE.DoubleSide;
+      return { bowl, lid, material };
+    }
     const map = bowlTexture(anisotropy);
     map.repeat.set(2, 1);
     return {
-      bowl: bowlGeometry(),
-      lid: lidGeometry(),
+      bowl,
+      lid,
       material: new THREE.MeshPhysicalMaterial({
         map,
         roughness: 0.34,
@@ -67,7 +76,8 @@ export function Bowls() {
         side: THREE.DoubleSide,
       }),
     };
-  }, [anisotropy]);
+  }, [anisotropy, look]);
+  const outlined = look === 'manga';
 
   return (
     <>
@@ -75,15 +85,13 @@ export function Bowls() {
         <group key={c}>
           <group position={[BOWL[c].x, 0, BOWL[c].z]}>
             <mesh geometry={bowl} material={material} castShadow receiveShadow />
+            {outlined && <mesh geometry={bowl} material={inkMaterial()} scale={OUTLINE.bowl} />}
             <Mound color={c} />
           </group>
-          <mesh
-            geometry={lid}
-            material={material}
-            position={[LID[c].x, 0, LID[c].z]}
-            castShadow
-            receiveShadow
-          />
+          <group position={[LID[c].x, 0, LID[c].z]}>
+            <mesh geometry={lid} material={material} castShadow receiveShadow />
+            {outlined && <mesh geometry={lid} material={inkMaterial()} scale={OUTLINE.bowl} />}
+          </group>
         </group>
       ))}
     </>

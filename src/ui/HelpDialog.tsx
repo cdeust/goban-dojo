@@ -30,6 +30,23 @@ export function HelpDialog() {
         La souris ou le doigt font tourner la caméra autour du goban ; la molette règle la distance.
       </p>
 
+      <h3>Ce que montrent les marques</h3>
+      <ul className="legend">
+        <li>
+          <i className="legend__dot legend__dot--attack" aria-hidden="true" /> <b>Attaque</b> — un
+          halo rouge bat sous les pierres en atari : il ne leur reste qu’une liberté.
+        </li>
+        <li>
+          <i className="legend__dot legend__dot--trap" aria-hidden="true" /> <b>Piège</b> — une cage
+          tourne autour des pierres prises dans un shicho qui fonctionne : elles ne peuvent plus
+          fuir.
+        </li>
+        <li>
+          <i className="legend__dot legend__dot--connection" aria-hidden="true" /> <b>Connexion</b>{' '}
+          — un halo bleu sous le coup qui vient de relier deux groupes, et sous les pierres reliées.
+        </li>
+      </ul>
+
       <h3>Sources</h3>
       <ul className="sources">
         {SOURCES.map((s) => (

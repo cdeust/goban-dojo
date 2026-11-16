@@ -95,13 +95,8 @@ function paintStraightGrain(
   }
 }
 
-/** Dessus du goban : kaya à fil droit, lignes laquées et neuf hoshi, aux cotes réelles. */
-export function boardTopTexture(anisotropy: number): THREE.CanvasTexture {
-  const W = 2048;
-  const H = Math.round((W * BOARD_LENGTH) / BOARD_WIDTH);
-  const [c, ctx] = canvas(W, H);
-  paintStraightGrain(ctx, W, H, 1829, true);
-
+/** Lignes et hoshi du goban, aux cotes réelles, sur un canvas couvrant tout le dessus du plateau. */
+function paintGrid(ctx: CanvasRenderingContext2D, W: number, H: number): void {
   const s = W / BOARD_WIDTH; // pixels par centimètre
   const x0 = W / 2 - 9 * PITCH_X * s;
   const y0 = H / 2 - 9 * PITCH_Z * s;
@@ -126,6 +121,16 @@ export function boardTopTexture(anisotropy: number): THREE.CanvasTexture {
       ctx.fill();
     }
   }
+}
+
+/** Dessus du goban : kaya à fil droit, lignes laquées et neuf hoshi, aux cotes réelles. */
+export function boardTopTexture(anisotropy: number): THREE.CanvasTexture {
+  const W = 2048;
+  const H = Math.round((W * BOARD_LENGTH) / BOARD_WIDTH);
+  const [c, ctx] = canvas(W, H);
+  paintStraightGrain(ctx, W, H, 1829, true);
+
+  paintGrid(ctx, W, H);
   return finish(c, anisotropy);
 }
 
@@ -287,5 +292,85 @@ export function numberAtlas(): THREE.CanvasTexture {
   }
   const t = new THREE.CanvasTexture(c);
   t.anisotropy = 8;
+  return t;
+}
+
+// ───────────────────────────── style manga : encre et trames ─────────────────────────────
+
+export const INK = '#17130f';
+export const PAPER = '#efe7d6';
+
+/** Dessus du goban à l'encre : aplat, quelques veines au trait, grille. */
+export function inkBoardTopTexture(anisotropy: number): THREE.CanvasTexture {
+  const W = 2048;
+  const H = Math.round((W * BOARD_LENGTH) / BOARD_WIDTH);
+  const [c, ctx] = canvas(W, H);
+  const rnd = mulberry32(1829);
+  ctx.fillStyle = '#e9c98a';
+  ctx.fillRect(0, 0, W, H);
+  // Veines du bois : de rares traits fins, interrompus, comme tracés à la plume.
+  ctx.strokeStyle = 'rgba(120,78,30,0.35)';
+  for (let x = 30; x < W; x += 38 + rnd() * 70) {
+    ctx.lineWidth = 1 + rnd() * 1.4;
+    for (let y = rnd() * 200; y < H;) {
+      const len = 120 + rnd() * 520;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.sin(y * 0.004) * 6, y);
+      ctx.lineTo(x + Math.sin((y + len) * 0.004) * 6, Math.min(H, y + len));
+      ctx.stroke();
+      y += len + 60 + rnd() * 380;
+    }
+  }
+  paintGrid(ctx, W, H);
+  return finish(c, anisotropy);
+}
+
+/** Hachures régulières : l'ombre propre d'un volume, dessinée au trait. */
+export function hatchTexture(
+  anisotropy: number,
+  base: string,
+  vertical = false,
+): THREE.CanvasTexture {
+  const S = 512;
+  const [c, ctx] = canvas(S, S);
+  const rnd = mulberry32(1846);
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, S, S);
+  ctx.strokeStyle = 'rgba(23,19,15,0.32)';
+  for (let p = 6; p < S; p += 16) {
+    ctx.lineWidth = 1 + rnd() * 1.2;
+    ctx.beginPath();
+    if (vertical) {
+      ctx.moveTo(p, 0);
+      ctx.lineTo(p + (rnd() - 0.5) * 3, S);
+    } else {
+      ctx.moveTo(0, p);
+      ctx.lineTo(S, p + (rnd() - 0.5) * 3);
+    }
+    ctx.stroke();
+  }
+  const t = finish(c, anisotropy);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  return t;
+}
+
+/** Trame de points (screentone) sur papier : le sol, en demi-teinte. */
+export function screentoneTexture(anisotropy: number): THREE.CanvasTexture {
+  const S = 256;
+  const [c, ctx] = canvas(S, S);
+  ctx.fillStyle = PAPER;
+  ctx.fillRect(0, 0, S, S);
+  ctx.fillStyle = 'rgba(23,19,15,0.2)';
+  const step = 16;
+  for (let y = 0; y < S / step; y++) {
+    for (let x = 0; x < S / step; x++) {
+      ctx.beginPath();
+      // Trame en quinconce.
+      ctx.arc(x * step + (y % 2 ? step / 2 : 0) + 4, y * step + 4, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  const t = finish(c, anisotropy);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }

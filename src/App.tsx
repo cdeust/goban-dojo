@@ -23,6 +23,7 @@ export function App() {
   const error = useStore((s) => s.error);
   const entered = useStore((s) => s.entered);
   const panel = useStore((s) => s.panel);
+  const look = useStore((s) => s.look);
   const load = useStore((s) => s.load);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export function App() {
   return (
     // « user » : Motion respecte de lui-même la préférence système de réduction des animations.
     <MotionConfig reducedMotion="user">
-      <div className="app" data-panel={entered && panel ? 'open' : 'closed'}>
+      <div className="app" data-panel={entered && panel ? 'open' : 'closed'} data-look={look}>
         {entered && <Panel />}
         <main className="stage">
           <div className="stage__canvas">

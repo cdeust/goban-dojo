@@ -126,24 +126,37 @@ describe('threatOf', () => {
   it('signale les pierres mises en atari par le coup', () => {
     // Blanc d16 entouré de trois côtés : le troisième coup noir le met en atari.
     const seq = moves('wdd bcd wqq bed wqp bdc');
-    expect(threatOf([], seq, 2)).toEqual({ atari: [], captured: 0 });
-    expect(threatOf([], seq, 4)).toEqual({ atari: [], captured: 0 });
-    expect(threatOf([], seq, 6)).toEqual({ atari: [P('dd')], captured: 0 });
+    expect(threatOf([], seq, 2)).toEqual({ atari: [], captured: 0, connects: [] });
+    expect(threatOf([], seq, 4)).toEqual({ atari: [], captured: 0, connects: [] });
+    expect(threatOf([], seq, 6)).toEqual({ atari: [P('dd')], captured: 0, connects: [] });
   });
 
   it('compte les captures et ne signale pas en atari un groupe déjà capturé', () => {
     const seq = moves('wdd bcd wqq bed wqp bdc wpq bde');
-    expect(threatOf([], seq, 8)).toEqual({ atari: [], captured: 1 });
+    expect(threatOf([], seq, 8)).toEqual({ atari: [], captured: 1, connects: [] });
   });
 
   it('met en atari un groupe entier', () => {
     // Deux pierres blanches c17-d17 ; Noir ferme b17, c16, d16, c18, d18 : reste e17.
     const seq = moves('wcc bbc wdc bcd wqq bdd wqp bcb wpq bdb');
-    expect(threatOf([], seq, 10)).toEqual({ atari: [P('cc'), P('dc')], captured: 0 });
+    expect(threatOf([], seq, 10)).toEqual({ atari: [P('cc'), P('dc')], captured: 0, connects: [] });
   });
 
   it('ne dit rien d’une passe ni d’un coup hors de la partie', () => {
-    expect(threatOf([], moves('bdd w--'), 2)).toEqual({ atari: [], captured: 0 });
-    expect(threatOf([], moves('bdd'), 5)).toEqual({ atari: [], captured: 0 });
+    expect(threatOf([], moves('bdd w--'), 2)).toEqual({ atari: [], captured: 0, connects: [] });
+    expect(threatOf([], moves('bdd'), 5)).toEqual({ atari: [], captured: 0, connects: [] });
+  });
+
+  it('reconnaît un coup qui relie deux groupes', () => {
+    // Noir d16 et f16 sont deux groupes ; e16 les relie. g16 prolonge ensuite un seul groupe.
+    const seq = moves('bdd wqq bfd wqp bed wpq bgd');
+    expect(threatOf([], seq, 5).connects).toEqual([P('dd'), P('fd')]);
+    expect(threatOf([], seq, 7).connects).toEqual([]);
+  });
+
+  it('ne compte pas comme connexion deux voisines déjà du même groupe', () => {
+    // d16, d17, e17 forment un seul groupe ; e16 touche d16 et e17, sans rien relier de nouveau.
+    const seq = moves('bdd wqq bdc wqp bec wpq bed');
+    expect(threatOf([], seq, 7).connects).toEqual([]);
   });
 });

@@ -4,7 +4,12 @@ import * as ort from 'onnxruntime-web/wasm';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { Color } from '../src/domain/board.ts';
 import { decodeOutputs, topMoves, type Evaluation } from '../src/engine/decode.ts';
-import { AREA, encodePosition, type EnginePosition } from '../src/engine/features.ts';
+import {
+  AREA,
+  encodePosition,
+  trappedStones,
+  type EnginePosition,
+} from '../src/engine/features.ts';
 import { judgeMoves, verdictOf } from '../src/engine/judge.ts';
 
 /**
@@ -159,5 +164,29 @@ describe('jugement d’un coup', () => {
     expect(a).toMatchObject({ loss: 0, verdict: 'bon', best: 10, rank: 1 });
     expect(b).toMatchObject({ loss: 2, verdict: 'discutable', best: 10, rank: 2 });
     expect(c).toMatchObject({ loss: 7, verdict: 'erreur', best: 10, rank: 0 });
+  });
+});
+
+describe('pierres prises au piège', () => {
+  const at = (s: string): number => (s.charCodeAt(1) - 97) * 19 + (s.charCodeAt(0) - 97);
+  const seq = (coords: string): EnginePosition['moves'] =>
+    coords.split(' ').map((c, i) => ({ color: i % 2 === 0 ? 'B' : 'W', point: at(c) }) as const);
+
+  it('un shicho sans pierre de secours fonctionne : la pierre en atari est perdue', () => {
+    // Blanc d4 ; Noir c4, d3, c5 puis e4 : il ne reste à Blanc que d5, et la fuite en diagonale
+    // vers le coin opposé ne rencontre aucune pierre amie (les autres coups blancs sont en a19, a18).
+    const moves = seq('cp dp dq aa co ab ep');
+    expect(trappedStones({ setupBlack: [], moves, next: 'W' })).toEqual([at('dp')]);
+  });
+
+  it('avec une pierre amie sur le chemin, le shicho casse : la pierre n’est pas piégée', () => {
+    // Même forme, mais Blanc a une pierre en g7, sur la diagonale de fuite.
+    const moves = seq('cp dp dq gm co ab ep');
+    expect(trappedStones({ setupBlack: [], moves, next: 'W' })).toEqual([]);
+  });
+
+  it('ne signale rien sur un goban vide', () => {
+    const empty: EnginePosition = { setupBlack: [], moves: [], next: 'B' };
+    expect(trappedStones(empty)).toEqual([]);
   });
 });
