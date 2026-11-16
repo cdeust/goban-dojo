@@ -277,8 +277,7 @@ export const useStore = create<State>((set, get) => ({
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: unknown = await res.json();
       if (!isDataset(json)) throw new Error('format de données inattendu');
-      const first = json.games.findIndex((g) => !g.dateSuspect);
-      set({ dataset: json, status: 'ready', gameIndex: Math.max(0, first) });
+      set({ dataset: json, status: 'ready', gameIndex: 0 });
     } catch (e) {
       set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
     }

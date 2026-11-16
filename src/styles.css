@@ -109,6 +109,7 @@ button:disabled {
   overflow: hidden;
   /* Le goban occupe la hauteur que les commandes de lecture lui laissent, quelle que soit la leur. */
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) auto;
   height: 100dvh;
 }
@@ -1200,4 +1201,11 @@ kbd {
   .mode__note {
     display: none;
   }
+}
+
+.card__era {
+  margin-top: 0.1rem;
+  font-size: 0.74rem;
+  color: var(--paper-faint);
+  overflow-wrap: anywhere;
 }

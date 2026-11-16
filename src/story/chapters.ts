@@ -3,9 +3,10 @@ import type { GameRecord } from '../domain/game.ts';
 /**
  * Le récit : huit chapitres de la vie de Hon'inbō Shūsaku.
  *
- * Chaque fait biographique provient des deux articles cités dans SOURCES ;
- * lorsque les deux divergent, le texte le dit. Les parties proviennent du corpus
- * (public/data/games.json) et sont référencées par leur identifiant stable.
+ * Chaque fait biographique provient des pages citées dans SOURCES ; lorsqu'elles divergent,
+ * le texte le dit. Les dates de promotion sont celles, grégoriennes, de la collection de parties.
+ * Les parties proviennent du corpus (public/data/games.json) et sont référencées par leur
+ * identifiant stable.
  */
 
 export interface Source {
@@ -26,10 +27,16 @@ export const SOURCES: Source[] = [
     detail: 'révision 1381490013 du 22 octobre 2026, licence CC BY-SA 4.0',
   },
   {
+    label: 'A. E. Brouwer (CWI) — « Games by Shusaku »',
+    url: 'https://homepages.cwi.nl/~aeb/go/games/games/Shusaku/',
+    detail:
+      '470 parties en SGF, dérivées du recueil 本因坊秀策全集, avec dates japonaises et grégoriennes ; archive vérifiée par empreinte SHA-256',
+  },
+  {
     label: 'Professional Go Dataset (PGD)',
     url: 'https://github.com/wangjinzhuo/pgd/tree/b1e006b49dc286f8c513953e5caad0901cd2e895',
     detail:
-      'J. Wang, W. Wang, R. Wang, W. Gao, AAAI 2017 — 460 fichiers SGF mentionnant Shūsaku, épinglés au commit b1e006b',
+      'J. Wang, W. Wang, R. Wang, W. Gao, AAAI 2017 — lieux et circonstances de 195 parties, commit b1e006b',
   },
 ];
 
@@ -62,9 +69,12 @@ export const CHAPTERS: Chapter[] = [
       'Le 6 juin 1829 naît sur l’île d’Innoshima, près d’Onomichi, le second fils du marchand Kuwabara Wazō. On l’appelle Torajirō.',
       'Le seigneur Asano, du château de Mihara, joue contre l’enfant, devient son protecteur et le confie à son propre maître de go, le prêtre Hōshin.',
       'En 1837, à huit ans, il quitte les siens pour Edo et entre à l’école Hon’inbō, la première maison de go du Japon, comme disciple de Hon’inbō Jōwa. On prête à Jōwa ce mot, peut-être apocryphe : le plus grand génie du go depuis cent cinquante ans.',
-      'Le 3 janvier 1840, il reçoit son diplôme de premier dan. Aucune partie de ces années d’apprentissage ne figure dans le corpus : le goban reste vide.',
+      'Les deux plus anciennes parties qui nous soient parvenues datent de décembre 1839. Il a dix ans, il porte encore le nom de Yasuda Eisai, et il recevra son diplôme de premier dan quelques jours plus tard, le 3 janvier 1840.',
     ],
-    featured: [],
+    featured: [
+      { gameId: 's001', label: 'La plus ancienne partie connue (14 décembre 1839)' },
+      { gameId: 's002', label: 'Dix jours plus tard, contre Hori Risaburō' },
+    ],
   },
   {
     id: 'ascension',
@@ -74,16 +84,17 @@ export const CHAPTERS: Chapter[] = [
     from: 1840,
     to: 1845,
     paragraphs: [
-      'En 1840, le jeune premier dan rentre plus d’un an dans son pays natal. De retour à Edo en 1841, il prend le nom de Yasuda Shūsaku.',
-      'Les grades s’enchaînent : deuxième dan en 1841, troisième en 1842, quatrième en 1843 ou 1844 selon les sources.',
+      'En 1840, le jeune premier dan rentre plus d’un an dans son pays natal. De retour à Edo en 1841, il quitte le nom d’Eisai pour celui de Yasuda Shūsaku.',
+      'Les grades s’enchaînent : deuxième dan en octobre 1841, troisième en août 1842, quatrième en novembre 1843.',
       'C’est dans ces années, face à Kadono Chūzaemon, fils aîné de Jōwa, qu’il éprouve pour la première fois l’ouverture qui portera son nom : trois komoku aux coups 1, 3 et 5, puis le kosumi.',
-      'La plus ancienne partie conservée ici date du 22 avril 1840 : il a dix ans et reçoit trois pierres de handicap d’un septième dan que le kifu nomme Tsuchiya Shūwa.',
+      'Au printemps 1840, à dix ans, il reçoit trois pierres de handicap de deux joueurs qui compteront dans sa vie : Itō Matsujirō, sixième dan, et un septième dan que les kifus nomment Tsuchiya Shūwa.',
     ],
     featured: [
-      { gameId: 'c6796bf5b0', label: 'La plus ancienne partie conservée (1840)' },
-      { gameId: '7ab747f441', label: 'Deux pierres contre Hon’inbō Jōsaku (1841)' },
-      { gameId: '3fcb845c94', label: 'Face à Kadono Chūzaemon (1843)' },
-      { gameId: '7084fc2fab', label: 'Jigo contre Shūwa (1844)' },
+      { gameId: 's004', label: 'Trois pierres contre Itō Matsujirō (1840)' },
+      { gameId: 's005', label: 'Trois pierres contre Tsuchiya Shūwa (1840)' },
+      { gameId: 's011', label: 'Deux pierres contre Hon’inbō Jōsaku (1841)' },
+      { gameId: 's052', label: 'Face à Kadono Chūzaemon (1843)' },
+      { gameId: 's084', label: 'Jigo contre Shūwa (1844)' },
     ],
   },
   {
@@ -100,9 +111,9 @@ export const CHAPTERS: Chapter[] = [
       'Ce coup est le 127ᵉ. Shūsaku l’emporte de deux points au terme de 325 coups.',
     ],
     featured: [
-      { gameId: '60d1953ecc', label: 'La partie à deux pierres, interrompue' },
-      { gameId: '2d229bca26', label: 'La partie de l’oreille rouge' },
-      { gameId: 'e4cd65e800', label: 'Gennan, encore (19 septembre)' },
+      { gameId: 's125', label: 'La partie à deux pierres, interrompue' },
+      { gameId: 's126', label: 'La partie de l’oreille rouge' },
+      { gameId: 's128', label: 'Gennan, encore (19 septembre)' },
     ],
   },
   {
@@ -115,12 +126,12 @@ export const CHAPTERS: Chapter[] = [
     paragraphs: [
       'La maison Hon’inbō veut faire de lui son héritier. Shūsaku refuse d’abord, par loyauté envers le seigneur Asano : devenir chef d’une maison de go, c’est entrer au service du shogun.',
       'Après de longues négociations, le seigneur de Mihara le libère de ses obligations. Shūsaku accepte en 1847 ; en 1848 il devient officiellement l’héritier de la maison, sixième dan, et épouse Hana, la fille de Jōwa.',
-      'Jōsaku et Jōwa meurent en 1847. Son maître est désormais Shūwa. Par respect, Shūsaku refusera toujours de prendre les blancs contre lui : toutes leurs parties le voient jouer noir.',
+      'Jōsaku et Jōwa meurent en 1847. Son maître est désormais Shūwa. Par respect, Shūsaku refusera toujours de prendre les blancs contre lui : dans toutes leurs parties en tête-à-tête, il joue noir.',
     ],
     featured: [
-      { gameId: 'f9a7b77e68', label: 'Deux pierres contre Jōwa, 9ᵉ dan (1847)' },
-      { gameId: '9fec728780', label: 'Contre Shūwa, 326 coups (1847)' },
-      { gameId: 'e0a34712b3', label: 'Contre Shūwa chez le seigneur Kugai (1847)' },
+      { gameId: 's152', label: 'Deux pierres contre Jōwa, 9ᵉ dan (1847)' },
+      { gameId: 's170', label: 'Contre Shūwa, 326 coups (1847)' },
+      { gameId: 's177', label: 'Contre Shūwa chez le seigneur Kugai (1847)' },
     ],
   },
   {
@@ -136,10 +147,10 @@ export const CHAPTERS: Chapter[] = [
       'En 1851, il dispute aussi une série de vingt parties contre Sekiyama Sendayū, joueur étranger aux grandes maisons.',
     ],
     featured: [
-      { gameId: '4d0c3c49e4', label: 'Premier oshirogo, contre Sakaguchi Sentoku (1849)' },
-      { gameId: '2e875e2482', label: 'Oshirogo contre Yasui Sanchi (1849)' },
-      { gameId: '30c192a73e', label: 'Retour à Onomichi : deux pierres au prêtre Hōshin (1850)' },
-      { gameId: '3b34bf252f', label: 'Shūwa l’emporte d’un point (1851)' },
+      { gameId: 's246', label: 'Premier oshirogo, contre Sakaguchi Sentoku (1849)' },
+      { gameId: 's245', label: 'Oshirogo contre Yasui Sanchi (1849)' },
+      { gameId: 's264', label: 'Retour à Onomichi : deux pierres au prêtre Hōshin (1850)' },
+      { gameId: 's271', label: 'Shūwa l’emporte d’un point (1851)' },
     ],
   },
   {
@@ -155,8 +166,8 @@ export const CHAPTERS: Chapter[] = [
       'La vingt-troisième partie dure près de vingt-quatre heures et s’achève sur un jigo, une partie nulle, que Yūzō obtient avec les blancs. L’honneur est sauf ; le match s’arrête là. Les vingt-trois parties jouées sont toutes ici.',
     ],
     featured: [
-      { gameId: '7783937348', label: 'Première partie du match' },
-      { gameId: '45463f6b0b', label: 'La vingt-troisième : le jigo' },
+      { gameId: 's327', label: 'Première partie du match' },
+      { gameId: 's356', label: 'La vingt-troisième : le jigo' },
     ],
   },
   {
@@ -169,13 +180,13 @@ export const CHAPTERS: Chapter[] = [
     paragraphs: [
       'Septième dan, héritier des Hon’inbō, Shūsaku passe pour le plus fort joueur du Japon après son maître. Interrogé sur l’issue d’une partie, il aurait répondu simplement : « J’avais les noirs. »',
       'Les oshirogo se poursuivent — sauf en 1855, année du séisme. En 1861 il joue ses deux dernières parties au château, et dispute un match en dix parties contre Murase Shūho, autre grand disciple de Shūwa.',
-      'La dernière partie datée du corpus est celle du château, à la fin de 1861, contre Hayashi Yūbi.',
+      'En décembre 1861, contre Hayashi Yūbi, il joue sa dix-neuvième et dernière partie au château.',
     ],
     featured: [
-      { gameId: '6a7399c4cb', label: 'Retrouvailles avec Gennan Inseki (1855)' },
-      { gameId: '3c34e54228', label: 'Jūbango contre Murase Shūho (1861)' },
-      { gameId: 'fbe3c431a3', label: 'Oshirogo contre Hayashi Monnyū (1861)' },
-      { gameId: '2fd1de428f', label: 'La dernière partie du château (1861)' },
+      { gameId: 's376', label: 'Retrouvailles avec Gennan Inseki (1855)' },
+      { gameId: 's458', label: 'Jūbango contre Murase Shūho (1861)' },
+      { gameId: 's468', label: 'Oshirogo contre Hayashi Monnyū (1861)' },
+      { gameId: 's469', label: 'La dernière partie du château (1861)' },
     ],
   },
   {
@@ -186,12 +197,15 @@ export const CHAPTERS: Chapter[] = [
     from: 1862,
     to: 1862,
     paragraphs: [
-      'En mars 1862, sa mère meurt. À l’été, une épidémie de choléra ravage Edo et frappe la maison Hon’inbō.',
+      'En mars 1862, sa mère meurt. Le 19 juin, il s’assied face à Narabayashi Kurakichi : trente-huit coups, puis le kifu s’arrête. La partie est restée inachevée ; c’est la dernière que l’on connaisse de lui.',
+      'À l’été, une épidémie de choléra ravage Edo et frappe la maison Hon’inbō.',
       'Malgré les mises en garde de Shūwa, Shūsaku se dévoue au chevet des malades. Il est contaminé à son tour et s’éteint le 3 septembre 1862. Il avait trente-trois ans.',
       'La postérité l’a élevé au rang de kisei, « saint du go », aux côtés de Dōsaku. Son ouverture a dominé le jeu jusqu’aux années 1930.',
-      'Il n’y a plus de partie à poser. Le goban reste vide.',
     ],
-    featured: [{ gameId: '2fd1de428f', label: 'Revoir sa dernière partie connue' }],
+    featured: [
+      { gameId: 's470', label: 'Trois pierres données à Mukai Shōsō (20 mars 1862)' },
+      { gameId: 's471', label: 'La dernière partie, inachevée (19 juin 1862)' },
+    ],
   },
 ];
 
@@ -205,19 +219,19 @@ export interface Moment {
 
 export const MOMENTS: Moment[] = [
   {
-    gameId: '2d229bca26',
+    gameId: 's126',
     move: 89,
     title: 'Fin de la première séance',
     text: 'La partie est interrompue ici, chez Tsuji Chūjirō. Elle reprendra chez Hara Saiichirō.',
   },
   {
-    gameId: '2d229bca26',
+    gameId: 's126',
     move: 127,
     title: 'Le coup de l’oreille rouge',
     text: 'Noir 127. Un seul coup pour quatre desseins : agrandir le haut, neutraliser l’influence blanche à droite, soutenir ses pierres fragiles en bas, préparer l’invasion à gauche. Les oreilles de Gennan rougissent.',
   },
   {
-    gameId: '2d229bca26',
+    gameId: 's126',
     move: 141,
     title: 'Fin de la deuxième séance',
     text: 'La partie s’achèvera lors d’une réunion organisée par Nakagawa Junsetsu.',
@@ -230,9 +244,8 @@ export function momentFor(gameId: string, move: number): Moment | undefined {
 
 const yearOf = (g: GameRecord): number => Number(g.date.slice(0, 4));
 
-/** Chapitre auquel appartient une partie ; -1 si sa date est douteuse. */
+/** Chapitre auquel appartient une partie (d'après l'année de son début). */
 export function chapterIndexOf(game: GameRecord): number {
-  if (game.dateSuspect) return -1;
   const y = yearOf(game);
   return CHAPTERS.findIndex((c) => y >= c.from && y <= c.to);
 }

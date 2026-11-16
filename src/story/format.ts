@@ -9,10 +9,15 @@ const MACRONS: [RegExp, string][] = [
   [/\bJowa\b/g, 'Jōwa'],
   [/\bJosaku\b/g, 'Jōsaku'],
   [/\bOta Yuzo\b/g, 'Ōta Yūzō'],
-  [/\bIto Showa\b/g, 'Itō Shōwa'],
+  [/\bShowa\b/g, 'Shōwa'],
   [/\bSendayu\b/g, 'Sendayū'],
   [/\bHoshin\b/g, 'Hōshin'],
   [/\bHosenji\b/g, 'Hōsenji'],
+  [/\bTenpo\b/g, 'Tenpō'],
+  [/\bKoka\b/g, 'Kōka'],
+  [/\bBunkyu\b/g, 'Bunkyū'],
+  [/\bIto\b/g, 'Itō'],
+  [/\bMatsujiro\b/g, 'Matsujirō'],
 ];
 
 export function prettyName(name: string): string {
@@ -21,16 +26,27 @@ export function prettyName(name: string): string {
   return out;
 }
 
-const DATE = new Intl.DateTimeFormat('fr-FR', {
+const DAY = new Intl.DateTimeFormat('fr-FR', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
   timeZone: 'UTC',
 });
+const MONTH = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
+/** Met en forme une date AAAA-MM-JJ, AAAA-MM ou AAAA, selon la précision connue. */
 export function formatDate(iso: string): string {
-  const d = new Date(`${iso}T00:00:00Z`);
-  return Number.isNaN(d.getTime()) ? iso : DATE.format(d).replace(/^1 /, '1ᵉʳ ');
+  const [y, m, d] = iso.split('-');
+  if (!y || !m) return iso;
+  const date = new Date(Date.UTC(Number(y), Number(m) - 1, d ? Number(d) : 1));
+  if (Number.isNaN(date.getTime())) return iso;
+  return d ? DAY.format(date).replace(/^1 /, '1ᵉʳ ') : MONTH.format(date);
+}
+
+/** Instant (ms) du début d'une date éventuellement partielle : le milieu de la période inconnue. */
+export function dateToTime(iso: string): number {
+  const [y, m, d] = iso.split('-');
+  return Date.UTC(Number(y), m ? Number(m) - 1 : 6, d ? Number(d) : m ? 15 : 1);
 }
 
 export const colorName = (c: 'B' | 'W'): string => (c === 'B' ? 'Noir' : 'Blanc');
@@ -67,5 +83,5 @@ export function outcomeFor(game: GameRecord): { mark: string; label: string } {
 }
 
 export function handicapLabel(game: GameRecord): string | undefined {
-  return game.handicap > 0 ? `${game.handicap} pierres de handicap` : undefined;
+  return game.handicap > 0 ? `${game.handicap} pierres de handicap` : game.regime;
 }

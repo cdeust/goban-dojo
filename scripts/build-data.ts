@@ -1,141 +1,78 @@
 /**
- * Construit public/data/games.json à partir des SGF bruts de data/raw.
+ * Construit public/data/games.json à partir des SGF bruts.
  *
- *  1. vérifie l'empreinte de chaque fichier contre data/sources.tsv ;
- *  2. analyse le SGF et en extrait la ligne principale ;
- *  3. rejoue la partie avec le moteur de règles (tout coup illégal est consigné) ;
- *  4. fusionne les doublons, y compris ceux enregistrés sous une autre orientation ;
+ *  1. vérifie l'empreinte de chaque fichier contre les manifestes (data/cwi.sha256, data/pgd/sources.tsv) ;
+ *  2. lit la collection principale (CWI) : une partie par fichier, déjà dédoublonnée par son auteur ;
+ *  3. rejoue chaque partie avec le moteur de règles (tout coup illégal est consigné) ;
+ *  4. retrouve la même partie dans la collection complémentaire (PGD), à une symétrie du goban
+ *     près, pour en reprendre le lieu et les circonstances ;
  *  5. écrit le jeu de données et un rapport de qualité (data/report.json).
  *
  * Déterministe : deux exécutions produisent des fichiers identiques à l'octet près.
  * Usage : pnpm data:build
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PASS, SIZE, pointFromSgf, pointToSgf, type Color } from '../src/domain/board.ts';
 import {
   buildTimeline,
-  decodePoints,
   type Dataset,
   type GameRecord,
   type GameResult,
   type Move,
 } from '../src/domain/game.ts';
-import { mainLine, parseSgf, prop } from '../src/domain/sgf.ts';
-import { SOURCE } from './source.ts';
+import { mainLine, parseSgf, prop, type SgfNode } from '../src/domain/sgf.ts';
+import { CWI, PGD } from './source.ts';
 
 const root = join(import.meta.dirname, '..');
-const rawDir = join(root, 'data', 'raw');
+const anomalies: string[] = [];
 
-const blobSha = (bytes: Uint8Array): string =>
-  createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+// ---------------------------------------------------------------- lecture commune
 
-// ---------------------------------------------------------------- normalisation
-
-/** Variantes orthographiques d'un même joueur dans la source. */
-const NAME_ALIASES: Record<string, string> = {
-  'Sekiyama Sendaiu': 'Sekiyama Sendayu',
-  'Ebizawa Kenzo': 'Ebisawa Kenzo',
-  'Gennan Inseki': 'Inoue Gennan Inseki',
-  'Inoue Genan Inseki': 'Inoue Gennan Inseki',
-  // La source précise : « Honinbo Shuho was still Murase Shuho at the time. »
-  'Honinbo Shuho': 'Murase Shuho',
-  'Mizutani Nuji': 'Mizutani Nuiji',
-};
-
-const cleanName = (s: string | undefined): string => {
-  const t = (s ?? '').trim();
-  return NAME_ALIASES[t] ?? t;
-};
-
-const cleanRank = (s: string | undefined): string | undefined => {
-  const m = /^(\d)\s*(p|d|dan)$/i.exec((s ?? '').trim());
-  return m ? `${m[1]}e dan` : undefined;
-};
-
-const MONTHS: Record<string, string> = {
-  jan: '01',
-  feb: '02',
-  mar: '03',
-  apr: '04',
-  may: '05',
-  jun: '06',
-  jul: '07',
-  aug: '08',
-  sep: '09',
-  oct: '10',
-  nov: '11',
-  dec: '12',
-};
-
-function parseDate(raw: string): { date: string; dateRaw?: string } {
-  const t = raw.trim();
-  const iso = /^(\d{4})-(\d{2})-(\d{2})(.*)$/.exec(t);
-  if (iso) {
-    const date = `${iso[1]}-${iso[2]}-${iso[3]}`;
-    return (iso[4] ?? '').trim() === '' ? { date } : { date, dateRaw: t };
-  }
-  const en = /^(\d{1,2}) ([A-Za-z]{3})\.? (\d{4})$/.exec(t);
-  if (en) {
-    const month = MONTHS[(en[2] as string).toLowerCase()];
-    if (month) return { date: `${en[3]}-${month}-${(en[1] as string).padStart(2, '0')}` };
-  }
-  throw new Error(`date illisible : « ${raw} »`);
+interface Body {
+  rootNode: SgfNode;
+  setupBlack: number[];
+  moves: Move[];
+  hadVariations: boolean;
 }
 
-function translateResultNote(note: string): string {
-  const t = note.replace(/[{}()]/g, '').trim();
-  let m: RegExpExecArray | null;
-  if (/^no further moves known$/i.test(t)) return 'suite des coups inconnue';
-  if ((m = /^moves beyond (\d+) not known$/i.exec(t))) return `coups inconnus après le ${m[1]}e`;
-  if ((m = /^([BW]) connec[a-z]{1,4} the ko$/i.exec(t)))
-    return `${m[1] === 'B' ? 'Noir' : 'Blanc'} connecte le ko`;
-  return t;
-}
-
-function parseResult(rawIn: string | undefined): GameResult {
-  const raw = (rawIn ?? '').trim();
-  const noteMatch = /[{(](.*)[)}]/.exec(raw);
-  const note = noteMatch ? translateResultNote(noteMatch[0]) : undefined;
-  const head = raw.replace(/[{(].*$/, '').trim();
-  const base = (r: Omit<GameResult, 'raw'>): GameResult =>
-    note ? { ...r, note, raw } : { ...r, raw };
-  const side = head.charAt(0).toUpperCase();
-  if ((side === 'B' || side === 'W') && head.charAt(1) === '+') {
-    const winner = side;
-    const tail = head.slice(2).trim();
-    if (tail === '') return base({ winner });
-    if (/^r/i.test(tail)) return base({ winner, resign: true });
-    const margin = Number(tail);
-    return Number.isFinite(margin) ? base({ winner, margin }) : base({ winner });
-  }
-  if (/^black wins by resign/i.test(head)) return base({ winner: 'B', resign: true });
-  if (/^white wins by resign/i.test(head)) return base({ winner: 'W', resign: true });
-  if (/^(jigo|0|draw)$/i.test(head)) return base({ winner: 'jigo' });
-  if (/unfinished/i.test(head)) return base({ winner: 'unfinished' });
-  return base({ winner: 'unknown' });
-}
-
-const EVENTS: [RegExp, string][] = [
-  [/castle game.*o-konomi/i, 'Oshirogo — okonomi-go (partie du château)'],
-  [/castle game/i, 'Oshirogo (partie du château)'],
-  [/sanju-bango|30-game match|thirty game match/i, 'Sanjūbango (match en trente parties)'],
-  [/niju-bango|20-game match|twenty game match/i, 'Nijūbango (match en vingt parties)'],
-  [/ju-bango|10-game match|ten game match/i, 'Jūbango (match en dix parties)'],
-];
-
-function translateEvent(raw: string | undefined): string | undefined {
-  const t = (raw ?? '').trim();
-  if (t === '' || t === 'None') return undefined;
-  for (const [re, label] of EVENTS) if (re.test(t)) return label;
-  return t;
+function readBody(text: string, label: string): Body {
+  const line = mainLine(parseSgf(text));
+  const rootNode = line[0];
+  if (!rootNode) throw new Error(`SGF vide : ${label}`);
+  const size = prop(rootNode, 'SZ');
+  if (size !== undefined && size !== '19') throw new Error(`taille ${size} non gérée : ${label}`);
+  // Triées : l'ordre d'énumération des pierres de handicap varie d'un fichier à l'autre.
+  const setupBlack = (rootNode.props.get('AB') ?? []).map(pointFromSgf).sort((a, b) => a - b);
+  if (rootNode.props.has('AW'))
+    anomalies.push(`${label} : pierres blanches de mise en place ignorées`);
+  const moves: Move[] = [];
+  let hadVariations = false;
+  line.forEach((node, idx) => {
+    if (node.children.length > 1) hadVariations = true;
+    if (idx > 0 && (node.props.has('AB') || node.props.has('AW') || node.props.has('AE'))) {
+      anomalies.push(`${label} : mise en place en cours de partie ignorée`);
+    }
+    for (const c of ['B', 'W'] as Color[]) {
+      const v = node.props.get(c);
+      if (v) moves.push({ color: c, point: pointFromSgf(v[0] ?? '') });
+    }
+  });
+  // Les passes finales n'apportent rien à la relecture.
+  while (moves.length > 0 && (moves[moves.length - 1] as Move).point === PASS) moves.pop();
+  return { rootNode, setupBlack, moves, hadVariations };
 }
 
 const UNINFORMATIVE = new Set(['japan', 'ja', 'none', '']);
 const cleanText = (s: string | undefined): string | undefined => {
   const t = (s ?? '').replace(/\s+/g, ' ').trim();
   return UNINFORMATIVE.has(t.toLowerCase()) ? undefined : t.replace(/, Japan$/, '');
+};
+
+const cleanRank = (s: string | undefined): string | undefined => {
+  const m = /^(\d)\s*(p|d|dan)$/i.exec((s ?? '').trim());
+  return m ? `${m[1]}${m[1] === '1' ? 'er' : 'e'} dan` : undefined;
 };
 
 // ---------------------------------------------------------------- symétries
@@ -151,42 +88,22 @@ const SYMMETRIES: ((x: number, y: number) => [number, number])[] = [
   (x, y) => [SIZE - 1 - y, SIZE - 1 - x],
 ];
 
-const SIGNATURE_MOVES = 30;
+/** Nombre de coups comparés pour reconnaître une même partie dans deux collections. */
+const COMPARED_MOVES = 80;
+/** Part minimale de coups identiques, sous la meilleure symétrie, pour conclure à la même partie. */
+const SAME_GAME = 0.9;
 
 /**
- * Signature de la mise en place et des premiers coups, invariante par rotation
- * et réflexion du goban.
- */
-function signature(setup: number[], moves: Move[]): string {
-  const head = moves.slice(0, SIGNATURE_MOVES);
-  let best = '';
-  for (const f of SYMMETRIES) {
-    const map = (p: number): number => {
-      const [x, y] = f(p % SIZE, Math.floor(p / SIZE));
-      return y * SIZE + x;
-    };
-    let s = `${setup
-      .map(map)
-      .sort((a, b) => a - b)
-      .map(pointToSgf)
-      .join('')}|`;
-    for (const m of head) s += m.color + (m.point === PASS ? '--' : pointToSgf(map(m.point)));
-    if (best === '' || s < best) best = s;
-  }
-  return best;
-}
-
-/**
- * Part des coups identiques (même rang, même couleur, même point) entre deux parties
- * de même longueur, sous la meilleure des huit symétries. Sert à reconnaître deux
- * transcriptions d'une même partie qui divergent par une erreur de copie.
+ * Part des `COMPARED_MOVES` premiers coups identiques (même rang, même couleur, même point)
+ * entre deux parties, sous la meilleure des huit symétries du goban.
  */
 function similarity(a: Move[], b: Move[]): number {
-  if (a.length !== b.length || a.length === 0) return 0;
+  const n = Math.min(a.length, b.length, COMPARED_MOVES);
+  if (n === 0) return 0;
   let best = 0;
   for (const f of SYMMETRIES) {
     let same = 0;
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 0; i < n; i++) {
       const ma = a[i] as Move;
       const mb = b[i] as Move;
       if (ma.color !== mb.color) continue;
@@ -197,220 +114,266 @@ function similarity(a: Move[], b: Move[]): number {
       const [x, y] = f(ma.point % SIZE, Math.floor(ma.point / SIZE));
       if (y * SIZE + x === mb.point) same++;
     }
-    best = Math.max(best, same / a.length);
+    best = Math.max(best, same / n);
   }
   return best;
 }
 
-/** Seuil au-delà duquel deux transcriptions de même longueur sont tenues pour la même partie. */
-const SAME_GAME_SIMILARITY = 0.9;
+// ---------------------------------------------------------------- collection principale (CWI)
 
-// ---------------------------------------------------------------- lecture
+const sha256 = (b: Uint8Array): string => createHash('sha256').update(b).digest('hex');
 
-interface Parsed {
-  sha: string;
-  path: string;
-  record: GameRecord;
-  moves: Move[];
-  illegal: number;
-  midGameSetup: number;
-  hadVariations: boolean;
-  shusakuRank?: string;
+const NAME_FIXES: Record<string, string> = {
+  // La collection écrit « Ebizawa » ; l'usage courant est « Ebisawa ».
+  'Ebizawa Kenzo': 'Ebisawa Kenzo',
+};
+const cleanName = (s: string | undefined): string => {
+  const t = (s ?? '').trim();
+  return NAME_FIXES[t] ?? t;
+};
+
+const isShusaku = (name: string): boolean => /Shusaku|Yasuda Eisai/.test(name);
+
+function parseResult(rawIn: string | undefined): GameResult {
+  const raw = (rawIn ?? '').trim();
+  const side = raw.charAt(0).toUpperCase();
+  if ((side === 'B' || side === 'W') && raw.charAt(1) === '+') {
+    const tail = raw.slice(2).trim();
+    if (tail === '') return { winner: side, raw };
+    if (/^r/i.test(tail)) return { winner: side, resign: true, raw };
+    const margin = Number(tail);
+    return Number.isFinite(margin) ? { winner: side, margin, raw } : { winner: side, raw };
+  }
+  if (/^jigo$/i.test(raw)) return { winner: 'jigo', raw };
+  if (/^unfinished$/i.test(raw)) return { winner: 'unfinished', raw };
+  return { winner: 'unknown', raw };
 }
 
-const anomalies: string[] = [];
+const ordinal = (n: string): string => (n === '1' ? '1ʳᵉ' : `${n}ᵉ`);
 
-/** Fichiers où Shūsaku n'est cité que dans l'intitulé de la rencontre, sans y jouer. */
-const excluded: string[] = [];
+function eventOf(ev: string | undefined, round: string | undefined): string | undefined {
+  const t = (ev ?? '').trim();
+  if (t === '') return undefined;
+  const game = round ? ` — ${ordinal(round)} partie` : '';
+  if (/^castle game$/i.test(t)) return 'Oshirogo (partie du château)';
+  if (/^30-game match$/i.test(t)) return `Sanjūbango (match en trente parties)${game}`;
+  if (/^20-game match$/i.test(t)) return `Nijūbango (match en vingt parties)${game}`;
+  if (/^10-game match$/i.test(t)) return `Jūbango (match en dix parties)${game}`;
+  return t;
+}
 
-function readOne(sha: string, path: string): Parsed | null {
-  const bytes = readFileSync(join(rawDir, `${sha}.sgf`));
-  if (blobSha(bytes) !== sha) throw new Error(`empreinte inattendue pour ${path}`);
+/** Régimes de handicap sans pierres (propriété OH de la collection). */
+const REGIMES: Record<string, string> = {
+  B: 'josen (toujours Noir)',
+  BWB: 'sen-ai-sen (Noir deux parties sur trois)',
+};
+
+interface Main {
+  number: string;
+  record: GameRecord;
+  moves: Move[];
+}
+
+const cwiDir = join(root, 'data', 'cwi');
+const cwiManifest = readFileSync(join(root, 'data', 'cwi.sha256'), 'utf8')
+  .split('\n')
+  .filter(Boolean)
+  .map((l) => l.split(/\s+/) as [string, string]);
+{
+  const listed = new Set(cwiManifest.map(([, name]) => name));
+  const present = readdirSync(cwiDir).filter((f) => f.endsWith('.sgf'));
+  for (const f of present)
+    if (!listed.has(f)) throw new Error(`fichier hors manifeste : data/cwi/${f}`);
+}
+
+const main: Main[] = [];
+const lost: string[] = [];
+let cwiVariations = 0;
+
+for (const [hash, name] of cwiManifest) {
+  const bytes = readFileSync(join(cwiDir, name));
+  if (sha256(bytes) !== hash) throw new Error(`empreinte inattendue pour data/cwi/${name}`);
+  const number = name.replace('.sgf', '');
+  const label = `cwi:${number}`;
+  const body = readBody(new TextDecoder('utf-8', { fatal: true }).decode(bytes), label);
+  const r = body.rootNode;
+  const black = cleanName(prop(r, 'PB'));
+  const white = cleanName(prop(r, 'PW'));
+  const dt = (prop(r, 'DT') ?? '').trim();
+  // « 1846-09-11,14,15 », « 1842-04 », « 1849 », ou une mention libre comme « Summer 1857 ».
+  const first =
+    /^\d{4}-\d{2}-\d{2}/.exec(dt)?.[0] ??
+    /^\d{4}-\d{2}/.exec(dt)?.[0] ??
+    /^\d{4}/.exec(dt)?.[0] ??
+    /\b(1[78]\d{2})\b/.exec(dt)?.[1];
+  if (!first) throw new Error(`date illisible : ${label} « ${dt} »`);
+
+  if (body.moves.length === 0) {
+    lost.push(
+      `${first} ${black} – ${white} (${prop(r, 'RE') ?? '?'}) : kifu perdu, métadonnées seules`,
+    );
+    continue;
+  }
+  if (body.hadVariations) cwiVariations++;
+  const timeline = buildTimeline(body.setupBlack, body.moves);
+  for (const i of timeline.illegal)
+    anomalies.push(`${label} : coup ${i.move} illégal (${i.reason})`);
+
+  if (isShusaku(black) === isShusaku(white))
+    throw new Error(`camp de Shūsaku indéterminé : ${label}`);
+  const shusaku: Color = isShusaku(black) ? 'B' : 'W';
+  const mine = shusaku === 'B' ? black : white;
+  const rengo = mine.includes(',');
+  const ha = Number(prop(r, 'HA') ?? 0);
+  if (ha !== body.setupBlack.length) {
+    anomalies.push(
+      `${label} : HA[${ha}] mais ${body.setupBlack.length} pierres de handicap placées`,
+    );
+  }
+  const blackRank = cleanRank(prop(r, 'BR'));
+  const whiteRank = cleanRank(prop(r, 'WR'));
+  const jd = cleanText(prop(r, 'JD'));
+  const event = eventOf(prop(r, 'EV'), prop(r, 'RO'));
+  const place = cleanText(prop(r, 'PC'));
+  const regime = REGIMES[(prop(r, 'OH') ?? '').trim()];
+  const pretty = (n: string): string => n.split(',').join(' · ');
+
+  const record: GameRecord = {
+    id: `s${number}`,
+    date: first,
+    ...(dt !== first ? { sessions: dt.replace(/^Summer /, 'été ') } : {}),
+    ...(jd ? { dateJapanese: jd } : {}),
+    black: pretty(black),
+    white: pretty(white),
+    ...(blackRank ? { blackRank } : {}),
+    ...(whiteRank ? { whiteRank } : {}),
+    shusaku,
+    shusakuName: rengo ? 'Shusaku' : mine,
+    opponent: pretty(shusaku === 'B' ? white : black),
+    ...(rengo ? { rengo: true } : {}),
+    handicap: body.setupBlack.length,
+    ...(regime ? { regime } : {}),
+    setupBlack: body.setupBlack.map(pointToSgf).join(''),
+    moves: body.moves
+      .map((m) => (m.color === 'B' ? 'b' : 'w') + (m.point === PASS ? '--' : pointToSgf(m.point)))
+      .join(''),
+    result: parseResult(prop(r, 'RE')),
+    ...(event ? { event } : {}),
+    ...(place ? { place } : {}),
+    sources: [label],
+  };
+  main.push({ number, record, moves: body.moves });
+}
+
+// La collection est annoncée sans doublon : on le vérifie.
+const internalDuplicates: string[] = [];
+for (let i = 0; i < main.length; i++) {
+  for (let j = i + 1; j < main.length; j++) {
+    const a = main[i] as Main;
+    const b = main[j] as Main;
+    if (a.record.setupBlack.length !== b.record.setupBlack.length) continue;
+    if (Math.abs(a.moves.length - b.moves.length) > 2) continue;
+    if (similarity(a.moves, b.moves) >= SAME_GAME) {
+      internalDuplicates.push(`cwi:${a.number} / cwi:${b.number}`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- collection complémentaire (PGD)
+
+const blobSha = (b: Uint8Array): string =>
+  createHash('sha1').update(`blob ${b.length}\0`).update(b).digest('hex');
+
+interface Extra {
+  path: string;
+  moves: Move[];
+  handicap: number;
+  place?: string;
+  note?: string;
+  okonomi: boolean;
+}
+
+const pgdRows = readFileSync(join(root, 'data', 'pgd', 'sources.tsv'), 'utf8')
+  .split('\n')
+  .filter(Boolean)
+  .map((l) => l.split('\t') as [string, string]);
+const pgdBySha = new Map<string, string[]>();
+for (const [sha, path] of pgdRows) pgdBySha.set(sha, [...(pgdBySha.get(sha) ?? []), path].sort());
+
+const extras: Extra[] = [];
+for (const [sha, paths] of [...pgdBySha].sort(([a], [b]) => a.localeCompare(b))) {
+  const bytes = readFileSync(join(root, 'data', 'pgd', 'raw', `${sha}.sgf`));
+  if (blobSha(bytes) !== sha) throw new Error(`empreinte inattendue pour pgd:${paths[0]}`);
   let text: string;
-  let legacyEncoding = false;
+  let legacy = false;
   try {
     text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
   } catch {
     // Un fichier est encodé en GB2312 : seuls ses commentaires en dépendent, on ne les exploite pas.
     text = new TextDecoder('latin1').decode(bytes);
-    legacyEncoding = true;
+    legacy = true;
   }
-  const tree = parseSgf(text);
-  if (!/shusaku/i.test(`${prop(tree, 'PB')} ${prop(tree, 'PW')}`)) {
-    excluded.push(path);
-    return null;
-  }
-  const line = mainLine(tree);
-  const rootNode = line[0];
-  if (!rootNode) throw new Error(`SGF vide : ${path}`);
-  const size = prop(rootNode, 'SZ');
-  if (size !== undefined && size !== '19') throw new Error(`taille ${size} non gérée : ${path}`);
-
-  // Triées : l'ordre d'énumération des pierres de handicap varie d'un fichier à l'autre.
-  const setupBlack = (rootNode.props.get('AB') ?? []).map(pointFromSgf).sort((a, b) => a - b);
-  if (rootNode.props.has('AW'))
-    anomalies.push(`${path} : pierres blanches de mise en place ignorées`);
-
-  const moves: Move[] = [];
-  let midGameSetup = 0;
-  let hadVariations = false;
-  line.forEach((node, idx) => {
-    if (node.children.length > 1) hadVariations = true;
-    if (idx > 0 && (node.props.has('AB') || node.props.has('AW') || node.props.has('AE'))) {
-      midGameSetup++;
-    }
-    for (const c of ['B', 'W'] as Color[]) {
-      const v = node.props.get(c);
-      if (v) moves.push({ color: c, point: pointFromSgf(v[0] ?? '') });
-    }
-  });
-  // Les passes finales n'apportent rien à la relecture.
-  while (moves.length > 0 && (moves[moves.length - 1] as Move).point === PASS) moves.pop();
-
-  const timeline = buildTimeline(setupBlack, moves);
-  for (const i of timeline.illegal)
-    anomalies.push(`${path} : coup ${i.move} illégal (${i.reason})`);
-
-  const black = cleanName(prop(rootNode, 'PB'));
-  const white = cleanName(prop(rootNode, 'PW'));
-  const shusaku: Color = /shusaku/i.test(black) ? 'B' : 'W';
-  const { date, dateRaw } = parseDate(prop(rootNode, 'DT') ?? '');
-  const blackRank = cleanRank(prop(rootNode, 'BR'));
-  const whiteRank = cleanRank(prop(rootNode, 'WR'));
-  const note = legacyEncoding ? undefined : cleanText(prop(rootNode, 'C') ?? prop(rootNode, 'GC'));
-  const event = translateEvent(prop(rootNode, 'EV'));
-  const place = cleanText(prop(rootNode, 'PC'));
-
-  const record: GameRecord = {
-    id: sha.slice(0, 10),
-    date,
-    ...(dateRaw ? { dateRaw } : {}),
-    black,
-    white,
-    ...(blackRank ? { blackRank } : {}),
-    ...(whiteRank ? { whiteRank } : {}),
-    shusaku,
-    shusakuName: shusaku === 'B' ? black : white,
-    opponent: shusaku === 'B' ? white : black,
-    handicap: setupBlack.length,
-    setupBlack: setupBlack.map(pointToSgf).join(''),
-    moves: moves
-      .map((m) => (m.color === 'B' ? 'b' : 'w') + (m.point === PASS ? '--' : pointToSgf(m.point)))
-      .join(''),
-    result: parseResult(prop(rootNode, 'RE')),
-    ...(event ? { event } : {}),
+  const path = paths[0] as string;
+  const body = readBody(text, `pgd:${path}`);
+  const r = body.rootNode;
+  const place = cleanText(prop(r, 'PC'));
+  const note = legacy ? undefined : cleanText(prop(r, 'C') ?? prop(r, 'GC'));
+  extras.push({
+    path,
+    moves: body.moves,
+    handicap: body.setupBlack.length,
     ...(place ? { place } : {}),
     ...(note && note !== place ? { note } : {}),
-    sources: [path],
-  };
-  const shusakuRank = shusaku === 'B' ? blackRank : whiteRank;
-  return {
-    sha,
-    path,
-    record,
-    moves,
-    illegal: timeline.illegal.length,
-    midGameSetup,
-    hadVariations,
-    ...(shusakuRank ? { shusakuRank } : {}),
-  };
+    okonomi: /o-konomi/i.test(prop(r, 'EV') ?? ''),
+  });
 }
 
-// ---------------------------------------------------------------- fusion
-
-/** Préférence entre deux enregistrements d'une même partie. */
-function quality(p: Parsed): number {
-  let q = 0;
-  if (p.illegal === 0) q += 1000;
-  q += p.moves.length; // l'enregistrement le plus complet
-  if (!p.record.dateRaw) q += 20; // date unique, normalisée
-  if (p.record.place) q += 10;
-  if (p.record.event) q += 10;
-  if (p.record.result.winner !== 'unknown') q += 5;
-  return q;
-}
-
-function merge(group: Parsed[]): GameRecord {
-  const sorted = [...group].sort((a, b) => quality(b) - quality(a) || a.path.localeCompare(b.path));
-  const best = (sorted[0] as Parsed).record;
-  const out: GameRecord = { ...best, sources: sorted.map((p) => p.path).sort() };
-  for (const other of sorted.slice(1)) {
-    const o = other.record;
-    if (!out.place && o.place) out.place = o.place;
-    if (!out.event && o.event) out.event = o.event;
-    if (!out.note && o.note) out.note = o.note;
-    if (!out.blackRank && o.blackRank) out.blackRank = o.blackRank;
-    if (!out.whiteRank && o.whiteRank) out.whiteRank = o.whiteRank;
-    if (out.result.winner === 'unknown' && o.result.winner !== 'unknown') out.result = o.result;
-    if (o.date !== out.date && !out.dateRaw)
-      out.dateRaw = `${out.date} (autre enregistrement : ${o.dateRaw ?? o.date})`;
+let enriched = 0;
+const pgdMatched = new Set<string>();
+for (const g of main) {
+  const twins = extras.filter(
+    (e) => e.handicap === g.record.handicap && similarity(e.moves, g.moves) >= SAME_GAME,
+  );
+  if (twins.length === 0) continue;
+  for (const t of twins) pgdMatched.add(t.path);
+  const place = twins
+    .map((t) => t.place)
+    .filter(Boolean)
+    .sort((a, b) => (b as string).length - (a as string).length)[0];
+  const note = twins.map((t) => t.note).filter(Boolean)[0];
+  const before = JSON.stringify(g.record);
+  if (place && (!g.record.place || place.length > g.record.place.length)) g.record.place = place;
+  if (note) g.record.note = note;
+  if (twins.some((t) => t.okonomi) && g.record.event?.startsWith('Oshirogo')) {
+    g.record.event = 'Oshirogo — okonomi-go (partie du château)';
   }
-  return out;
-}
-
-// ---------------------------------------------------------------- exécution
-
-const rows = readFileSync(join(root, 'data', 'sources.tsv'), 'utf8')
-  .split('\n')
-  .filter(Boolean)
-  .map((l) => l.split('\t') as [string, string]);
-
-// Deux chemins peuvent désigner le même contenu (même empreinte) : on ne le lit qu'une fois.
-const bySha = new Map<string, string[]>();
-for (const [sha, path] of rows) bySha.set(sha, [...(bySha.get(sha) ?? []), path]);
-
-const parsed: Parsed[] = [];
-for (const [sha, paths] of [...bySha].sort(([a], [b]) => a.localeCompare(b))) {
-  const p = readOne(sha, paths.sort()[0] as string);
-  if (!p) continue;
-  p.record.sources = paths;
-  parsed.push(p);
-}
-
-const groups = new Map<string, Parsed[]>();
-for (const p of parsed) {
-  const key = signature(decodePoints(p.record.setupBlack), p.moves);
-  groups.set(key, [...(groups.get(key) ?? []), p]);
-}
-
-// Seconde passe : transcriptions divergentes d'une même partie (même adversaire, même
-// longueur, coups identiques à plus de 90 %).
-const nearDuplicates: string[] = [];
-{
-  const keys = [...groups.keys()];
-  for (let i = 0; i < keys.length; i++) {
-    const gi = groups.get(keys[i] as string);
-    if (!gi) continue;
-    for (let j = i + 1; j < keys.length; j++) {
-      const gj = groups.get(keys[j] as string);
-      if (!gj) continue;
-      const a = gi[0] as Parsed;
-      const b = gj[0] as Parsed;
-      if (a.record.opponent !== b.record.opponent || a.record.handicap !== b.record.handicap)
-        continue;
-      const sim = similarity(a.moves, b.moves);
-      if (sim >= SAME_GAME_SIMILARITY) {
-        nearDuplicates.push(
-          `${a.record.date} / ${b.record.date} ${a.record.black} – ${a.record.white} (${Math.round(sim * 1000) / 10} % de coups identiques)`,
-        );
-        gi.push(...gj);
-        groups.delete(keys[j] as string);
-      }
-    }
+  if (JSON.stringify(g.record) !== before) {
+    enriched++;
+    g.record.sources.push(
+      ...twins.filter((t) => t.place || t.note || t.okonomi).map((t) => `pgd:${t.path}`),
+    );
   }
 }
+const pgdUnmatched = extras
+  .filter((e) => !pgdMatched.has(e.path) && e.moves.length > 0)
+  .map((e) => e.path);
 
-/** Shūsaku est né en 1829 et reçoit son premier dan le 3 janvier 1840. */
-const FIRST_PLAUSIBLE_YEAR = 1840;
+// ---------------------------------------------------------------- écriture
 
-const games = [...groups.values()].map(merge);
-for (const g of games) {
-  if (Number(g.date.slice(0, 4)) < FIRST_PLAUSIBLE_YEAR) g.dateSuspect = true;
-}
-games.sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+/** Clé de tri : une date connue au mois ou à l'année près est placée au milieu de sa période. */
+const sortKey = (date: string): string =>
+  date.length === 10 ? date : date.length === 7 ? `${date}-15` : `${date}-07-01`;
+
+// Ordre chronologique ; à date égale, l'ordre de la collection.
+const games = main
+  .map((m) => m.record)
+  .sort((a, b) => sortKey(a.date).localeCompare(sortKey(b.date)) || a.id.localeCompare(b.id));
 
 const dataset: Dataset = {
-  generatedFrom: { ...SOURCE, files: rows.length },
+  generatedFrom: {
+    cwi: { page: CWI.page, archiveSha256: CWI.archiveSha256, files: cwiManifest.length },
+    pgd: { ...PGD, files: pgdRows.length },
+  },
   games,
 };
 
@@ -423,36 +386,39 @@ const count = <T>(items: T[], key: (t: T) => string): Record<string, number> => 
   return Object.fromEntries(Object.entries(out).sort(([a], [b]) => a.localeCompare(b)));
 };
 
-const shusakuWins = games.filter((g) => g.result.winner === g.shusaku).length;
-const decided = games.filter((g) => g.result.winner === 'B' || g.result.winner === 'W').length;
+const solo = games.filter((g) => !g.rengo);
+const decided = solo.filter((g) => g.result.winner === 'B' || g.result.winner === 'W');
 const report = {
-  source: dataset.generatedFrom,
-  files: rows.length,
-  distinctFiles: bySha.size,
-  excludedShusakuNotPlaying: excluded.sort(),
+  sources: dataset.generatedFrom,
   games: games.length,
-  duplicatesMerged: parsed.length - games.length,
-  nearDuplicatesMerged: nearDuplicates.sort(),
+  rengo: games.length - solo.length,
+  lostKifu: lost,
   totalMoves: games.reduce((s, g) => s + g.moves.length / 3, 0),
-  filesWithVariations: parsed.filter((p) => p.hadVariations).length,
-  filesWithMidGameSetup: parsed.filter((p) => p.midGameSetup > 0).length,
-  illegalMoves: parsed.reduce((s, p) => s + p.illegal, 0),
-  dateSuspect: games.filter((g) => g.dateSuspect).map((g) => `${g.date} ${g.black} – ${g.white}`),
+  illegalMoves: anomalies.filter((a) => a.includes('illégal')).length,
+  filesWithVariations: cwiVariations,
+  internalDuplicates,
+  enrichedFromPgd: enriched,
+  pgdFilesNotInCwi: pgdUnmatched.sort(),
   shusakuRecord: {
-    wins: shusakuWins,
-    decided,
-    jigo: games.filter((g) => g.result.winner === 'jigo').length,
+    wins: decided.filter((g) => g.result.winner === g.shusaku).length,
+    decided: decided.length,
+    jigo: solo.filter((g) => g.result.winner === 'jigo').length,
+    unfinished: solo.filter((g) => g.result.winner === 'unfinished').length,
   },
   byYear: count(games, (g) => g.date.slice(0, 4)),
   byHandicap: count(games, (g) => String(g.handicap)),
   byWinner: count(games, (g) => g.result.winner),
+  byShusakuName: count(games, (g) => g.shusakuName),
+  datePrecision: count(games, (g) =>
+    g.date.length === 10 ? 'jour' : g.date.length === 7 ? 'mois' : 'année',
+  ),
   opponents: count(games, (g) => g.opponent),
-  shusakuRankByYear: count(parsed, (p) => `${p.record.date.slice(0, 4)} ${p.shusakuRank ?? '?'}`),
   anomalies: anomalies.sort(),
 };
 writeFileSync(join(root, 'data', 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
 
 console.log(
-  `${report.files} fichiers → ${report.games} parties (${report.duplicatesMerged} doublons fusionnés), ` +
-    `${report.totalMoves} coups, ${report.illegalMoves} coups illégaux, ${anomalies.length} anomalies`,
+  `${cwiManifest.length} fichiers CWI → ${report.games} parties (${report.rengo} rengo, ${lost.length} kifu perdu), ` +
+    `${report.totalMoves} coups, ${report.illegalMoves} coups illégaux, ${anomalies.length} anomalies ; ` +
+    `${enriched} parties enrichies par PGD`,
 );

@@ -2,23 +2,31 @@ import { Board, PASS, pointFromSgf, type Color, type IllegalReason } from './boa
 
 /** Partie telle que servie à l'application (public/data/games.json). */
 export interface GameRecord {
+  /** Identifiant stable : « s » suivi du numéro de la partie dans la collection source. */
   id: string;
-  /** Date ISO (AAAA-MM-JJ) telle qu'enregistrée dans la source ; sert au tri chronologique. */
+  /**
+   * Date grégorienne du début de la partie : AAAA-MM-JJ, ou AAAA-MM, ou AAAA quand la source
+   * ne connaît pas le jour ou le mois.
+   */
   date: string;
-  /** Date brute de la source quand elle porte plus d'information (plusieurs séances, ère japonaise). */
-  dateRaw?: string;
-  /** true si la date de la source est incompatible avec la biographie de Shūsaku. */
-  dateSuspect?: boolean;
+  /** Toutes les séances, telles que la source les écrit, si la partie s'est jouée sur plusieurs jours. */
+  sessions?: string;
+  /** Date dans le calendrier japonais (ère, année, mois, jour), telle que la donne la source. */
+  dateJapanese?: string;
   black: string;
   white: string;
   blackRank?: string;
   whiteRank?: string;
   /** Couleur jouée par Shūsaku. */
   shusaku: Color;
-  /** Nom porté par Shūsaku dans le kifu (Kuwahara, Yasuda ou Honinbo Shusaku). */
+  /** Nom porté par Shūsaku dans le kifu (Yasuda Eisai, Yasuda, Kuwahara ou Honinbo Shusaku). */
   shusakuName: string;
   opponent: string;
+  /** Partie en consultation : Shūsaku joue au sein d'une équipe. */
+  rengo?: boolean;
   handicap: number;
+  /** Régime de handicap sans pierres, quand la source le précise (« josen », « sen-ai-sen »). */
+  regime?: string;
   /** Pierres de handicap, coordonnées SGF concaténées (« ddpdpp… »). */
   setupBlack: string;
   /** Coups : triplets couleur + coordonnée (« bqd », « wdc »), « b-- » pour une passe. */
@@ -27,7 +35,7 @@ export interface GameRecord {
   event?: string;
   place?: string;
   note?: string;
-  /** Chemins d'origine dans le jeu de données source (plusieurs si doublons fusionnés). */
+  /** Provenance : « cwi:126 », et le cas échéant « pgd:<chemin> » pour le lieu et les circonstances. */
   sources: string[];
 }
 
@@ -42,7 +50,10 @@ export interface GameResult {
 }
 
 export interface Dataset {
-  generatedFrom: { repository: string; commit: string; files: number };
+  generatedFrom: {
+    cwi: { page: string; archiveSha256: string; files: number };
+    pgd: { repository: string; commit: string; files: number };
+  };
   games: GameRecord[];
 }
 

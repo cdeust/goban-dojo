@@ -10,7 +10,9 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['list']] : 'list',
-  timeout: 60_000,
+  // Le rendu logiciel des machines de CI est plusieurs fois plus lent qu'un GPU.
+  timeout: process.env.CI ? 180_000 : 60_000,
+  workers: process.env.CI ? 2 : undefined,
   use: {
     baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',

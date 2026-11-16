@@ -49,7 +49,7 @@ test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le ré
   const w = watch(page);
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1, name: 'Hon’inbō Shūsaku' })).toBeVisible();
-  await expect(page.locator('.intro__count')).toContainText('391 parties');
+  await expect(page.locator('.intro__count')).toContainText('469 parties');
   await page.getByRole('button', { name: 'Entrer' }).click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
   await expect(page.locator('canvas')).toBeVisible();
@@ -102,16 +102,18 @@ test('relecture au clavier : chaque coup est annoncé en toutes lettres', async 
   const w = watch(page);
   await enter(page);
   const live = page.getByTestId('live');
-  await expect(live).toContainText('Position initiale, 3 pierres de handicap');
+  await expect(live).toContainText(
+    'Yasuda Eisai contre Itagaki Chuzo, 14 décembre 1839. Position initiale',
+  );
   await page.locator('canvas').click({ position: { x: 300, y: 300 } });
   await page.keyboard.press('ArrowRight');
-  await expect(live).toContainText('Coup 1 sur 245 : Blanc');
+  await expect(live).toContainText('Coup 1 sur 191 : Noir R16');
   await page.keyboard.press('Shift+ArrowRight');
-  await expect(live).toContainText('Coup 11 sur 245');
+  await expect(live).toContainText('Coup 11 sur 191');
   await page.keyboard.press('ArrowLeft');
-  await expect(live).toContainText('Coup 10 sur 245');
+  await expect(live).toContainText('Coup 10 sur 191');
   await page.keyboard.press('End');
-  await expect(live).toContainText('Coup 245 sur 245');
+  await expect(live).toContainText('Coup 191 sur 191');
   await page.keyboard.press('Home');
   await expect(live).toContainText('Position initiale');
   expect(w.problems).toEqual([]);
@@ -141,10 +143,11 @@ test('lecture automatique : les coups avancent, la pause les arrête', async ({ 
   await page.getByRole('button', { name: 'Vitesse 8 coups par seconde' }).click();
   await page.getByRole('button', { name: 'Lecture' }).click();
   const slider = page.getByRole('slider', { name: 'Coup' });
-  // Seuil bas : le rendu logiciel du navigateur de test est bien plus lent qu'un GPU.
+  // Seuil bas et délai long : en rendu logiciel, chaque image bloque le fil principal bien plus
+  // longtemps qu'avec un GPU. La cadence réelle se mesure avec scripts/dev/playcheck.ts.
   await expect
-    .poll(async () => Number(await slider.inputValue()), { timeout: 30_000 })
-    .toBeGreaterThan(3);
+    .poll(async () => Number(await slider.inputValue()), { timeout: 45_000 })
+    .toBeGreaterThanOrEqual(2);
   await page.getByRole('button', { name: 'Pause' }).click();
   const stopped = Number(await slider.inputValue());
   await page.waitForTimeout(800);
@@ -163,7 +166,7 @@ test('vues, numéros et boîte d’aide', async ({ page }) => {
   await page.getByRole('button', { name: 'Aide & sources' }).click();
   const dialog = page.getByRole('dialog', { name: 'Aide & sources' });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole('link')).toHaveCount(3);
+  await expect(dialog.getByRole('link')).toHaveCount(4);
   for (const link of await dialog.getByRole('link').all()) {
     await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   }
@@ -200,14 +203,14 @@ test('mode « deviner » : indice, coup montré, bilan', async ({ page }) => {
   await page.getByRole('button', { name: 'Fermer le volet' }).click();
   await page.getByRole('button', { name: 'Deviner' }).click();
   const panel = page.getByRole('region', { name: 'Jouer comme Shūsaku' });
-  // Première partie : Shūsaku (noir) a trois pierres de handicap, Blanc commence et joue seul.
-  await expect(panel).toContainText('joue-t-il le coup 2', { timeout: 15_000 });
+  // Première partie connue : l'enfant a les noirs et commence.
+  await expect(panel).toContainText('joue-t-il le coup 1', { timeout: 15_000 });
   await panel.getByRole('button', { name: 'Un indice' }).click();
   await panel.getByRole('button', { name: 'Montrer le coup' }).click();
   await expect(panel).toContainText('Shūsaku a joué');
   await expect(panel).toContainText('0 / 1');
   // L'adversaire répond de lui-même, puis c'est de nouveau à Shūsaku.
-  await expect(panel).toContainText('joue-t-il le coup 4', { timeout: 15_000 });
+  await expect(panel).toContainText('joue-t-il le coup 3', { timeout: 15_000 });
   expect(w.problems).toEqual([]);
 });
 
@@ -227,7 +230,7 @@ test('mode « explorer » : un clic sur le goban pose un coup hors de la partie'
   if (!box) throw new Error('canvas introuvable');
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect(panel).toContainText('1 coup hors de la partie', { timeout: 15_000 });
-  await expect(page.getByTestId('live')).toContainText('Exploration, coup 1 : Blanc');
+  await expect(page.getByTestId('live')).toContainText('Exploration, coup 1 : Noir');
   await panel.getByRole('button', { name: 'Revenir à la partie' }).click();
   await expect(panel).toContainText('Position après le coup 0');
   expect(w.problems).toEqual([]);

@@ -38,8 +38,14 @@ export function GameCard() {
       >
         <p className="card__date">
           <time dateTime={game.date}>{formatDate(game.date)}</time>
-          {game.dateSuspect && <span className="card__warn"> · date douteuse dans la source</span>}
         </p>
+        {game.dateJapanese && (
+          <p className="card__era">
+            <span className="sr-only">Calendrier japonais : </span>
+            {prettyName(game.dateJapanese)}
+            {game.sessions && <span> · séances : {game.sessions}</span>}
+          </p>
+        )}
         <ul className="card__players">
           <Player game={game} color="B" />
           <Player game={game} color="W" />
@@ -49,6 +55,12 @@ export function GameCard() {
             <>
               <dt>Cadre</dt>
               <dd>{game.event}</dd>
+            </>
+          )}
+          {game.rengo && (
+            <>
+              <dt>Forme</dt>
+              <dd>Rengo (partie en consultation)</dd>
             </>
           )}
           {handicapLabel(game) && (

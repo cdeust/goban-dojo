@@ -19,7 +19,7 @@ const dataset = JSON.parse(
 ) as Dataset;
 const P = pointFromSgf;
 /** La partie de l'oreille rouge : Shūsaku a les noirs, premiers coups q16 (qd), d17 (dc), q3 (pq)… */
-const RED_EAR = dataset.games.findIndex((g) => g.id === '2d229bca26');
+const RED_EAR = dataset.games.findIndex((g) => g.id === 's126');
 const s = () => useStore.getState();
 
 beforeEach(() => {

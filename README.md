@@ -1,8 +1,8 @@
 # 秀策 — Hon’inbō Shūsaku, 1829-1862
 
-Un goban en 3D pour revoir, coup après coup, les **391 parties conservées** de Hon’inbō Shūsaku,
-de sa plus ancienne partie connue (1840, dix ans, trois pierres de handicap) à sa dernière partie
-au château d’Edo (1861) — puis le goban vide de 1862.
+Un goban en 3D pour revoir, coup après coup, **469 parties** de Hon’inbō Shūsaku : de la plus
+ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernière, inachevée, du
+19 juin 1862, dix semaines avant sa mort.
 
 ![La partie de l’oreille rouge, coup 127](docs/oreille-rouge.png)
 
@@ -55,24 +55,26 @@ pnpm check
 
 ## Les données
 
-460 fichiers SGF mentionnant Shūsaku, tirés du _Professional Go Dataset_
-([wangjinzhuo/pgd](https://github.com/wangjinzhuo/pgd), commit `b1e006b`), donnent après
-nettoyage **391 parties distinctes et 75 193 coups**. Le détail du traitement, les contrôles
-et les réserves sont dans [docs/DONNEES.md](docs/DONNEES.md). En bref :
+Le corpus vient de la collection « Games by Shusaku » d’A. E. Brouwer (CWI) : 470 fichiers SGF
+dérivés du recueil 本因坊秀策全集, avec pour chaque partie la date japonaise et sa conversion
+grégorienne. Le _Professional Go Dataset_ complète le lieu et les circonstances de 195 parties.
+Les deux sources sont épinglées et vérifiées par empreinte. Le détail du traitement, les
+contrôles et les réserves sont dans [docs/DONNEES.md](docs/DONNEES.md). En bref :
 
-- chaque partie est rejouée par le moteur de règles : **zéro coup illégal** ;
-- 65 doublons sont fusionnés, y compris ceux enregistrés sous une autre orientation du goban ;
+- **469 parties, 85 577 coups**, chacune rejouée par le moteur de règles : **zéro coup illégal** ;
 - le corpus recoupe l’histoire : **19 parties du château, 19 victoires** ; **23 parties** du
   sanjūbango contre Ōta Yūzō, la dernière nulle ; l’oreille rouge en 325 coups, coup 127 en K11 ;
-- deux parties portent une date impossible (1839, « 6ᵉ dan ») : elles sont isolées, pas corrigées.
+- aucun kifu antérieur à décembre 1839 n’a été trouvé : les parties de l’enfance à Innoshima ne
+  sont connues que par le récit ;
+- 51 parties sont inachevées, une partie de 1842 n’a laissé que ses métadonnées.
 
-Le récit s’appuie sur deux révisions datées de Wikipédia (fr, en), citées dans l’application
-et dans [`src/story/chapters.ts`](src/story/chapters.ts).
+Le récit s’appuie sur deux révisions datées de Wikipédia (fr, en) et sur la page de la
+collection, citées dans l’application et dans [`src/story/chapters.ts`](src/story/chapters.ts).
 
 ## Architecture
 
 ```
-data/raw/*.sgf ──► scripts/build-data.ts ──► public/data/games.json
+data/cwi + data/pgd ──► scripts/build-data.ts ──► public/data/games.json
                         │ (src/domain : SGF, règles, vie de chaque pierre)
                         ▼
 src/state/store.ts ──► src/replay (horloge, son) ──► src/scene (three.js + Motion)
@@ -97,5 +99,5 @@ le goban, prisonnière) se déduit du numéro de coup ; Motion anime le passage 
 
 Le code est sous licence MIT. Les textes biographiques sont rédigés à partir de Wikipédia
 (CC BY-SA 4.0), cité. Les kifus sont des parties du XIXᵉ siècle ; les fichiers SGF proviennent
-du dépôt PGD, qui ne déclare pas de licence — voir [docs/DONNEES.md](docs/DONNEES.md).
+de deux collections qui ne déclarent pas de licence — voir [docs/DONNEES.md](docs/DONNEES.md).
 La police Shippori Mincho est sous SIL OFL 1.1.

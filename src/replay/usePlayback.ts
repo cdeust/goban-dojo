@@ -27,8 +27,8 @@ export function usePlayback(): void {
     const total = moveCount(game);
 
     if (move >= total) {
-      const next = games.findIndex((g, i) => i > gameIndex && !g.dateSuspect);
-      if (!state.continuous || next === -1) {
+      const next = gameIndex + 1;
+      if (!state.continuous || next >= games.length) {
         state.setPlaying(false);
         return;
       }

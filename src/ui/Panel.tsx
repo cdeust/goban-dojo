@@ -196,6 +196,7 @@ function Row({ game, index, current }: { game: GameRecord; index: number; curren
             {' · '}
             {game.shusaku === 'B' ? 'noir' : 'blanc'}
             {game.handicap > 0 && ` · ${game.handicap} p.`}
+            {game.rengo && ' · rengo'}
             {' · '}
             {moveCount(game)} coups
           </span>
@@ -227,14 +228,6 @@ function Library() {
         .map((g, i) => ({ g, i }))
         .filter(({ g }) => chapterIndexOf(g) === ci && matches(g)),
     }));
-    out.push({
-      key: 'incertaines',
-      title: 'Dates incertaines',
-      years: 'date de la source incompatible avec sa biographie',
-      items: games
-        .map((g, i) => ({ g, i }))
-        .filter(({ g }) => chapterIndexOf(g) === -1 && matches(g)),
-    });
     return out.filter((grp) => grp.items.length > 0);
   }, [games, query]);
 

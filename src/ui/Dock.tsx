@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { unlockAudio } from '../replay/sound.ts';
 import { CHAPTERS } from '../story/chapters.ts';
+import { dateToTime } from '../story/format.ts';
 import {
   SPEEDS,
   moveCount,
@@ -23,8 +24,7 @@ import {
 
 const LIFE_START = Date.UTC(1829, 0, 1);
 const LIFE_END = Date.UTC(1863, 0, 1);
-const fraction = (iso: string): number =>
-  (new Date(`${iso}T00:00:00Z`).getTime() - LIFE_START) / (LIFE_END - LIFE_START);
+const fraction = (iso: string): number => (dateToTime(iso) - LIFE_START) / (LIFE_END - LIFE_START);
 
 /** Frise de la vie de Shūsaku : huit chapitres, un trait par partie conservée. */
 function LifeRibbon() {
@@ -35,11 +35,10 @@ function LifeRibbon() {
   const setPanel = useStore((s) => s.setPanel);
 
   const ticks = useMemo(
-    () =>
-      (games ?? []).filter((g) => !g.dateSuspect).map((g) => ({ id: g.id, x: fraction(g.date) })),
+    () => (games ?? []).map((g) => ({ id: g.id, x: fraction(g.date) })),
     [games],
   );
-  const here = game && !game.dateSuspect ? fraction(game.date) : null;
+  const here = game ? fraction(game.date) : null;
 
   return (
     <nav className="ribbon" aria-label="Chapitres de la vie de Shūsaku">
@@ -87,7 +86,7 @@ function LifeRibbon() {
       </div>
       <div className="ribbon__years" aria-hidden="true">
         <span>1829</span>
-        <span>{game && !game.dateSuspect ? game.date.slice(0, 4) : ''}</span>
+        <span>{game ? game.date.slice(0, 4) : ''}</span>
         <span>1862</span>
       </div>
     </nav>
