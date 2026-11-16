@@ -1295,3 +1295,10 @@ progress {
 .impact--menace .impact__lines line {
   stroke: #f3c9b8;
 }
+
+.card__age {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--paper-faint);
+  white-space: nowrap;
+}

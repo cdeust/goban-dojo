@@ -85,3 +85,27 @@ export function outcomeFor(game: GameRecord): { mark: string; label: string } {
 export function handicapLabel(game: GameRecord): string | undefined {
   return game.handicap > 0 ? `${game.handicap} pierres de handicap` : game.regime;
 }
+
+/** Naissance de Shūsaku : 6 juin 1829 (sources citées dans chapters.ts). */
+const BIRTH = { year: 1829, month: 6, day: 6 } as const;
+
+/**
+ * Âge de Shūsaku à une date AAAA-MM-JJ, AAAA-MM ou AAAA. Quand la date est partielle, l'âge est
+ * celui du milieu de la période et `approximate` est vrai s'il peut différer d'un an.
+ */
+export function ageAt(iso: string): { years: number; approximate: boolean } {
+  const [y, m, d] = iso.split('-').map(Number);
+  const year = y ?? BIRTH.year;
+  const month = m ?? 7;
+  const day = d ?? 15;
+  const before = month < BIRTH.month || (month === BIRTH.month && day < BIRTH.day);
+  return {
+    years: year - BIRTH.year - (before ? 1 : 0),
+    approximate: m === undefined || (d === undefined && month === BIRTH.month),
+  };
+}
+
+export function ageLabel(iso: string): string {
+  const { years, approximate } = ageAt(iso);
+  return `${approximate ? 'vers ' : ''}${years} ans`;
+}

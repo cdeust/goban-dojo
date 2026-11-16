@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { PASS } from '../src/domain/board.ts';
 import { buildTimeline, decodeMoves, decodePoints, type Dataset } from '../src/domain/game.ts';
 import { CHAPTERS, MOMENTS, chapterIndexOf, gamesOfChapter } from '../src/story/chapters.ts';
-import { dateToTime, formatDate } from '../src/story/format.ts';
+import { ageAt, ageLabel, dateToTime, formatDate } from '../src/story/format.ts';
 
 const root = join(import.meta.dirname, '..');
 const dataset = JSON.parse(readFileSync(join(root, 'public/data/games.json'), 'utf8')) as Dataset;
@@ -96,6 +96,32 @@ describe('jeu de données', () => {
       expect(t).toBeGreaterThan(Date.UTC(1839, 0, 1));
       expect(t).toBeLessThan(Date.UTC(1863, 0, 1));
     }
+  });
+});
+
+describe('âge de Shūsaku', () => {
+  it('se calcule depuis sa naissance, le 6 juin 1829', () => {
+    expect(ageAt('1839-12-14')).toEqual({ years: 10, approximate: false });
+    expect(ageAt('1840-06-05').years).toBe(10);
+    expect(ageAt('1840-06-06').years).toBe(11);
+    expect(ageAt('1848-03-18').years).toBe(18);
+    expect(ageAt('1862-06-19').years).toBe(33);
+  });
+
+  it('signale l’incertitude d’une date partielle', () => {
+    // Avril : avant l'anniversaire quel que soit le jour.
+    expect(ageAt('1842-04')).toEqual({ years: 12, approximate: false });
+    // Juin : l'anniversaire tombe dans le mois.
+    expect(ageAt('1845-06').approximate).toBe(true);
+    expect(ageAt('1849')).toEqual({ years: 20, approximate: true });
+    expect(ageLabel('1849')).toBe('vers 20 ans');
+    expect(ageLabel('1839-12-14')).toBe('10 ans');
+  });
+
+  it('va de 10 à 33 ans sur l’ensemble du corpus', () => {
+    const ages = games.map((g) => ageAt(g.date).years);
+    expect(Math.min(...ages)).toBe(10);
+    expect(Math.max(...ages)).toBe(33);
   });
 });
 

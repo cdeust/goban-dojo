@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import type { GameRecord } from '../domain/game.ts';
-import { formatDate, formatResult, handicapLabel, prettyName } from '../story/format.ts';
+import { ageLabel, formatDate, formatResult, handicapLabel, prettyName } from '../story/format.ts';
 import { moveCount, useCurrentGame, useStore } from '../state/store.ts';
 
 function Player({ game, color }: { game: GameRecord; color: 'B' | 'W' }) {
@@ -38,6 +38,7 @@ export function GameCard() {
       >
         <p className="card__date">
           <time dateTime={game.date}>{formatDate(game.date)}</time>
+          <span className="card__age"> · Shūsaku a {ageLabel(game.date)}</span>
         </p>
         {game.dateJapanese && (
           <p className="card__era">
