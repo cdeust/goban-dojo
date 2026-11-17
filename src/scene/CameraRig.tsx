@@ -47,7 +47,12 @@ export function CameraRig() {
   const narrow = Math.min(2.4, Math.max(1, 1.18 / aspect));
 
   useEffect(() => {
-    const preset = (look === 'manga' ? VIEWS_MANGA : VIEWS_REALISTE)[entered ? view : 'ouverture'];
+    // Aide à la mise au point : /?oeil=x,y,z place la caméra à cette position (cm, relative au goban).
+    const forced = new URLSearchParams(window.location.search).get('oeil')?.split(',').map(Number);
+    const preset =
+      forced?.length === 3 && forced.every(Number.isFinite)
+        ? (forced as [number, number, number])
+        : (look === 'manga' ? VIEWS_MANGA : VIEWS_REALISTE)[entered ? view : 'ouverture'];
     const to = new THREE.Spherical().setFromVector3(new THREE.Vector3(...preset));
     to.radius *= narrow;
     const from = new THREE.Spherical().setFromVector3(camera.position.clone().sub(TARGET));
@@ -89,7 +94,7 @@ export function CameraRig() {
       enablePan={false}
       enableDamping
       dampingFactor={0.08}
-      minDistance={42}
+      minDistance={12}
       maxDistance={420}
       minPolarAngle={0.02}
       maxPolarAngle={Math.PI * 0.47}

@@ -12,7 +12,7 @@ import { bowlTexture } from './textures.ts';
 const MOUND = 46;
 
 /** Réserve de pierres visible dans un bol : un monticule affleurant sous le bord. */
-function Mound({ color }: { color: Color }) {
+export function Mound({ color }: { color: Color }) {
   const { geometry, black, white } = useStoneAssets();
   const outlined = useLook() === 'manga';
   const ref = useRef<THREE.InstancedMesh>(null);

@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { animate } from 'motion';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import type { Color } from '../domain/board.ts';
 import { NEVER, type StoneLife, type Timeline } from '../domain/game.ts';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { playStone } from '../replay/sound.ts';
@@ -19,6 +20,7 @@ import {
 } from './dimensions.ts';
 import { OUTLINE, inkMaterial, useLook } from './look.ts';
 import { useStoneAssets } from './materials.ts';
+import { getPlayers, type Players } from './players.ts';
 import { hashString, mulberry32 } from './random.ts';
 import { ATLAS_COLUMNS, ATLAS_ROWS, numberAtlas } from './textures.ts';
 
@@ -67,6 +69,10 @@ const quad = (a: number, b: number, c: number, t: number): number =>
 const PLACE_DURATION = 0.62;
 const CAPTURE_DURATION = 0.55;
 const UNDO_DURATION = 0.3;
+/** En deçà de cette durée (s) entre deux coups, la main n'a pas le temps : la pierre vole seule. */
+const HAND_MIN_DURATION = 0.4;
+/** Durée (s) du geste de la main jusqu'au contact, quand le rythme le permet. */
+const HAND_DURATION = 0.85;
 /** Part du geste consacrée au trajet jusqu'au-dessus de l'intersection ; le reste est la frappe. */
 const TRAVEL = 0.74;
 
@@ -95,14 +101,17 @@ const NUMBER_FRAGMENT = /* glsl */ `
   }
 `;
 
-/** Vrai si `a` et `b` décrivent les mêmes pierres sur leurs `n` premières entrées. */
-function samePrefix(a: Timeline, b: Timeline, n: number): boolean {
-  for (let i = 0; i < n; i++) {
-    const x = a.stones[i];
+/**
+ * Vrai si les positions `a` et `b` ont en commun toutes les pierres posées jusqu'au coup `upTo`.
+ * Les coups suivants n'entrent pas en compte : ils ne sont pas encore sur le goban, et une
+ * exploration s'écarte justement de la partie à partir de là.
+ */
+function sameUpTo(a: Timeline, b: Timeline, upTo: number): boolean {
+  for (let i = 0; i < a.stones.length; i++) {
+    const x = a.stones[i] as StoneLife;
+    if (x.placedAt > upTo) break;
     const y = b.stones[i];
-    if (!x || !y || x.point !== y.point || x.color !== y.color || x.placedAt !== y.placedAt) {
-      return false;
-    }
+    if (!y || x.point !== y.point || x.color !== y.color || x.placedAt !== y.placedAt) return false;
   }
   return true;
 }
@@ -313,6 +322,37 @@ export function Stones({ seed }: { seed: string }) {
       });
     };
 
+    /** Ce qui doit suivre l'instant où une pierre touche le goban (ramassage des prisonniers). */
+    const afterLanding = new Map<number, () => void>();
+
+    /** La main du joueur `color` ramasse les pierres `captured` et les dépose dans son couvercle. */
+    const collect = (players: Players, color: Color, captured: number[], sound: boolean): void => {
+      const half = STONE_THICKNESS / 2;
+      const items = captured.map((c) => {
+        stop(c);
+        const p = L.pose[c]!;
+        const to = L.lid[c]!;
+        L.phase[c] = IN_LID;
+        return {
+          from: new THREE.Vector3(p.x, p.y + half, p.z),
+          to: new THREE.Vector3(to.x, to.y + half, to.z),
+          onMove: (x: number, y: number, z: number): void => {
+            p.x = x;
+            p.y = y - half;
+            p.z = z;
+          },
+          onDrop: (played: boolean): void => {
+            L.running[c] = undefined;
+            settle(c, to, 1);
+            touch();
+            if (played && sound) playStone('capture', to.x / 32);
+          },
+        };
+      });
+      const gesture = players.collect(color, items, touch);
+      for (const c of captured) L.running[c] = gesture;
+    };
+
     /** Geste de pose : la pierre sort du bol, vient au-dessus de l'intersection, puis frappe. */
     const place = (i: number, duration: number, sound: boolean, emphatic: boolean): void => {
       stop(i);
@@ -327,6 +367,37 @@ export function Stones({ seed }: { seed: string }) {
         y: BOARD_TOP + 14,
         z: lerp(from.z, hover.z, 0.5),
       };
+      L.phase[i] = ON_BOARD;
+      const landed = (): void => {
+        settle(i, to, 1);
+        touch();
+        // Un coup qui capture est frappé plus fort.
+        if (sound) playStone('place', to.x / 21, emphatic ? 1.3 : 1);
+        useStore.getState().notifyImpact(stone.point);
+        wobble(i);
+        const then = afterLanding.get(i);
+        afterLanding.delete(i);
+        then?.();
+      };
+      // Si les joueurs sont là et que le rythme le permet, c'est une main qui porte la pierre.
+      const players = getPlayers();
+      if (players && duration >= HAND_MIN_DURATION) {
+        settle(i, from, 0);
+        L.running[i] = players.play(stone.color, stone.point, {
+          duration: Math.max(duration, HAND_DURATION),
+          onStone: (x, y, z) => {
+            p.x = x;
+            p.y = y - STONE_THICKNESS / 2;
+            p.z = z;
+            p.rx = 0;
+            p.rz = 0;
+            p.s = 1;
+          },
+          onContact: landed,
+          onFrame: touch,
+        });
+        return;
+      }
       L.phase[i] = ON_BOARD;
       L.running[i] = animate(0, 1, {
         duration,
@@ -350,14 +421,7 @@ export function Stones({ seed }: { seed: string }) {
           p.rz = 0;
           touch();
         },
-        onComplete: () => {
-          settle(i, to, 1);
-          touch();
-          // Un coup qui capture est frappé plus fort.
-          if (sound) playStone('place', to.x / 21, emphatic ? 1.3 : 1);
-          useStore.getState().notifyImpact(stone.point);
-          wobble(i);
-        },
+        onComplete: landed,
       });
     };
 
@@ -398,6 +462,7 @@ export function Stones({ seed }: { seed: string }) {
 
     /** Saut direct à une position quelconque : les pierres apparaissent ou s'effacent sur place. */
     const jump = (n: number, instant: boolean): void => {
+      getPlayers()?.reset();
       stones().forEach((stone, i) => {
         const phase = phaseAt(stone, n);
         const was = L.phase[i]!;
@@ -454,8 +519,7 @@ export function Stones({ seed }: { seed: string }) {
       // La nouvelle position prolonge-t-elle l'ancienne (mêmes pierres, plus éventuellement d'autres) ?
       const continuous =
         before !== null &&
-        (before === timeline ||
-          samePrefix(before, timeline, Math.min(before.stones.length, timeline.stones.length)));
+        (before === timeline || sameUpTo(before, timeline, Math.min(previous, n)));
       if (before !== timeline) adopt(timeline);
       shown = n;
       const { playing, speed, sound } = useStore.getState();
@@ -469,15 +533,23 @@ export function Stones({ seed }: { seed: string }) {
         const duration = playing ? Math.min(PLACE_DURATION, (1 / speed) * 0.85) : PLACE_DURATION;
         const i = timeline.stoneOfMove[n] ?? -1;
         if (i >= 0) place(i, duration, sound, (timeline.capturesAt[n]?.length ?? 0) > 0);
-        (timeline.capturesAt[n] ?? []).forEach((c, k) =>
-          fly(c, IN_LID, {
-            duration: Math.min(CAPTURE_DURATION, duration * 1.4),
-            delay: duration + 0.1 + k * Math.min(0.06, duration * 0.12),
-            lift: 9,
-            endScale: 1,
-            sound: sound && k < 4,
-          }),
-        );
+        const captured = timeline.capturesAt[n] ?? [];
+        const mover = timeline.moves[n - 1]?.color;
+        const players = getPlayers();
+        if (players && mover && captured.length > 0 && i >= 0 && duration >= HAND_MIN_DURATION) {
+          // La main qui vient de poser la pierre ramasse les prisonniers, une fois le coup frappé.
+          afterLanding.set(i, () => collect(players, mover, captured, sound));
+        } else {
+          captured.forEach((c, k) =>
+            fly(c, IN_LID, {
+              duration: Math.min(CAPTURE_DURATION, duration * 1.4),
+              delay: duration + 0.1 + k * Math.min(0.06, duration * 0.12),
+              lift: 9,
+              endScale: 1,
+              sound: sound && k < 4,
+            }),
+          );
+        }
         setMarker(n, i >= 0 ? duration : 0);
         return;
       }

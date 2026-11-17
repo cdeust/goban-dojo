@@ -24,12 +24,13 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
   probable — et le compare au coup réellement joué. Voir [docs/MOTEUR.md](docs/MOTEUR.md) pour ce
   que vaut ce jugement.
-- **Un rendu manga**, par défaut : aplats, contours à l’encre, trames et hachures, pierres noires
-  au reflet net. Le rendu réaliste (kaya, ardoise, coquillage, tatamis) reste disponible d’un
-  bouton ; les deux styles partagent géométrie, animations et effets, et ne diffèrent que par
-  `src/scene/look.ts` et les matériaux qu’il fournit.
-- **Un salon à tatamis** : shōji éclairés, tokonoma et son rouleau peint, fusuma à la branche de
-  pin, poteaux, lampe de papier — dessinés par le code, comme le reste.
+- **Deux joueurs qui jouent les coups** : assis en seiza dans un salon à tatamis, en kimono et
+  hakama, ils prennent la pierre dans leur bol, la portent et la posent du bout du majeur, se
+  penchent ou se soulèvent sur les genoux pour atteindre le fond du goban, et ramassent à la main
+  les pierres capturées pour les déposer dans leur couvercle. Le bras est recalculé pour chaque
+  intersection (cinématique inverse) ; le rythme et la prise viennent d’une animation d’origine.
+  Scène et personnages : voir [public/modeles/PROVENANCE.md](public/modeles/PROVENANCE.md).
+- **Un rendu réaliste** en option : goban seul, kaya, ardoise et coquillage.
 - **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
   (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
   bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et

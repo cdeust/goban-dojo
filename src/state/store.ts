@@ -504,6 +504,11 @@ export const useStore = create<State>((set, get) => ({
   clearVariation: () => set({ variation: [], notice: null }),
 }));
 
+// Accès de mise au point (scripts/dev) ; absent de la version construite.
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as unknown as { __store?: typeof useStore }).__store = useStore;
+}
+
 export const useCurrentGame = (): GameRecord | null =>
   useStore((s) => s.dataset?.games[s.gameIndex] ?? null);
 
