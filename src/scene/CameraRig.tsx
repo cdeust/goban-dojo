@@ -10,14 +10,27 @@ import { BOARD_TOP } from './dimensions.ts';
 const TARGET = new THREE.Vector3(0, BOARD_TOP - 1, 0);
 
 /** Position de l'œil pour chaque point de vue, relative au centre du goban (cm). */
-const VIEWS: Record<ViewName | 'ouverture', [number, number, number]> = {
-  // Assis en seiza derrière Noir : le regard porte jusqu'au fond de la pièce.
+type Views = Record<ViewName | 'ouverture', [number, number, number]>;
+
+/** Rendu réaliste : le goban seul dans la pièce. */
+const VIEWS_REALISTE: Views = {
   joueur: [0, 47, 88],
-  // De côté, assez bas pour que les shōji et le tokonoma entrent dans l'image.
   'trois-quarts': [74, 35, 98],
-  // À la verticale : la position se lit comme un kifu.
   dessus: [0, 128, 0.6],
   ouverture: [-70, 30, 128],
+};
+
+/**
+ * Salon aux deux joueurs : positions des caméras du fichier (cam_epaule_noir, cam_large,
+ * cam_dessus), ramenées au centre du goban.
+ */
+const VIEWS_MANGA: Views = {
+  // Par-dessus l'épaule de Noir.
+  joueur: [78, 112, 108],
+  // Les deux joueurs face à face.
+  'trois-quarts': [-205, 96, 168],
+  dessus: [0, 129, 0.6],
+  ouverture: [-230, 70, 190],
 };
 
 /** Caméra : transitions entre points de vue animées par Motion, orbite libre à la souris. */
@@ -28,12 +41,13 @@ export function CameraRig() {
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const view = useStore((s) => s.view);
   const entered = useStore((s) => s.entered);
+  const look = useStore((s) => s.look);
   const first = useRef(true);
   // Écran étroit : on recule pour garder le goban entier dans le cadre.
   const narrow = Math.min(2.4, Math.max(1, 1.18 / aspect));
 
   useEffect(() => {
-    const preset = VIEWS[entered ? view : 'ouverture'];
+    const preset = (look === 'manga' ? VIEWS_MANGA : VIEWS_REALISTE)[entered ? view : 'ouverture'];
     const to = new THREE.Spherical().setFromVector3(new THREE.Vector3(...preset));
     to.radius *= narrow;
     const from = new THREE.Spherical().setFromVector3(camera.position.clone().sub(TARGET));
@@ -65,7 +79,7 @@ export function CameraRig() {
       run.stop();
       c?.removeEventListener('start', cancel);
     };
-  }, [view, entered, narrow, camera, invalidate]);
+  }, [view, entered, narrow, look, camera, invalidate]);
 
   return (
     <OrbitControls
@@ -76,7 +90,7 @@ export function CameraRig() {
       enableDamping
       dampingFactor={0.08}
       minDistance={42}
-      maxDistance={260}
+      maxDistance={420}
       minPolarAngle={0.02}
       maxPolarAngle={Math.PI * 0.47}
       autoRotate={!entered && !prefersReducedMotion()}

@@ -15,7 +15,9 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  // « blob: » : les textures embarquées dans le modèle 3D sont lues par des adresses créées par
+  // la page elle-même ; elles ne désignent rien hors de son origine.
+  "connect-src 'self' blob:",
   "worker-src 'self' blob:",
   "media-src 'none'",
   "object-src 'none'",

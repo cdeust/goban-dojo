@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import type { Look } from '../state/store.ts';
 import { STONE_DIAMETER_BLACK } from './dimensions.ts';
 import { stoneGeometry } from './geometry.ts';
-import { toon, useLook } from './look.ts';
+import { useLook } from './look.ts';
 import { shellTexture } from './textures.ts';
 
 export interface StoneAssets {
@@ -15,15 +15,7 @@ export interface StoneAssets {
 let geometry: THREE.BufferGeometry | null = null;
 const cache = new Map<Look, { black: THREE.Material; white: THREE.Material }>();
 
-function build(look: Look): { black: THREE.Material; white: THREE.Material } {
-  if (look === 'manga') {
-    return {
-      // Noir d'encre. Seize bandes dont une seule claire : le reflet n'apparaît que là où la
-      // surface fait presque face à la lumière — un point net, comme sur une pierre dessinée.
-      black: toon('#ffffff', [...Array<number>(14).fill(0.07), 0.2, 0.97]),
-      white: toon('#fdfaf2', [0.66, 0.9, 1, 1]),
-    };
-  }
+function build(): { black: THREE.Material; white: THREE.Material } {
   return {
     // Ardoise de Nachi : noir mat, satiné.
     black: new THREE.MeshPhysicalMaterial({
@@ -50,7 +42,7 @@ export function useStoneAssets(): StoneAssets {
     geometry ??= stoneGeometry(STONE_DIAMETER_BLACK);
     let materials = cache.get(look);
     if (!materials) {
-      materials = build(look);
+      materials = build();
       cache.set(look, materials);
     }
     return { geometry, ...materials };
