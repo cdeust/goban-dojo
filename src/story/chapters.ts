@@ -37,7 +37,7 @@ export const SOURCES: Source[] = [
     label: 'Wikipedia (en) — “Shusaku opening”',
     url: 'https://en.wikipedia.org/wiki/Shusaku_opening',
     detail:
-      'consultée le 17 novembre 2026, licence CC BY-SA 4.0 — diagramme de l’ouverture et propos sur le kosumi, que la page rapporte d’après Go Seigen',
+      'consultée le 17 novembre 2026, licence CC BY-SA 4.0 — diagramme de l’ouverture (définition provisoire, à confirmer par une source de référence)',
   },
   {
     label: 'Professional Go Dataset (PGD)',
@@ -95,7 +95,6 @@ export const CHAPTERS: Chapter[] = [
       'Les grades s’enchaînent : deuxième dan en octobre 1841, troisième en août 1842, quatrième en novembre 1843.',
       'C’est dans ces années, face à Kadono Chūzaemon, fils aîné de Jōwa, qu’il éprouve pour la première fois l’ouverture qui portera son nom : trois komoku aux coups 1, 3 et 5, puis le kosumi.',
       'Le corpus garde la trace de cette ouverture dans 68 parties. La première fois, le 24 mai 1843, c’est Kadono qui la joue contre lui ; Shūsaku la reprend à son compte le 18 juillet. Il la jouera 52 fois avec les noirs, pour 42 victoires, 6 défaites et 2 parties nulles.',
-      'Du kosumi, la diagonale du septième coup, il aurait dit qu’il ne serait jamais un mauvais coup, quelle que soit l’évolution de la théorie. Le propos est rapporté par Go Seigen.',
       'Au printemps 1840, à dix ans, il reçoit trois pierres de handicap de deux joueurs qui compteront dans sa vie : Itō Matsujirō, sixième dan, et un septième dan que les kifus nomment Tsuchiya Shūwa.',
     ],
     featured: [
