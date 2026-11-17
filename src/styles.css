@@ -621,6 +621,10 @@ input[type='range']::-moz-range-thumb {
   gap: 0.5rem 1.2rem;
 }
 
+.transport__settings {
+  display: contents;
+}
+
 .transport__group {
   display: flex;
   align-items: center;
@@ -1021,55 +1025,153 @@ kbd {
 /* ───────────────────────────── écrans étroits ───────────────────────────── */
 
 @media (width < 60rem) {
+  /*
+   * Écran étroit : le goban garde toujours sa place. La scène est en haut ; le volet (récit,
+   * parties) s'ouvre dessous, dans le flux, au lieu de la recouvrir.
+   */
   .app,
   .app[data-panel='open'] {
-    grid-template-columns: 0 minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 0;
+    transition: none;
   }
 
-  /* Le volet devient une feuille qui recouvre le bas de l'écran. */
+  .app[data-panel='open'] {
+    grid-template-rows: minmax(0, 1fr) min(50dvh, 34rem);
+  }
+
+  .stage {
+    grid-column: 1;
+    grid-row: 1;
+    height: auto;
+    min-height: 0;
+    /* Goban, fiche de la partie, commandes : trois rangées, rien ne se recouvre. */
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
   .panel {
-    position: fixed;
-    inset: auto 0 0 0;
+    grid-column: 1;
+    grid-row: 2;
     width: 100%;
-    height: min(72dvh, 40rem);
+    height: 100%;
+    min-height: 0;
     border-right: 0;
     border-top: 1px solid var(--hairline);
-    border-radius: 16px 16px 0 0;
-    box-shadow: 0 -20px 60px rgb(0 0 0 / 0.6);
   }
 
+  /* La fiche devient une ligne sous le goban : date, puis les deux joueurs. */
   .card {
-    top: 6.6rem;
-    right: 0.75rem;
-    width: min(17rem, calc(100% - 1.5rem));
-    font-size: 0.78rem;
+    position: static;
+    grid-row: 2;
+    z-index: 3;
+    width: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.9rem;
+    padding: 0.45rem 0.9rem 0.35rem;
+    border: 0;
+    border-radius: 0;
+    background: var(--ink);
+    backdrop-filter: none;
+    font-size: 0.8rem;
   }
 
   .card__date {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
   }
 
-  .card__facts {
+  .card__era,
+  .card__facts,
+  .player__rank {
     display: none;
+  }
+
+  .card__players {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 0.9rem;
   }
 
   .brand__name {
     display: none;
   }
 
+  .topbar {
+    padding: 0.6rem 0.75rem;
+    padding-top: max(0.6rem, env(safe-area-inset-top));
+    gap: 0.5rem;
+  }
+
   .dock {
-    padding-inline: 0.75rem;
+    grid-row: 3;
+    /* La bande de réglages ne doit pas élargir les commandes au-delà de l'écran. */
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 0;
+    gap: 0.45rem;
+    padding: 0.2rem 0.75rem 0.6rem;
+    padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
+    background: var(--ink);
+  }
+
+  .ribbon__track {
+    height: 1.9rem;
+  }
+
+  .transport {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
   }
 
   .transport__row {
     justify-content: center;
+    gap: 0.35rem;
+  }
+
+  /* Les réglages tiennent sur une ligne et défilent de côté ; un fondu en signale la suite. */
+  .transport__settings {
+    display: flex;
+    flex: 1 0 100%;
+    gap: 0.9rem;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding-inline: 0.5rem;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 1.2rem,
+      #000 calc(100% - 1.2rem),
+      transparent
+    );
+  }
+
+  .transport__settings .transport__group {
+    flex: none;
+  }
+
+  /* Légendes et volets de mode se posent en haut du goban, sous la barre. */
+  .moment,
+  .mode {
+    top: 3.6rem;
+    bottom: auto;
+    left: 0.75rem;
+    width: calc(100% - 1.5rem);
+    font-size: 0.86rem;
   }
 
   .moment {
-    top: auto;
-    bottom: 19.5rem;
-    left: 0.75rem;
-    font-size: 0.92rem;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .mode {
+    max-height: 42%;
+  }
+
+  .mode__note {
+    display: none;
   }
 
   .ribbon__kanji {
@@ -1079,16 +1181,24 @@ kbd {
   .dialog {
     padding: 1.5rem 1.3rem;
   }
+
+  /* Volet ouvert : la moitié haute reste au goban ; la frise et les réglages s'effacent. */
+  .app[data-panel='open'] .ribbon,
+  .app[data-panel='open'] .transport__settings,
+  .app[data-panel='open'] .topbar {
+    display: none;
+  }
 }
 
-@media (width < 36rem) {
+/* Écran tactile : des cibles d'au moins 44 px. */
+@media (pointer: coarse) {
   .icon-button {
     width: 2.75rem;
     height: 2.75rem;
   }
 
   .seg {
-    min-height: 2.5rem;
+    min-height: 2.75rem;
   }
 }
 
@@ -1201,20 +1311,6 @@ kbd {
   font-size: 0.76rem;
   line-height: 1.5;
   color: var(--paper-faint);
-}
-
-@media (width < 60rem) {
-  .mode {
-    top: auto;
-    bottom: 22rem;
-    left: 0.75rem;
-    max-height: 40dvh;
-    font-size: 0.82rem;
-  }
-
-  .mode__note {
-    display: none;
-  }
 }
 
 .card__era {

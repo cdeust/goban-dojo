@@ -214,88 +214,91 @@ function Transport() {
           </button>
         </div>
 
-        <div className="transport__group" role="group" aria-label="Mode">
-          {MODE_LABELS.map(([m, label, title]) => (
+        {/* Réglages : sur un écran étroit, une seule bande qui défile de côté. */}
+        <div className="transport__settings">
+          <div className="transport__group" role="group" aria-label="Mode">
+            {MODE_LABELS.map(([m, label, title]) => (
+              <button
+                key={m}
+                type="button"
+                className="seg"
+                aria-pressed={mode === m}
+                title={title}
+                onClick={() => setMode(m)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="transport__group" role="group" aria-label="Vitesse">
+            {SPEEDS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                className="seg"
+                aria-pressed={speed === s}
+                aria-label={`Vitesse ${String(s).replace('.', ',')} coup${s > 1 ? 's' : ''} par seconde`}
+                onClick={() => setSpeed(s)}
+              >
+                {speedLabel(s)}
+              </button>
+            ))}
+          </div>
+
+          <div className="transport__group" role="group" aria-label="Point de vue">
+            {VIEW_LABELS.map(([v, label]) => (
+              <button
+                key={v}
+                type="button"
+                className="seg"
+                aria-pressed={view === v}
+                onClick={() => setView(v)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="transport__group" role="group" aria-label="Options">
             <button
-              key={m}
               type="button"
               className="seg"
-              aria-pressed={mode === m}
-              title={title}
-              onClick={() => setMode(m)}
+              aria-pressed={showNumbers}
+              onClick={() => toggle('showNumbers')}
             >
-              {label}
+              Numéros
             </button>
-          ))}
-        </div>
-
-        <div className="transport__group" role="group" aria-label="Vitesse">
-          {SPEEDS.map((s) => (
             <button
-              key={s}
               type="button"
               className="seg"
-              aria-pressed={speed === s}
-              aria-label={`Vitesse ${String(s).replace('.', ',')} coup${s > 1 ? 's' : ''} par seconde`}
-              onClick={() => setSpeed(s)}
+              aria-pressed={sound}
+              onClick={() => {
+                unlockAudio();
+                toggle('sound');
+              }}
             >
-              {speedLabel(s)}
+              Son
             </button>
-          ))}
-        </div>
-
-        <div className="transport__group" role="group" aria-label="Point de vue">
-          {VIEW_LABELS.map(([v, label]) => (
             <button
-              key={v}
               type="button"
               className="seg"
-              aria-pressed={view === v}
-              onClick={() => setView(v)}
+              aria-pressed={effects}
+              title="Marques d’attaque, de piège et de connexion ; lignes de force à l’impact"
+              onClick={() => toggle('effects')}
             >
-              {label}
+              Effets
             </button>
-          ))}
-        </div>
-
-        <div className="transport__group" role="group" aria-label="Options">
-          <button
-            type="button"
-            className="seg"
-            aria-pressed={showNumbers}
-            onClick={() => toggle('showNumbers')}
-          >
-            Numéros
-          </button>
-          <button
-            type="button"
-            className="seg"
-            aria-pressed={sound}
-            onClick={() => {
-              unlockAudio();
-              toggle('sound');
-            }}
-          >
-            Son
-          </button>
-          <button
-            type="button"
-            className="seg"
-            aria-pressed={effects}
-            title="Marques d’attaque, de piège et de connexion ; lignes de force à l’impact"
-            onClick={() => toggle('effects')}
-          >
-            Effets
-          </button>
-          <button
-            type="button"
-            className="seg"
-            aria-pressed={continuous}
-            title="Enchaîner automatiquement sur la partie suivante"
-            onClick={() => toggle('continuous')}
-          >
-            Enchaîner
-          </button>
+            <button
+              type="button"
+              className="seg"
+              aria-pressed={continuous}
+              title="Enchaîner automatiquement sur la partie suivante"
+              onClick={() => toggle('continuous')}
+            >
+              Enchaîner
+            </button>
+          </div>
         </div>
       </div>
     </div>

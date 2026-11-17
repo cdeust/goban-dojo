@@ -191,16 +191,80 @@ test('animations réduites : la relecture reste complète, sans mouvement', asyn
   expect(w.problems).toEqual([]);
 });
 
-test('écran étroit : les commandes restent accessibles', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test('téléphone : le goban reste visible, volet ouvert comme fermé', async ({ page }) => {
+  // Surface utile d'un téléphone dans son navigateur.
+  await page.setViewportSize({ width: 390, height: 700 });
   await enter(page);
+  /** Ce qui occupe l'écran : hauteur du goban, recouvrements, commandes hors de l'écran. */
+  const layout = () =>
+    page.evaluate(() => {
+      const box = (selector: string) => document.querySelector(selector)?.getBoundingClientRect();
+      const canvas = box('.stage__canvas');
+      const card = box('.card');
+      const dock = box('.dock');
+      const panel = box('.panel');
+      const play = document.querySelector('.icon-button--primary');
+      const at = play?.getBoundingClientRect();
+      const hit = at ? document.elementFromPoint(at.x + at.width / 2, at.y + at.height / 2) : null;
+      return {
+        goban: (canvas?.height ?? 0) / window.innerHeight,
+        // Rien ne passe sur le goban : la fiche et les commandes commencent où il finit.
+        cardBelow: !!canvas && !!card && card.top >= canvas.bottom - 1,
+        dockBelow: !!canvas && !!dock && dock.top >= canvas.bottom - 1,
+        panelBelow: !panel || (!!dock && panel.top >= dock.bottom - 1),
+        playReachable: !!play && !!hit && play.contains(hit),
+        offscreen: [
+          ...document.querySelectorAll(
+            '.ribbon, .transport__scrub, .transport__row > .transport__group, .card',
+          ),
+        ]
+          .filter((e) => {
+            const r = e.getBoundingClientRect();
+            return r.width > 0 && (r.right > window.innerWidth + 1 || r.left < -1);
+          })
+          .map((e) => e.className),
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+  // Volet du récit ouvert : il est sous la scène, pas dessus.
+  await expect(page.getByRole('button', { name: 'Fermer le volet' })).toBeVisible();
+  // L'écran d'ouverture s'efface et la fiche glisse en place : on attend la fin de ces transitions.
+  await expect
+    .poll(
+      async () => {
+        const l = await layout();
+        return l.playReachable && l.cardBelow;
+      },
+      { timeout: 20_000 },
+    )
+    .toBe(true);
+  const open = await layout();
+  expect(open.goban).toBeGreaterThan(0.25);
+  expect(open).toMatchObject({
+    cardBelow: true,
+    dockBelow: true,
+    panelBelow: true,
+    playReachable: true,
+    offscreen: [],
+    overflow: false,
+  });
+
+  // Volet fermé : le goban prend plus de la moitié de l'écran.
   await page.getByRole('button', { name: 'Fermer le volet' }).click();
-  await expect(page.getByRole('button', { name: 'Lecture' })).toBeInViewport();
   await expect(page.getByRole('slider', { name: 'Coup' })).toBeInViewport();
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth > window.innerWidth,
-  );
-  expect(overflow).toBe(false);
+  const closed = await layout();
+  expect(closed.goban).toBeGreaterThan(0.5);
+  expect(closed).toMatchObject({
+    cardBelow: true,
+    dockBelow: true,
+    playReachable: true,
+    offscreen: [],
+    overflow: false,
+  });
+  // Les réglages restent atteignables dans leur bande.
+  await page.getByRole('button', { name: 'Dessus' }).scrollIntoViewIfNeeded();
+  await expect(page.getByRole('button', { name: 'Dessus' })).toBeInViewport();
 });
 
 test('mode « deviner » : indice, coup montré, bilan', async ({ page }) => {
