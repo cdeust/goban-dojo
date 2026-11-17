@@ -30,7 +30,9 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   les pierres capturées pour les déposer dans leur couvercle. Le bras est recalculé pour chaque
   intersection (cinématique inverse) ; le rythme et la prise viennent d’une animation d’origine.
   Scène et personnages : voir [public/modeles/PROVENANCE.md](public/modeles/PROVENANCE.md).
-- **Un rendu réaliste** en option : goban seul, kaya, ardoise et coquillage.
+- **Des pierres qui tombent pour de bon** : les prisonniers lâchés dans un couvercle y chutent,
+  rebondissent et s’entassent, et les bols sont garnis de pierres simulées de la même façon
+  (moteur physique [Rapier](https://rapier.rs), obstacles tirés des maillages de la scène).
 - **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
   (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
   bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et

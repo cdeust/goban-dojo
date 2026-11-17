@@ -22,8 +22,8 @@ export function App() {
   const status = useStore((s) => s.status);
   const error = useStore((s) => s.error);
   const entered = useStore((s) => s.entered);
+  const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
-  const look = useStore((s) => s.look);
   const load = useStore((s) => s.load);
 
   useEffect(() => {
@@ -36,12 +36,17 @@ export function App() {
   return (
     // « user » : Motion respecte de lui-même la préférence système de réduction des animations.
     <MotionConfig reducedMotion="user">
-      <div className="app" data-panel={entered && panel ? 'open' : 'closed'} data-look={look}>
+      <div className="app" data-panel={entered && panel ? 'open' : 'closed'}>
         {entered && <Panel />}
         <main className="stage">
           <div className="stage__canvas">
             <Suspense fallback={null}>{status === 'ready' && <Scene />}</Suspense>
           </div>
+          {status === 'ready' && !sceneReady && (
+            <p className="stage__loading" role="status">
+              Le salon se prépare…
+            </p>
+          )}
           {status === 'error' && (
             <p className="fatal" role="alert">
               Les parties n’ont pas pu être chargées ({error}). Rechargez la page.

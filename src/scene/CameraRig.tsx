@@ -10,25 +10,16 @@ import { BOARD_TOP } from './dimensions.ts';
 const TARGET = new THREE.Vector3(0, BOARD_TOP - 1, 0);
 
 /** Position de l'œil pour chaque point de vue, relative au centre du goban (cm). */
-type Views = Record<ViewName | 'ouverture', [number, number, number]>;
-
-/** Rendu réaliste : le goban seul dans la pièce. */
-const VIEWS_REALISTE: Views = {
-  joueur: [0, 47, 88],
-  'trois-quarts': [74, 35, 98],
-  dessus: [0, 128, 0.6],
-  ouverture: [-70, 30, 128],
-};
-
 /**
- * Salon aux deux joueurs : positions des caméras du fichier (cam_epaule_noir, cam_large,
- * cam_dessus), ramenées au centre du goban.
+ * Position de l'œil pour chaque point de vue, relative au centre du goban (cm). Elles reprennent
+ * les caméras de la scène (cam_epaule_noir, cam_large, cam_dessus).
  */
-const VIEWS_MANGA: Views = {
+const VIEWS: Record<ViewName | 'ouverture', [number, number, number]> = {
   // Par-dessus l'épaule de Noir.
   joueur: [78, 112, 108],
   // Les deux joueurs face à face.
   'trois-quarts': [-205, 96, 168],
+  // À la verticale : la position se lit comme un kifu.
   dessus: [0, 129, 0.6],
   ouverture: [-230, 70, 190],
 };
@@ -41,7 +32,6 @@ export function CameraRig() {
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const view = useStore((s) => s.view);
   const entered = useStore((s) => s.entered);
-  const look = useStore((s) => s.look);
   const first = useRef(true);
   // Écran étroit : on recule pour garder le goban entier dans le cadre.
   const narrow = Math.min(2.4, Math.max(1, 1.18 / aspect));
@@ -52,7 +42,7 @@ export function CameraRig() {
     const preset =
       forced?.length === 3 && forced.every(Number.isFinite)
         ? (forced as [number, number, number])
-        : (look === 'manga' ? VIEWS_MANGA : VIEWS_REALISTE)[entered ? view : 'ouverture'];
+        : VIEWS[entered ? view : 'ouverture'];
     const to = new THREE.Spherical().setFromVector3(new THREE.Vector3(...preset));
     to.radius *= narrow;
     const from = new THREE.Spherical().setFromVector3(camera.position.clone().sub(TARGET));
@@ -84,7 +74,7 @@ export function CameraRig() {
       run.stop();
       c?.removeEventListener('start', cancel);
     };
-  }, [view, entered, narrow, look, camera, invalidate]);
+  }, [view, entered, narrow, camera, invalidate]);
 
   return (
     <OrbitControls

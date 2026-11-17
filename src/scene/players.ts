@@ -501,13 +501,16 @@ type Running = { stop: () => void };
 
 /** Une pierre capturée à ramasser sur le goban et à déposer dans un couvercle. */
 export interface Prisoner {
-  /** Centre de la pierre sur le goban, puis à sa place dans le couvercle. */
+  /** Centre de la pierre sur le goban, puis à l'endroit où elle est lâchée au-dessus du couvercle. */
   from: THREE.Vector3;
   to: THREE.Vector3;
   /** Appelé à chaque image tant que la pierre est tenue. */
   onMove: (x: number, y: number, z: number) => void;
-  /** Appelé quand la pierre est déposée ; `played` est faux si le geste a été interrompu. */
-  onDrop: (played: boolean) => void;
+  /**
+   * Appelé quand la pierre est lâchée ; `played` est faux si le geste a été interrompu. `order`
+   * est son rang dans la poignée (0 pour une pierre portée seule).
+   */
+  onDrop: (played: boolean, order: number) => void;
 }
 
 /** Les deux joueurs de la scène, prêts à jouer n'importe quel coup. */
@@ -599,10 +602,10 @@ export class Players {
     this.running[side] = chain;
     const active = (): boolean => this.running[side] === chain;
     const dropped = new Set<Prisoner>();
-    const drop = (item: Prisoner, played: boolean): void => {
+    const drop = (item: Prisoner, played: boolean, order: number): void => {
       if (dropped.has(item)) return;
       dropped.add(item);
-      item.onDrop(played);
+      item.onDrop(played, order);
     };
     const trips: Prisoner[][] = items.slice(0, Players.SINGLE_TRIPS - 1).map((item) => [item]);
     if (items.length >= Players.SINGLE_TRIPS) trips.push(items.slice(Players.SINGLE_TRIPS - 1));
@@ -641,7 +644,6 @@ export class Players {
       );
     };
 
-    const above = (v: THREE.Vector3, h: number): THREE.Vector3 => v.clone().setY(v.y + h);
     const tipOn = (stone: THREE.Vector3): THREE.Vector3 => stone.clone().add(player.tipOffset);
     const next = (index: number, from: THREE.Vector3): void => {
       const trip = trips[index];
@@ -652,11 +654,11 @@ export class Players {
       }
       const first = trip[0] as Prisoner;
       const grab = tipOn(first.from);
-      const release = above(tipOn(first.to), 2.5);
+      const release = tipOn(first.to);
       move(from, grab, 0.3, [0.6, 1], [], () => {
         // La pierre est pincée, soulevée, portée au-dessus du couvercle, puis lâchée.
         move(grab, release, 0.42, [1, 1], trip, () => {
-          for (const item of trip) drop(item, true);
+          trip.forEach((item, order) => drop(item, true, order));
           next(index + 1, release);
         });
       });
@@ -666,7 +668,7 @@ export class Players {
       stop: () => {
         if (active()) this.stop(side);
         // Un geste interrompu ne laisse aucune pierre en l'air.
-        for (const item of items) drop(item, false);
+        for (const item of items) drop(item, false, 0);
       },
     };
   }
@@ -708,15 +710,4 @@ export class Players {
     player.rest();
     return gap;
   }
-}
-
-let current: Players | null = null;
-
-/** La scène y dépose ses joueurs une fois chargés ; les pierres s'en servent pour leur geste. */
-export function setPlayers(players: Players | null): void {
-  current = players;
-}
-
-export function getPlayers(): Players | null {
-  return current;
 }

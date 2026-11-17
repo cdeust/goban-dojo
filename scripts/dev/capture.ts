@@ -12,7 +12,7 @@ page.on('console', (m) => {
   if (m.type() === 'error') problems.push(m.text());
 });
 page.on('pageerror', (e) => problems.push(e.message));
-await page.goto('http://127.0.0.1:5173/?oeil=-150,95,60');
+await page.goto('http://127.0.0.1:5173/?oeil=-95,48,62');
 await page.getByRole('button', { name: 'Entrer' }).click();
 await page.getByRole('button', { name: 'Parties', exact: true }).first().click();
 await page.getByRole('searchbox').fill('1846-09-11');
@@ -24,7 +24,7 @@ await page.getByRole('slider', { name: 'Coup' }).fill('39');
 await page.waitForTimeout(2500);
 await page.locator('body').click({ position: { x: 5, y: 500 } });
 await page.keyboard.press('ArrowRight');
-for (const [i, wait] of [900, 330, 330, 420, 900].entries()) {
+for (const [i, wait] of [900, 300, 250, 120, 120, 120, 700].entries()) {
   await page.waitForTimeout(wait);
   await page.screenshot({ path: `test-results/shots/capture-${i + 1}.png` });
 }

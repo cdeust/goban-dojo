@@ -43,6 +43,13 @@ module.exports = {
       to: { path: 'onnxruntime-web' },
     },
     {
+      name: 'physique-en-un-seul-module',
+      severity: 'error',
+      comment: 'Le moteur physique n’est importé que par src/scene/physics.ts.',
+      from: { pathNot: '^src/scene/physics\\.ts$' },
+      to: { path: '@dimforge/rapier3d' },
+    },
+    {
       name: 'etat-sans-vue',
       severity: 'error',
       comment: 'L’état ne dépend ni de la scène, ni de l’interface, ni de la lecture.',

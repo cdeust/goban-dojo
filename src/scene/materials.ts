@@ -1,22 +1,25 @@
-import { useMemo } from 'react';
 import * as THREE from 'three';
-import type { Look } from '../state/store.ts';
 import { STONE_DIAMETER_BLACK } from './dimensions.ts';
 import { stoneGeometry } from './geometry.ts';
-import { useLook } from './look.ts';
-import { shellTexture } from './textures.ts';
+import { INK, shellTexture } from './textures.ts';
 
 export interface StoneAssets {
   geometry: THREE.BufferGeometry;
   black: THREE.Material;
   white: THREE.Material;
+  /** Contour à l'encre : la face arrière d'une copie légèrement plus grande de la pierre. */
+  outline: THREE.Material;
 }
 
-let geometry: THREE.BufferGeometry | null = null;
-const cache = new Map<Look, { black: THREE.Material; white: THREE.Material }>();
+/** Grossissement de la copie qui fait le contour d'une pierre. */
+export const OUTLINE_SCALE = 1.045;
 
-function build(): { black: THREE.Material; white: THREE.Material } {
-  return {
+let assets: StoneAssets | null = null;
+
+/** Géométrie et matériaux des pierres, partagés entre le goban, les bols et les couvercles. */
+export function stoneAssets(): StoneAssets {
+  assets ??= {
+    geometry: stoneGeometry(STONE_DIAMETER_BLACK),
     // Ardoise de Nachi : noir mat, satiné.
     black: new THREE.MeshPhysicalMaterial({
       color: '#131315',
@@ -32,19 +35,7 @@ function build(): { black: THREE.Material; white: THREE.Material } {
       clearcoat: 0.75,
       clearcoatRoughness: 0.12,
     }),
+    outline: new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide }),
   };
-}
-
-/** Géométrie et matériaux des pierres, partagés entre le goban, les bols et les couvercles. */
-export function useStoneAssets(): StoneAssets {
-  const look = useLook();
-  return useMemo(() => {
-    geometry ??= stoneGeometry(STONE_DIAMETER_BLACK);
-    let materials = cache.get(look);
-    if (!materials) {
-      materials = build();
-      cache.set(look, materials);
-    }
-    return { geometry, ...materials };
-  }, [look]);
+  return assets;
 }

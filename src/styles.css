@@ -114,6 +114,20 @@ button:disabled {
   height: 100dvh;
 }
 
+/* Pendant le chargement du salon (modèle et moteur physique). */
+.stage__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #5a4f40;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
 .stage__canvas {
   position: relative;
   grid-row: 1;
@@ -1339,38 +1353,38 @@ progress {
   border: 2px dashed var(--paper);
 }
 
-/* ───────────────────────────── style manga : la scène est claire ───────────────────────────── */
+/* ───────────────────────────── la scène est claire ───────────────────────────── */
 
-.app[data-look='manga'] .stage__canvas::after {
+.stage__canvas::after {
   /* Sur papier, la vignette devient un simple liseré d'ombre. */
   background: radial-gradient(ellipse at 50% 48%, transparent 62%, rgb(23 19 15 / 0.18) 100%);
 }
 
-.app[data-look='manga'] .topbar {
+.topbar {
   background: none;
 }
 
-.app[data-look='manga'] .brand__kanji {
+.brand__kanji {
   color: #8a5a17;
 }
 
-.app[data-look='manga'] .brand__name {
+.brand__name {
   color: var(--ink-2);
 }
 
 /* Sur papier, les lignes de force sont tracées à l'encre. */
-.app[data-look='manga'] .impact__lines line {
+.impact__lines line {
   stroke: #17130f;
 }
 
-.app[data-look='manga'] .impact--menace .impact__lines line {
+.impact--menace .impact__lines line {
   stroke: #b8371f;
 }
 
-.app[data-look='manga'] .impact--connexion .impact__lines line {
+.impact--connexion .impact__lines line {
   stroke: #1f5591;
 }
 
-.app[data-look='manga'] .impact--moment {
+.impact--moment {
   background: radial-gradient(circle at 50% 45%, transparent 14%, rgb(23 19 15 / 0.32) 75%);
 }

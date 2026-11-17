@@ -51,5 +51,3 @@ export const LID = {
   W: { x: -32, z: -29 },
 } as const;
 export const BOWL_HEIGHT = 9;
-/** Hauteur du fond du couvercle retourné, où reposent les prisonniers. */
-export const LID_FLOOR = 0.6;

@@ -8,7 +8,6 @@ import {
   moveCount,
   useCurrentGame,
   useStore,
-  type Look,
   type Mode,
   type ViewName,
 } from '../state/store.ts';
@@ -100,11 +99,6 @@ const VIEW_LABELS: [ViewName, string][] = [
   ['dessus', 'Dessus'],
 ];
 
-const LOOK_LABELS: [Look, string][] = [
-  ['manga', 'Manga'],
-  ['realiste', 'Réaliste'],
-];
-
 const MODE_LABELS: [Mode, string, string][] = [
   ['lecture', 'Regarder', 'Regarder la partie se dérouler'],
   ['deviner', 'Deviner', 'Chercher soi-même les coups de Shūsaku'],
@@ -126,8 +120,6 @@ function Transport() {
   const sound = useStore((s) => s.sound);
   const continuous = useStore((s) => s.continuous);
   const effects = useStore((s) => s.effects);
-  const look = useStore((s) => s.look);
-  const setLook = useStore((s) => s.setLook);
   const mode = useStore((s) => s.mode);
   const setMode = useStore((s) => s.setMode);
   const { step, togglePlay, setMove, setSpeed, setView, toggle, selectGame, setPlaying } =
@@ -260,20 +252,6 @@ function Transport() {
               className="seg"
               aria-pressed={view === v}
               onClick={() => setView(v)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="transport__group" role="group" aria-label="Style">
-          {LOOK_LABELS.map(([l, label]) => (
-            <button
-              key={l}
-              type="button"
-              className="seg"
-              aria-pressed={look === l}
-              onClick={() => setLook(l)}
             >
               {label}
             </button>

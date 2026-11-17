@@ -27,6 +27,7 @@
     "rig:check": "node scripts/dev/rig.ts"
   },
   "dependencies": {
+    "@dimforge/rapier3d-compat": "0.21.0",
     "@fontsource/shippori-mincho": "5.3.0",
     "@pixiv/three-vrm": "3.5.5",
     "@react-three/drei": "10.7.9",

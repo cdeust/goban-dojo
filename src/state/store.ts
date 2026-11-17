@@ -40,9 +40,6 @@ export interface Zone {
  */
 export type ImpactKind = 'coup' | 'connexion' | 'menace' | 'piege' | 'moment';
 
-/** Style de rendu de la scène. */
-export type Look = 'manga' | 'realiste';
-
 export interface Impact {
   /** Numéro d'ordre : deux impacts au même point restent distincts. */
   seq: number;
@@ -129,11 +126,12 @@ interface State {
   sound: boolean;
   /** Effets de mise en scène : marques d'atari, de piège et de connexion, lignes de force. */
   effects: boolean;
-  look: Look;
   /** Dernière pierre à avoir frappé le goban (renseigné par la scène). */
   impact: Impact | null;
   /** L'écran d'ouverture a été franchi. */
   entered: boolean;
+  /** Le salon (modèle et physique) est chargé. */
+  sceneReady: boolean;
   panel: PanelName;
   chapterIndex: number;
   mode: Mode;
@@ -145,6 +143,7 @@ interface State {
 
   load: () => Promise<void>;
   enter: () => void;
+  setSceneReady: () => void;
   selectGame: (index: number, opts?: { play?: boolean; move?: number }) => void;
   setMove: (move: number) => void;
   step: (delta: number) => void;
@@ -152,7 +151,6 @@ interface State {
   setPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
   setView: (view: ViewName) => void;
-  setLook: (look: Look) => void;
   toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects') => void;
   /** La scène signale que la pierre du coup affiché vient de toucher le goban. */
   notifyImpact: (point: number) => void;
@@ -293,9 +291,9 @@ export const useStore = create<State>((set, get) => ({
   showNumbers: false,
   sound: true,
   effects: true,
-  look: 'manga',
   impact: null,
   entered: false,
+  sceneReady: false,
   panel: null,
   chapterIndex: 0,
   mode: 'lecture',
@@ -316,6 +314,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   enter: () => set({ entered: true, panel: 'recit', view: 'joueur' }),
+  setSceneReady: () => set({ sceneReady: true }),
 
   selectGame: (index, opts) => {
     const games = get().dataset?.games;
@@ -366,7 +365,6 @@ export const useStore = create<State>((set, get) => ({
 
   setSpeed: (speed) => set({ speed }),
   setView: (view) => set({ view }),
-  setLook: (look) => set({ look }),
   toggle: (key) => set((s) => ({ [key]: !s[key] }) as Partial<State>),
   setPanel: (panel) => set({ panel }),
   setChapter: (index) => set({ chapterIndex: index }),

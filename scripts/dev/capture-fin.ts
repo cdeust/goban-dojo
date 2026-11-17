@@ -1,4 +1,4 @@
-/** Mise au point : la pièce sous les deux styles, depuis l'écran d'ouverture et de trois-quarts. */
+/** Mise au point : bols et couvercles en fin de partie, vus de près. */
 import { mkdirSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 
@@ -12,16 +12,16 @@ page.on('console', (m) => {
   if (m.type() === 'error') problems.push(m.text());
 });
 page.on('pageerror', (e) => problems.push(e.message));
-await page.goto(process.argv[2] ?? 'http://127.0.0.1:5173/');
-await page.getByRole('button', { name: 'Entrer' }).waitFor();
-await page.waitForTimeout(2500);
-await page.screenshot({ path: 'test-results/shots/30-ouverture-manga.png' });
+await page.goto('http://127.0.0.1:5173/?oeil=-150,75,-25');
 await page.getByRole('button', { name: 'Entrer' }).click();
+await page.getByRole('button', { name: 'Parties', exact: true }).first().click();
+await page.getByRole('searchbox').fill('1846-09-11');
+await page.locator('.row').first().click();
+await page.getByRole('button', { name: 'Pause' }).click();
 await page.getByRole('button', { name: 'Fermer le volet' }).click();
-await page.getByRole('slider', { name: 'Coup' }).fill('120');
-await page.getByRole('button', { name: 'Trois-quarts' }).click();
-await page.getByRole('button', { name: 'Réaliste' }).click();
-await page.waitForTimeout(3200);
-await page.screenshot({ path: 'test-results/shots/31-realiste-trois-quarts.png' });
+await page.waitForFunction(() => '__players' in window, undefined, { timeout: 60000 });
+await page.getByRole('slider', { name: 'Coup' }).fill('325');
+await page.waitForTimeout(2500);
+await page.screenshot({ path: 'test-results/shots/fin-couvercles.png' });
 console.log(problems.length ? problems.join('\n') : 'aucune erreur console');
 await browser.close();

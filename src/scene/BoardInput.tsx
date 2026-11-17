@@ -12,7 +12,7 @@ import {
   STONE_DIAMETER_BLACK,
   pointToWorld,
 } from './dimensions.ts';
-import { useStoneAssets } from './materials.ts';
+import { stoneAssets } from './materials.ts';
 
 /** Intersection la plus proche d'un point du plateau, ou -1 si l'on est hors de la grille. */
 function nearestPoint(x: number, z: number): number {
@@ -34,7 +34,7 @@ export function BoardInput() {
   const zone = useStore((s) => s.guess.zone);
   const wrong = useStore((s) => s.guess.wrong);
   const invalidate = useThree((s) => s.invalidate);
-  const assets = useStoneAssets();
+  const assets = stoneAssets();
   const ghost = useRef<THREE.Mesh>(null);
   const hovered = useRef(-1);
 

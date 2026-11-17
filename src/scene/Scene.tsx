@@ -3,11 +3,8 @@ import { useRef } from 'react';
 import { useCurrentGame, useStore } from '../state/store.ts';
 
 import { BoardInput } from './BoardInput.tsx';
-import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
-import { Goban } from './Goban.tsx';
 import { Marks } from './Marks.tsx';
-import { Room } from './Room.tsx';
 import { Salon } from './Salon.tsx';
 import { Stones } from './Stones.tsx';
 
@@ -36,7 +33,6 @@ function RenderProbe() {
 export function Scene() {
   const game = useCurrentGame();
   const entered = useStore((s) => s.entered);
-  const look = useStore((s) => s.look);
   return (
     <Canvas
       shadows="percentage"
@@ -47,16 +43,7 @@ export function Scene() {
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       aria-hidden="true"
     >
-      {look === 'manga' ? (
-        <Salon />
-      ) : (
-        <>
-          <Room />
-          <Goban />
-          <Bowls />
-        </>
-      )}
-      {game && <Stones key={game.id} seed={game.id} />}
+      <Salon>{game && <Stones key={game.id} seed={game.id} />}</Salon>
       <Marks />
       <BoardInput />
       <CameraRig />

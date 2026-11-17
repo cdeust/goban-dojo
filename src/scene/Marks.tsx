@@ -6,13 +6,12 @@ import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { setProjector } from '../state/projection.ts';
 import { marksOf, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
-import { useLook } from './look.ts';
 import { INK } from './textures.ts';
 
 /** Nombre maximal de pierres marquées à la fois, par type de marque. */
 const CAPACITY = 96;
 
-/** Couleur de chaque notion, commune aux deux styles. */
+/** Couleur de chaque notion. */
 export const MARK_COLORS = {
   /** Attaque : pierres en atari, coup qui capture. */
   attack: '#e0553a',
@@ -77,7 +76,6 @@ const flashTexture = (): THREE.CanvasTexture =>
  */
 export function Marks() {
   const enabled = useStore((s) => s.effects);
-  const look = useLook();
   // Clé stable tant que les marques ne changent pas : évite de tout reconstruire à chaque coup.
   const key = useStore((s) => {
     if (!s.effects) return '';
@@ -96,8 +94,6 @@ export function Marks() {
   const assets = useMemo(() => {
     const plane = new THREE.PlaneGeometry(1, 1);
     plane.rotateX(-Math.PI / 2);
-    // Sur le papier clair du manga, une lumière additive ne se verrait pas : la couleur est posée.
-    const blending = look === 'manga' ? THREE.NormalBlending : THREE.AdditiveBlending;
     const material = (
       map: THREE.Texture,
       color: THREE.ColorRepresentation,
@@ -108,16 +104,15 @@ export function Marks() {
         transparent: true,
         opacity: 0,
         depthWrite: false,
-        blending,
         toneMapped: false,
       });
     return {
       plane,
       halo: material(haloTexture(), '#ffffff'),
-      cage: material(cageTexture(), look === 'manga' ? MARK_COLORS.trap : '#f3e7c8'),
+      cage: material(cageTexture(), MARK_COLORS.trap),
       flash: material(flashTexture(), MARK_COLORS.attack),
     };
-  }, [look]);
+  }, []);
 
   // Projection d'une intersection vers l'écran, pour l'interface.
   useEffect(() => {
@@ -226,7 +221,7 @@ export function Marks() {
     assets.flash.color.set(
       impact.kind === 'connexion'
         ? MARK_COLORS.connection
-        : impact.kind === 'piege' && look === 'manga'
+        : impact.kind === 'piege'
           ? MARK_COLORS.trap
           : MARK_COLORS.attack,
     );
@@ -245,7 +240,7 @@ export function Marks() {
       assets.flash.opacity = 0;
       invalidate();
     };
-  }, [impact, enabled, assets, look, invalidate]);
+  }, [impact, enabled, assets, invalidate]);
 
   return (
     <group visible={enabled}>
