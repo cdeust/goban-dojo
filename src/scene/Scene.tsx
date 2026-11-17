@@ -3,9 +3,11 @@ import { useRef } from 'react';
 import { useCurrentGame, useStore } from '../state/store.ts';
 
 import { BoardInput } from './BoardInput.tsx';
+import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
+import { Goban } from './Goban.tsx';
 import { Marks } from './Marks.tsx';
-import { Salon } from './Salon.tsx';
+import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 
 /**
@@ -43,7 +45,9 @@ export function Scene() {
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       aria-hidden="true"
     >
-      <Salon>{game && <Stones key={game.id} seed={game.id} />}</Salon>
+      <Room />
+      <Goban />
+      <Bowls>{game && <Stones key={game.id} seed={game.id} />}</Bowls>
       <Marks />
       <BoardInput />
       <CameraRig />

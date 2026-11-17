@@ -102,6 +102,8 @@ function stoneHull(diameter: number): Float32Array {
 export interface PileOptions {
   /** Objets fixes sur lesquels les pierres tombent (bol, couvercle…). Le sol y = 0 est ajouté. */
   fixed: TriMesh[];
+  /** Fond caché : un disque plein à cette hauteur (cm), sous les pierres visibles d'un bol profond. */
+  floor?: number;
   /** Centre du lâcher, et rayon dans lequel il varie d'une pierre à l'autre. */
   centre: { x: number; z: number };
   spread: number;
@@ -138,6 +140,15 @@ export class Pile {
     };
     fix(rapier.ColliderDesc.cuboid(500, 5, 500).setTranslation(0, -5, 0));
     for (const mesh of options.fixed) fix(rapier.ColliderDesc.trimesh(mesh.vertices, mesh.indices));
+    if (options.floor !== undefined) {
+      fix(
+        rapier.ColliderDesc.cylinder(0.5, 20).setTranslation(
+          options.centre.x,
+          options.floor - 0.5,
+          options.centre.z,
+        ),
+      );
+    }
     this.world = world;
   }
 

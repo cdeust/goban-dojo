@@ -1,18 +1,13 @@
 import * as THREE from 'three';
 import { STONE_DIAMETER_BLACK } from './dimensions.ts';
 import { stoneGeometry } from './geometry.ts';
-import { INK, shellTexture } from './textures.ts';
+import { shellTexture } from './textures.ts';
 
 export interface StoneAssets {
   geometry: THREE.BufferGeometry;
   black: THREE.Material;
   white: THREE.Material;
-  /** Contour à l'encre : la face arrière d'une copie légèrement plus grande de la pierre. */
-  outline: THREE.Material;
 }
-
-/** Grossissement de la copie qui fait le contour d'une pierre. */
-export const OUTLINE_SCALE = 1.045;
 
 let assets: StoneAssets | null = null;
 
@@ -35,7 +30,6 @@ export function stoneAssets(): StoneAssets {
       clearcoat: 0.75,
       clearcoatRoughness: 0.12,
     }),
-    outline: new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide }),
   };
   return assets;
 }

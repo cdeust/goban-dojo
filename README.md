@@ -24,15 +24,11 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
   probable — et le compare au coup réellement joué. Voir [docs/MOTEUR.md](docs/MOTEUR.md) pour ce
   que vaut ce jugement.
-- **Deux joueurs qui jouent les coups** : assis en seiza dans un salon à tatamis, en kimono et
-  hakama, ils prennent la pierre dans leur bol, la portent et la posent du bout du majeur, se
-  penchent ou se soulèvent sur les genoux pour atteindre le fond du goban, et ramassent à la main
-  les pierres capturées pour les déposer dans leur couvercle. Le bras est recalculé pour chaque
-  intersection (cinématique inverse) ; le rythme et la prise viennent d’une animation d’origine.
-  Scène et personnages : voir [public/modeles/PROVENANCE.md](public/modeles/PROVENANCE.md).
+- **Un rendu réaliste** : goban de kaya sur ses pieds tournés, pierres d’ardoise et de coquillage,
+  bols de bois, dans un salon à tatamis éclairé par ses shōji.
 - **Des pierres qui tombent pour de bon** : les prisonniers lâchés dans un couvercle y chutent,
   rebondissent et s’entassent, et les bols sont garnis de pierres simulées de la même façon
-  (moteur physique [Rapier](https://rapier.rs), obstacles tirés des maillages de la scène).
+  (moteur physique [Rapier](https://rapier.rs), obstacles tirés des maillages des bols et couvercles).
 - **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
   (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
   bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et

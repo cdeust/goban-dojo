@@ -104,12 +104,13 @@ export function Marks() {
         transparent: true,
         opacity: 0,
         depthWrite: false,
+        blending: THREE.AdditiveBlending,
         toneMapped: false,
       });
     return {
       plane,
       halo: material(haloTexture(), '#ffffff'),
-      cage: material(cageTexture(), MARK_COLORS.trap),
+      cage: material(cageTexture(), '#f3e7c8'),
       flash: material(flashTexture(), MARK_COLORS.attack),
     };
   }, []);
@@ -222,7 +223,7 @@ export function Marks() {
       impact.kind === 'connexion'
         ? MARK_COLORS.connection
         : impact.kind === 'piege'
-          ? MARK_COLORS.trap
+          ? '#f3e7c8'
           : MARK_COLORS.attack,
     );
     const strong = impact.kind === 'moment';

@@ -114,14 +114,14 @@ button:disabled {
   height: 100dvh;
 }
 
-/* Pendant le chargement du salon (modèle et moteur physique). */
+/* Pendant le chargement du moteur physique. */
 .stage__loading {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   margin: 0;
-  color: #5a4f40;
+  color: var(--paper-dim);
   font-family: var(--serif);
   font-size: 1.05rem;
   letter-spacing: 0.04em;
@@ -1351,40 +1351,4 @@ progress {
 
 .legend__dot--trap {
   border: 2px dashed var(--paper);
-}
-
-/* ───────────────────────────── la scène est claire ───────────────────────────── */
-
-.stage__canvas::after {
-  /* Sur papier, la vignette devient un simple liseré d'ombre. */
-  background: radial-gradient(ellipse at 50% 48%, transparent 62%, rgb(23 19 15 / 0.18) 100%);
-}
-
-.topbar {
-  background: none;
-}
-
-.brand__kanji {
-  color: #8a5a17;
-}
-
-.brand__name {
-  color: var(--ink-2);
-}
-
-/* Sur papier, les lignes de force sont tracées à l'encre. */
-.impact__lines line {
-  stroke: #17130f;
-}
-
-.impact--menace .impact__lines line {
-  stroke: #b8371f;
-}
-
-.impact--connexion .impact__lines line {
-  stroke: #1f5591;
-}
-
-.impact--moment {
-  background: radial-gradient(circle at 50% 45%, transparent 14%, rgb(23 19 15 / 0.32) 75%);
 }

@@ -23,8 +23,7 @@
     "sbom": "node scripts/sbom.ts",
     "audit:deps": "pnpm audit --prod",
     "check": "pnpm data:build && pnpm typecheck && pnpm lint && pnpm arch && pnpm format:check && pnpm test && pnpm audit:deps && vite build && pnpm e2e",
-    "arch": "depcruise --config .dependency-cruiser.cjs src scripts tests",
-    "rig:check": "node scripts/dev/rig.ts"
+    "arch": "depcruise --config .dependency-cruiser.cjs src scripts tests"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",

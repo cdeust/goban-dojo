@@ -44,7 +44,7 @@ export function App() {
           </div>
           {status === 'ready' && !sceneReady && (
             <p className="stage__loading" role="status">
-              Le salon se prépare…
+              La scène se prépare…
             </p>
           )}
           {status === 'error' && (

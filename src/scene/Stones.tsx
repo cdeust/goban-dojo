@@ -2,7 +2,6 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { animate } from 'motion';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import type { Color } from '../domain/board.ts';
 import { NEVER, type StoneLife, type Timeline } from '../domain/game.ts';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { playStone } from '../replay/sound.ts';
@@ -16,7 +15,7 @@ import {
   STONE_THICKNESS,
   pointToWorld,
 } from './dimensions.ts';
-import { OUTLINE_SCALE, stoneAssets } from './materials.ts';
+import { stoneAssets } from './materials.ts';
 import { poseAt, type Fall, type Rigid } from './physics.ts';
 import { useStage } from './stage.ts';
 import { hashString, mulberry32 } from './random.ts';
@@ -82,13 +81,7 @@ const quad = (a: number, b: number, c: number, t: number): number =>
 /** Durée (s) du geste de pose quand on avance d'un coup à la main. */
 const PLACE_DURATION = 0.62;
 const CAPTURE_DURATION = 0.4;
-/** Délai (s) entre deux pierres lâchées d'une même poignée. */
-const HANDFUL_STAGGER = 0.07;
 const UNDO_DURATION = 0.3;
-/** En deçà de cette durée (s) entre deux coups, la main n'a pas le temps : la pierre vole seule. */
-const HAND_MIN_DURATION = 0.4;
-/** Durée (s) du geste de la main jusqu'au contact, quand le rythme le permet. */
-const HAND_DURATION = 0.85;
 /** Part du geste consacrée au trajet jusqu'au-dessus de l'intersection ; le reste est la frappe. */
 const TRAVEL = 0.74;
 
@@ -148,7 +141,6 @@ export function Stones({ seed }: { seed: string }) {
   const invalidate = useThree((s) => s.invalidate);
   const showNumbers = useStore((s) => s.showNumbers);
 
-  const outlineRef = useRef<THREE.InstancedMesh>(null);
   const blackRef = useRef<THREE.InstancedMesh>(null);
   const whiteRef = useRef<THREE.InstancedMesh>(null);
   const numbersRef = useRef<THREE.InstancedMesh>(null);
@@ -195,7 +187,7 @@ export function Stones({ seed }: { seed: string }) {
 
   useEffect(() => {
     const L = live.current;
-    const { players, lids } = stage;
+    const { lids } = stage;
     const seedHash = hashString(seed);
     let markerRun: Controls | undefined;
     let shown = -1;
@@ -336,9 +328,6 @@ export function Stones({ seed }: { seed: string }) {
       });
     };
 
-    /** Ce qui doit suivre l'instant où une pierre touche le goban (ramassage des prisonniers). */
-    const afterLanding = new Map<number, () => void>();
-
     /** La pierre `i`, lâchée au-dessus du couvercle, y tombe, rebondit et s'immobilise. */
     const drop = (i: number, delay: number, sound: boolean): void => {
       const fall = fallOf(i);
@@ -366,34 +355,6 @@ export function Stones({ seed }: { seed: string }) {
       });
     };
 
-    /** La main du joueur `color` ramasse les pierres `captured` et les lâche dans son couvercle. */
-    const collect = (color: Color, captured: number[], sound: boolean): void => {
-      const half = STONE_THICKNESS / 2;
-      const items = captured.map((c) => {
-        stop(c);
-        const p = L.pose[c]!;
-        const release = fallOf(c).start;
-        L.phase[c] = IN_LID;
-        return {
-          from: new THREE.Vector3(p.x, p.y + half, p.z),
-          to: new THREE.Vector3(release.x, release.y, release.z),
-          onMove: (x: number, y: number, z: number): void => {
-            p.x = x;
-            p.y = y - half;
-            p.z = z;
-          },
-          onDrop: (played: boolean, order: number): void => {
-            L.running[c] = undefined;
-            if (played) drop(c, order * HANDFUL_STAGGER, sound);
-            else settle(c, targetOf(c, IN_LID), 1);
-            touch();
-          },
-        };
-      });
-      const gesture = players.collect(color, items, touch);
-      for (const c of captured) L.running[c] = gesture;
-    };
-
     /** Geste de pose : la pierre sort du bol, vient au-dessus de l'intersection, puis frappe. */
     const place = (i: number, duration: number, sound: boolean, emphatic: boolean): void => {
       stop(i);
@@ -416,30 +377,7 @@ export function Stones({ seed }: { seed: string }) {
         if (sound) playStone('place', to.x / 21, emphatic ? 1.3 : 1);
         useStore.getState().notifyImpact(stone.point);
         wobble(i);
-        const then = afterLanding.get(i);
-        afterLanding.delete(i);
-        then?.();
       };
-      // Si le rythme le permet, c'est une main qui porte la pierre.
-      if (duration >= HAND_MIN_DURATION) {
-        settle(i, from, 0);
-        L.running[i] = players.play(stone.color, stone.point, {
-          duration: Math.max(duration, HAND_DURATION),
-          onStone: (x, y, z) => {
-            p.x = x;
-            p.y = y - STONE_THICKNESS / 2;
-            p.z = z;
-            p.rx = 0;
-            p.rz = 0;
-            p.s = 1;
-            p.rigid = null;
-          },
-          onContact: landed,
-          onFrame: touch,
-        });
-        return;
-      }
-      L.phase[i] = ON_BOARD;
       L.running[i] = animate(0, 1, {
         duration,
         ease: 'linear',
@@ -506,7 +444,6 @@ export function Stones({ seed }: { seed: string }) {
 
     /** Saut direct à une position quelconque : les pierres apparaissent ou s'effacent sur place. */
     const jump = (n: number, instant: boolean): void => {
-      players.reset();
       stones().forEach((stone, i) => {
         const phase = phaseAt(stone, n);
         const was = L.phase[i]!;
@@ -577,22 +514,16 @@ export function Stones({ seed }: { seed: string }) {
         const duration = playing ? Math.min(PLACE_DURATION, (1 / speed) * 0.85) : PLACE_DURATION;
         const i = timeline.stoneOfMove[n] ?? -1;
         if (i >= 0) place(i, duration, sound, (timeline.capturesAt[n]?.length ?? 0) > 0);
-        const captured = timeline.capturesAt[n] ?? [];
-        const mover = timeline.moves[n - 1]?.color;
-        if (mover && captured.length > 0 && i >= 0 && duration >= HAND_MIN_DURATION) {
-          // La main qui vient de poser la pierre ramasse les prisonniers, une fois le coup frappé.
-          afterLanding.set(i, () => collect(mover, captured, sound));
-        } else {
-          captured.forEach((c, k) =>
-            fly(c, IN_LID, {
-              duration: Math.min(CAPTURE_DURATION, duration * 1.4),
-              delay: duration + 0.1 + k * Math.min(0.06, duration * 0.12),
-              lift: 7,
-              endScale: 1,
-              sound: sound && k < 4,
-            }),
-          );
-        }
+        // Les prisonniers s'envolent vers le couvercle et y sont lâchés.
+        (timeline.capturesAt[n] ?? []).forEach((c, k) =>
+          fly(c, IN_LID, {
+            duration: Math.min(CAPTURE_DURATION, duration * 1.4),
+            delay: duration + 0.1 + k * Math.min(0.08, duration * 0.14),
+            lift: 7,
+            endScale: 1,
+            sound: sound && k < 4,
+          }),
+        );
         setMarker(n, i >= 0 ? duration : 0);
         return;
       }
@@ -648,12 +579,7 @@ export function Stones({ seed }: { seed: string }) {
 
   useLayoutEffect(() => {
     // Avant la première image : rien n'est dessiné tant que les positions n'ont pas été écrites.
-    for (const mesh of [
-      blackRef.current,
-      whiteRef.current,
-      numbersRef.current,
-      outlineRef.current,
-    ]) {
+    for (const mesh of [blackRef.current, whiteRef.current, numbersRef.current]) {
       if (!mesh) continue;
       mesh.count = 0;
       mesh.frustumCulled = false;
@@ -667,7 +593,6 @@ export function Stones({ seed }: { seed: string }) {
     const black = blackRef.current;
     const white = whiteRef.current;
     const numbers = numbersRef.current;
-    const outline = outlineRef.current;
     const L = live.current;
     const timeline = L.timeline;
     if (!black || !white || !numbers || !timeline) return;
@@ -691,12 +616,6 @@ export function Stones({ seed }: { seed: string }) {
       }
       m.compose(v.set(x, y, z), q, s.set(d, d, d));
       (stone.color === 'B' ? black : white).setMatrixAt(stone.slot, m);
-      // Contour : la même pierre, un peu plus grande, dont on ne voit que la face arrière.
-      if (outline && i < STONE_CAPACITY * 2) {
-        const o = d * OUTLINE_SCALE;
-        m.compose(v.set(x, y - 0.02 * p.s, z), q, s.set(o, o, o));
-        outline.setMatrixAt(i, m);
-      }
       if (i < STONE_CAPACITY * 2) {
         const k = numbered && stone.placedAt > 0 && L.phase[i] === ON_BOARD ? p.s : 0;
         m.compose(v.set(x, y + STONE_THICKNESS + 0.012, z), flat, s.set(k, k, k));
@@ -709,19 +628,13 @@ export function Stones({ seed }: { seed: string }) {
     black.count = Math.min(B, STONE_CAPACITY);
     white.count = Math.min(W, STONE_CAPACITY);
     numbers.count = total;
-    if (outline) outline.count = total;
     black.instanceMatrix.needsUpdate = true;
     white.instanceMatrix.needsUpdate = true;
     numbers.instanceMatrix.needsUpdate = true;
-    if (outline) outline.instanceMatrix.needsUpdate = true;
   });
 
   return (
     <group>
-      <instancedMesh
-        ref={outlineRef}
-        args={[assets.geometry, assets.outline, STONE_CAPACITY * 2]}
-      />
       <instancedMesh
         ref={blackRef}
         args={[assets.geometry, assets.black, STONE_CAPACITY]}

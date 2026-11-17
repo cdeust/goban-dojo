@@ -9,15 +9,13 @@ import { defineConfig } from 'vitest/config';
  */
 const CSP = [
   "default-src 'none'",
-  // 'wasm-unsafe-eval' : nécessaire pour compiler le moteur d'inférence WebAssembly (et rien d'autre :
+  // 'wasm-unsafe-eval' : nécessaire pour compiler les modules WebAssembly (inférence, physique) (et rien d'autre :
   // ni eval, ni script en ligne).
   "script-src 'self' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  // « blob: » : les textures embarquées dans le modèle 3D sont lues par des adresses créées par
-  // la page elle-même ; elles ne désignent rien hors de son origine.
-  "connect-src 'self' blob:",
+  "connect-src 'self'",
   "worker-src 'self' blob:",
   "media-src 'none'",
   "object-src 'none'",

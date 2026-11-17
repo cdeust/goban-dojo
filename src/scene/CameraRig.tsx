@@ -10,18 +10,11 @@ import { BOARD_TOP } from './dimensions.ts';
 const TARGET = new THREE.Vector3(0, BOARD_TOP - 1, 0);
 
 /** Position de l'œil pour chaque point de vue, relative au centre du goban (cm). */
-/**
- * Position de l'œil pour chaque point de vue, relative au centre du goban (cm). Elles reprennent
- * les caméras de la scène (cam_epaule_noir, cam_large, cam_dessus).
- */
 const VIEWS: Record<ViewName | 'ouverture', [number, number, number]> = {
-  // Par-dessus l'épaule de Noir.
-  joueur: [78, 112, 108],
-  // Les deux joueurs face à face.
-  'trois-quarts': [-205, 96, 168],
-  // À la verticale : la position se lit comme un kifu.
-  dessus: [0, 129, 0.6],
-  ouverture: [-230, 70, 190],
+  joueur: [0, 47, 88],
+  'trois-quarts': [74, 35, 98],
+  dessus: [0, 128, 0.6],
+  ouverture: [-70, 30, 128],
 };
 
 /** Caméra : transitions entre points de vue animées par Motion, orbite libre à la souris. */

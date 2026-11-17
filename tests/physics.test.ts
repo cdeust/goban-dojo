@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { LID, BOWL, STONE_DIAMETER_BLACK, STONE_THICKNESS } from '../src/scene/dimensions.ts';
+import { BOWL_FILL, LID_FILL } from '../src/scene/Bowls.tsx';
+import { BOWL, LID, STONE_DIAMETER_BLACK, STONE_THICKNESS } from '../src/scene/dimensions.ts';
+import { bowlGeometry, lidGeometry, triMeshOf } from '../src/scene/geometry.ts';
 import { FRAME, Pile, loadPhysics, poseAt, type Rigid } from '../src/scene/physics.ts';
-import { readMesh } from './glb.ts';
 
-/** Les vrais maillages de la scène : c'est sur eux que les pierres tombent dans l'application. */
-const GLB = 'public/modeles/shusaku_salon.glb';
-const lid = readMesh(GLB, 'couvercle_noir', 'bol_bois');
-const bowl = readMesh(GLB, 'bol_noir', 'bol_bois');
-/** Le plus grand nombre de prisonniers d'une couleur dans une partie du corpus est bien inférieur. */
+/** Les obstacles et les réglages de l'application : c'est sur eux que les pierres y tombent. */
+const lid = triMeshOf(lidGeometry(), LID.B);
+const bowl = triMeshOf(bowlGeometry(), BOWL.B);
+/** Bien plus que le plus grand nombre de prisonniers d'une couleur dans une partie du corpus. */
 const PRISONERS = 40;
 const HALF = STONE_THICKNESS / 2;
 
@@ -20,8 +20,7 @@ const lidPile = (): Pile =>
   new Pile(rapier, {
     fixed: [lid, bowl],
     centre: LID.B,
-    spread: 2.6,
-    rim: 2.2,
+    ...LID_FILL,
     diameter: STONE_DIAMETER_BLACK,
     seed: 11,
   });
@@ -29,8 +28,7 @@ const bowlPile = (): Pile =>
   new Pile(rapier, {
     fixed: [bowl],
     centre: BOWL.B,
-    spread: 3.2,
-    rim: 9,
+    ...BOWL_FILL,
     diameter: STONE_DIAMETER_BLACK,
     seed: 1,
   });
@@ -43,7 +41,7 @@ describe('chute des prisonniers dans un couvercle', () => {
     const falls = Array.from({ length: PRISONERS }, (_, k) => pile.fall(k));
     for (const fall of falls) {
       expect(fall.rest.y).toBeGreaterThan(HALF * 0.5);
-      expect(distance(fall.rest, LID.B)).toBeLessThan(6.3);
+      expect(distance(fall.rest, LID.B)).toBeLessThan(6.35);
       // Elle est tombée : elle repose plus bas qu'elle n'a été lâchée, après un choc.
       expect(fall.rest.y).toBeLessThan(fall.start.y);
       expect(fall.impact).toBeGreaterThan(0);
@@ -55,9 +53,9 @@ describe('chute des prisonniers dans un couvercle', () => {
 
   it('une première pierre repose à plat au fond du couvercle', () => {
     const { rest } = lidPile().fall(0);
-    // Fond du couvercle à 0,8 cm.
-    expect(rest.y - HALF).toBeGreaterThan(0.7);
-    expect(rest.y - HALF).toBeLessThan(1.1);
+    // Fond du couvercle à 0,6 cm.
+    expect(rest.y - HALF).toBeGreaterThan(0.5);
+    expect(rest.y - HALF).toBeLessThan(0.9);
     // Axe de la pierre proche de la verticale.
     const up = 1 - 2 * (rest.qx * rest.qx + rest.qz * rest.qz);
     expect(up).toBeGreaterThan(0.97);
@@ -100,16 +98,18 @@ describe('chute des prisonniers dans un couvercle', () => {
 });
 
 describe('pierres d’un bol', () => {
-  it('22 pierres tiennent dans le bol et dépassent à peine son bord', () => {
+  it('les pierres visibles tiennent dans le bol et affleurent son bord', () => {
     const pile = bowlPile();
-    const rests = Array.from({ length: 22 }, (_, k) => pile.rest(k));
+    const rests = Array.from({ length: BOWL_FILL.stones }, (_, k) => pile.rest(k));
     for (const rest of rests) {
-      // Fond de la cavité à 7,3 cm, ouverture de 5 cm de rayon.
-      expect(rest.y - HALF).toBeGreaterThan(7.2);
-      expect(distance(rest, BOWL.B)).toBeLessThan(5);
+      expect(rest.y - HALF).toBeGreaterThan(BOWL_FILL.floor - 0.1);
+      // Paroi intérieure à 6,5 cm au plus large.
+      expect(distance(rest, BOWL.B)).toBeLessThan(6.5);
     }
-    // Bord à 9 cm ; une pierre sur la tranche dépasse d'un centimètre au plus.
-    expect(Math.max(...rests.map((r) => r.y + HALF))).toBeLessThan(10.5);
+    const top = Math.max(...rests.map((r) => r.y + HALF));
+    // Bord à 9 cm : le tas l'atteint presque, et le dépasse d'un centimètre au plus.
+    expect(top).toBeGreaterThan(8);
+    expect(top).toBeLessThan(10);
     expect(pile.deepestOverlap()).toBeLessThan(0.05);
   });
 });
