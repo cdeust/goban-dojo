@@ -18,6 +18,17 @@ export interface Source {
 
 export const SOURCES: Source[] = [
   {
+    label: 'Institut japonais de go (日本棋院) — histoire du go, époque d’Edo',
+    url: 'https://www.nihonkiin.or.jp/teach/history/history02.html',
+    detail:
+      'consultée le 17 novembre 2026 — entrée chez Jōwa (1837), héritier de Shūwa (1848), dix-neuf victoires au château, coup 127 de la partie de l’oreille rouge, ouverture « 秀策流 », mort du choléra (1862)',
+  },
+  {
+    label: 'Institut japonais de go (日本棋院) — panthéon du go (囲碁殿堂)',
+    url: 'https://www.nihonkiin.or.jp/special/vr-igodendou/',
+    detail: 'consultée le 17 novembre 2026 — Shūsaku fait partie de la première promotion, en 2004',
+  },
+  {
     label: 'Wikipédia (fr) — « Hon’inbō Shūsaku »',
     url: 'https://fr.wikipedia.org/w/index.php?title=Hon%27inb%C5%8D_Sh%C5%ABsaku&oldid=240986053',
     detail: 'révision 240986053 du 3 novembre 2026, licence CC BY-SA 4.0',
@@ -116,7 +127,7 @@ export const CHAPTERS: Chapter[] = [
       'En 1846, sur la route qui le ramène à Edo, Shūsaku s’arrête à Osaka et y rencontre Gennan Inseki, huitième dan, champion de la maison Inoue et l’un des plus forts joueurs de son temps.',
       'Une première partie à deux pierres est interrompue : Gennan juge le jeune homme trop fort pour ce handicap. On recommence, Shūsaku prenant simplement les noirs.',
       'La partie débute le 11 septembre et se joue en trois séances. Gennan sort une variation nouvelle du taisha ; Shūsaku se trompe et se retrouve en difficulté. Tous les spectateurs donnent Gennan gagnant — sauf un médecin, qui a vu ses oreilles rougir après un coup de Shūsaku.',
-      'Ce coup est le 127ᵉ. Shūsaku l’emporte de deux points au terme de 325 coups.',
+      'Ce coup est le 127ᵉ. Shūsaku l’emporte au terme de 325 coups : de deux points selon le kifu de la collection, de trois selon l’Institut japonais de go.',
     ],
     featured: [
       { gameId: 's125', label: 'La partie à deux pierres, interrompue' },
@@ -208,7 +219,8 @@ export const CHAPTERS: Chapter[] = [
       'En mars 1862, sa mère meurt. Le 19 juin, il s’assied face à Narabayashi Kurakichi : trente-huit coups, puis le kifu s’arrête. La partie est restée inachevée ; c’est la dernière que l’on connaisse de lui.',
       'À l’été, une épidémie de choléra ravage Edo et frappe la maison Hon’inbō.',
       'Malgré les mises en garde de Shūwa, Shūsaku se dévoue au chevet des malades. Il est contaminé à son tour et s’éteint le 3 septembre 1862. Il avait trente-trois ans.',
-      'La postérité l’a élevé au rang de kisei, « saint du go », aux côtés de Dōsaku. Son ouverture a dominé le jeu jusqu’aux années 1930.',
+      'La postérité l’a élevé au rang de kisei, « saint du go », aux côtés de Dōsaku. Son ouverture, la « manière de Shūsaku », a été étudiée de la fin de Meiji à l’ère Taishō comme la façon de gagner avec les noirs dans un go sans komi, et s’est transmise jusqu’à aujourd’hui.',
+      'En 2004, l’Institut japonais de go ouvre son panthéon : Shūsaku fait partie de la première promotion.',
     ],
     featured: [
       { gameId: 's470', label: 'Trois pierres données à Mukai Shōsō (20 mars 1862)' },
