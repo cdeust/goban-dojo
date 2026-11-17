@@ -380,7 +380,7 @@ export const useStore = create<State>((set, get) => ({
     const caught = new Set(marks.trapped);
     const traps = marks.threat.atari.some((p) => caught.has(p));
     const kind: ImpactKind =
-      s.variation.length === 0 && momentFor(game.id, s.move)
+      s.variation.length === 0 && momentFor(game, s.move)
         ? 'moment'
         : traps
           ? 'piege'

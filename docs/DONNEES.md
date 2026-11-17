@@ -38,6 +38,8 @@ produisent un `games.json` identique à l’octet près, ce que la CI vérifie �
 3. **Contrôle des doublons** : aucune paire de parties ne partage plus de 90 % de ses 80 premiers
    coups, à une rotation ou une réflexion du goban près.
 4. **Appariement avec PGD** selon ce même critère, pour reprendre lieu et circonstances.
+   Les lieux, donnés en anglais par les sources, sont traduits en français (`scripts/places.ts`) ;
+   les noms propres gardent leur transcription d’origine.
 5. **Tri chronologique** ; une date connue au mois ou à l’année près est placée au milieu de sa
    période.
 

@@ -24,6 +24,8 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
   probable — et le compare au coup réellement joué. Voir [docs/MOTEUR.md](docs/MOTEUR.md) pour ce
   que vaut ce jugement.
+- **L’ouverture de Shūsaku, repérée dans les kifus** : les 68 parties où elle est jouée sont
+  signalées, avec une légende aux coups 5 et du kosumi ; le récit en donne le bilan chiffré.
 - **Un rendu réaliste** : goban de kaya sur ses pieds tournés, pierres d’ardoise et de coquillage,
   bols de bois, dans un salon à tatamis éclairé par ses shōji.
 - **Des pierres qui tombent pour de bon** : les prisonniers lâchés dans un couvercle y chutent,

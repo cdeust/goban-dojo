@@ -11,7 +11,7 @@ export function MomentCaption() {
   const mode = useStore((s) => s.mode);
   // Les modes interactifs occupent cet emplacement, et une légende y trahirait le coup à deviner.
   if (!game || mode !== 'lecture') return null;
-  const moment = momentFor(game.id, move);
+  const moment = momentFor(game, move);
   const last = move > 0 ? timelineOf(game).moves[move - 1] : undefined;
   const pass = last?.point === PASS ? `${colorName(last.color)} passe.` : null;
   return (
