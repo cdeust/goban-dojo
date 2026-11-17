@@ -38,7 +38,7 @@ export function usePlayback(): void {
 
     let delay = 1000 / speed;
     if (move === 0) delay = Math.max(delay, 900);
-    if (momentFor(game.id, move)) delay = Math.max(delay, MOMENT_PAUSE);
+    if (momentFor(game, move)) delay = Math.max(delay, MOMENT_PAUSE);
     // Une passe ne pose rien : on laisse le temps de lire l'annonce.
     const last = move > 0 ? timelineOf(game).moves[move - 1] : undefined;
     if (last?.point === PASS) delay = Math.max(delay, 1200);

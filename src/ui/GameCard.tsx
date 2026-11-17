@@ -1,3 +1,4 @@
+import { openingOf } from '../story/chapters.ts';
 import { AnimatePresence, motion } from 'motion/react';
 import type { GameRecord } from '../domain/game.ts';
 import { ageLabel, formatDate, formatResult, handicapLabel, prettyName } from '../story/format.ts';
@@ -70,10 +71,18 @@ export function GameCard() {
               <dd>{handicapLabel(game)}</dd>
             </>
           )}
+          {openingOf(game).fuseki && (
+            <>
+              <dt>Ouverture</dt>
+              <dd>
+                <span lang="ja">秀策流</span> · ouverture de Shūsaku
+              </dd>
+            </>
+          )}
           {game.place && (
             <>
               <dt>Lieu</dt>
-              <dd lang="en">{game.place}</dd>
+              <dd>{game.place}</dd>
             </>
           )}
           {game.note && (

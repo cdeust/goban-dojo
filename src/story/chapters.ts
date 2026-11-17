@@ -1,4 +1,5 @@
-import type { GameRecord } from '../domain/game.ts';
+import { decodeMoves, type GameRecord } from '../domain/game.ts';
+import { shusakuOpening, type ShusakuOpening } from '../domain/opening.ts';
 
 /**
  * Le récit : huit chapitres de la vie de Hon'inbō Shūsaku.
@@ -31,6 +32,12 @@ export const SOURCES: Source[] = [
     url: 'https://homepages.cwi.nl/~aeb/go/games/games/Shusaku/',
     detail:
       '470 parties en SGF, dérivées du recueil 本因坊秀策全集, avec dates japonaises et grégoriennes ; archive vérifiée par empreinte SHA-256',
+  },
+  {
+    label: 'Wikipedia (en) — “Shusaku opening”',
+    url: 'https://en.wikipedia.org/wiki/Shusaku_opening',
+    detail:
+      'consultée le 17 novembre 2026, licence CC BY-SA 4.0 — diagramme de l’ouverture et propos sur le kosumi, que la page rapporte d’après Go Seigen',
   },
   {
     label: 'Professional Go Dataset (PGD)',
@@ -87,6 +94,8 @@ export const CHAPTERS: Chapter[] = [
       'En 1840, le jeune premier dan rentre plus d’un an dans son pays natal. De retour à Edo en 1841, il quitte le nom d’Eisai pour celui de Yasuda Shūsaku.',
       'Les grades s’enchaînent : deuxième dan en octobre 1841, troisième en août 1842, quatrième en novembre 1843.',
       'C’est dans ces années, face à Kadono Chūzaemon, fils aîné de Jōwa, qu’il éprouve pour la première fois l’ouverture qui portera son nom : trois komoku aux coups 1, 3 et 5, puis le kosumi.',
+      'Le corpus garde la trace de cette ouverture dans 68 parties. La première fois, le 24 mai 1843, c’est Kadono qui la joue contre lui ; Shūsaku la reprend à son compte le 18 juillet. Il la jouera 52 fois avec les noirs, pour 42 victoires, 6 défaites et 2 parties nulles.',
+      'Du kosumi, la diagonale du septième coup, il aurait dit qu’il ne serait jamais un mauvais coup, quelle que soit l’évolution de la théorie. Le propos est rapporté par Go Seigen.',
       'Au printemps 1840, à dix ans, il reçoit trois pierres de handicap de deux joueurs qui compteront dans sa vie : Itō Matsujirō, sixième dan, et un septième dan que les kifus nomment Tsuchiya Shūwa.',
     ],
     featured: [
@@ -217,7 +226,14 @@ export interface Moment {
   text: string;
 }
 
+/** Légendes écrites à la main, d'après les sources du récit. */
 export const MOMENTS: Moment[] = [
+  {
+    gameId: 's125',
+    move: 102,
+    title: 'La partie s’arrête',
+    text: 'Gennan interrompt la partie : deux pierres, c’est trop pour ce jeune homme. On recommencera, Shūsaku prenant simplement les noirs.',
+  },
   {
     gameId: 's126',
     move: 89,
@@ -236,10 +252,60 @@ export const MOMENTS: Moment[] = [
     title: 'Fin de la deuxième séance',
     text: 'La partie s’achèvera lors d’une réunion organisée par Nakagawa Junsetsu.',
   },
+  {
+    gameId: 's356',
+    move: 273,
+    title: 'Jigo',
+    text: 'Près de vingt-quatre heures de jeu, et aucun vainqueur. Avec les blancs, Yūzō obtient la nulle ; le match s’arrête sur cette vingt-troisième partie.',
+  },
+  {
+    gameId: 's471',
+    move: 38,
+    title: 'Le kifu s’arrête ici',
+    text: 'Trente-huit coups, le 19 juin 1862. C’est la dernière partie que l’on connaisse de lui ; il meurt le 3 septembre.',
+  },
 ];
 
-export function momentFor(gameId: string, move: number): Moment | undefined {
-  return MOMENTS.find((m) => m.gameId === gameId && m.move === move);
+const openings = new WeakMap<GameRecord, ShusakuOpening>();
+
+/** L'ouverture de Shūsaku dans cette partie, si elle y est jouée. */
+export function openingOf(game: GameRecord): ShusakuOpening {
+  let opening = openings.get(game);
+  if (!opening) {
+    opening = shusakuOpening(decodeMoves(game.moves), game.handicap);
+    openings.set(game, opening);
+  }
+  return opening;
+}
+
+/** Légendes tirées du kifu lui-même : l'ouverture de Shūsaku, quand elle est jouée. */
+function readMoment(game: GameRecord, move: number): Moment | undefined {
+  const opening = openingOf(game);
+  if (!opening.fuseki) return undefined;
+  const his = game.shusaku === 'B';
+  if (move === 5) {
+    return {
+      gameId: game.id,
+      move,
+      title: 'L’ouverture de Shūsaku',
+      text: his
+        ? 'Trois komoku dans trois coins, aux coups 1, 3 et 5.'
+        : `Trois komoku dans trois coins, aux coups 1, 3 et 5 : ici, c’est ${game.black} qui la joue contre lui.`,
+    };
+  }
+  if (move === opening.kosumi) {
+    return {
+      gameId: game.id,
+      move,
+      title: 'Le kosumi',
+      text: 'Blanc approche le coin ; Noir répond par la diagonale.',
+    };
+  }
+  return undefined;
+}
+
+export function momentFor(game: GameRecord, move: number): Moment | undefined {
+  return MOMENTS.find((m) => m.gameId === game.id && m.move === move) ?? readMoment(game, move);
 }
 
 const yearOf = (g: GameRecord): number => Number(g.date.slice(0, 4));

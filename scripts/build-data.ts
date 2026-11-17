@@ -13,6 +13,7 @@
  */
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { UNTRANSLATED, translatePlace } from './places.ts';
 import { join } from 'node:path';
 import { PASS, SIZE, pointFromSgf, pointToSgf, type Color } from '../src/domain/board.ts';
 import {
@@ -357,6 +358,14 @@ for (const g of main) {
   if (JSON.stringify(g.record) !== before) {
     enriched++;
     g.record.sources.push(...twins.filter((t) => t.place || t.okonomi).map((t) => `pgd:${t.path}`));
+  }
+}
+// Les lieux sont donnés en anglais par les sources : l'interface est en français.
+for (const g of main) {
+  if (!g.record.place) continue;
+  g.record.place = translatePlace(g.record.place);
+  if (UNTRANSLATED.test(g.record.place)) {
+    throw new Error(`${g.record.id} : lieu non traduit « ${g.record.place} » (scripts/places.ts)`);
   }
 }
 const pgdUnmatched = extras

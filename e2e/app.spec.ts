@@ -172,7 +172,7 @@ test('vues, numéros et boîte d’aide', async ({ page }) => {
   await page.getByRole('button', { name: 'Aide & sources' }).click();
   const dialog = page.getByRole('dialog', { name: 'Aide & sources' });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole('link')).toHaveCount(4);
+  await expect(dialog.getByRole('link')).toHaveCount(5);
   for (const link of await dialog.getByRole('link').all()) {
     await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   }
