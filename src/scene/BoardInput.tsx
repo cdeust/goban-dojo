@@ -56,7 +56,7 @@ export function BoardInput() {
     [],
   );
 
-  const active = mode !== 'lecture';
+  const active = mode === 'deviner' || mode === 'explorer';
 
   const hide = (): void => {
     hovered.current = -1;

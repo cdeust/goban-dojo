@@ -343,3 +343,39 @@ test('évaluation des coups : le réseau se charge, juge le coup de la partie et
   expect(w.foreign).toEqual([]);
   expect(w.problems).toEqual([]);
 });
+
+test('étudier une capture sur mobile : filtrer, comparer et ouvrir une variante', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await page.getByRole('button', { name: 'Étudier cette partie' }).click();
+  const study = page.getByRole('region', { name: 'Étude du kifu' });
+  await expect(study.getByRole('heading', { name: 'Étude du kifu' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(study.getByLabel('Thème')).toBeFocused();
+  const slider = page.getByRole('slider', { name: 'Coup' });
+  await study.getByLabel('Thème').selectOption('captures');
+  await expect(study.getByRole('heading', { name: 'Coup 84' })).toBeVisible();
+  await expect(slider).toHaveValue('83');
+  await expect(study.getByText('Capture.', { exact: true })).toHaveCount(0);
+  const studyBox = await study.boundingBox();
+  const canvasBox = await page.locator('canvas').boundingBox();
+  expect(studyBox).not.toBeNull();
+  expect(canvasBox).not.toBeNull();
+  expect(studyBox!.y).toBeGreaterThanOrEqual(canvasBox!.y + canvasBox!.height);
+  expect(studyBox!.width).toBeLessThanOrEqual(390);
+  expect(await study.evaluate((panel) => panel.scrollHeight - panel.clientHeight)).toBe(0);
+
+  await study.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+  await expect(slider).toHaveValue('84');
+  await expect(study).toContainText('Retire la pierre en P13');
+  await study.getByRole('button', { name: 'Revoir avant le coup' }).click();
+  await expect(slider).toHaveValue('83');
+  await study.getByRole('button', { name: 'Suivante' }).click();
+  await expect(slider).toHaveValue('86');
+  await study.getByRole('button', { name: 'Essayer une variante' }).click();
+  await expect(page.getByRole('heading', { name: 'Explorer une autre suite' })).toBeFocused();
+  await expect(slider).toHaveValue('86');
+});

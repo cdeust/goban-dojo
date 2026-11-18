@@ -719,6 +719,10 @@ input[type='range']::-moz-range-thumb {
   color: var(--paper);
 }
 
+.tab--study {
+  color: var(--kaya);
+}
+
 .tab[aria-pressed='true'] {
   color: var(--paper);
   border-bottom-color: var(--vermilion);
@@ -1447,4 +1451,211 @@ progress {
 
 .legend__dot--trap {
   border: 2px dashed var(--paper);
+}
+
+/* En étude, le texte et le goban ont chacun leur place. */
+[data-study='true'] .stage {
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 24rem);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+}
+
+[data-study='true'] .stage__canvas {
+  grid-column: 1;
+}
+
+[data-study='true'] .card {
+  position: static;
+  grid-area: 2 / 1;
+  width: auto;
+  padding: 0.65rem 1.25rem;
+  border: 0;
+  border-radius: 0;
+  background: var(--ink-2);
+  backdrop-filter: none;
+}
+
+[data-study='true'] .card__players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1rem;
+  margin: 0.25rem 0 0;
+}
+
+[data-study='true'] .card__facts,
+[data-study='true'] .card__era {
+  display: none;
+}
+
+[data-study='true'] .dock {
+  grid-area: 3 / 1 / auto / -1;
+  margin: 0;
+  padding-top: 0.8rem;
+  background: var(--ink);
+}
+
+.study {
+  grid-area: 1 / 2 / 3 / 3;
+  min-width: 0;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 4.4rem clamp(1rem, 2.5vw, 2rem) 1.35rem;
+  border-left: 1px solid var(--hairline);
+  background: linear-gradient(155deg, #261a13, var(--ink-2) 55%);
+  font-size: 0.9rem;
+}
+
+.study h2,
+.study h3 {
+  font-family: var(--serif);
+  line-height: 1.2;
+}
+
+.study h2 {
+  margin-bottom: 0.45rem;
+  color: var(--kaya);
+  font-size: clamp(1.45rem, 2.25vw, 2rem);
+}
+
+.study p,
+.study li {
+  color: var(--paper-dim);
+}
+
+.study__filter {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.study__filter select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.45rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+}
+
+.study__position {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.6rem;
+  background: var(--ink);
+}
+
+.study__index {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.study__details {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.study__details li {
+  padding-inline-start: 0.65rem;
+  border-inline-start: 2px solid;
+  overflow-wrap: anywhere;
+}
+
+.study__details [data-note='capture'] {
+  border-color: #f17b52;
+}
+
+.study__details [data-note='atari'] {
+  border-color: #ff826a;
+}
+
+.study__details [data-note='connection'] {
+  border-color: #9bd1fe;
+}
+
+.study__history {
+  border-top: 1px solid var(--hairline);
+  padding-top: 0.6rem;
+}
+
+.study__actions,
+.study__nav {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.study__nav {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.study .chip {
+  min-height: 2.75rem;
+}
+
+[data-study='true'] .topbar__nav {
+  flex-wrap: wrap;
+  min-inline-size: 0;
+}
+
+@media (any-pointer: coarse) {
+  [data-study='true'] .topbar__nav .chip {
+    min-block-size: 2.75rem;
+  }
+}
+
+@media (width < 60rem) {
+  .app[data-study='true'] {
+    grid-template-rows: max-content auto;
+    align-content: start;
+    overflow-y: auto;
+  }
+
+  [data-study='true'] .stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto min(46dvh, 26rem) auto auto auto;
+  }
+
+  [data-study='true'] .stage__canvas {
+    grid-area: 2 / 1;
+  }
+
+  [data-study='true'] .topbar {
+    display: flex;
+    position: static;
+    grid-area: 1 / 1;
+  }
+
+  [data-study='true'] .card {
+    grid-area: 3 / 1;
+  }
+
+  [data-study='true'] .transport__settings {
+    display: flex;
+  }
+
+  [data-study='true'] .dock {
+    grid-area: 5 / 1;
+  }
+
+  .study {
+    grid-area: 4 / 1;
+    overflow: visible;
+    padding: 1rem 0.9rem 1.5rem;
+    border-top: 1px solid var(--hairline);
+    border-left: 0;
+  }
+
+  .study__filter {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .app[data-study='true'][data-panel='open'] .panel {
+    height: min(65dvh, 34rem);
+  }
 }

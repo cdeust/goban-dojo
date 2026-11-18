@@ -12,6 +12,7 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 export function Panel() {
   const panel = useStore((s) => s.panel);
   const setPanel = useStore((s) => s.setPanel);
+  const studying = useStore((s) => s.mode === 'etudier');
   return (
     <AnimatePresence initial={false}>
       {panel && (
@@ -41,6 +42,15 @@ export function Panel() {
             >
               Parties
             </button>
+            {!studying && (
+              <button
+                type="button"
+                className="tab tab--study"
+                onClick={() => useStore.getState().setMode('etudier')}
+              >
+                Étudier cette partie
+              </button>
+            )}
             <button
               type="button"
               className="icon-button panel__close"

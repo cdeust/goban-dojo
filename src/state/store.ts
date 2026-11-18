@@ -21,9 +21,10 @@ export type PanelName = 'recit' | 'parties' | null;
 /**
  * lecture  : la partie se déroule seule ;
  * deviner  : on cherche soi-même le prochain coup de Shūsaku ;
- * explorer : on pose librement d'autres coups à partir de la position courante.
+ * explorer : on pose librement d'autres coups à partir de la position courante ;
+ * etudier  : on compare la position avant et après un coup tactique du kifu.
  */
-export type Mode = 'lecture' | 'deviner' | 'explorer';
+export type Mode = 'lecture' | 'deviner' | 'explorer' | 'etudier';
 
 /** Zone du goban (bornes incluses) donnée en indice dans le mode « deviner ». */
 export interface Zone {
@@ -135,6 +136,7 @@ interface State {
   panel: PanelName;
   chapterIndex: number;
   mode: Mode;
+  studyMove: number | null;
   guess: GuessState;
   /** Coups ajoutés par l'utilisateur après le coup `move` de la partie (mode « explorer »). */
   variation: Move[];
@@ -157,6 +159,7 @@ interface State {
   setPanel: (panel: PanelName) => void;
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
+  showStudyMove: (number: number | null, after?: boolean) => void;
   /** Clic sur une intersection du goban ; l'effet dépend du mode. */
   clickPoint: (point: number) => void;
   /** Mode « deviner » : demander un indice (compte comme un essai manqué). */
@@ -297,6 +300,7 @@ export const useStore = create<State>((set, get) => ({
   panel: null,
   chapterIndex: 0,
   mode: 'lecture',
+  studyMove: null,
   guess: emptyGuess(),
   variation: [],
   notice: null,
@@ -328,6 +332,7 @@ export const useStore = create<State>((set, get) => ({
       move: clamp(opts?.move ?? 0, 0, moveCount(game)),
       // On ne lance pas la lecture automatique par-dessus un mode interactif.
       playing: mode === 'lecture' ? (opts?.play ?? false) : false,
+      studyMove: null,
       variation: [],
       guess: emptyGuess(),
       notice: null,
@@ -338,8 +343,11 @@ export const useStore = create<State>((set, get) => ({
     const game = get().dataset?.games[get().gameIndex];
     if (!game) return;
     const g = get().guess;
+    const next = clamp(Math.round(move), 0, moveCount(game));
+    const target = get().studyMove;
     set({
-      move: clamp(Math.round(move), 0, moveCount(game)),
+      move: next,
+      studyMove: target !== null && (next === target || next === target - 1) ? target : null,
       // Changer de position abandonne l'exploration et l'essai en cours, pas le bilan.
       variation: [],
       guess: { ...g, tries: 0, wrong: [], zone: null },
@@ -360,7 +368,11 @@ export const useStore = create<State>((set, get) => ({
     // Relancer la lecture en fin de partie reprend depuis le début.
     if (playing && get().move >= moveCount(game)) set({ move: 0 });
     // La lecture automatique ramène au mode « lecture ».
-    set(playing ? { playing, mode: 'lecture', variation: [], notice: null } : { playing });
+    set(
+      playing
+        ? { playing, mode: 'lecture', studyMove: null, variation: [], notice: null }
+        : { playing },
+    );
   },
 
   setSpeed: (speed) => set({ speed }),
@@ -395,6 +407,8 @@ export const useStore = create<State>((set, get) => ({
   setMode: (mode) =>
     set((s) => ({
       mode,
+      ...(mode === 'etudier' ? { panel: null, view: 'dessus' } : {}),
+      studyMove: null,
       playing: false,
       variation: [],
       notice: null,
@@ -403,6 +417,18 @@ export const useStore = create<State>((set, get) => ({
           ? emptyGuess()
           : { ...s.guess, tries: 0, wrong: [], zone: null, last: null },
     })),
+
+  showStudyMove: (number, after = false) => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (s.mode !== 'etudier' || !game) return;
+    if (number === null) {
+      set({ studyMove: null });
+      return;
+    }
+    if (!Number.isInteger(number) || number < 1 || number > moveCount(game)) return;
+    set({ studyMove: number, move: after ? number : number - 1, playing: false });
+  },
 
   clickPoint: (point) => {
     const s = get();

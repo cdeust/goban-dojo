@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useRef } from 'react';
 import { PASS, pointToHuman } from '../domain/board.ts';
 import { loadEngine, useEngine } from '../engine/client.ts';
 import { GOOD_BELOW, type Judgement, type Verdict } from '../engine/judge.ts';
@@ -154,6 +155,10 @@ function EngineControl() {
 
 /** Panneau du mode « explorer » : coups ajoutés, jugement du réseau, retour à la partie. */
 function Explore() {
+  const title = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (document.activeElement === document.body) title.current?.focus({ preventScroll: true });
+  }, []);
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
   const variation = useStore((s) => s.variation);
@@ -168,7 +173,9 @@ function Explore() {
   const last = judgements.explored.at(-1);
   return (
     <>
-      <h2 className="mode__title">Explorer une autre suite</h2>
+      <h2 className="mode__title" ref={title} tabIndex={-1}>
+        Explorer une autre suite
+      </h2>
       <p className="mode__lead">
         {variation.length === 0
           ? `Position après le coup ${move}. Posez un coup sur le goban : ${colorName(color)} joue.`
@@ -229,7 +236,7 @@ export function ModePanel() {
   const mode = useStore((s) => s.mode);
   return (
     <AnimatePresence mode="wait">
-      {mode !== 'lecture' && (
+      {(mode === 'deviner' || mode === 'explorer') && (
         <motion.section
           key={mode}
           className="mode"
