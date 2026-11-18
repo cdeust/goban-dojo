@@ -217,21 +217,53 @@ export interface Threat {
 export function threatOf(setupBlack: number[], moves: Move[], n: number): Threat {
   const move = moves[n - 1];
   if (!move || move.point === PASS) return { atari: [], captured: 0, connects: [] };
-  const board = boardAt(setupBlack, moves, n - 1);
+  const { atari, captures, connects } = playTacticalMove(boardAt(setupBlack, moves, n - 1), move);
+  return { atari, captured: captures.length, connects };
+}
 
+function playTacticalMove(board: Board, move: Move) {
   // Avant de jouer : les pierres amies voisines, et le groupe de chacune.
-  const friends = neighbours(move.point).filter((q) => board.get(q) === move.color);
+  const adjacent = neighbours(move.point);
+  const friends = adjacent.filter((q) => board.get(q) === move.color);
   const groups = new Set(friends.map((q) => Math.min(...board.stonesOf(q))));
   const connects = groups.size >= 2 ? [...friends].sort((a, b) => a - b) : [];
+  const enemies = adjacent.filter(
+    (q) => board.get(q) === opposite(move.color) && board.libertyCount(q) > 1,
+  );
 
-  const captured = board.play(move.color, move.point).captures.length;
+  const result = board.play(move.color, move.point);
   const atari = new Set<number>();
-  for (const q of neighbours(move.point)) {
+  for (const q of enemies) {
     if (board.get(q) === opposite(move.color) && board.libertyCount(q) === 1) {
       for (const s of board.stonesOf(q)) atari.add(s);
     }
   }
-  return { atari: [...atari].sort((a, b) => a - b), captured, connects };
+  return { ...result, atari: [...atari].sort((a, b) => a - b), connects };
+}
+
+export interface StudyMove {
+  number: number;
+  move: Move;
+  captures: number[];
+  atari: number[];
+  connects: number[];
+}
+
+/** Index chronologique des effets tactiques observables en une seule relecture. */
+export function studyMoves(setupBlack: number[], moves: Move[]): StudyMove[] {
+  const board = boardAt(setupBlack, moves, 0);
+  const index: StudyMove[] = [];
+  moves.forEach((move, i) => {
+    if (move.point === PASS) {
+      board.play(move.color, PASS);
+      return;
+    }
+    const { illegal, captures, atari, connects } = playTacticalMove(board, move);
+    if (!illegal && (captures.length || atari.length || connects.length)) {
+      index.push({ number: i + 1, move, captures, atari, connects });
+    }
+  });
+  return index;
 }
 
 /** Toutes les pierres, des deux couleurs, dont le groupe n'a plus qu'une liberté. */

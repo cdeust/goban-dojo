@@ -12,6 +12,7 @@ import { LiveRegion } from './ui/LiveRegion.tsx';
 import { ModePanel } from './ui/ModePanel.tsx';
 import { MomentCaption } from './ui/MomentCaption.tsx';
 import { Panel } from './ui/Panel.tsx';
+import { StudyPanel } from './ui/StudyPanel.tsx';
 import { TopBar } from './ui/TopBar.tsx';
 import { useKeyboard } from './ui/useKeyboard.ts';
 
@@ -24,6 +25,7 @@ export function App() {
   const entered = useStore((s) => s.entered);
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
+  const studying = useStore((s) => s.mode === 'etudier');
   const load = useStore((s) => s.load);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export function App() {
   return (
     // « user » : Motion respecte de lui-même la préférence système de réduction des animations.
     <MotionConfig reducedMotion="user">
-      <div className="app" data-panel={entered && panel ? 'open' : 'closed'}>
+      <div className="app" data-panel={entered && panel ? 'open' : 'closed'} data-study={studying}>
         {entered && <Panel />}
         <main className="stage">
           <div className="stage__canvas">
@@ -58,7 +60,7 @@ export function App() {
               <GameCard />
               <ImpactLines />
               <MomentCaption />
-              <ModePanel />
+              {studying ? <StudyPanel /> : <ModePanel />}
               <Dock />
             </>
           )}

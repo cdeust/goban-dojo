@@ -23,6 +23,9 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   pierres simulées de la même façon (moteur physique [Rapier](https://rapier.rs), obstacles tirés
   des maillages des bols et couvercles). Sauter à n’importe quel coup montre le même couvercle
   qu’y arriver coup par coup.
+- **Étudier le kifu** (mode « Étudier ») : filtrez les captures, les ataris et les connexions de
+  la partie. Comparez la position avant et après le coup, repérez les pierres sur le goban et
+  essayez une variante depuis la position de départ.
 - **Jouer comme Shūsaku** (mode « Deviner ») : la partie s’arrête à chacun de ses coups et vous
   demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
   premier coup, 2 après un indice, 1 après deux, puis le coup est montré.

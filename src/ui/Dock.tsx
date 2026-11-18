@@ -101,6 +101,7 @@ const VIEW_LABELS: [ViewName, string][] = [
 
 const MODE_LABELS: [Mode, string, string][] = [
   ['lecture', 'Regarder', 'Regarder la partie se dérouler'],
+  ['etudier', 'Étudier', 'Comparer les positions avant et après les coups tactiques'],
   ['deviner', 'Deviner', 'Chercher soi-même les coups de Shūsaku'],
   ['explorer', 'Explorer', 'Essayer d’autres coups à partir de cette position'],
 ];
@@ -224,7 +225,9 @@ function Transport() {
                 className="seg"
                 aria-pressed={mode === m}
                 title={title}
-                onClick={() => setMode(m)}
+                onClick={() => {
+                  if (m !== 'etudier' || mode !== m) setMode(m);
+                }}
               >
                 {label}
               </button>

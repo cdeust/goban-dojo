@@ -5,6 +5,7 @@ import {
   buildTimeline,
   decodeMoves,
   prisonersAt,
+  studyMoves,
   threatOf,
   type Move,
 } from '../src/domain/game.ts';
@@ -33,6 +34,23 @@ describe('coordonnées', () => {
     expect(() => P('a')).toThrow(RangeError);
     expect(() => P('az')).toThrow(RangeError);
     expect(() => P('A1')).toThrow(RangeError);
+  });
+});
+
+describe('studyMoves', () => {
+  it('repère dans l’ordre l’atari et la capture, en conservant la numérotation des passes', () => {
+    const seq = moves('wdd bcd wqq bed w-- bdc wpq bde');
+    expect(studyMoves([], seq)).toEqual([
+      { number: 6, move: seq[5], captures: [], atari: [P('dd')], connects: [] },
+      { number: 8, move: seq[7], captures: [P('dd')], atari: [], connects: [] },
+    ]);
+  });
+
+  it('utilise les pierres de handicap et écarte une pose sur une intersection occupée', () => {
+    const seq = moves('bed wdd');
+    expect(studyMoves([P('dd'), P('fd')], seq)).toEqual([
+      { number: 1, move: seq[0], captures: [], atari: [], connects: [P('dd'), P('fd')] },
+    ]);
   });
 });
 
