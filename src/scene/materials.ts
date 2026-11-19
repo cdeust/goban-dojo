@@ -33,9 +33,9 @@ export function stoneAssets(): StoneAssets {
   });
   const estimateBlack = black.clone();
   const estimateWhite = white.clone();
-  estimateBlack.color.set('#172338');
-  estimateWhite.color.set('#c2dbff');
-  estimateWhite.emissive.set('#081634');
+  estimateBlack.color.set('#244780');
+  estimateWhite.color.set('#a1d3ff');
+  estimateWhite.emissive.set('#123451');
   assets = {
     geometry: stoneGeometry(STONE_DIAMETER_BLACK),
     black,

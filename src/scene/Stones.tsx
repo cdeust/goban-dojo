@@ -661,13 +661,17 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
       <instancedMesh
         ref={numbersRef}
         args={[numberGeometry, numberMaterial, capacity * 2]}
-        visible={showNumbers}
+        visible={showNumbers && !estimating}
         renderOrder={2}
       />
       {/* Repère du dernier coup : un point de vermillon, comme l'encre des sceaux. */}
       <mesh ref={markerRef} rotation={[-Math.PI / 2, 0, 0]} visible={false} renderOrder={1}>
         <circleGeometry args={[0.27, 40]} />
-        <meshBasicMaterial color="#d2452c" toneMapped={false} visible={!showNumbers} />
+        <meshBasicMaterial
+          color="#d2452c"
+          toneMapped={false}
+          visible={!showNumbers && !estimating}
+        />
       </mesh>
     </group>
   );

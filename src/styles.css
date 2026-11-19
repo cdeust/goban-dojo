@@ -1886,6 +1886,8 @@ progress {
   justify-items: center;
   gap: 0.25rem;
   width: min(33rem, calc(100% - 1rem));
+  max-block-size: 100%;
+  overflow: auto;
   margin-inline: auto;
   padding: 0.55rem;
   border: 1px solid rgb(120 198 255 / 0.42);
@@ -1943,6 +1945,11 @@ progress {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.25rem;
+}
+
+.simulation__controls .chip[aria-pressed='true'] {
+  border-color: #fbd780;
+  color: #ffe2a4;
 }
 
 .simulation__controls .chip {

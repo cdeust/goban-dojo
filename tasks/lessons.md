@@ -10,3 +10,5 @@
   coordonnées et dimensions du canvas avant et pendant l’animation.
 - Quand on remplace un plateau de simulation par le goban principal, vérifier
   aussi les effets d’ambiance de la scène précédente.
+- Pour distinguer les coups simulés, vérifier sur le même goban que le halo
+  apparaît sur les pierres ajoutées et disparaît à la position initiale.

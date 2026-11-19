@@ -592,6 +592,16 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   });
   await expect(slider).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
+  const pausedStep = await variant.getAttribute('data-step');
+  const compare = simulation.getByRole('button', { name: 'Position initiale' });
+  await compare.click();
+  await expect(compare).toHaveAttribute('aria-pressed', 'true');
+  await expect(variant).toHaveAttribute('data-step', '0');
+  await expect(variant).toContainText('Position initiale · coups du kifu');
+  await expect(slider).toHaveValue('86');
+  await compare.click();
+  await expect(variant).toHaveAttribute('data-step', pausedStep!);
+  await expect(variant).toContainText('Coup simulé ·');
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
   await expect(variant).toHaveAttribute('data-branch', '2', { timeout: 60_000 });
