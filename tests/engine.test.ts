@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import * as ort from 'onnxruntime-web/wasm';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { Color } from '../src/domain/board.ts';
+import { afterCandidate, candidatesOf } from '../src/engine/analysis.ts';
 import { decodeOutputs, topMoves, type Evaluation } from '../src/engine/decode.ts';
 import {
   AREA,
@@ -189,4 +190,32 @@ describe('pierres prises au piège', () => {
     const empty: EnginePosition = { setupBlack: [], moves: [], next: 'B' };
     expect(trappedStones(empty)).toEqual([]);
   });
+});
+
+it('garde le rang réel du coup historique et inclut la passe quand elle est classée', () => {
+  const position: EnginePosition = { setupBlack: [], moves: [], next: 'B' };
+  const policy = new Float64Array(362);
+  for (let point = 0; point < 20; point++) policy[point] = (20 - point) / 300;
+  policy[361] = 0.2;
+  const choices = candidatesOf(position, policy, 19);
+  expect(choices).toHaveLength(12);
+  expect(choices[0]).toMatchObject({ point: -1, rank: 1, recorded: false });
+  expect(choices.at(-1)).toMatchObject({ point: 19, rank: 21, recorded: true });
+  expect(candidatesOf(afterCandidate(afterCandidate(position, -1), -1), policy)).toEqual([]);
+});
+
+it('oriente la carte de propriété du réseau selon la couleur au trait', () => {
+  const raw = {
+    policy: new Float32Array(AREA),
+    policyPass: [0],
+    value: [0, 0, 0],
+    scoreValue: [0, 0, 0],
+    ownership: [1, 0, -1],
+  };
+  const legal = new Uint8Array(AREA + 1).fill(1);
+  const black = decodeOutputs(raw, legal, 'B', 2).blackOwnership!;
+  const white = decodeOutputs(raw, legal, 'W', 2).blackOwnership!;
+  expect(black[0]).toBeCloseTo(Math.tanh(2));
+  expect(white[0]).toBeCloseTo(-Math.tanh(2));
+  expect(black[2]).toBeCloseTo(-Math.tanh(2));
 });

@@ -20,6 +20,7 @@ export function useKeyboard(): void {
     const onKey = (e: KeyboardEvent): void => {
       const s = useStore.getState();
       if (!s.entered || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
+      if (s.mode === 'reflechir' || s.mode === 'analyser' || s.mode === 'lire') return;
       const t = e.target;
       if (t instanceof HTMLElement) {
         if (t.closest('input, select, textarea, dialog, [contenteditable]')) return;

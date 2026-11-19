@@ -23,3 +23,45 @@ Les captures à 1 440 × 900 et 390 × 844 confirment la disposition du goban et
 Le registre officiel est configuré dans npm et pnpm. La résolution DNS du registre échoue
 dans le bac à sable. Avec l’accès réseau autorisé, `npm ping` reçoit un `PONG` et la recherche
 `modern-web-guidance` aboutit avec le cache npm sur le volume Anthropic.
+
+## Temps de réflexion
+
+- [x] Vérifier les interruptions historiques et le contenu des champs temporels SGF.
+- [x] Monter trois scènes, avec les suites historiques et des variantes distinctement signalées.
+- [x] Vérifier la légalité des coups, le parcours dans Chromium et les effets.
+
+Les deux interruptions de séance sont confirmées par le commentaire de Miyamoto Naoki,
+et les trois dates figurent dans le SGF CWI 126. Les SGF CWI et PGD ne contiennent aucun
+champ de temps restant par coup. Les sept suites de trois coups sont légales.
+
+Le build et les 99 tests unitaires passent. Les cinq parcours Chromium ciblés passent,
+dont le retour au kifu, la réduction des mouvements et l’apparition des éclairs à K11.
+
+## Analyse interactive des variantes
+
+- [x] Vérifier les sorties du réseau et la distinction entre politique brute et recherche.
+- [x] Relier le balayage progressif, les repères du goban et la navigation de branche.
+- [x] Mesurer les délais et vérifier le parcours Chromium avec le vrai modèle.
+
+Avant ce changement, la réflexion proposait uniquement les lignes éditoriales. Depuis la
+position après Blanc 126, le balayage propose 12 premiers coups, chacun avec 12 réponses.
+Le test Chromium du build final, seul dans son worker, mesure 1,12 s avant les premières
+propositions et 1,92 s jusqu’aux 144 suites, chargement compris. K11 est classé 36e et reste
+disponible comme coup de référence. Le build, les 100 tests unitaires et le parcours de
+navigation jusqu’à la réponse du kifu et retour au départ passent.
+
+## Lecture longue des plans
+
+- [x] Rendre la projection du moteur progressive et les points de bifurcation jouables.
+- [x] Afficher les réponses tactiques et l’évolution de l’avance dans le goban de réflexion.
+- [x] Vérifier les règles, la durée de calcul et la navigation sur une vraie partie.
+
+Le build final et les 101 tests unitaires passent. Quatre parcours Chromium ciblés
+passent, dont l’ouverture avant Noir 127, l’affichage des territoires estimés, la
+bifurcation et la restauration de la branche. Après démarrage du calcul sur K11, le
+premier coup apparaît en 0,81 s et les 60 coups sont disponibles en 13,77 s.
+
+Depuis la position initiale de la partie s126, une mesure en Node avec le modèle ONNX
+livré et WASM sur un seul fil donne 240 coups en 53,57 s, pour 1 201 inférences. La
+relecture par le moteur de règles ne trouve aucun coup illégal. Chaque position
+calculée comporte 361 valeurs de propriété finies, comprises entre −1 et +1.

@@ -199,19 +199,19 @@ describe('mode « explorer »', () => {
 });
 
 describe('poids dramatique d’un coup', () => {
-  it('distingue le coup ordinaire, la menace et l’instant du récit', () => {
+  it('distingue le coup ordinaire, la menace et la prise d’initiative historique', () => {
     // Coup 1 : une pierre posée sur un goban vide ne menace rien.
     s().setMove(1);
     s().notifyImpact(P('qd'));
     expect(s().impact).toMatchObject({ kind: 'coup', point: P('qd') });
     // Coup 47 : Noir met trois pierres blanches en atari.
     s().setMove(47);
-    s().notifyImpact(0);
+    s().notifyImpact(marksOf(s()).last);
     expect(s().impact?.kind).toBe('menace');
-    // Coup 127 : le coup de l'oreille rouge est un instant du récit.
+    // Coup 127 : K11 prend l'initiative, avec un effet visuel distinct.
     s().setMove(127);
     s().notifyImpact(P('ji'));
-    expect(s().impact?.kind).toBe('moment');
+    expect(s().impact?.kind).toBe('initiative');
     expect(s().impact?.seq).toBe(3);
   });
 

@@ -3,6 +3,7 @@ import { animate } from 'motion';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { NEVER, type StoneLife, type Timeline } from '../domain/game.ts';
+import { READING_DEPTHS } from '../engine/reading.ts';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { playStone } from '../replay/sound.ts';
 import { displayOf, useStore } from '../state/store.ts';
@@ -66,9 +67,10 @@ const restOf = (rigid: Rigid, keep: boolean): Rest => ({
 
 /**
  * Capacité des maillages instanciés, par couleur. La plus longue partie du corpus compte
- * 342 coups, soit 171 pierres par couleur ; une exploration en ajoute au plus 80.
+ * 342 coups. La réserve existante inclut l’exploration libre ; la lecture longue peut
+ * encore ajouter la moitié de son horizon à chaque couleur.
  */
-export const STONE_CAPACITY = 260;
+export const STONE_CAPACITY = 260 + Math.ceil(READING_DEPTHS[2] / 2);
 
 const phaseAt = (stone: StoneLife, n: number): Phase =>
   n < stone.placedAt ? HIDDEN : n < stone.capturedAt ? ON_BOARD : IN_LID;
@@ -503,7 +505,7 @@ export function Stones({ seed }: { seed: string }) {
         (before === timeline || sameUpTo(before, timeline, Math.min(previous, n)));
       if (before !== timeline) adopt(timeline);
       shown = n;
-      const { playing, speed, sound } = useStore.getState();
+      const { mode, readingPace, playing, speed, sound } = useStore.getState();
       const reduced = prefersReducedMotion();
       if (previous === -1 || reduced || !continuous || Math.abs(n - previous) !== 1) {
         jump(n, reduced);
@@ -511,7 +513,8 @@ export function Stones({ seed }: { seed: string }) {
       }
       if (n === previous + 1) {
         // Un coup en avant : le geste doit tenir dans l'intervalle de lecture.
-        const duration = playing ? Math.min(PLACE_DURATION, (1 / speed) * 0.85) : PLACE_DURATION;
+        const pace = mode === 'lire' ? readingPace : playing ? speed : null;
+        const duration = pace ? Math.min(PLACE_DURATION, (1 / pace) * 0.85) : PLACE_DURATION;
         const i = timeline.stoneOfMove[n] ?? -1;
         if (i >= 0) place(i, duration, sound, (timeline.capturesAt[n]?.length ?? 0) > 0);
         // Les prisonniers s'envolent vers le couvercle et y sont lâchés.

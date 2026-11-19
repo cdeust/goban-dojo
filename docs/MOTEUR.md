@@ -79,3 +79,33 @@ la conversion officielle, pas sur une comparaison directe.
 - Les coups de la partie elle-même ne sont jugés qu’à la demande, position par position : il n’y
   a pas d’analyse précalculée des 85 577 coups (estimée à une soixantaine d’heures de calcul avec
   une vraie recherche).
+
+## Lire les variantes
+
+Depuis un coup du kifu, « Analyser » classe jusqu’à douze coups légaux d’après la politique
+brute du réseau. Si le coup enregistré est plus bas dans le classement, il remplace la
+dernière option affichée et conserve son rang réel. L’écran examine ensuite chaque position
+fille, une à une, et compte jusqu’à douze réponses par option. Au maximum, treize inférences
+donnent ainsi 144 suites de deux coups avec une estimation après le premier coup de chacune.
+
+Cliquer sur une option ou jouer sur le goban déplace la racine de cette analyse. Les évaluations
+sont réutilisées au sein de la séance. Le pourcentage décrit la préférence initiale du réseau.
+La comparaison avec le kifu porte sur l’avance estimée du joueur au trait après le premier
+coup. Ces sorties viennent d’un modèle moderne entraîné en autojeu. Elles ne renseignent
+pas sur les intentions historiques d’un joueur.
+
+## Lecture longue
+
+Les écrans de réflexion et d’analyse ouvrent une projection de 60, 120 ou 240 coups. À
+chaque position, le navigateur compare les cinq coups préférés du réseau à partir de
+l’avance estimée après chacun, comme dans le jugement de coups. Il conserve les choix
+et répète le calcul pour le camp adverse. Le coup du kifu ou une bifurcation choisie
+est évalué en plus s’il n’est pas déjà dans les cinq premiers.
+
+La courbe rapporte les estimations position par position. La carte « Territoires estimés »
+affiche la sortie de propriété du réseau, du point de vue de Noir, avec une couleur
+continue par intersection. Les ataris, sorties d’atari, captures et connexions sont
+calculés avec les règles du goban. La lecture s’arrête après
+deux passes. La longueur indique l’horizon de la projection, avec une comparaison locale
+à chaque coup. Elle ne correspond ni à un arbre de profondeur équivalente, ni au
+raisonnement historique des joueurs.

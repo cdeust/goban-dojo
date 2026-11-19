@@ -13,6 +13,7 @@ const scope = self as unknown as DedicatedWorkerGlobalScope;
 const post = (message: EngineResponse): void => scope.postMessage(message);
 
 let session: ort.InferenceSession | null = null;
+let evaluationQueue = Promise.resolve();
 
 async function download(url: string): Promise<Uint8Array> {
   const res = await fetch(url, { credentials: 'omit' });
@@ -59,7 +60,7 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
     return;
   }
   const { id, positions } = request;
-  void (async () => {
+  evaluationQueue = evaluationQueue.then(async () => {
     try {
       if (!session) throw new Error('moteur non chargé');
       const evaluations = [];
@@ -82,6 +83,7 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
               policyPass: data('OutputPolicyPass'),
               value: data('OutputValue'),
               scoreValue: data('OutputScoreValue'),
+              ownership: data('OutputOwnership'),
             },
             enc.legal,
             position.next,
@@ -93,5 +95,5 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
     } catch (e) {
       post({ type: 'error', id, message: e instanceof Error ? e.message : String(e) });
     }
-  })();
+  });
 };

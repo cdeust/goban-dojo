@@ -3,6 +3,8 @@
  * donc aucune dépendance à un tiers ni question de droits.
  */
 import * as THREE from 'three';
+import { READING_DEPTHS } from '../engine/reading.ts';
+import { MAX_VARIATION } from '../state/store.ts';
 import {
   BOARD_LENGTH,
   BOARD_WIDTH,
@@ -271,18 +273,18 @@ export function shellTexture(): THREE.CanvasTexture {
 }
 
 export const ATLAS_COLUMNS = 20;
-export const ATLAS_ROWS = 20;
+export const ATLAS_ROWS = 20 + Math.ceil((MAX_VARIATION + READING_DEPTHS[2]) / ATLAS_COLUMNS);
 
-/** Atlas des numéros de coups 1…400, blanc sur transparent (teinté par le shader). */
+/** Atlas des numéros du kifu et de la projection, blanc sur transparent. */
 export function numberAtlas(): THREE.CanvasTexture {
-  const cell = 96;
+  const cell = 64;
   const [c, ctx] = canvas(ATLAS_COLUMNS * cell, ATLAS_ROWS * cell);
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (let n = 1; n <= ATLAS_COLUMNS * ATLAS_ROWS; n++) {
     const i = n - 1;
-    const size = n < 10 ? 62 : n < 100 ? 54 : 42;
+    const size = n < 10 ? 41 : n < 100 ? 36 : 28;
     ctx.font = `600 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
     ctx.fillText(
       String(n),

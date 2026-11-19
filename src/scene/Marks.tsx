@@ -4,12 +4,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { setProjector } from '../state/projection.ts';
-import { marksOf, useStore } from '../state/store.ts';
+import { marksOf, showsEarRedMove, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
 import { INK } from './textures.ts';
 
 /** Nombre maximal de pierres marquées à la fois, par type de marque. */
 const CAPACITY = 96;
+const INITIATIVE_GLOW = '#58aafa';
 
 /** Couleur de chaque notion. */
 export const MARK_COLORS = {
@@ -81,7 +82,9 @@ export function Marks() {
     if (!s.effects) return '';
     const m = marksOf(s);
     const linked = m.threat.connects.length > 0 ? [m.last, ...m.threat.connects] : [];
-    return `${m.atari.join(',')}|${m.trapped.join(',')}|${linked.join(',')}`;
+    const game = s.dataset?.games[s.gameIndex];
+    const initiative = game && showsEarRedMove(game, s.move, s.variation) ? [m.last] : [];
+    return `${m.atari.join(',')}|${m.trapped.join(',')}|${linked.join(',')}|${initiative.join(',')}`;
   });
   const impact = useStore((s) => s.impact);
   const invalidate = useThree((s) => s.invalidate);
@@ -110,7 +113,14 @@ export function Marks() {
     return {
       plane,
       halo: material(haloTexture(), '#ffffff'),
-      cage: material(cageTexture(), '#f3e7c8'),
+      cage: new THREE.MeshBasicMaterial({
+        map: cageTexture(),
+        color: '#ff934b',
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        toneMapped: false,
+      }),
       flash: material(flashTexture(), MARK_COLORS.attack),
     };
   }, []);
@@ -140,7 +150,7 @@ export function Marks() {
     const haloMesh = halos.current;
     const cageMesh = cages.current;
     if (!haloMesh || !cageMesh) return;
-    const [atari = '', trapped = '', linked = ''] = key.split('|');
+    const [atari = '', trapped = '', linked = '', initiative = ''] = key.split('|');
     const list = (s: string): number[] => (s === '' ? [] : s.split(',').map(Number));
     const m = new THREE.Matrix4();
     const color = new THREE.Color();
@@ -158,6 +168,7 @@ export function Marks() {
         n++;
       }
     };
+    put(list(initiative), INITIATIVE_GLOW);
     put(list(linked), MARK_COLORS.connection);
     put(list(atari), MARK_COLORS.attack);
     haloMesh.count = n;
@@ -171,7 +182,7 @@ export function Marks() {
         const [x, z] = pointToWorld(p);
         m.makeRotationY(angle)
           .scale(new THREE.Vector3(cageSize, 1, cageSize))
-          .setPosition(x, BOARD_TOP + 0.02, z);
+          .setPosition(x, BOARD_TOP + STONE_THICKNESS, z);
         cageMesh.setMatrixAt(i, m);
       });
       cageMesh.instanceMatrix.needsUpdate = true;
@@ -181,7 +192,7 @@ export function Marks() {
 
     const still = prefersReducedMotion();
     assets.halo.opacity = n > 0 ? 0.6 : 0;
-    assets.cage.opacity = caged.length > 0 ? 0.9 : 0;
+    assets.cage.opacity = caged.length > 0 ? 1 : 0;
     invalidate();
     if (still || (n === 0 && caged.length === 0)) return;
     // Les halos battent lentement ; les cages tournent, comme un étau qui se resserre.
@@ -220,13 +231,15 @@ export function Marks() {
     const [x, z] = pointToWorld(impact.point);
     mesh.position.set(x, BOARD_TOP + 0.025, z);
     assets.flash.color.set(
-      impact.kind === 'connexion'
-        ? MARK_COLORS.connection
-        : impact.kind === 'piege'
-          ? '#f3e7c8'
-          : MARK_COLORS.attack,
+      impact.kind === 'initiative' || impact.kind === 'menace'
+        ? INITIATIVE_GLOW
+        : impact.kind === 'connexion'
+          ? MARK_COLORS.connection
+          : impact.kind === 'piege'
+            ? '#f3e7c8'
+            : MARK_COLORS.attack,
     );
-    const strong = impact.kind === 'moment';
+    const strong = impact.kind === 'moment' || impact.kind === 'initiative';
     const run = animate(0, 1, {
       duration: strong ? 2.4 : 0.9,
       ease: 'easeOut',
