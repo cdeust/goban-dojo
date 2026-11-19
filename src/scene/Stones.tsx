@@ -70,7 +70,7 @@ const restOf = (rigid: Rigid, keep: boolean): Rest => ({
  * 342 coups. La réserve existante inclut l’exploration libre ; la lecture longue peut
  * encore ajouter la moitié de son horizon à chaque couleur.
  */
-export const STONE_CAPACITY = 260 + Math.ceil(READING_DEPTHS[2] / 2);
+const VARIATION_STONES = Math.ceil(READING_DEPTHS[2] / 2);
 
 const phaseAt = (stone: StoneLife, n: number): Phase =>
   n < stone.placedAt ? HIDDEN : n < stone.capturedAt ? ON_BOARD : IN_LID;
@@ -137,7 +137,8 @@ function sameUpTo(a: Timeline, b: Timeline, upTo: number): boolean {
  *
  * @param seed identifiant de la partie : fixe les petites irrégularités de pose.
  */
-export function Stones({ seed }: { seed: string }) {
+export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
+  const capacity = Math.max(260, recorded) + VARIATION_STONES;
   const assets = stoneAssets();
   const stage = useStage();
   const invalidate = useThree((s) => s.invalidate);
@@ -164,16 +165,10 @@ export function Stones({ seed }: { seed: string }) {
   const numberGeometry = useMemo(() => {
     const g = new THREE.PlaneGeometry(1.5, 1.5);
     g.rotateX(-Math.PI / 2);
-    g.setAttribute(
-      'cell',
-      new THREE.InstancedBufferAttribute(new Float32Array(STONE_CAPACITY * 2), 1),
-    );
-    g.setAttribute(
-      'tint',
-      new THREE.InstancedBufferAttribute(new Float32Array(STONE_CAPACITY * 6), 3),
-    );
+    g.setAttribute('cell', new THREE.InstancedBufferAttribute(new Float32Array(capacity * 2), 1));
+    g.setAttribute('tint', new THREE.InstancedBufferAttribute(new Float32Array(capacity * 6), 3));
     return g;
-  }, []);
+  }, [capacity]);
 
   // État animé, hors React.
   const live = useRef<{
@@ -264,7 +259,7 @@ export function Stones({ seed }: { seed: string }) {
         };
         L.pose[i] ??= { ...bowlOf(i), s: 0, rigid: null };
         L.phase[i] ??= HIDDEN;
-        if (i < STONE_CAPACITY * 2) {
+        if (i < capacity * 2) {
           cell.setX(i, Math.max(0, s.placedAt - 1));
           const v = s.color === 'B' ? 0.93 : 0.07;
           tint.setXYZ(i, v, v * 0.98, v * 0.94);
@@ -495,7 +490,7 @@ export function Stones({ seed }: { seed: string }) {
       touch();
     };
 
-    const sync = (timeline: Timeline, n: number): void => {
+    const sync = (timeline: Timeline, n: number, instant = false): void => {
       const before = L.timeline;
       const previous = shown;
       if (before === timeline && n === previous) return;
@@ -507,8 +502,8 @@ export function Stones({ seed }: { seed: string }) {
       shown = n;
       const { mode, readingPace, playing, speed, sound } = useStore.getState();
       const reduced = prefersReducedMotion();
-      if (previous === -1 || reduced || !continuous || Math.abs(n - previous) !== 1) {
-        jump(n, reduced);
+      if (instant || previous === -1 || reduced || !continuous || Math.abs(n - previous) !== 1) {
+        jump(n, instant || reduced);
         return;
       }
       if (n === previous + 1) {
@@ -545,9 +540,17 @@ export function Stones({ seed }: { seed: string }) {
       touch();
     };
 
+    let simulatedAnchor: number | undefined;
     const pull = (): void => {
-      const d = displayOf(useStore.getState());
-      if (d) sync(d.timeline, d.move);
+      const state = useStore.getState();
+      const d = displayOf(state);
+      if (!d) return;
+      const simulation = state.reflectionReplay === 'auto' || state.reflectionReplay === 'manual';
+      if (!simulation && simulatedAnchor !== undefined && d.move === simulatedAnchor + 1) {
+        sync(d.timeline, simulatedAnchor, true);
+      }
+      sync(d.timeline, d.move, simulation);
+      simulatedAnchor = simulation ? state.move : undefined;
     };
     pull();
     const unsubscribe = useStore.subscribe(pull);
@@ -560,7 +563,7 @@ export function Stones({ seed }: { seed: string }) {
       L.phase = [];
       L.running = [];
     };
-  }, [seed, stage, invalidate, numberGeometry]);
+  }, [seed, stage, invalidate, numberGeometry, capacity]);
 
   useEffect(() => {
     showNumbersRef.current = showNumbers;
@@ -603,7 +606,7 @@ export function Stones({ seed }: { seed: string }) {
     const numbered = showNumbersRef.current;
     timeline.stones.forEach((stone, i) => {
       const p = L.pose[i];
-      if (!p || stone.slot >= STONE_CAPACITY) return;
+      if (!p || stone.slot >= capacity) return;
       const d = (stone.color === 'B' ? STONE_DIAMETER_BLACK : STONE_DIAMETER_WHITE) * p.s;
       let { x, y, z } = p;
       if (p.rigid) {
@@ -619,7 +622,7 @@ export function Stones({ seed }: { seed: string }) {
       }
       m.compose(v.set(x, y, z), q, s.set(d, d, d));
       (stone.color === 'B' ? black : white).setMatrixAt(stone.slot, m);
-      if (i < STONE_CAPACITY * 2) {
+      if (i < capacity * 2) {
         const k = numbered && stone.placedAt > 0 && L.phase[i] === ON_BOARD ? p.s : 0;
         m.compose(v.set(x, y + STONE_THICKNESS + 0.012, z), flat, s.set(k, k, k));
         numbers.setMatrixAt(i, m);
@@ -627,9 +630,9 @@ export function Stones({ seed }: { seed: string }) {
     });
     // On ne dessine que les pierres de la position : les emplacements libres ne coûtent rien.
     const { B, W } = timeline.counts;
-    const total = Math.min(timeline.stones.length, STONE_CAPACITY * 2);
-    black.count = Math.min(B, STONE_CAPACITY);
-    white.count = Math.min(W, STONE_CAPACITY);
+    const total = Math.min(timeline.stones.length, capacity * 2);
+    black.count = Math.min(B, capacity);
+    white.count = Math.min(W, capacity);
     numbers.count = total;
     black.instanceMatrix.needsUpdate = true;
     white.instanceMatrix.needsUpdate = true;
@@ -640,19 +643,19 @@ export function Stones({ seed }: { seed: string }) {
     <group>
       <instancedMesh
         ref={blackRef}
-        args={[assets.geometry, assets.black, STONE_CAPACITY]}
+        args={[assets.geometry, assets.black, capacity]}
         castShadow
         receiveShadow
       />
       <instancedMesh
         ref={whiteRef}
-        args={[assets.geometry, assets.white, STONE_CAPACITY]}
+        args={[assets.geometry, assets.white, capacity]}
         castShadow
         receiveShadow
       />
       <instancedMesh
         ref={numbersRef}
-        args={[numberGeometry, numberMaterial, STONE_CAPACITY * 2]}
+        args={[numberGeometry, numberMaterial, capacity * 2]}
         visible={showNumbers}
         renderOrder={2}
       />

@@ -77,6 +77,7 @@ export function outcomeFor(game: GameRecord): { mark: string; label: string } {
   if (w === 'jigo') return { mark: '＝', label: 'jigo' };
   if (w === 'unfinished') return { mark: '…', label: 'inachevée' };
   if (w === 'unknown') return { mark: '?', label: 'résultat inconnu' };
+  if (game.imported) return { mark: w === 'B' ? '●' : '○', label: formatResult(game.result) };
   return w === game.shusaku
     ? { mark: '○', label: 'victoire de Shūsaku' }
     : { mark: '●', label: 'défaite de Shūsaku' };

@@ -6,7 +6,7 @@
  * 1628). KataGo est sous licence MIT (© David J. Wu et contributeurs).
  *
  * Règles encodées : japonaises (ko simple, score au territoire, taxe de seki, suicide interdit),
- * goban 19×19, komi nul. Sous ces règles, les plans 7, 8 et 18 à 21 restent nuls.
+ * goban 19×19, komi du kifu (nul pour les parties historiques). Sous ces règles, les plans 7, 8 et 18 à 21 restent nuls.
  *
  * Limite connue : le cas particulier « double ko » de la recherche de shicho n'est pas porté.
  */
@@ -220,6 +220,7 @@ function iterLadders(board: NetBoard, f: (p: number, working: number[]) => void)
 export interface EnginePosition {
   /** Pierres noires de handicap, posées avant le premier coup. */
   setupBlack: number[];
+  komi?: number;
   moves: Move[];
   /** Joueur au trait. */
   next: Color;
@@ -285,7 +286,7 @@ export function encodePosition(position: EnginePosition): Encoded {
 
   // En score au territoire, le komi vu par le réseau est décalé d'un point par pierre posée
   // (cpp/game/boardhistory.cpp, l. 364-378, 597 et 1115-1122) : +1 par pierre noire, −1 par blanche.
-  let whiteBonus = position.setupBlack.length;
+  let whiteBonus = position.setupBlack.length + (position.komi ?? 0);
   for (const m of moves) if (m.pos !== -1) whiteBonus += m.pla === BLACK ? 1 : -1;
   global[5] = (pla === WHITE ? whiteBonus : -whiteBonus) / 20;
   global[9] = 1; // score au territoire

@@ -16,6 +16,7 @@ import {
 import { trappedStones } from '../engine/features.ts';
 import { momentFor } from '../story/chapters.ts';
 import { reflectionMoves } from '../story/reflections.ts';
+import { localGames, saveGame } from './localGames.ts';
 import { reflectionLines, reflectionsOf } from './reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
@@ -151,6 +152,7 @@ interface State {
   mode: Mode;
   studyMove: number | null;
   guess: GuessState;
+  guessColor: Color;
   /** Coups ajoutés par l'utilisateur après le coup `move` de la partie (mode « explorer »). */
   variation: Move[];
   analysisMarks: AnalysisMark[];
@@ -160,7 +162,10 @@ interface State {
   notice: string | null;
 
   load: () => Promise<void>;
-  enter: () => void;
+  enter: (panel?: PanelName) => void;
+  importGame: (text: string, name: string) => void;
+  chooseGuessColor: (color: Color) => void;
+  showSimulation: (moves: Move[]) => void;
   setSceneReady: () => void;
   selectGame: (index: number, opts?: { play?: boolean; move?: number }) => void;
   setMove: (move: number, pause?: boolean, replay?: ReflectionReplay) => void;
@@ -336,6 +341,7 @@ export const useStore = create<State>((set, get) => ({
   mode: 'lecture',
   studyMove: null,
   guess: emptyGuess(),
+  guessColor: 'B',
   variation: [],
   analysisMarks: [],
   readingPace: null,
@@ -348,13 +354,42 @@ export const useStore = create<State>((set, get) => ({
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: unknown = await res.json();
       if (!isDataset(json)) throw new Error('format de données inattendu');
-      set({ dataset: json, status: 'ready', gameIndex: 0 });
+      set({
+        dataset: { ...json, games: [...json.games, ...localGames()] },
+        status: 'ready',
+        gameIndex: 0,
+        guessColor: json.games[0]?.shusaku ?? 'B',
+      });
     } catch (e) {
       set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
     }
   },
 
-  enter: () => set({ entered: true, panel: 'recit', view: 'joueur' }),
+  enter: (panel = 'recit') => set({ entered: true, panel, view: 'joueur' }),
+
+  importGame: (text, name) => {
+    const s = get();
+    if (!s.dataset) return;
+    const game = saveGame(text, name);
+    let index = s.dataset.games.findIndex(({ id }) => id === game.id);
+    if (index < 0) {
+      index = s.dataset.games.length;
+      set({ dataset: { ...s.dataset, games: [...s.dataset.games, game] } });
+    }
+    get().setMode('lecture');
+    get().selectGame(index);
+    set({ panel: null });
+  },
+
+  chooseGuessColor: (color) => set({ guessColor: color, guess: emptyGuess() }),
+
+  showSimulation: (moves) => {
+    const s = get();
+    if (s.reflectionReplay !== 'auto' && s.reflectionReplay !== 'manual') return;
+    if (s.variation.length === moves.length && s.variation.every((move, i) => move === moves[i]))
+      return;
+    set({ variation: moves, impact: null });
+  },
   setSceneReady: () => set({ sceneReady: true }),
 
   selectGame: (index, opts) => {
@@ -370,6 +405,7 @@ export const useStore = create<State>((set, get) => ({
         : previousMode;
     set({
       gameIndex: i,
+      guessColor: game.shusaku ?? 'B',
       mode,
       reflectionReplay: null,
       move: clamp(opts?.move ?? 0, 0, moveCount(game)),
@@ -444,6 +480,7 @@ export const useStore = create<State>((set, get) => ({
 
   notifyImpact: (point) => {
     const s = get();
+    if (s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual') return;
     if (s.mode === 'lire' && s.readingPace !== null && s.readingPace > 3) return;
     const game = s.dataset?.games[s.gameIndex];
     const d = displayOf(s);
@@ -603,7 +640,7 @@ export const useStore = create<State>((set, get) => ({
 
     if (s.mode !== 'deviner') return;
     const target = timelineOf(game).moves[s.move];
-    if (!target || target.color !== game.shusaku || target.point === PASS) return;
+    if (!target || target.color !== s.guessColor || target.point === PASS) return;
     if (boardOf(s)?.get(point)) return;
     const g = s.guess;
     if (point === target.point) {
@@ -645,7 +682,7 @@ export const useStore = create<State>((set, get) => ({
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
     const target = game ? timelineOf(game).moves[s.move] : undefined;
-    if (s.mode !== 'deviner' || !game || !target || target.color !== game.shusaku) return;
+    if (s.mode !== 'deviner' || !game || !target || target.color !== s.guessColor) return;
     const tries = s.guess.tries + 1;
     const size = HINT_SIZES[tries - 1];
     if (size === undefined) {
@@ -659,7 +696,7 @@ export const useStore = create<State>((set, get) => ({
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
     const target = game ? timelineOf(game).moves[s.move] : undefined;
-    if (s.mode !== 'deviner' || !game || !target || target.color !== game.shusaku) return;
+    if (s.mode !== 'deviner' || !game || !target || target.color !== s.guessColor) return;
     set({
       guess: {
         ...s.guess,

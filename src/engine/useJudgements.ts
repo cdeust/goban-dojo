@@ -55,7 +55,12 @@ export function useJudgements(
           if (!next) continue;
           const missing = targets.filter((p) => !cache.has(keyOf(game, before, p)));
           if (missing.length === 0) continue;
-          const position: EnginePosition = { setupBlack: setup, moves: before, next };
+          const position: EnginePosition = {
+            setupBlack: setup,
+            komi: game.komi,
+            moves: before,
+            next,
+          };
           const results = await judgeMoves(evaluate, position, missing);
           missing.forEach((p, k) => {
             const j = results[k];

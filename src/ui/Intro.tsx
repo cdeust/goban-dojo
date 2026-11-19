@@ -13,8 +13,9 @@ export function Intro() {
   const status = useStore((s) => s.status);
   const dataset = useStore((s) => s.dataset);
   const enter = useStore((s) => s.enter);
-  const games = dataset?.games.length ?? 0;
-  const moves = dataset?.games.reduce((sum, g) => sum + g.moves.length / 3, 0) ?? 0;
+  const historical = dataset?.games.filter((game) => !game.imported) ?? [];
+  const games = historical.length;
+  const moves = historical.reduce((sum, g) => sum + g.moves.length / 3, 0);
 
   return (
     <AnimatePresence>
@@ -28,18 +29,17 @@ export function Intro() {
           variants={{ shown: { transition: { staggerChildren: 0.22, delayChildren: 0.3 } } }}
         >
           <motion.p className="intro__kanji" lang="ja" aria-hidden="true" variants={rise}>
-            本因坊秀策
+            囲碁
           </motion.p>
           <motion.h1 id="intro-title" className="intro__title" variants={rise}>
-            Hon’inbō Shūsaku
+            Atelier de go
           </motion.h1>
           <motion.p className="intro__dates" variants={rise}>
-            1829 — 1862
+            Replay · Analyse · Entraînement
           </motion.p>
           <motion.p className="intro__lede" variants={rise}>
-            Trente-trois ans de vie, dix-neuf victoires sans défaite devant le shogun, et une
-            ouverture qui porta son nom pendant un siècle. Voici ses parties, coup après coup, de
-            l’enfant d’Innoshima au saint du go.
+            Rejouez les parties de Shūsaku ou importez les vôtres. Explorez les variantes et
+            entraînez-vous à trouver le prochain coup.
           </motion.p>
           <motion.div variants={rise}>
             <button
@@ -56,6 +56,17 @@ export function Intro() {
                 : status === 'error'
                   ? 'Indisponible'
                   : 'Préparation du goban…'}
+            </button>
+            <button
+              type="button"
+              className="chip intro__import"
+              disabled={status !== 'ready'}
+              onClick={() => {
+                unlockAudio();
+                enter('parties');
+              }}
+            >
+              Importer un SGF
             </button>
           </motion.div>
           {status === 'ready' && (

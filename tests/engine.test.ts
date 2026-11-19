@@ -256,3 +256,9 @@ it('simule plusieurs premiers coups distincts et rejoue chaque branche selon les
     expect(buildTimeline(position.setupBlack, [...position.moves, ...moves]).illegal).toEqual([]);
   }
 }, 30_000);
+
+it('transmet le komi du kifu aux branches évaluées par le moteur', () => {
+  const position: EnginePosition = { setupBlack: [], moves: [], next: 'B', komi: 6.5 };
+  expect(encodePosition(position).global[5]).toBeCloseTo(-6.5 / 20);
+  expect(afterCandidate(position, 0).komi).toBe(6.5);
+});

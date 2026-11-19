@@ -19,7 +19,7 @@ import { PASS, SIZE, pointFromSgf, pointToSgf, type Color } from '../src/domain/
 import {
   buildTimeline,
   type Dataset,
-  type GameRecord,
+  type HistoricalGameRecord,
   type GameResult,
   type Move,
 } from '../src/domain/game.ts';
@@ -184,7 +184,7 @@ const REGIMES: Record<string, string> = {
 
 interface Main {
   number: string;
-  record: GameRecord;
+  record: HistoricalGameRecord;
   moves: Move[];
 }
 
@@ -252,7 +252,7 @@ for (const [hash, name] of cwiManifest) {
   const regime = REGIMES[(prop(r, 'OH') ?? '').trim()];
   const pretty = (n: string): string => n.split(',').join(' · ');
 
-  const record: GameRecord = {
+  const record: HistoricalGameRecord = {
     id: `s${number}`,
     date: first,
     ...(dt !== first ? { sessions: dt.replace(/^Summer /, 'été ') } : {}),

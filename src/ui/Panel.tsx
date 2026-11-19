@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { MAX_SGF_LENGTH } from '../domain/sgf.ts';
 import type { GameRecord } from '../domain/game.ts';
 import { CHAPTERS, chapterIndexOf, gamesOfChapter } from '../story/chapters.ts';
 import { formatDate, outcomeFor, prettyName } from '../story/format.ts';
@@ -200,20 +201,70 @@ function Row({ game, index, current }: { game: GameRecord; index: number; curren
           <span className="sr-only">{outcome.label}</span>
         </span>
         <span className="row__main">
-          <span className="row__opponent">{prettyName(game.opponent)}</span>
+          <span className="row__opponent">
+            {game.imported
+              ? prettyName(game.black) + ' — ' + prettyName(game.white)
+              : prettyName(game.opponent)}
+          </span>
           <span className="row__meta">
-            <time dateTime={game.date}>{formatDate(game.date)}</time>
-            {' · '}
-            {game.shusaku === 'B' ? 'noir' : 'blanc'}
+            {game.date && <time dateTime={game.date}>{formatDate(game.date)}</time>}
+            {!game.imported && ' · ' + (game.shusaku === 'B' ? 'noir' : 'blanc')}
             {game.handicap > 0 && ` · ${game.handicap} p.`}
             {game.rengo && ' · rengo'}
-            {' · '}
+            {(game.date || !game.imported || game.handicap > 0) && ' · '}
             {moveCount(game)} coups
           </span>
           {game.event && <span className="row__event">{game.event}</span>}
         </span>
       </button>
     </li>
+  );
+}
+
+function ImportGame() {
+  const importGame = useStore((s) => s.importGame);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  async function read(file: File) {
+    setBusy(true);
+    setError('');
+    try {
+      if (file.size > MAX_SGF_LENGTH)
+        throw new Error('Choisissez un fichier SGF de 512 Kio maximum.');
+      const bytes = await file.arrayBuffer();
+      const probe = new TextDecoder('windows-1252').decode(bytes);
+      const charset = /[;\s\]]CA\[([\w-]+)\]/.exec(probe)?.[1] ?? 'utf-8';
+      let text: string;
+      try {
+        text = new TextDecoder(charset, { fatal: true }).decode(bytes);
+      } catch {
+        throw new Error('Impossible de lire l’encodage de ce fichier SGF.');
+      }
+      importGame(text, file.name);
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : 'Impossible d’importer ce kifu.');
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="library-import">
+      <label htmlFor="import-sgf">Importer un fichier SGF</label>
+      <input
+        type="file"
+        id="import-sgf"
+        accept=".sgf,application/x-go-sgf"
+        aria-describedby="import-detail"
+        disabled={busy}
+        onChange={(event) => {
+          const file = event.currentTarget.files?.[0];
+          event.currentTarget.value = '';
+          if (file) void read(file);
+        }}
+      />
+      <p id="import-detail">Goban 19 × 19. Les parties sont conservées dans ce navigateur.</p>
+      {error && <p role="alert">{error}</p>}
+    </div>
   );
 }
 
@@ -227,9 +278,10 @@ function Library() {
     const q = query.trim().toLowerCase();
     const matches = (g: GameRecord): boolean =>
       q === '' ||
-      `${g.opponent} ${prettyName(g.opponent)} ${g.date} ${g.event ?? ''} ${g.place ?? ''}`
+      `${prettyName(g.black)} ${prettyName(g.white)} ${g.date} ${g.event ?? ''} ${g.place ?? ''}`
         .toLowerCase()
         .includes(q);
+    const imports = games.flatMap((g, i) => (g.imported && matches(g) ? [{ g, i }] : []));
     const out = CHAPTERS.map((c, ci) => ({
       key: c.id,
       title: c.title,
@@ -238,20 +290,23 @@ function Library() {
         .map((g, i) => ({ g, i }))
         .filter(({ g }) => chapterIndexOf(g) === ci && matches(g)),
     }));
-    return out.filter((grp) => grp.items.length > 0);
+    return [{ key: 'imports', title: 'Mes parties', years: '', items: imports }, ...out].filter(
+      (grp) => grp.items.length > 0,
+    );
   }, [games, query]);
 
   const total = groups.reduce((n, g) => n + g.items.length, 0);
 
   return (
     <div className="panel__body">
+      <ImportGame />
       <label className="search">
-        <span className="sr-only">Chercher un adversaire, une année, un lieu</span>
+        <span className="sr-only">Chercher un joueur, une année, un lieu</span>
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Adversaire, année, lieu…"
+          placeholder="Joueur, année, lieu…"
           autoComplete="off"
           spellCheck={false}
         />
@@ -266,7 +321,7 @@ function Library() {
       {groups.map((grp) => (
         <section key={grp.key} className="group">
           <h3 className="group__title">
-            {grp.title} <span className="group__years">{grp.years}</span>
+            {grp.title} {grp.years && <span className="group__years">{grp.years}</span>}
           </h3>
           <ul className="rows">
             {grp.items.map(({ g, i }) => (

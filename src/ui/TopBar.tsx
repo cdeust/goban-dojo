@@ -11,9 +11,9 @@ export function TopBar() {
     <header className="topbar">
       <p className="brand">
         <span className="brand__kanji" lang="ja" aria-hidden="true">
-          秀策
+          囲碁
         </span>
-        <span className="brand__name">Hon’inbō Shūsaku</span>
+        <span className="brand__name">Atelier de go</span>
       </p>
       <nav className="topbar__nav" aria-label="Volets">
         <button

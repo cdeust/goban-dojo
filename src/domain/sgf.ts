@@ -16,7 +16,7 @@ export class SgfSyntaxError extends Error {}
 /** Taille maximale acceptée pour un fichier SGF (défense contre les entrées hostiles). */
 export const MAX_SGF_LENGTH = 512 * 1024;
 
-export function parseSgf(text: string): SgfNode {
+export function parseSgf(text: string, { strict = false } = {}): SgfNode {
   if (text.length > MAX_SGF_LENGTH) throw new SgfSyntaxError('fichier SGF trop volumineux');
   let i = 0;
   const n = text.length;
@@ -110,7 +110,11 @@ export function parseSgf(text: string): SgfNode {
         throw new SgfSyntaxError(`caractère inattendu « ${c} » à la position ${i}`);
       }
     }
+    if (strict && stack.length !== 0) throw new SgfSyntaxError('arbre SGF incomplet');
     if (!root) throw new SgfSyntaxError('arbre vide');
+    skipWs();
+    if (strict && i !== n)
+      throw new SgfSyntaxError('Choisissez un fichier contenant une seule partie.');
     return root;
   };
 

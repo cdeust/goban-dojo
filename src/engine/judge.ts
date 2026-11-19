@@ -40,7 +40,7 @@ export const verdictOf = (loss: number): Verdict =>
   loss < GOOD_BELOW ? 'bon' : loss < MISTAKE_FROM ? 'discutable' : 'erreur';
 
 const after = (p: EnginePosition, color: Color, point: number): EnginePosition => ({
-  setupBlack: p.setupBlack,
+  ...p,
   moves: [...p.moves, { color, point }],
   next: opposite(color),
 });

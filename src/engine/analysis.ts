@@ -40,7 +40,7 @@ export function candidatesOf(
 
 export function afterCandidate(position: EnginePosition, point: number): EnginePosition {
   return {
-    setupBlack: position.setupBlack,
+    ...position,
     moves: [...position.moves, { color: position.next, point }],
     next: opposite(position.next),
   };

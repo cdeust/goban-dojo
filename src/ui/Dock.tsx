@@ -35,10 +35,13 @@ function LifeRibbon() {
   const setPanel = useStore((s) => s.setPanel);
 
   const ticks = useMemo(
-    () => (games ?? []).map((g) => ({ id: g.id, x: fraction(g.date) })),
+    () =>
+      (games ?? [])
+        .filter((game) => !game.imported)
+        .map((g) => ({ id: g.id, x: fraction(g.date) })),
     [games],
   );
-  const here = game ? fraction(game.date) : null;
+  const here = game && !game.imported ? fraction(game.date) : null;
 
   return (
     <nav className="ribbon" aria-label="Chapitres de la vie de Shūsaku">
@@ -103,7 +106,7 @@ const MODE_LABELS: [Mode, string, string][] = [
   ['lecture', 'Regarder', 'Regarder la partie se dérouler'],
   ['etudier', 'Étudier', 'Comparer les positions avant et après les coups tactiques'],
   ['analyser', 'Analyser', 'Lister les variantes proposées par KataGo depuis cette position'],
-  ['deviner', 'Deviner', 'Chercher soi-même les coups de Shūsaku'],
+  ['deviner', 'Deviner', 'Chercher soi-même les coups du camp choisi'],
   ['explorer', 'Explorer', 'Essayer d’autres coups à partir de cette position'],
 ];
 
@@ -320,9 +323,10 @@ function Transport() {
 }
 
 export function Dock() {
+  const game = useCurrentGame();
   return (
     <footer className="dock">
-      <LifeRibbon />
+      {!game?.imported && <LifeRibbon />}
       <Transport />
     </footer>
   );

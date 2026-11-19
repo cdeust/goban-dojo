@@ -1,7 +1,7 @@
 import { useReducedMotion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { PASS, POINTS, SIZE, pointToHuman } from '../domain/board.ts';
-import { boardAt, decodePoints, type GameRecord, type Move } from '../domain/game.ts';
+import { pointToHuman } from '../domain/board.ts';
+import { decodePoints, type GameRecord } from '../domain/game.ts';
 import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { previewLines, type PreviewLine } from '../engine/preview.ts';
 import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
@@ -11,61 +11,7 @@ import { reflectionMoves } from '../story/reflections.ts';
 
 const FRAME_MS = 230;
 const BRANCH_HOLD = 750;
-const intersections = Array.from({ length: SIZE }, (_, i) => i);
 const finished = new WeakMap<GameRecord, Map<number, PreviewLine[]>>();
-
-function MiniBoard({
-  setup,
-  history,
-  variation,
-}: {
-  setup: number[];
-  history: Move[];
-  variation: Move[];
-}) {
-  const board = useMemo(
-    () => boardAt(setup, [...history, ...variation], history.length + variation.length),
-    [setup, history, variation],
-  );
-  const last = variation.at(-1)?.point;
-  const half = SIZE - 1;
-  return (
-    <svg
-      className="simulation__board"
-      viewBox="-1 -1 20 20"
-      role="img"
-      aria-label="Mini-goban de la simulation"
-    >
-      <g className="simulation__grid">
-        {intersections.map((i) => (
-          <path key={i} d={'M0 ' + i + 'H' + half + ' M' + i + ' 0V' + half} />
-        ))}
-      </g>
-      {Array.from({ length: POINTS }, (_, point) => {
-        const stone = board.get(point);
-        return (
-          stone && (
-            <circle
-              key={point}
-              className={stone === 'B' ? 'simulation__black' : 'simulation__white'}
-              cx={point % SIZE}
-              cy={Math.floor(point / SIZE)}
-              r={0.45}
-            />
-          )
-        );
-      })}
-      {last !== undefined && last !== PASS && (
-        <circle
-          className="simulation__last"
-          cx={last % SIZE}
-          cy={Math.floor(last / SIZE)}
-          r={0.32}
-        />
-      )}
-    </svg>
-  );
-}
 
 function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const status = useEngine((s) => s.status);
@@ -92,6 +38,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         })),
     [game, scene, anchor],
   );
+  const showSimulation = useStore((s) => s.showSimulation);
   const reveal = useStore((s) => s.revealReflectionMove);
   const examine = useStore((s) => s.showReflection);
 
@@ -105,7 +52,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
     const controller = new AbortController();
     void previewLines(
       evaluate,
-      { setupBlack: setup, moves: history, next: recorded.color },
+      { setupBlack: setup, komi: game.komi, moves: history, next: recorded.color },
       recorded,
       controller.signal,
       (line, index) =>
@@ -135,6 +82,11 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const branch = shown?.[index];
   const current = step ? branch?.moves[step - 1] : undefined;
   const estimate = step ? branch?.estimates[step - 1] : undefined;
+  const simulatedMoves = branch?.moves;
+
+  useEffect(() => {
+    showSimulation(simulatedMoves?.slice(0, step) ?? []);
+  }, [showSimulation, simulatedMoves, step]);
 
   useEffect(() => {
     if (paused || !shown) return;
@@ -168,7 +120,6 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         data-branch={branch ? index + 1 : undefined}
         data-step={step}
       >
-        <MiniBoard setup={setup} history={history} variation={branch?.moves.slice(0, step) ?? []} />
         <p className="simulation__current">
           {current
             ? colorName(current.color) +
