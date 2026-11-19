@@ -275,3 +275,16 @@ describe('poids dramatique d’un coup', () => {
     expect([...m.atari, ...m.trapped]).toContain(P('dp'));
   });
 });
+
+it('affiche une branche sur le goban du kifu, puis révèle le coup enregistré', () => {
+  s().setMove(126, true, 'auto');
+  const hypothetical = { color: 'B' as const, point: P('gp') };
+  s().showSimulation([hypothetical]);
+  expect(s().move).toBe(126);
+  expect(displayOf(s())?.timeline.moves[126]).toEqual(hypothetical);
+  s().revealReflectionMove();
+  expect(s().reflectionReplay).toBe('return');
+  expect(s().move).toBe(127);
+  expect(s().variation).toEqual([]);
+  expect(displayOf(s())?.timeline.moves[126]?.point).toBe(P('ji'));
+});

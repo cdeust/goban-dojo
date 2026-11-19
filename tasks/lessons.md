@@ -6,3 +6,5 @@
 - Pour une scène de réflexion, vérifier la géométrie des effets sur la grille
   et la succession des positions. Une lueur et un panneau ne montrent pas à eux seuls
   les réponses prévues par le joueur.
+- Quand une simulation doit partager le cadrage du goban, vérifier les
+  coordonnées et dimensions du canvas avant et pendant l’animation.

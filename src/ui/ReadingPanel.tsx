@@ -106,6 +106,7 @@ export function ReadingPanel() {
     const nextColor = prefix.at(-1)?.move.color;
     const position = {
       setupBlack: decodePoints(game.setupBlack),
+      komi: game.komi,
       moves: [...history.slice(0, base), ...seed, ...prefix.map(({ move }) => move)],
       next: nextColor ? opposite(nextColor) : mover,
     };

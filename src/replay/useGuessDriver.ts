@@ -13,6 +13,7 @@ export function useGuessDriver(): void {
   const mode = useStore((s) => s.mode);
   const gameIndex = useStore((s) => s.gameIndex);
   const move = useStore((s) => s.move);
+  const color = useStore((s) => s.guessColor);
 
   useEffect(() => {
     if (mode !== 'deviner') return;
@@ -20,11 +21,11 @@ export function useGuessDriver(): void {
     const game = s.dataset?.games[gameIndex];
     if (!game) return;
     const next = timelineOf(game).moves[move];
-    if (!next || (next.color === game.shusaku && next.point !== PASS)) return;
+    if (!next || (next.color === color && next.point !== PASS)) return;
     const id = window.setTimeout(() => {
       // Avance sans passer par setMove, qui effacerait l'essai en cours.
       useStore.setState({ move: move + 1 });
     }, REPLY_DELAY);
     return () => window.clearTimeout(id);
-  }, [mode, gameIndex, move]);
+  }, [mode, gameIndex, move, color]);
 }

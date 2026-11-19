@@ -9,7 +9,7 @@ import {
 } from './board.ts';
 
 /** Partie telle que servie à l'application (public/data/games.json). */
-export interface GameRecord {
+interface CommonGameRecord {
   /** Identifiant stable : « s » suivi du numéro de la partie dans la collection source. */
   id: string;
   /**
@@ -25,14 +25,8 @@ export interface GameRecord {
   white: string;
   blackRank?: string;
   whiteRank?: string;
-  /** Couleur jouée par Shūsaku. */
-  shusaku: Color;
-  /** Nom porté par Shūsaku dans le kifu (Yasuda Eisai, Yasuda, Kuwahara ou Honinbo Shusaku). */
-  shusakuName: string;
-  opponent: string;
-  /** Partie en consultation : Shūsaku joue au sein d'une équipe. */
-  rengo?: boolean;
   handicap: number;
+  komi?: number;
   /** Régime de handicap sans pierres, quand la source le précise (« josen », « sen-ai-sen »). */
   regime?: string;
   /** Pierres de handicap, coordonnées SGF concaténées (« ddpdpp… »). */
@@ -46,6 +40,27 @@ export interface GameRecord {
   /** Provenance : « cwi:126 », et le cas échéant « pgd:<chemin> » pour le lieu et les circonstances. */
   sources: string[];
 }
+
+export interface HistoricalGameRecord extends CommonGameRecord {
+  imported?: false;
+  /** Couleur jouée par Shūsaku. */
+  shusaku: Color;
+  /** Nom porté par Shūsaku dans le kifu (Yasuda Eisai, Yasuda, Kuwahara ou Honinbo Shusaku). */
+  shusakuName: string;
+  opponent: string;
+  /** Partie en consultation : Shūsaku joue au sein d'une équipe. */
+  rengo?: boolean;
+}
+
+export interface ImportedGameRecord extends CommonGameRecord {
+  imported: true;
+  shusaku?: never;
+  shusakuName?: never;
+  opponent?: never;
+  rengo?: never;
+}
+
+export type GameRecord = HistoricalGameRecord | ImportedGameRecord;
 
 export interface GameResult {
   winner: 'B' | 'W' | 'jigo' | 'unfinished' | 'unknown';

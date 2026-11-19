@@ -38,8 +38,12 @@ export function GameCard() {
         transition={{ duration: 0.45, ease: 'easeOut' }}
       >
         <p className="card__date">
-          <time dateTime={game.date}>{formatDate(game.date)}</time>
-          <span className="card__age"> · Shūsaku a {ageLabel(game.date)}</span>
+          {game.date ? (
+            <time dateTime={game.date}>{formatDate(game.date)}</time>
+          ) : (
+            'Partie importée'
+          )}
+          {!game.imported && <span className="card__age"> · Shūsaku a {ageLabel(game.date)}</span>}
         </p>
         {game.dateJapanese && (
           <p className="card__era">
@@ -71,7 +75,13 @@ export function GameCard() {
               <dd>{handicapLabel(game)}</dd>
             </>
           )}
-          {openingOf(game).fuseki && (
+          {game.komi !== undefined && (
+            <>
+              <dt>Komi</dt>
+              <dd>{game.komi.toLocaleString('fr-FR')}</dd>
+            </>
+          )}
+          {!game.imported && openingOf(game).fuseki && (
             <>
               <dt>Ouverture</dt>
               <dd>

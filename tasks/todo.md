@@ -106,3 +106,16 @@ de l’affichage de la scène. Le replay pose F7 sur le goban principal, puis ou
 une nouvelle simulation avant Blanc 88, G7. Le test de règles rejoue les 24 coups
 proposés sur une position du corpus sans relever de coup illégal. Le rendu a
 également été vérifié à 1 440 × 900 et 390 × 844.
+
+## Atelier de go et import SGF
+
+- [x] Afficher les variantes sur le goban principal.
+- [x] Importer et conserver les kifus dans la bibliothèque locale.
+- [x] Rejouer, étudier et deviner avec les joueurs du kifu.
+- [x] Vérifier les règles, les importations et le rendu.
+
+L’import a été vérifié avec un fichier SGF 19 × 19, un komi de 6,5 et deux noms de
+joueurs. Le test Chromium retrouve la partie après rechargement et lance
+l’exercice avec Blanc. Les tests de règles couvrent le handicap, la passe, la
+première variante SGF et les fichiers incompatibles. Pendant une simulation,
+Chromium mesure les mêmes dimensions et la même position pour le canvas du goban.

@@ -51,6 +51,7 @@ function AnalysisTree({ game, base, path }: { game: GameRecord; base: number; pa
     const history = timelineOf(game).moves;
     const position: EnginePosition = {
       setupBlack: decodePoints(game.setupBlack),
+      komi: game.komi,
       moves: [...history.slice(0, base), ...path],
       next,
     };

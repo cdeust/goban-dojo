@@ -48,7 +48,7 @@ test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le ré
 }) => {
   const w = watch(page);
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Hon’inbō Shūsaku' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Atelier de go' })).toBeVisible();
   await expect(page.locator('.intro__count')).toContainText('469 parties');
   await page.getByRole('button', { name: 'Entrer' }).click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
@@ -546,7 +546,7 @@ test('le replay s’arrête avant les coups tactiques des deux joueurs', async (
     .toBeGreaterThan(152);
 });
 
-test('les simulations se succèdent sur le mini-goban puis la réponse ouvre sa propre scène', async ({
+test('les simulations se succèdent sur le même goban puis la réponse ouvre sa propre scène', async ({
   page,
 }) => {
   test.slow();
@@ -556,20 +556,37 @@ test('les simulations se succèdent sur le mini-goban puis la réponse ouvre sa 
   await page.getByRole('button', { name: 'Partie suivante' }).click();
   const slider = page.getByRole('slider', { name: 'Coup' });
   await slider.fill('85');
+  const goban = page.locator('canvas[data-rendered=true]');
+  const position = await goban.boundingBox();
+  await page.evaluate(() => {
+    const live = document.querySelector('[data-testid="live"]')!;
+    const observer = new MutationObserver(() => {
+      if (live.textContent.includes('Noir F7')) document.body.dataset.sawBlackMove = 'true';
+      if (live.textContent.includes('Blanc G7')) {
+        document.body.dataset.sawWhiteReply = 'true';
+        observer.disconnect();
+      }
+    });
+    observer.observe(live, { childList: true, characterData: true, subtree: true });
+  });
   await page.getByRole('button', { name: 'Lecture', exact: true }).click();
   const simulation = page.locator('.simulation');
   await expect(simulation.getByRole('heading')).toContainText('Noir · avant le coup 87', {
     timeout: 30_000,
   });
   await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
-  await expect(simulation.getByRole('img', { name: 'Mini-goban de la simulation' })).toBeVisible();
+  await expect(goban).toHaveCount(1);
+  expect(await goban.boundingBox()).toEqual(position);
+  await expect(simulation.locator('svg')).toHaveCount(0);
   const started = performance.now();
   const variant = simulation.locator('.simulation__view');
   await expect(variant).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
   console.log(
     'Première branche du coup 87 visible après ' + Math.round(performance.now() - started) + ' ms',
   );
-  await expect(simulation.locator('.simulation__last')).toBeVisible({ timeout: 20_000 });
+  await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', /[1-8]/, {
+    timeout: 20_000,
+  });
   await expect(slider).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
@@ -580,18 +597,52 @@ test('les simulations se succèdent sur le mini-goban puis la réponse ouvre sa 
     timeout: 90_000,
   });
   await expect(slider).toHaveValue('87');
-  await expect(page.getByTestId('live')).toContainText('Noir F7');
-  await page.evaluate(() => {
-    const live = document.querySelector('[data-testid="live"]')!;
-    const observer = new MutationObserver(() => {
-      if (!live.textContent.includes('Blanc G7')) return;
-      document.body.dataset.sawWhiteReply = 'true';
-      observer.disconnect();
-    });
-    observer.observe(live, { childList: true, characterData: true, subtree: true });
-  });
+  await expect(page.locator('body')).toHaveAttribute('data-saw-black-move', 'true');
   await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
   await expect(page.locator('body')).toHaveAttribute('data-saw-white-reply', 'true', {
     timeout: 15_000,
   });
+});
+
+test('import SGF local, bibliothèque persistante et entraînement avec le camp choisi', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  const file = page.getByLabel('Importer un fichier SGF');
+  await file.setInputFiles({
+    name: 'petit.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from('(;SZ[9];B[cc])'),
+  });
+  await expect(page.getByRole('alert')).toContainText('19 × 19');
+  await file.setInputFiles({
+    name: 'finale.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from(
+      '(;FF[4]GM[1]CA[UTF-8]SZ[19]PB[Alice]PW[Émile]KM[6.5];B[pd];W[dd];B[ab];W[bb];B[ba];W[dp];B[cb];W[pp];B[bc])',
+    ),
+  });
+
+  const card = page.getByRole('region', { name: 'Partie en cours' });
+  await expect(card).toContainText('Alice');
+  await expect(card).toContainText('Émile');
+  await expect(card).toContainText('6,5');
+  await expect(card).not.toContainText('Shūsaku');
+  await page.getByRole('button', { name: 'Deviner', exact: true }).click();
+  await page.getByLabel('Camp à deviner').selectOption('W');
+  await expect(page.getByRole('heading', { name: 'Jouer comme Émile' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Montrer le coup' })).toBeVisible({
+    timeout: 20_000,
+  });
+  await page.getByRole('button', { name: 'Montrer le coup' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Émile a joué' })).toContainText('D16');
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Mes parties' })).toBeVisible();
+  await page.getByRole('searchbox').fill('Émile');
+  await page.getByRole('button', { name: /Alice — Émile/ }).click();
+  await expect(card).toContainText('Émile');
 });

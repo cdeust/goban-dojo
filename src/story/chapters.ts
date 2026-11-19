@@ -291,6 +291,7 @@ export function openingOf(game: GameRecord): ShusakuOpening {
 
 /** Légendes tirées du kifu lui-même : l'ouverture de Shūsaku, quand elle est jouée. */
 function readMoment(game: GameRecord, move: number): Moment | undefined {
+  if (game.imported) return undefined;
   const opening = openingOf(game);
   if (!opening.fuseki) return undefined;
   const his = game.shusaku === 'B';
@@ -323,6 +324,7 @@ const yearOf = (g: GameRecord): number => Number(g.date.slice(0, 4));
 
 /** Chapitre auquel appartient une partie (d'après l'année de son début). */
 export function chapterIndexOf(game: GameRecord): number {
+  if (game.imported) return -1;
   const y = yearOf(game);
   return CHAPTERS.findIndex((c) => y >= c.from && y <= c.to);
 }

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
-import { PASS, pointToHuman } from '../domain/board.ts';
+import { PASS, opposite, pointToHuman } from '../domain/board.ts';
 import { loadEngine, useEngine } from '../engine/client.ts';
 import { GOOD_BELOW, type Judgement, type Verdict } from '../engine/judge.ts';
 import { useJudgements } from '../engine/useJudgements.ts';
@@ -21,11 +21,15 @@ function Guess() {
   const guess = useStore((s) => s.guess);
   const hint = useStore((s) => s.hint);
   const reveal = useStore((s) => s.reveal);
+  const color = useStore((s) => s.guessColor);
+  const chooseColor = useStore((s) => s.chooseGuessColor);
   if (!game) return null;
   const moves = timelineOf(game).moves;
   const next = moves[move];
   const finished = move >= moveCount(game);
-  const mine = next?.color === game.shusaku && next.point !== PASS;
+  const player = (side: 'B' | 'W') => prettyName(side === 'B' ? game.black : game.white);
+  const name = color === game.shusaku ? 'Shūsaku' : player(color);
+  const mine = next?.color === color && next.point !== PASS;
   const max = guess.asked * GUESS_POINTS[0];
 
   let feedback: string | null = null;
@@ -36,20 +40,32 @@ function Guess() {
         : `Exact (${guess.last.points} point${guess.last.points > 1 ? 's' : ''}).`;
   } else if (guess.last?.kind === 'miss') {
     const d = guess.last.distance;
-    feedback = `Ce n’est pas là : Shūsaku a joué à ${d} intersection${d > 1 ? 's' : ''} de votre coup. La zone se resserre.`;
+    feedback = `Ce n’est pas là : ${name} a joué à ${d} intersection${d > 1 ? 's' : ''} de votre coup. La zone se resserre.`;
   } else if (guess.last?.kind === 'revealed') {
-    feedback = `Shūsaku a joué ${pointToHuman(guess.last.point)}.`;
+    feedback = `${name} a joué ${pointToHuman(guess.last.point)}.`;
   }
 
   return (
     <>
-      <h2 className="mode__title">Jouer comme Shūsaku</h2>
+      <h2 className="mode__title" id="guess-title">
+        Jouer comme {name}
+      </h2>
+      <label className="study__filter">
+        Camp à deviner
+        <select
+          value={color}
+          onChange={(event) => chooseColor(event.currentTarget.value === 'B' ? 'B' : 'W')}
+        >
+          <option value="B">Noir · {player('B')}</option>
+          <option value="W">Blanc · {player('W')}</option>
+        </select>
+      </label>
       <p className="mode__lead">
         {finished
           ? 'La partie est terminée.'
           : mine
-            ? `À vous : où ${prettyName(game.shusakuName)} (${colorName(game.shusaku).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban.`
-            : `${prettyName(game.opponent)} répond…`}
+            ? `À vous : où ${name} (${colorName(color).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban.`
+            : `${player(opposite(color))} répond…`}
       </p>
       <p className="mode__feedback" role="status" aria-live="polite">
         {feedback}
@@ -240,7 +256,8 @@ export function ModePanel() {
         <motion.section
           key={mode}
           className="mode"
-          aria-label={mode === 'deviner' ? 'Jouer comme Shūsaku' : 'Explorer une autre suite'}
+          aria-labelledby={mode === 'deviner' ? 'guess-title' : undefined}
+          aria-label={mode === 'explorer' ? 'Explorer une autre suite' : undefined}
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -10 }}

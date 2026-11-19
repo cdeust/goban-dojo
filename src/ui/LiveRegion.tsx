@@ -13,13 +13,14 @@ export function LiveRegion() {
   const reading = useStore((s) => s.mode === 'lire');
   const readingPace = useStore((s) => s.readingPace);
   const entered = useStore((s) => s.entered);
+  const replay = useStore((s) => s.reflectionReplay);
   const variation = useStore((s) => s.variation);
   let text = '';
-  if (game && entered && !playing && (!reading || readingPace === null)) {
-    const head = `${prettyName(game.black)} contre ${prettyName(game.white)}, ${formatDate(game.date)}.`;
+  if (game && entered && !playing && replay !== 'auto' && (!reading || readingPace === null)) {
+    const head = `${prettyName(game.black)} contre ${prettyName(game.white)}${game.date ? ', ' + formatDate(game.date) : ''}.`;
     const explored = variation.at(-1);
     if (explored) {
-      text = `${reading ? 'Simulation' : 'Exploration'}, coup ${move + variation.length} : ${colorName(explored.color)} ${pointToHuman(explored.point)}.`;
+      text = `${reading || replay === 'manual' ? 'Simulation' : 'Exploration'}, coup ${move + variation.length} : ${colorName(explored.color)} ${pointToHuman(explored.point)}.`;
     } else if (move === 0) {
       text = `${head} Position initiale${game.handicap ? `, ${game.handicap} pierres de handicap` : ''}.`;
     } else {

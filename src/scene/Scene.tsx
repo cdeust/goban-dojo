@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
-import { useCurrentGame, useStore } from '../state/store.ts';
+import { timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 
 import { BoardInput } from './BoardInput.tsx';
 import { AnalysisMarks } from './AnalysisMarks.tsx';
@@ -38,6 +38,7 @@ function RenderProbe() {
 export function Scene() {
   const game = useCurrentGame();
   const entered = useStore((s) => s.entered);
+  const counts = game ? timelineOf(game).counts : null;
   return (
     <Canvas
       shadows="percentage"
@@ -50,7 +51,15 @@ export function Scene() {
     >
       <Room />
       <Goban />
-      <Bowls>{game && <Stones key={game.id} seed={game.id} />}</Bowls>
+      <Bowls>
+        {game && (
+          <Stones
+            key={game.id}
+            seed={game.id}
+            recorded={Math.max(counts?.B ?? 0, counts?.W ?? 0)}
+          />
+        )}
+      </Bowls>
       <Marks />
       <ReadingOwnership />
       <StudyMarks />

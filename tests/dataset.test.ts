@@ -167,7 +167,7 @@ describe('recoupement avec l’histoire', () => {
   });
 
   it('Shūsaku joue toujours Noir contre son maître Shūwa, en tête-à-tête', () => {
-    const vsShuwa = solo.filter((g) => /Shuwa/.test(g.opponent));
+    const vsShuwa = solo.filter((g) => /Shuwa/.test(g.opponent ?? ''));
     expect(vsShuwa.length).toBeGreaterThan(25);
     expect(vsShuwa.every((g) => g.shusaku === 'B')).toBe(true);
   });
