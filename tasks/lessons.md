@@ -8,3 +8,5 @@
   les réponses prévues par le joueur.
 - Quand une simulation doit partager le cadrage du goban, vérifier les
   coordonnées et dimensions du canvas avant et pendant l’animation.
+- Quand on remplace un plateau de simulation par le goban principal, vérifier
+  aussi les effets d’ambiance de la scène précédente.
