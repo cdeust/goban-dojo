@@ -379,3 +379,128 @@ test('étudier une capture sur mobile : filtrer, comparer et ouvrir une variante
   await expect(page.getByRole('heading', { name: 'Explorer une autre suite' })).toBeFocused();
   await expect(slider).toHaveValue('86');
 });
+
+test('réflexion : interruption documentée, variante, puis retour au kifu', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await openRedEarGame(page);
+  await page.getByRole('slider', { name: 'Coup' }).fill('89');
+  await page.getByRole('button', { name: 'Examiner cette position' }).click();
+  const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
+  await expect(reflection.getByRole('heading', { name: 'Temps de réflexion' })).toBeFocused();
+  await expect(reflection).toContainText('Interruption documentée');
+  await reflection.getByLabel('Moment de la partie').selectOption('126');
+  await expect(reflection).toContainText('Le temps pris pour le jouer est inconnu');
+  await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
+  await expect(reflection).toContainText('Noir K11');
+  await expect(page.locator('.impact__arcs')).toHaveCount(0);
+  await reflection.getByLabel('Suite à examiner').selectOption('1');
+  await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
+  await expect(reflection).toContainText('Variante pédagogique');
+  await expect(reflection).toContainText('Noir G4');
+  await reflection.getByRole('button', { name: 'Coup suivant' }).click();
+  await expect(reflection).toContainText('Blanc E18');
+  await reflection.getByRole('button', { name: 'Reculer' }).click();
+  await expect(reflection).toContainText('Noir G4');
+  await reflection.getByRole('button', { name: 'Revenir à la partie' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup' })).toHaveValue('126');
+});
+
+test('réflexion : le coup historique K11 déclenche les éclairs bleus', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await enter(page);
+  await openRedEarGame(page);
+  await page.getByRole('button', { name: 'Réflexion', exact: true }).click();
+  const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
+  await reflection.getByLabel('Moment de la partie').selectOption('126');
+  await page.locator('canvas[data-rendered="true"]').waitFor();
+  await page.evaluate(() => {
+    const observer = new MutationObserver(() => {
+      if (!document.querySelector('.impact--initiative .impact__arcs path')) return;
+      document.body.dataset.sawInitiative = 'true';
+      observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+  await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-saw-initiative', 'true');
+});
+
+test('KataGo : 144 suites, comparaison au kifu et retour depuis une réponse', async ({ page }) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await openRedEarGame(page);
+  await page.getByRole('slider', { name: 'Coup' }).fill('126');
+  await page.getByRole('button', { name: 'Analyser', exact: true }).click();
+  const analysis = page.getByRole('region', { name: 'Lire les variantes' });
+  await analysis.getByRole('button', { name: 'Lancer KataGo' }).click();
+  const started = performance.now();
+  const candidates = analysis.locator('.analysis__choice');
+  const kifu = candidates.filter({ hasText: 'Coup du kifu' });
+  await expect(kifu).toContainText('K11', { timeout: 60_000 });
+  const first = performance.now() - started;
+  await expect(analysis.getByRole('status')).toContainText('144 suites en deux coups', {
+    timeout: 60_000,
+  });
+  console.log(
+    `KataGo K11 : premières propositions ${Math.round(first)} ms, balayage ${Math.round(performance.now() - started)} ms. Kifu : ${await kifu.textContent()}`,
+  );
+  await expect(candidates).toHaveCount(12);
+  await expect(kifu).toContainText('Réponses');
+  await kifu.click();
+  await expect(analysis.getByRole('heading', { name: 'Blanc au trait' })).toBeVisible();
+  const recordedReply = candidates.filter({ hasText: 'Coup du kifu' });
+  await expect(recordedReply).toContainText('E18');
+  await recordedReply.click();
+  await expect(analysis.getByRole('heading', { name: 'Noir au trait' })).toBeVisible();
+  await analysis.getByRole('button', { name: 'Départ' }).click();
+  await expect(kifu).toContainText('K11');
+  await expect(analysis.locator('.analysis__path')).toHaveCount(0);
+});
+
+test('lecture longue : 60 coups après K11, bifurcation et retour à la branche', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await openRedEarGame(page);
+  await page.getByRole('slider', { name: 'Coup' }).fill('126');
+  await expect(page.getByRole('heading', { name: 'Avant le coup 127' })).toBeVisible();
+  await page.getByRole('button', { name: 'Examiner cette position' }).click();
+  await page.getByRole('button', { name: 'Lire 60 coups d’avance' }).click();
+  const reading = page.getByRole('region', { name: 'Lecture longue' });
+  await reading.getByRole('button', { name: 'Lancer KataGo' }).click();
+  const start = reading.getByRole('button', { name: /Lire après K11/ });
+  await expect(start).toBeVisible({ timeout: 60_000 });
+  const initial = performance.now();
+  await start.click();
+  const slider = reading.getByRole('slider', { name: 'Coup dans la simulation' });
+  await expect(slider).toBeVisible({ timeout: 60_000 });
+  const first = Math.round(performance.now() - initial);
+  await reading.getByRole('button', { name: 'Avancer' }).click();
+  await expect(reading.getByRole('heading', { name: 'Noir K11' })).toBeVisible();
+  const ownership = reading.getByRole('button', { name: 'Territoires estimés' });
+  await ownership.click();
+  await expect(ownership).toHaveAttribute('aria-pressed', 'true');
+  await expect(reading.getByRole('status')).toHaveText('60 coups disponibles', {
+    timeout: 120_000,
+  });
+  console.log(
+    `Lecture K11 : premier coup ${first} ms, 60 coups ${Math.round(performance.now() - initial)} ms`,
+  );
+  await slider.fill('60');
+  await expect(slider).toHaveAttribute('aria-valuetext', 'Coup 60 sur 60');
+  await slider.fill('0');
+  const alternate = reading.locator('.analysis__choice[aria-pressed="false"]').first();
+  const alternatePoint = await alternate.locator('strong').innerText();
+  await alternate.click();
+  await expect(reading.locator('.analysis__choice[aria-pressed="true"] strong')).toHaveText(
+    alternatePoint,
+    { timeout: 60_000 },
+  );
+  await reading.getByRole('button', { name: 'Comparer avec la branche précédente' }).click();
+  await expect(reading.locator('.analysis__choice[aria-pressed="true"] strong')).toHaveText('K11');
+  await expect(slider).toHaveAttribute('max', '60');
+});

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { PASS } from '../domain/board.ts';
 import { chapterIndexOf } from '../story/chapters.ts';
 import { momentFor } from '../story/chapters.ts';
+import { reflectionsOf } from '../story/reflections.ts';
 import { moveCount, timelineOf, useStore } from '../state/store.ts';
 
 /** Pause (ms) sur un instant remarquable, puis en fin de partie avant d'enchaîner. */
@@ -38,7 +39,9 @@ export function usePlayback(): void {
 
     let delay = 1000 / speed;
     if (move === 0) delay = Math.max(delay, 900);
-    if (momentFor(game, move)) delay = Math.max(delay, MOMENT_PAUSE);
+    if (momentFor(game, move) || reflectionsOf(game).some(({ after }) => after === move)) {
+      delay = Math.max(delay, MOMENT_PAUSE);
+    }
     // Une passe ne pose rien : on laisse le temps de lire l'annonce.
     const last = move > 0 ? timelineOf(game).moves[move - 1] : undefined;
     if (last?.point === PASS) delay = Math.max(delay, 1200);

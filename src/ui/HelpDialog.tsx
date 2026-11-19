@@ -38,12 +38,16 @@ export function HelpDialog() {
         </li>
         <li>
           <i className="legend__dot legend__dot--trap" aria-hidden="true" /> <b>Piège</b> — une cage
-          tourne autour des pierres prises dans un shicho qui fonctionne : elles ne peuvent plus
-          fuir.
+          ambrée entoure les pierres prises dans un shicho, une poursuite en escalier qui mène à
+          leur capture.
         </li>
         <li>
           <i className="legend__dot legend__dot--connection" aria-hidden="true" /> <b>Connexion</b>{' '}
           — un halo bleu sous le coup qui vient de relier deux groupes, et sous les pierres reliées.
+        </li>
+        <li>
+          <b>Éclairs</b> — ils soulignent le coup qui lance une menace ou prend l’initiative. Lors
+          du coup de l’oreille rouge, le point K11 reste marqué en bleu.
         </li>
       </ul>
 

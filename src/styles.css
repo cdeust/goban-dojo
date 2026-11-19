@@ -280,6 +280,8 @@ button:disabled {
 .topbar__nav {
   display: flex;
   gap: 0.4rem;
+  flex-wrap: wrap;
+  min-inline-size: 0;
 }
 
 .chip {
@@ -433,6 +435,11 @@ button:disabled {
   font-size: 1.15rem;
   color: var(--vermilion);
   margin-bottom: 0.2rem;
+}
+
+.moment__reflection {
+  min-block-size: 2.75rem;
+  margin-top: 0.55rem;
 }
 
 /* ───────────────────────────── dock ───────────────────────────── */
@@ -1384,7 +1391,8 @@ progress {
 }
 
 /* Instant du récit : le reste de la scène s'assombrit autour de la pierre. */
-.impact--moment {
+.impact--moment,
+.impact--initiative {
   background: radial-gradient(circle at 50% 45%, transparent 12%, rgb(11 9 8 / 0.5) 70%);
 }
 
@@ -1396,7 +1404,8 @@ progress {
   overflow: visible;
 }
 
-.impact--moment .impact__lines {
+.impact--moment .impact__lines,
+.impact--initiative .impact__lines {
   width: min(120vmin, 80rem);
   height: min(120vmin, 80rem);
 }
@@ -1404,10 +1413,6 @@ progress {
 .impact__lines line {
   stroke: var(--paper);
   stroke-linecap: round;
-}
-
-.impact--menace .impact__lines line {
-  stroke: #f3c9b8;
 }
 
 .card__age {
@@ -1421,9 +1426,22 @@ progress {
   stroke: #9cc3ee;
 }
 
-.impact--piege .impact__lines line {
-  stroke: #f3e7c8;
-  stroke-width: 2.2;
+.impact__arcs {
+  fill: none;
+  stroke: #c9edff;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 0.22rem #329bff) drop-shadow(0 0 0.55rem #329bff);
+}
+
+.impact--initiative .impact__arcs {
+  stroke-width: 2;
+}
+
+.impact--piege .impact__arcs {
+  stroke: #ffe6bd;
+  filter: drop-shadow(0 0 0.25rem #ff934b);
 }
 
 .legend {
@@ -1450,7 +1468,7 @@ progress {
 }
 
 .legend__dot--trap {
-  border: 2px dashed var(--paper);
+  border: 2px dashed #ff934b;
 }
 
 /* En étude, le texte et le goban ont chacun leur place. */
@@ -1596,15 +1614,46 @@ progress {
   min-height: 2.75rem;
 }
 
-[data-study='true'] .topbar__nav {
-  flex-wrap: wrap;
-  min-inline-size: 0;
-}
-
 @media (any-pointer: coarse) {
   [data-study='true'] .topbar__nav .chip {
     min-block-size: 2.75rem;
   }
+}
+
+.reflection {
+  border-inline-start-color: #669dca;
+  background: linear-gradient(150deg, #1d2b36, var(--ink-2) 62%);
+}
+
+.reflection h2 {
+  color: #d4efff;
+}
+
+.reflection__context {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.reflection .reflection__question {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--paper);
+}
+
+.reflection__position {
+  border-inline-start: 2px solid #669dca;
+}
+
+.reflection__source {
+  font-size: 0.82rem;
+}
+
+.reflection__source a {
+  color: #d4efff;
+}
+
+[data-reflection='true'] .stage {
+  grid-template-rows: minmax(0, 1fr) auto;
 }
 
 @media (width < 60rem) {
@@ -1617,6 +1666,10 @@ progress {
   [data-study='true'] .stage {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto min(46dvh, 26rem) auto auto auto;
+  }
+
+  [data-reflection='true'] .stage {
+    grid-template-rows: auto min(46dvh, 26rem) auto auto;
   }
 
   [data-study='true'] .stage__canvas {
@@ -1658,4 +1711,157 @@ progress {
   .app[data-study='true'][data-panel='open'] .panel {
     height: min(65dvh, 34rem);
   }
+}
+
+.analysis__tree,
+.analysis__progress {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.analysis__progress progress {
+  accent-color: #80caff;
+}
+
+.analysis__path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.analysis__path [aria-current] {
+  border-color: #80caff;
+}
+
+.analysis__coverage:empty {
+  display: none;
+}
+
+.analysis__choices {
+  display: grid;
+  gap: 0.3rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.analysis__choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.1rem 0.6rem;
+  min-block-size: 2.75rem;
+  inline-size: 100%;
+  text-align: start;
+  background: #142430;
+  border: 1px solid #3d627c;
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.analysis__choice:hover,
+.analysis__choice:focus-visible {
+  background: #243d4f;
+}
+
+.analysis__choice[data-recorded='true'] {
+  border-color: var(--kaya);
+}
+
+.analysis__choice small {
+  color: var(--kaya);
+}
+
+.analysis__rank,
+.analysis__prior {
+  color: #a9deff;
+  font-variant-numeric: tabular-nums;
+}
+
+.analysis__result {
+  grid-column: 2 / -1;
+  color: var(--paper-dim);
+  font-size: 0.76rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .analysis__choice {
+    animation: analysis-appear 0.22s ease-out both;
+  }
+
+  @keyframes analysis-appear {
+    from {
+      opacity: 0;
+      transform: translateY(0.25rem);
+    }
+  }
+}
+
+.reading__controls,
+.reading__controls > label:first-child,
+.reading__fork {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.reading__controls input[type='range'] {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+}
+
+.reading__buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.reading__buttons .chip {
+  padding-inline: 0.35rem;
+}
+
+.reading__plot {
+  margin: 0;
+  padding: 0.6rem;
+  border: 1px solid #3d627c;
+  border-radius: 0.45rem;
+  background: #142430;
+}
+
+.reading__plot figcaption {
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.reading__plot svg {
+  display: block;
+  inline-size: 100%;
+}
+
+.reading__plot polyline {
+  fill: none;
+  stroke: #80caff;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.reading__plot circle {
+  fill: var(--kaya);
+}
+
+.reading__zero {
+  stroke: #708294;
+  stroke-dasharray: 4 4;
+}
+
+.reading__fork .analysis__choice {
+  grid-template-columns: 1fr auto;
+}
+
+.reading__fork .analysis__choice[aria-pressed='true'] {
+  border-color: var(--kaya);
+}
+
+.reading__fork .analysis__choice small {
+  grid-column: 1 / -1;
 }

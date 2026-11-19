@@ -15,6 +15,7 @@ import {
 } from '../domain/game.ts';
 import { trappedStones } from '../engine/features.ts';
 import { momentFor } from '../story/chapters.ts';
+import { reflectionMoves, reflectionsOf } from '../story/reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
 export type PanelName = 'recit' | 'parties' | null;
@@ -24,7 +25,14 @@ export type PanelName = 'recit' | 'parties' | null;
  * explorer : on pose librement d'autres coups à partir de la position courante ;
  * etudier  : on compare la position avant et après un coup tactique du kifu.
  */
-export type Mode = 'lecture' | 'deviner' | 'explorer' | 'etudier';
+export type Mode =
+  'lecture' | 'deviner' | 'explorer' | 'etudier' | 'reflechir' | 'analyser' | 'lire';
+
+export interface AnalysisMark {
+  point: number;
+  rank: number;
+  recorded: boolean;
+}
 
 /** Zone du goban (bornes incluses) donnée en indice dans le mode « deviner ». */
 export interface Zone {
@@ -39,7 +47,7 @@ export interface Zone {
  * « moment » (instant du récit), « piege » (il enferme des pierres dans un shicho qui fonctionne),
  * « menace » (il met en atari ou capture), « connexion » (il relie deux groupes), « coup ».
  */
-export type ImpactKind = 'coup' | 'connexion' | 'menace' | 'piege' | 'moment';
+export type ImpactKind = 'coup' | 'connexion' | 'menace' | 'piege' | 'moment' | 'initiative';
 
 export interface Impact {
   /** Numéro d'ordre : deux impacts au même point restent distincts. */
@@ -140,6 +148,9 @@ interface State {
   guess: GuessState;
   /** Coups ajoutés par l'utilisateur après le coup `move` de la partie (mode « explorer »). */
   variation: Move[];
+  analysisMarks: AnalysisMark[];
+  readingPace: number | null;
+  readingOwnership: Float32Array | null;
   /** Message bref à l'utilisateur (coup refusé, etc.). */
   notice: string | null;
 
@@ -160,6 +171,11 @@ interface State {
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
   showStudyMove: (number: number | null, after?: boolean) => void;
+  showReflection: (after: number) => void;
+  playReflection: (line: number, step: number) => void;
+  markAnalysis: (marks: AnalysisMark[]) => void;
+  trimAnalysis: (length: number) => void;
+  showReading: (moves: Move[], pace: number | null, ownership: Float32Array | null) => void;
   /** Clic sur une intersection du goban ; l'effet dépend du mode. */
   clickPoint: (point: number) => void;
   /** Mode « deviner » : demander un indice (compte comme un essai manqué). */
@@ -237,6 +253,15 @@ export function timelineOf(game: GameRecord): Timeline {
 
 export const moveCount = (game: GameRecord): number => game.moves.length / 3;
 
+export function showsEarRedMove(game: GameRecord, base: number, variation: Move[]): boolean {
+  if (game.id !== 's126' || base + variation.length !== 127) return false;
+  const recorded = timelineOf(game).moves;
+  return variation.every(({ point, color }, i) => {
+    const move = recorded[base + i];
+    return move?.point === point && move.color === color;
+  });
+}
+
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
 
 const isCoord = (s: string, i: number): boolean => {
@@ -303,6 +328,9 @@ export const useStore = create<State>((set, get) => ({
   studyMove: null,
   guess: emptyGuess(),
   variation: [],
+  analysisMarks: [],
+  readingPace: null,
+  readingOwnership: null,
   notice: null,
 
   load: async () => {
@@ -326,14 +354,20 @@ export const useStore = create<State>((set, get) => ({
     const i = clamp(index, 0, games.length - 1);
     const game = games[i];
     if (!game) return;
-    const mode = get().mode;
+    const previousMode = get().mode;
+    const mode =
+      previousMode === 'reflechir' || previousMode === 'analyser' || previousMode === 'lire'
+        ? 'lecture'
+        : previousMode;
     set({
       gameIndex: i,
+      mode,
       move: clamp(opts?.move ?? 0, 0, moveCount(game)),
       // On ne lance pas la lecture automatique par-dessus un mode interactif.
       playing: mode === 'lecture' ? (opts?.play ?? false) : false,
       studyMove: null,
       variation: [],
+      analysisMarks: [],
       guess: emptyGuess(),
       notice: null,
     });
@@ -383,16 +417,20 @@ export const useStore = create<State>((set, get) => ({
 
   notifyImpact: (point) => {
     const s = get();
+    if (s.mode === 'lire' && s.readingPace !== null && s.readingPace > 3) return;
     const game = s.dataset?.games[s.gameIndex];
     const d = displayOf(s);
     if (!game || !d) return;
     const marks = marksOf(s);
+    if (point !== marks.last) return;
     // Seul compte ce que CE coup accomplit : un piège ou un atari déjà en place ailleurs sur le
     // goban ne donne aucun relief au coup suivant.
     const caught = new Set(marks.trapped);
     const traps = marks.threat.atari.some((p) => caught.has(p));
-    const kind: ImpactKind =
-      s.variation.length === 0 && momentFor(game, s.move)
+    const initiative = showsEarRedMove(game, s.move, s.variation);
+    const kind: ImpactKind = initiative
+      ? 'initiative'
+      : s.variation.length === 0 && momentFor(game, s.move)
         ? 'moment'
         : traps
           ? 'piege'
@@ -407,16 +445,75 @@ export const useStore = create<State>((set, get) => ({
   setMode: (mode) =>
     set((s) => ({
       mode,
-      ...(mode === 'etudier' ? { panel: null, view: 'dessus' } : {}),
+      ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
+        ? { panel: null, view: 'dessus' }
+        : {}),
       studyMove: null,
       playing: false,
-      variation: [],
+      variation: mode === 'lire' && s.mode === 'analyser' ? s.variation : [],
+      analysisMarks: [],
+      readingPace: null,
+      readingOwnership: null,
+      impact: null,
       notice: null,
       guess:
         mode === 'deviner'
           ? emptyGuess()
           : { ...s.guess, tries: 0, wrong: [], zone: null, last: null },
     })),
+
+  showReflection: (after) => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (!game || !reflectionsOf(game).some((scene) => scene.after === after)) return;
+    set({
+      mode: 'reflechir',
+      move: after,
+      playing: false,
+      view: 'dessus',
+      panel: null,
+      variation: [],
+      studyMove: null,
+      impact: null,
+      notice: null,
+    });
+  },
+
+  playReflection: (line, step) => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (s.mode !== 'reflechir' || !game) return;
+    const scene = reflectionsOf(game).find((scene) => scene.after === s.move);
+    const choice = scene?.lines[line];
+    if (!choice) return;
+    set({ variation: reflectionMoves(game, s.move, choice).slice(0, step), impact: null });
+  },
+
+  markAnalysis: (marks) => {
+    if (get().mode === 'analyser') set({ analysisMarks: marks });
+  },
+
+  trimAnalysis: (length) => {
+    const s = get();
+    if (s.mode !== 'analyser') return;
+    set({ variation: s.variation.slice(0, length), analysisMarks: [], notice: null, impact: null });
+  },
+
+  showReading: (moves, pace, ownership) => {
+    const s = get();
+    if (s.mode !== 'lire') return;
+    const same =
+      moves.length === s.variation.length &&
+      moves.every((move, i) => {
+        const shown = s.variation[i];
+        return shown?.point === move.point && shown.color === move.color;
+      });
+    if (!same)
+      set({ variation: moves, readingPace: pace, readingOwnership: ownership, impact: null });
+    else if (s.readingPace !== pace || s.readingOwnership !== ownership) {
+      set({ readingPace: pace, readingOwnership: ownership });
+    }
+  },
 
   showStudyMove: (number, after = false) => {
     const s = get();
@@ -433,9 +530,22 @@ export const useStore = create<State>((set, get) => ({
   clickPoint: (point) => {
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
-    if (!game || point < 0 || point >= SIZE * SIZE) return;
+    const analysis = s.mode === 'analyser';
+    if (
+      !game ||
+      !Number.isInteger(point) ||
+      ((point < 0 || point >= SIZE * SIZE) && !(analysis && point === PASS))
+    )
+      return;
 
-    if (s.mode === 'explorer') {
+    if (s.mode === 'explorer' || analysis) {
+      if (analysis) {
+        const last = [...timelineOf(game).moves.slice(0, s.move).slice(-2), ...s.variation];
+        if (last.at(-1)?.point === PASS && last.at(-2)?.point === PASS) {
+          set({ notice: 'Deux passes terminent cette branche. Vous pouvez revenir en arrière.' });
+          return;
+        }
+      }
       if (s.variation.length >= MAX_VARIATION) {
         set({ notice: `Une exploration est limitée à ${MAX_VARIATION} coups.` });
         return;
@@ -448,7 +558,7 @@ export const useStore = create<State>((set, get) => ({
         set({ notice: ILLEGAL_LABEL[res.illegal] });
         return;
       }
-      set({ variation: [...s.variation, { color, point }], notice: null });
+      set({ variation: [...s.variation, { color, point }], analysisMarks: [], notice: null });
       return;
     }
 

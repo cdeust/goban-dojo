@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { PASS } from '../src/domain/board.ts';
 import { buildTimeline, decodeMoves, decodePoints, type Dataset } from '../src/domain/game.ts';
 import { CHAPTERS, MOMENTS, chapterIndexOf, gamesOfChapter } from '../src/story/chapters.ts';
+import { reflectionMoves, reflectionsOf } from '../src/story/reflections.ts';
 import { ageAt, ageLabel, dateToTime, formatDate } from '../src/story/format.ts';
 
 const root = join(import.meta.dirname, '..');
@@ -216,4 +217,27 @@ describe('récit', () => {
       expect(m.move).toBeLessThanOrEqual((g?.moves.length ?? 0) / 3);
     }
   });
+});
+
+it('les scènes de réflexion suivent le bon kifu et chaque coup proposé est légal', () => {
+  const game = byId.get('s126')!;
+  const setup = decodePoints(game.setupBlack);
+  const historical = decodeMoves(game.moves);
+  const scenes = reflectionsOf(game);
+  expect(scenes.filter((scene) => scene.sessionBreak).map((scene) => scene.after)).toEqual([
+    89, 141,
+  ]);
+  expect(scenes.map((scene) => scene.after)).toEqual([89, 126, 141]);
+  for (const scene of scenes) {
+    for (const line of scene.lines) {
+      const moves = reflectionMoves(game, scene.after, line);
+      expect(moves).toHaveLength(line.notes.length);
+      expect(moves.map((move) => move.color)).toEqual(
+        historical.slice(scene.after, scene.after + moves.length).map((move) => move.color),
+      );
+      const prefix = historical.slice(0, scene.after);
+      const timeline = buildTimeline(setup, [...prefix, ...moves]);
+      expect(timeline.illegal).toEqual([]);
+    }
+  }
 });

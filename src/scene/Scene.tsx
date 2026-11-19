@@ -3,10 +3,12 @@ import { useRef } from 'react';
 import { useCurrentGame, useStore } from '../state/store.ts';
 
 import { BoardInput } from './BoardInput.tsx';
+import { AnalysisMarks } from './AnalysisMarks.tsx';
 import { Bowls } from './Bowls.tsx';
 import { CameraRig } from './CameraRig.tsx';
 import { Goban } from './Goban.tsx';
 import { Marks } from './Marks.tsx';
+import { ReadingOwnership } from './ReadingOwnership.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 import { StudyMarks } from './StudyMarks.tsx';
@@ -50,8 +52,10 @@ export function Scene() {
       <Goban />
       <Bowls>{game && <Stones key={game.id} seed={game.id} />}</Bowls>
       <Marks />
+      <ReadingOwnership />
       <StudyMarks />
       <BoardInput />
+      <AnalysisMarks />
       <CameraRig />
       <RenderProbe />
     </Canvas>

@@ -14,6 +14,7 @@ export interface RawOutputs {
   value: ArrayLike<number>;
   /** [0] score moyen / 20, [2] avance (« lead ») / 20, du point de vue du joueur au trait. */
   scoreValue: ArrayLike<number>;
+  ownership?: ArrayLike<number>;
 }
 
 export interface Evaluation {
@@ -23,6 +24,8 @@ export interface Evaluation {
   blackWinrate: number;
   /** Avance de Noir estimée, en points (négative si Blanc mène). */
   blackLead: number;
+  /** Estimation de propriété de chaque intersection, de −1 (Blanc) à +1 (Noir). */
+  blackOwnership?: Float32Array;
 }
 
 export function decodeOutputs(
@@ -60,6 +63,9 @@ export function decodeOutputs(
     policy,
     blackWinrate: 0.5 * (1 + sign * (win - loss)),
     blackLead: sign * lead,
+    ...(raw.ownership && {
+      blackOwnership: Float32Array.from(raw.ownership, (value) => sign * Math.tanh(value * scale)),
+    }),
   };
 }
 

@@ -1,8 +1,12 @@
-import { useStore } from '../state/store.ts';
+import { useCurrentGame, useStore } from '../state/store.ts';
+import { reflectionsOf } from '../story/reflections.ts';
 
 export function TopBar() {
   const panel = useStore((s) => s.panel);
   const setPanel = useStore((s) => s.setPanel);
+  const game = useCurrentGame();
+  const reflecting = useStore((s) => s.mode === 'reflechir');
+  const scenes = game ? reflectionsOf(game) : [];
   return (
     <header className="topbar">
       <p className="brand">
@@ -30,6 +34,20 @@ export function TopBar() {
         >
           Parties
         </button>
+        {!reflecting && scenes.length > 0 && (
+          <button
+            type="button"
+            className="chip chip--accent"
+            onClick={() => {
+              const s = useStore.getState();
+              const scene = scenes.find(({ after }) => after === s.move || after === s.move - 1);
+              const after = scene?.after ?? scenes[0]?.after;
+              if (after !== undefined) s.showReflection(after);
+            }}
+          >
+            Réflexion
+          </button>
+        )}
         <button type="button" className="chip" {...HELP_INVOKER}>
           Aide &amp; sources
         </button>

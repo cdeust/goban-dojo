@@ -148,6 +148,17 @@ export function StudyPanel() {
             >
               Essayer une variante
             </button>
+            <button
+              type="button"
+              className="chip"
+              onClick={() => {
+                const s = useStore.getState();
+                s.setMove(entry.number - 1);
+                s.setMode('lire');
+              }}
+            >
+              Lire 60 coups d’avance
+            </button>
           </div>
           <nav className="study__nav" aria-label="Positions à étudier">
             <button
