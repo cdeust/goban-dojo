@@ -416,11 +416,12 @@ test('réflexion : le coup historique K11 déclenche les éclairs bleus', async 
   await page.locator('canvas[data-rendered="true"]').waitFor();
   await page.evaluate(() => {
     const observer = new MutationObserver(() => {
-      if (!document.querySelector('.impact--initiative .impact__arcs path')) return;
+      const path = document.querySelector('.impact--initiative .impact__arcs path');
+      if (path?.getAttribute('d')?.match(/M/g)?.length !== 4) return;
       document.body.dataset.sawInitiative = 'true';
       observer.disconnect();
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
   });
   await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
   await expect(page.locator('body')).toHaveAttribute('data-saw-initiative', 'true');
@@ -508,6 +509,7 @@ test('lecture longue : 60 coups après K11, bifurcation et retour à la branche'
 test('le replay s’arrête avant les coups tactiques des deux joueurs', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enter(page);
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
   const slider = page.getByRole('slider', { name: 'Coup' });
   const stage = page.locator('.stage');
   for (const [start, anchor, coup, color] of [
@@ -517,7 +519,8 @@ test('le replay s’arrête avant les coups tactiques des deux joueurs', async (
     await slider.fill(start!);
     await page.getByRole('button', { name: 'Lecture', exact: true }).click();
     const cue = stage.getByRole('heading', { name: 'Avant le coup ' + coup });
-    await expect(cue).toBeVisible();
+    await expect(cue).toBeVisible({ timeout: 15_000 });
+    await expect(stage.locator('.simulation')).toHaveCount(0);
     await expect(slider).toHaveValue(anchor!);
     await expect(page.getByRole('button', { name: 'Lecture', exact: true })).toBeVisible();
     await stage.getByRole('button', { name: 'Examiner cette position' }).click();
@@ -532,8 +535,63 @@ test('le replay s’arrête avant les coups tactiques des deux joueurs', async (
     await stage.getByRole('button', { name: 'Révéler le coup' }).click();
     await expect(slider).toHaveValue(coup!);
   }
-  await page.getByRole('button', { name: 'Coups forts' }).click();
-  await slider.fill('78');
+  const tacticalPauses = page.getByRole('button', { name: 'Coups forts' });
+  await tacticalPauses.click();
+  await expect(tacticalPauses).toHaveAttribute('aria-pressed', 'false');
+  await slider.fill('151');
   await page.getByRole('button', { name: 'Lecture', exact: true }).click();
-  await expect.poll(async () => Number(await slider.inputValue())).toBeGreaterThan(79);
+  // Le rendu logiciel peut monopoliser le fil principal au changement de position.
+  await expect
+    .poll(async () => Number(await slider.inputValue()), { timeout: 90_000 })
+    .toBeGreaterThan(152);
+});
+
+test('les simulations se succèdent sur le mini-goban puis la réponse ouvre sa propre scène', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await enter(page);
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
+  await page.getByRole('button', { name: 'Partie suivante' }).click();
+  const slider = page.getByRole('slider', { name: 'Coup' });
+  await slider.fill('85');
+  await page.getByRole('button', { name: 'Lecture', exact: true }).click();
+  const simulation = page.locator('.simulation');
+  await expect(simulation.getByRole('heading')).toContainText('Noir · avant le coup 87', {
+    timeout: 30_000,
+  });
+  await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
+  await expect(simulation.getByRole('img', { name: 'Mini-goban de la simulation' })).toBeVisible();
+  const started = performance.now();
+  const variant = simulation.locator('.simulation__view');
+  await expect(variant).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
+  console.log(
+    'Première branche du coup 87 visible après ' + Math.round(performance.now() - started) + ' ms',
+  );
+  await expect(simulation.locator('.simulation__last')).toBeVisible({ timeout: 20_000 });
+  await expect(slider).toHaveValue('86');
+  await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
+  await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
+  await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
+  await expect(variant).toHaveAttribute('data-branch', '2', { timeout: 60_000 });
+  await expect(variant).toHaveAttribute('data-branch', '3', { timeout: 60_000 });
+  await expect(simulation.getByRole('heading')).toContainText('Blanc · avant le coup 88', {
+    timeout: 90_000,
+  });
+  await expect(slider).toHaveValue('87');
+  await expect(page.getByTestId('live')).toContainText('Noir F7');
+  await page.evaluate(() => {
+    const live = document.querySelector('[data-testid="live"]')!;
+    const observer = new MutationObserver(() => {
+      if (!live.textContent.includes('Blanc G7')) return;
+      document.body.dataset.sawWhiteReply = 'true';
+      observer.disconnect();
+    });
+    observer.observe(live, { childList: true, characterData: true, subtree: true });
+  });
+  await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-saw-white-reply', 'true', {
+    timeout: 15_000,
+  });
 });

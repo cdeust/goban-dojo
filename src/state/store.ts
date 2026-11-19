@@ -19,6 +19,7 @@ import { reflectionMoves } from '../story/reflections.ts';
 import { reflectionLines, reflectionsOf } from './reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
+type ReflectionReplay = 'auto' | 'manual' | 'return';
 export type PanelName = 'recit' | 'parties' | null;
 /**
  * lecture  : la partie se déroule seule ;
@@ -133,6 +134,7 @@ interface State {
   /** Enchaîner automatiquement sur la partie suivante. */
   continuous: boolean;
   tacticalPauses: boolean;
+  reflectionReplay: ReflectionReplay | null;
   view: ViewName;
   showNumbers: boolean;
   sound: boolean;
@@ -161,7 +163,9 @@ interface State {
   enter: () => void;
   setSceneReady: () => void;
   selectGame: (index: number, opts?: { play?: boolean; move?: number }) => void;
-  setMove: (move: number, pause?: boolean) => void;
+  setMove: (move: number, pause?: boolean, replay?: ReflectionReplay) => void;
+  playReflectionReplay: () => void;
+  revealReflectionMove: () => void;
   step: (delta: number) => void;
   togglePlay: () => void;
   setPlaying: (playing: boolean) => void;
@@ -323,6 +327,7 @@ export const useStore = create<State>((set, get) => ({
   sound: true,
   effects: true,
   tacticalPauses: true,
+  reflectionReplay: null,
   impact: null,
   entered: false,
   sceneReady: false,
@@ -366,6 +371,7 @@ export const useStore = create<State>((set, get) => ({
     set({
       gameIndex: i,
       mode,
+      reflectionReplay: null,
       move: clamp(opts?.move ?? 0, 0, moveCount(game)),
       // On ne lance pas la lecture automatique par-dessus un mode interactif.
       playing: mode === 'lecture' ? (opts?.play ?? false) : false,
@@ -377,7 +383,7 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
-  setMove: (move, pause = false) => {
+  setMove: (move, pause = false, replay) => {
     const game = get().dataset?.games[get().gameIndex];
     if (!game) return;
     const g = get().guess;
@@ -385,13 +391,22 @@ export const useStore = create<State>((set, get) => ({
     const target = get().studyMove;
     set({
       move: next,
-      ...(pause ? { playing: false, impact: null } : {}),
+      reflectionReplay: replay ?? null,
+      ...(pause || replay ? { playing: false, impact: null } : {}),
       studyMove: target !== null && (next === target || next === target - 1) ? target : null,
       // Changer de position abandonne l'exploration et l'essai en cours, pas le bilan.
       variation: [],
       guess: { ...g, tries: 0, wrong: [], zone: null },
       notice: null,
     });
+  },
+
+  playReflectionReplay: () => set({ reflectionReplay: 'manual', playing: false, impact: null }),
+
+  revealReflectionMove: () => {
+    const { move, reflectionReplay, setMove } = get();
+    if (reflectionReplay === 'auto') setMove(move + 1, true, 'return');
+    else if (reflectionReplay === 'manual') setMove(move + 1);
   },
 
   step: (delta) => {
@@ -409,7 +424,14 @@ export const useStore = create<State>((set, get) => ({
     // La lecture automatique ramène au mode « lecture ».
     set(
       playing
-        ? { playing, mode: 'lecture', studyMove: null, variation: [], notice: null }
+        ? {
+            playing,
+            mode: 'lecture',
+            reflectionReplay: null,
+            studyMove: null,
+            variation: [],
+            notice: null,
+          }
         : { playing },
     );
   },
@@ -460,6 +482,7 @@ export const useStore = create<State>((set, get) => ({
   setMode: (mode) =>
     set((s) => ({
       mode,
+      reflectionReplay: null,
       ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
         ? { panel: null, view: 'dessus' }
         : {}),
@@ -483,6 +506,7 @@ export const useStore = create<State>((set, get) => ({
     if (!game || !reflectionsOf(game).some((scene) => scene.after === after)) return;
     set({
       mode: 'reflechir',
+      reflectionReplay: null,
       move: after,
       playing: false,
       view: 'dessus',

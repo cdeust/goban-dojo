@@ -13,6 +13,7 @@ import { LiveRegion } from './ui/LiveRegion.tsx';
 import { ModePanel } from './ui/ModePanel.tsx';
 import { MomentCaption } from './ui/MomentCaption.tsx';
 import { Panel } from './ui/Panel.tsx';
+import { ReflectionReplay } from './ui/ReflectionReplay.tsx';
 import { ReflectionPanel } from './ui/ReflectionPanel.tsx';
 import { ReadingPanel } from './ui/ReadingPanel.tsx';
 import { StudyPanel } from './ui/StudyPanel.tsx';
@@ -29,6 +30,8 @@ export function App() {
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
   const effects = useStore((s) => s.effects);
+  const replay = useStore((s) => s.reflectionReplay);
+  const showReplay = replay === 'auto' || replay === 'manual';
   const studying = useStore((s) => s.mode === 'etudier');
   const reflecting = useStore((s) => s.mode === 'reflechir');
   const analysing = useStore((s) => s.mode === 'analyser');
@@ -53,7 +56,7 @@ export function App() {
         data-reflection={hasReadingPanel}
       >
         {entered && <Panel />}
-        <main className="stage" data-effects={effects}>
+        <main className="stage" data-effects={effects} data-simulation={showReplay}>
           <div className="stage__canvas">
             <Suspense fallback={null}>{status === 'ready' && <Scene />}</Suspense>
           </div>
@@ -73,6 +76,7 @@ export function App() {
               <GameCard />
               <ImpactLines />
               <MomentCaption />
+              <ReflectionReplay />
               {reading ? (
                 <ReadingPanel />
               ) : analysing ? (

@@ -4,7 +4,7 @@ import { decodePoints } from '../domain/game.ts';
 import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { readLine, READING_DEPTHS, type ReadingStep } from '../engine/reading.ts';
 import { nextColor, SPEEDS, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
-import { colorName } from '../story/format.ts';
+import { colorName, formatLead } from '../story/format.ts';
 import { reflectionsOf } from '../state/reflections.ts';
 
 function moveLabel(step: ReadingStep) {
@@ -17,13 +17,6 @@ function tacticalLabel(step: ReadingStep) {
   if (step.threat.atari.length > 0) return 'Mise en atari';
   if (step.threat.connects.length > 0) return 'Connexion';
   return null;
-}
-
-function leadLabel(value: number) {
-  const points = Math.round(Math.abs(value));
-  return points === 0
-    ? 'Équilibre estimé'
-    : `${value > 0 ? 'Noir' : 'Blanc'} +${points} pts estimés`;
 }
 
 function LeadPlot({ steps, cursor }: { steps: ReadingStep[]; cursor: number }) {
@@ -295,7 +288,7 @@ export function ReadingPanel() {
               )}
               <div className="study__position">
                 <h3>{current ? moveLabel(current) : 'Position de départ'}</h3>
-                {estimate !== undefined && <p>{leadLabel(estimate)}</p>}
+                {estimate !== undefined && <p>{formatLead(estimate)}</p>}
                 {current && tacticalLabel(current) && <p>{tacticalLabel(current)}</p>}
                 {current && current.threat.captured > 0 && (
                   <p>Pierres capturées · {current.threat.captured}</p>
@@ -320,7 +313,7 @@ export function ReadingPanel() {
                           }}
                         >
                           <strong>{pointToHuman(point)}</strong>
-                          <span>{leadLabel(blackLead)}</span>
+                          <span>{formatLead(blackLead)}</span>
                           {point === next.move.point && <small>Suite affichée</small>}
                         </button>
                       </li>
