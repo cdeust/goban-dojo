@@ -34,6 +34,20 @@ function finish(c: HTMLCanvasElement, anisotropy: number): THREE.CanvasTexture {
   return t;
 }
 
+/** Dégradé de halo, opaque au centre puis transparent au bord. */
+export function haloTexture(): THREE.CanvasTexture {
+  const size = 128;
+  const [c, ctx] = canvas(size, size);
+  const center = size / 2;
+  const gradient = ctx.createRadialGradient(center, center, size * 0.24, center, center, center);
+  gradient.addColorStop(0, 'rgba(255,255,255,1)');
+  gradient.addColorStop(0.35, 'rgba(255,255,255,0.75)');
+  gradient.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  return new THREE.CanvasTexture(c);
+}
+
 /** Fil droit (masame) du kaya : fines veines parallèles légèrement ondulées. */
 function paintStraightGrain(
   ctx: CanvasRenderingContext2D,

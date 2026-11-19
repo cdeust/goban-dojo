@@ -1,7 +1,11 @@
+import { useEffect, useMemo } from 'react';
 import { displayOf, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
+import { haloTexture } from './textures.ts';
 
 export function SimulationMarks() {
+  const glow = useMemo(haloTexture, []);
+  useEffect(() => () => glow.dispose(), [glow]);
   const anchor = useStore((s) => s.move);
   const played = useStore((s) => s.variation.length);
   const stones = useStore((s) => {
@@ -18,14 +22,14 @@ export function SimulationMarks() {
         key={placedAt}
         position={[x, BOARD_TOP + STONE_THICKNESS / 2, z]}
         rotation={[-Math.PI / 2, 0, 0]}
-        scale={STONE_DIAMETER_BLACK}
+        scale={STONE_DIAMETER_BLACK * 1.65}
         raycast={() => null}
       >
-        <ringGeometry args={[0.49, 0.65, 40]} />
+        <planeGeometry />
         <meshBasicMaterial
+          map={glow}
           color="#a2eaff"
           transparent
-          opacity={0.95}
           depthWrite={false}
           toneMapped={false}
         />
