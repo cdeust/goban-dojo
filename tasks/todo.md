@@ -93,3 +93,16 @@ Une passe sur le corpus de 85 577 coups indexe 3 728 scènes (dont trois entrée
 historiques), dans 406 parties. Parmi les scènes tactiques, 1 264 permettent
 d’essayer immédiatement une autre défense légale. L’index du corpus prend 136 ms
 dans un processus Node local, hors calcul des variantes.
+
+## Séquence de réflexion sur le goban
+
+- [x] Projeter les effets d’impact sur la grille réelle.
+- [x] Lire plusieurs branches sur un mini-goban, puis reprendre le kifu.
+- [x] Vérifier le parcours, les deux couleurs et la réduction des animations.
+
+Dans la partie du 24 décembre 1839, le mini-goban montre trois branches avant
+Noir 87. La première apparaît en 940 ms lors du parcours Chromium local, à partir
+de l’affichage de la scène. Le replay pose F7 sur le goban principal, puis ouvre
+une nouvelle simulation avant Blanc 88, G7. Le test de règles rejoue les 24 coups
+proposés sur une position du corpus sans relever de coup illégal. Le rendu a
+également été vérifié à 1 440 × 900 et 390 × 844.

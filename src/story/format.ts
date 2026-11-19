@@ -109,3 +109,10 @@ export function ageLabel(iso: string): string {
   const { years, approximate } = ageAt(iso);
   return `${approximate ? 'vers ' : ''}${years} ans`;
 }
+
+export function formatLead(value: number) {
+  const points = Math.round(Math.abs(value));
+  return points === 0
+    ? 'Équilibre estimé'
+    : `${value > 0 ? 'Noir' : 'Blanc'} +${points} pts estimés`;
+}

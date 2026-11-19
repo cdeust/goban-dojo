@@ -11,14 +11,15 @@ export function MomentCaption() {
   const move = useStore((s) => s.move);
   const mode = useStore((s) => s.mode);
   const playing = useStore((s) => s.playing);
+  const replay = useStore((s) => s.reflectionReplay);
   const reducedMotion = useReducedMotion();
   // Les modes interactifs occupent cet emplacement, et une légende y trahirait le coup à deviner.
-  if (!game || mode !== 'lecture') return null;
+  if (!game || mode !== 'lecture' || replay === 'auto' || replay === 'manual') return null;
   const moment = momentFor(game, move);
   const scenes = reflectionsOf(game);
   const preparation = scenes.find(
     ({ after, sessionBreak, tactical }) =>
-      after === move && !sessionBreak && (!tactical || !playing),
+      after === move && !sessionBreak && (!tactical || (!playing && replay !== 'return')),
   );
   const scene =
     preparation ??
@@ -48,6 +49,15 @@ export function MomentCaption() {
                   onClick={() => useStore.getState().step(1)}
                 >
                   Révéler le coup
+                </button>
+              )}
+              {preparation && (
+                <button
+                  type="button"
+                  className="chip moment__reflection"
+                  onClick={() => useStore.getState().playReflectionReplay()}
+                >
+                  Voir les simulations
                 </button>
               )}
               {scene && (

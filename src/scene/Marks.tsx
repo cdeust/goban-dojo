@@ -57,27 +57,18 @@ const cageTexture = (): THREE.CanvasTexture =>
     ctx.stroke();
   });
 
-/** Éclat : disque plein au centre, pour l'instant de l'impact. */
-const flashTexture = (): THREE.CanvasTexture =>
-  texture((ctx, s) => {
-    const g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-    g.addColorStop(0, 'rgba(255,255,255,1)');
-    g.addColorStop(0.15, 'rgba(255,255,255,0.9)');
-    g.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, s, s);
-  });
-
 /**
  * Ce que la position donne à lire, dessiné sur le plateau sous les pierres :
  *  - attaque : un halo vermillon bat sous chaque pierre en atari ;
  *  - piège : une cage d'encre tourne autour des pierres prises en shicho ;
  *  - connexion : un halo bleu sous le coup et les pierres qu'il vient de relier ;
- *  - un éclat sous la pierre qui vient de frapper, selon la nature du coup.
  * Publie aussi la projection à l'écran des intersections, pour les effets de l'interface.
  */
 export function Marks() {
   const enabled = useStore((s) => s.effects);
+  const simulating = useStore(
+    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
+  );
   // Clé stable tant que les marques ne changent pas : évite de tout reconstruire à chaque coup.
   const key = useStore((s) => {
     if (!s.effects) return '';
@@ -98,13 +89,11 @@ export function Marks() {
     }
     return `${m.atari.join(',')}|${m.trapped.join(',')}|${linked.join(',')}|${[...initiative].join(',')}`;
   });
-  const impact = useStore((s) => s.impact);
   const invalidate = useThree((s) => s.invalidate);
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
   const halos = useRef<THREE.InstancedMesh>(null);
   const cages = useRef<THREE.InstancedMesh>(null);
-  const flash = useRef<THREE.Mesh>(null);
 
   const assets = useMemo(() => {
     const plane = new THREE.PlaneGeometry(1, 1);
@@ -133,7 +122,6 @@ export function Marks() {
         depthWrite: false,
         toneMapped: false,
       }),
-      flash: material(flashTexture(), MARK_COLORS.attack),
     };
   }, []);
 
@@ -141,14 +129,14 @@ export function Marks() {
   useEffect(() => {
     const v = new THREE.Vector3();
     const edge = new THREE.Vector3();
-    setProjector((point) => {
+    setProjector((point, surface) => {
       const [x, z] = pointToWorld(point);
       const rect = gl.domElement.getBoundingClientRect();
       const toScreen = (t: THREE.Vector3): [number, number] => [
         rect.left + ((t.x + 1) / 2) * rect.width,
         rect.top + ((1 - t.y) / 2) * rect.height,
       ];
-      v.set(x, BOARD_TOP + STONE_THICKNESS, z).project(camera);
+      v.set(x, BOARD_TOP + (surface ? 0.025 : STONE_THICKNESS), z).project(camera);
       if (v.z < -1 || v.z > 1) return null;
       edge.set(x + STONE_DIAMETER_BLACK / 2, BOARD_TOP + STONE_THICKNESS, z).project(camera);
       const [sx, sy] = toScreen(v);
@@ -206,7 +194,7 @@ export function Marks() {
     assets.halo.opacity = n > 0 ? 0.6 : 0;
     assets.cage.opacity = caged.length > 0 ? 1 : 0;
     invalidate();
-    if (still || (n === 0 && caged.length === 0)) return;
+    if (still || simulating || (n === 0 && caged.length === 0)) return;
     // Les halos battent lentement ; les cages tournent, comme un étau qui se resserre.
     const pulse = animate(0, 1, {
       duration: 1.3,
@@ -234,39 +222,7 @@ export function Marks() {
       pulse.stop();
       turn?.stop();
     };
-  }, [key, assets, invalidate]);
-
-  // Un éclat sous la pierre qui vient de frapper, à la couleur de ce qu'elle accomplit.
-  useEffect(() => {
-    const mesh = flash.current;
-    if (!mesh || !impact || !enabled || impact.kind === 'coup' || prefersReducedMotion()) return;
-    const [x, z] = pointToWorld(impact.point);
-    mesh.position.set(x, BOARD_TOP + 0.025, z);
-    assets.flash.color.set(
-      impact.tactical || impact.kind === 'initiative' || impact.kind === 'menace'
-        ? INITIATIVE_GLOW
-        : impact.kind === 'connexion'
-          ? MARK_COLORS.connection
-          : impact.kind === 'piege'
-            ? '#f3e7c8'
-            : MARK_COLORS.attack,
-    );
-    const strong = impact.tactical || impact.kind === 'moment' || impact.kind === 'initiative';
-    const run = animate(0, 1, {
-      duration: strong ? 2.4 : 0.9,
-      ease: 'easeOut',
-      onUpdate: (t) => {
-        mesh.scale.setScalar(STONE_DIAMETER_BLACK * (1.2 + t * (strong ? 15 : 8)));
-        assets.flash.opacity = (strong ? 1 : 0.75) * (1 - t) ** 1.5;
-        invalidate();
-      },
-    });
-    return () => {
-      run.stop();
-      assets.flash.opacity = 0;
-      invalidate();
-    };
-  }, [impact, enabled, assets, invalidate]);
+  }, [key, assets, invalidate, simulating]);
 
   return (
     <group visible={enabled}>
@@ -282,7 +238,6 @@ export function Marks() {
         frustumCulled={false}
         renderOrder={1}
       />
-      <mesh ref={flash} geometry={assets.plane} material={assets.flash} renderOrder={1} />
     </group>
   );
 }

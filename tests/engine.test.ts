@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as ort from 'onnxruntime-web/wasm';
 import { beforeAll, describe, expect, it } from 'vitest';
-import type { Color } from '../src/domain/board.ts';
+import { opposite, type Color } from '../src/domain/board.ts';
+import { buildTimeline } from '../src/domain/game.ts';
 import { afterCandidate, candidatesOf } from '../src/engine/analysis.ts';
 import { decodeOutputs, topMoves, type Evaluation } from '../src/engine/decode.ts';
 import {
@@ -12,6 +13,7 @@ import {
   type EnginePosition,
 } from '../src/engine/features.ts';
 import { judgeMoves, verdictOf } from '../src/engine/judge.ts';
+import { previewLines, type PreviewLine } from '../src/engine/preview.ts';
 
 /**
  * Reproduction de la référence : le portage TypeScript (encodeur + décodeur), exécuté sur le
@@ -219,3 +221,38 @@ it('oriente la carte de propriété du réseau selon la couleur au trait', () =>
   expect(white[0]).toBeCloseTo(-Math.tanh(2));
   expect(black[2]).toBeCloseTo(-Math.tanh(2));
 });
+
+it('simule plusieurs premiers coups distincts et rejoue chaque branche selon les règles', async () => {
+  const ref = reference.positions.find(
+    (position) => position.moves.length > 80 && position.next === 'W',
+  )!;
+  const position = {
+    setupBlack: ref.setupBlack,
+    moves: ref.moves.map(([color, point]) => ({ color, point })),
+    next: ref.next,
+  };
+  const recorded = { color: ref.next, point: ref.top[0]![0] };
+  const received: PreviewLine[] = [];
+  const lines = await previewLines(
+    evaluate,
+    position,
+    recorded,
+    new AbortController().signal,
+    (line, index) => {
+      if (received[index]) expect(received[index]!.moves).toEqual(line.moves.slice(0, 2));
+      received[index] = line;
+    },
+  );
+  expect(lines).toEqual(received);
+  expect(lines).toHaveLength(3);
+  const roots = lines.map((line) => line.moves[0]!.point);
+  expect(new Set(roots).size).toBe(lines.length);
+  expect(roots).not.toContain(recorded.point);
+  for (const { moves, estimates } of lines) {
+    expect(moves).toHaveLength(8);
+    expect(estimates.every(Number.isFinite)).toBe(true);
+    expect(moves[0]!.color).toBe(position.next);
+    expect(moves[1]!.color).toBe(opposite(position.next));
+    expect(buildTimeline(position.setupBlack, [...position.moves, ...moves]).illegal).toEqual([]);
+  }
+}, 30_000);

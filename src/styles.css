@@ -158,11 +158,22 @@ button:disabled {
   }
 }
 
+.stage[data-effects='true'][data-simulation='true'] .stage__canvas::before {
+  opacity: 1;
+  background: rgb(3 9 20 / 0.78);
+  mix-blend-mode: normal;
+}
+
+.stage[data-simulation='true'] .stage__canvas::after {
+  background: radial-gradient(ellipse at center, transparent, rgb(2 5 12 / 0.62));
+}
+
 .stage[data-effects='true']:has(.moment--tactical) .stage__canvas::before {
   opacity: 1;
 }
 
-.stage:has(.moment--tactical) .card {
+.stage:has(.moment--tactical) .card,
+.stage[data-simulation='true'] .card {
   visibility: hidden;
 }
 
@@ -1425,51 +1436,16 @@ progress {
   z-index: 2;
   pointer-events: none;
   overflow: hidden;
-}
-
-/* Instant du récit : le reste de la scène s'assombrit autour de la pierre. */
-.impact--moment,
-.impact--initiative {
-  background: radial-gradient(circle at 50% 45%, transparent 12%, rgb(11 9 8 / 0.5) 70%);
-}
-
-.impact__lines {
-  position: absolute;
-  width: min(70vmin, 44rem);
-  height: min(70vmin, 44rem);
-  translate: -50% -50%;
-  overflow: visible;
-}
-
-.impact--moment .impact__lines,
-.impact--initiative .impact__lines {
-  width: min(120vmin, 80rem);
-  height: min(120vmin, 80rem);
-}
-
-.impact__lines line {
-  stroke: var(--paper);
-  stroke-linecap: round;
-}
-
-.card__age {
-  font-family: var(--sans);
-  font-size: 0.78rem;
-  color: var(--paper-faint);
-  white-space: nowrap;
-}
-
-.impact--connexion .impact__lines line {
-  stroke: #9cc3ee;
+  width: 100%;
+  height: 100%;
 }
 
 .impact__arcs {
   fill: none;
-  stroke: #c9edff;
-  stroke-width: 1.3;
-  stroke-linejoin: round;
+  stroke: #cbecff;
+  stroke-width: 1.5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 0.22rem #329bff) drop-shadow(0 0 0.55rem #329bff);
+  filter: drop-shadow(0 0 4px #329bff);
 }
 
 .impact--initiative .impact__arcs {
@@ -1478,7 +1454,14 @@ progress {
 
 .impact--piege .impact__arcs {
   stroke: #ffe6bd;
-  filter: drop-shadow(0 0 0.25rem #ff934b);
+  filter: drop-shadow(0 0 3px #ff934b);
+}
+
+.card__age {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--paper-faint);
+  white-space: nowrap;
 }
 
 .legend {
@@ -1901,4 +1884,123 @@ progress {
 
 .reading__fork .analysis__choice small {
   grid-column: 1 / -1;
+}
+
+.simulation {
+  --mini-goban: min(19rem, 38svh, 76vw);
+  position: absolute;
+  inset: 3.8rem 0 auto;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  width: min(28rem, calc(100% - 1rem));
+  max-block-size: calc(100svh - 4.5rem);
+  overflow: auto;
+  margin-inline: auto;
+  padding: 0.65rem;
+  border: 1px solid rgb(120 198 255 / 0.42);
+  border-radius: 0.8rem;
+  color: #e4f4ff;
+  background: rgb(5 17 34 / 0.96);
+  box-shadow: 0 0 2.2rem rgb(50 149 255 / 0.3);
+  text-align: center;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: simulation-enter 0.28s ease-out both;
+  }
+}
+
+@keyframes simulation-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.simulation__header {
+  display: grid;
+  gap: 0.05rem;
+  color: #afdafa;
+  font-size: 0.75rem;
+}
+
+.simulation__header h2 {
+  margin: 0;
+  color: #f3faff;
+  font: 600 1rem var(--serif);
+}
+
+.simulation__view {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+}
+
+.simulation__board {
+  display: block;
+  inline-size: var(--mini-goban);
+  aspect-ratio: 1;
+  border: 1px solid rgb(169 229 255 / 0.68);
+  border-radius: 0.35rem;
+  background: radial-gradient(circle at 40% 36%, #247ab0, #0e385d 78%);
+}
+
+.simulation__grid {
+  fill: none;
+  stroke: #95d7fd;
+  stroke-width: 0.045;
+}
+
+.simulation__black {
+  fill: #071327;
+  stroke: #4b96bd;
+  stroke-width: 0.045;
+}
+
+.simulation__white {
+  fill: #dcfaff;
+  stroke: #83c8f6;
+  stroke-width: 0.045;
+}
+
+.simulation__last {
+  fill: none;
+  stroke: #fbd59a;
+  stroke-width: 0.12;
+}
+
+.simulation__current,
+.simulation__source {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.simulation__source {
+  color: #9cc4df;
+}
+
+.simulation__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.simulation__controls .chip {
+  min-block-size: 2.125rem;
+}
+
+@media (max-width: 48rem) {
+  .simulation {
+    --mini-goban: min(18rem, 30svh, 75vw);
+    inset-block-start: 7.5rem;
+    max-block-size: calc(100svh - 8rem);
+  }
 }

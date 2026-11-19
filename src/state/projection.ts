@@ -11,7 +11,7 @@ export interface ScreenPoint {
   size: number;
 }
 
-type Projector = (point: number) => ScreenPoint | null;
+type Projector = (point: number, surface?: boolean) => ScreenPoint | null;
 
 let projector: Projector | null = null;
 
@@ -19,6 +19,6 @@ export function setProjector(next: Projector | null): void {
   projector = next;
 }
 
-export function projectPoint(point: number): ScreenPoint | null {
-  return projector ? projector(point) : null;
+export function projectPoint(point: number, surface = false): ScreenPoint | null {
+  return projector ? projector(point, surface) : null;
 }
