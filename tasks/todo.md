@@ -119,3 +119,14 @@ joueurs. Le test Chromium retrouve la partie après rechargement et lance
 l’exercice avec Blanc. Les tests de règles couvrent le handicap, la passe, la
 première variante SGF et les fichiers incompatibles. Pendant une simulation,
 Chromium mesure les mêmes dimensions et la même position pour le canvas du goban.
+
+## Fondu du salon pendant l’estimation
+
+- [x] Assombrir le décor dans la scène 3D et rétablir ses couleurs au retour au kifu.
+- [x] Vérifier le plateau, le fondu et le retour en lecture.
+
+Vérification Chromium à 1 440 × 900 et 390 × 844 : le même canvas reste en place
+avant et pendant le fondu, puis le décor reprend sa luminosité. Sur la capture
+desktop, la luma moyenne du rectangle de tatami (90 × 36 px, origine 50, 90 sur la
+capture redimensionnée à 1 000 px de large) passe de 132,1 à 42,2 puis revient à
+132,1 (FFmpeg, YAVG).
