@@ -42,13 +42,14 @@ export function ImpactLines() {
     setBurst({ impact, at });
     const id = window.setTimeout(
       () => setBurst(null),
-      impact.kind === 'moment' || impact.kind === 'initiative' ? 1700 : 700,
+      impact.tactical || impact.kind === 'moment' || impact.kind === 'initiative' ? 1700 : 700,
     );
     return () => window.clearTimeout(id);
   }, [impact, effects, reduced]);
 
   if (!effects || reduced) return null;
   const lightning =
+    burst?.impact.tactical ||
     burst?.impact.kind === 'initiative' ||
     burst?.impact.kind === 'menace' ||
     burst?.impact.kind === 'piege';
@@ -58,7 +59,7 @@ export function ImpactLines() {
       {burst && burst.impact.seq === impact?.seq && (
         <motion.div
           key={burst.impact.seq}
-          className={`impact impact--${burst.impact.kind}`}
+          className={`impact impact--${burst.impact.tactical ? 'initiative' : burst.impact.kind}`}
           data-kind={burst.impact.kind}
           aria-hidden="true"
           initial={{ opacity: 0 }}
@@ -77,7 +78,8 @@ export function ImpactLines() {
                 initial={{ opacity: 1, scale: 0.75 }}
                 animate={{ opacity: 0, scale: 1.12 }}
                 transition={{
-                  duration: burst.impact.kind === 'initiative' ? 1.25 : 0.58,
+                  duration:
+                    burst.impact.tactical || burst.impact.kind === 'initiative' ? 1.25 : 0.58,
                   ease: 'easeOut',
                 }}
               >

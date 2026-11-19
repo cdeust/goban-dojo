@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { pointToHuman } from '../domain/board.ts';
 import type { GameRecord } from '../domain/game.ts';
 import { colorName } from '../story/format.ts';
-import { REFLECTION_SOURCE, reflectionMoves, reflectionsOf } from '../story/reflections.ts';
+import { REFLECTION_SOURCE, reflectionMoves } from '../story/reflections.ts';
+import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
 import { useCurrentGame, useStore } from '../state/store.ts';
 
 function ReflectionLine({
@@ -13,9 +14,10 @@ function ReflectionLine({
   scene: ReturnType<typeof reflectionsOf>[number];
 }) {
   const play = useStore((s) => s.playReflection);
-  const [line, setLine] = useState(0);
+  const lines = reflectionLines(game, scene);
+  const [line, setLine] = useState(scene.tactical && lines.length > 1 ? 1 : 0);
   const [step, setStep] = useState(0);
-  const choice = scene.lines[line]!;
+  const choice = lines[line]!;
   const moves = reflectionMoves(game, scene.after, choice);
   const current = moves[step - 1];
 
@@ -37,7 +39,7 @@ function ReflectionLine({
             play(next, 0);
           }}
         >
-          {scene.lines.map(({ title }, i) => (
+          {lines.map(({ title }, i) => (
             <option key={title} value={i}>
               {title}
             </option>
@@ -109,7 +111,11 @@ export function ReflectionPanel() {
       </label>
       <div className="reflection__context">
         <p className="study__index">
-          {scene.sessionBreak ? 'Interruption documentée' : 'Position commentée'}
+          {scene.tactical
+            ? 'Coup tactique'
+            : scene.sessionBreak
+              ? 'Interruption documentée'
+              : 'Position commentée'}
         </p>
         <p>{scene.context}</p>
         <p className="reflection__question">{scene.question}</p>
@@ -120,12 +126,19 @@ export function ReflectionPanel() {
       <button type="button" className="chip" onClick={() => setMode('lire')}>
         Lire 60 coups d’avance
       </button>
+      {scene.tactical && (
+        <button type="button" className="chip" onClick={() => setMode('explorer')}>
+          Essayer un coup sur le goban
+        </button>
+      )}
       <ReflectionLine key={scene.after} game={game} scene={scene} />
       <p className="reflection__source">
         Les variantes illustrent des options légales. Les pensées des joueurs ne sont pas connues.{' '}
-        <a href={REFLECTION_SOURCE} target="_blank" rel="noopener noreferrer">
-          Commentaire de Miyamoto Naoki
-        </a>
+        {!scene.tactical && (
+          <a href={REFLECTION_SOURCE} target="_blank" rel="noopener noreferrer">
+            Commentaire de Miyamoto Naoki
+          </a>
+        )}
       </p>
       <div className="study__actions">
         <button

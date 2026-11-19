@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { PASS } from '../domain/board.ts';
 import { chapterIndexOf } from '../story/chapters.ts';
 import { momentFor } from '../story/chapters.ts';
-import { reflectionsOf } from '../story/reflections.ts';
+import { reflectionsOf } from '../state/reflections.ts';
 import { moveCount, timelineOf, useStore } from '../state/store.ts';
 
 /** Pause (ms) sur un instant remarquable, puis en fin de partie avant d'enchaîner. */
@@ -18,6 +18,7 @@ export function usePlayback(): void {
   const speed = useStore((s) => s.speed);
   const gameIndex = useStore((s) => s.gameIndex);
   const move = useStore((s) => s.move);
+  const tacticalPauses = useStore((s) => s.tacticalPauses);
 
   useEffect(() => {
     if (!playing) return;
@@ -39,15 +40,22 @@ export function usePlayback(): void {
 
     let delay = 1000 / speed;
     if (move === 0) delay = Math.max(delay, 900);
-    if (momentFor(game, move) || reflectionsOf(game).some(({ after }) => after === move)) {
+    if (
+      momentFor(game, move) ||
+      reflectionsOf(game).some(({ after, sessionBreak }) => sessionBreak && after === move)
+    ) {
       delay = Math.max(delay, MOMENT_PAUSE);
     }
     // Une passe ne pose rien : on laisse le temps de lire l'annonce.
     const last = move > 0 ? timelineOf(game).moves[move - 1] : undefined;
     if (last?.point === PASS) delay = Math.max(delay, 1200);
-    const id = window.setTimeout(() => useStore.getState().setMove(move + 1), delay);
+    const next = move + 1;
+    const pause =
+      tacticalPauses &&
+      reflectionsOf(game).some(({ after, sessionBreak }) => after === next && !sessionBreak);
+    const id = window.setTimeout(() => useStore.getState().setMove(next, pause), delay);
     return () => window.clearTimeout(id);
-  }, [playing, speed, gameIndex, move]);
+  }, [playing, speed, gameIndex, move, tacticalPauses]);
 
   // Le récit suit la partie en cours.
   useEffect(() => {

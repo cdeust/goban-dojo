@@ -143,6 +143,24 @@ button:disabled {
   background: radial-gradient(ellipse at 50% 48%, transparent 45%, rgb(11 9 8 / 0.55) 100%);
 }
 
+.stage__canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 48%, rgb(32 151 255 / 0.14), rgb(2 9 24 / 0.9));
+  mix-blend-mode: hard-light;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity 0.6s ease;
+  }
+}
+
+.stage[data-effects='true']:has(.moment--tactical) .stage__canvas::before {
+  opacity: 1;
+}
+
 .stage__canvas canvas {
   display: block;
   touch-action: none;
@@ -435,6 +453,20 @@ button:disabled {
   font-size: 1.15rem;
   color: var(--vermilion);
   margin-bottom: 0.2rem;
+}
+
+.moment--tactical {
+  border-left-color: #8bd6ff;
+  background: rgb(6 22 39 / 0.92);
+  box-shadow: 0 0 2rem rgb(73 174 242 / 0.25);
+}
+
+.moment--tactical .moment__title {
+  color: #a7e1ff;
+}
+
+.moment--tactical .moment__reflection + .moment__reflection {
+  margin-inline-start: 0.45rem;
 }
 
 .moment__reflection {

@@ -504,3 +504,36 @@ test('lecture longue : 60 coups après K11, bifurcation et retour à la branche'
   await expect(reading.locator('.analysis__choice[aria-pressed="true"] strong')).toHaveText('K11');
   await expect(slider).toHaveAttribute('max', '60');
 });
+
+test('le replay s’arrête avant les coups tactiques des deux joueurs', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  const slider = page.getByRole('slider', { name: 'Coup' });
+  const stage = page.locator('.stage');
+  for (const [start, anchor, coup, color] of [
+    ['78', '79', '80', 'Blanc'],
+    ['151', '152', '153', 'Noir'],
+  ]) {
+    await slider.fill(start!);
+    await page.getByRole('button', { name: 'Lecture', exact: true }).click();
+    const cue = stage.getByRole('heading', { name: 'Avant le coup ' + coup });
+    await expect(cue).toBeVisible();
+    await expect(slider).toHaveValue(anchor!);
+    await expect(page.getByRole('button', { name: 'Lecture', exact: true })).toBeVisible();
+    await stage.getByRole('button', { name: 'Examiner cette position' }).click();
+    const reflection = stage.getByRole('region', { name: 'Temps de réflexion' });
+    await expect(reflection.getByRole('combobox', { name: 'Moment de la partie' })).toHaveValue(
+      anchor!,
+    );
+    await expect(
+      reflection.getByRole('combobox', { name: 'Moment de la partie' }).locator('option:checked'),
+    ).toContainText(color!);
+    await reflection.getByRole('button', { name: 'Revenir à la partie' }).click();
+    await stage.getByRole('button', { name: 'Révéler le coup' }).click();
+    await expect(slider).toHaveValue(coup!);
+  }
+  await page.getByRole('button', { name: 'Coups forts' }).click();
+  await slider.fill('78');
+  await page.getByRole('button', { name: 'Lecture', exact: true }).click();
+  await expect.poll(async () => Number(await slider.inputValue())).toBeGreaterThan(79);
+});

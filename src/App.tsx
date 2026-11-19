@@ -28,6 +28,7 @@ export function App() {
   const entered = useStore((s) => s.entered);
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
+  const effects = useStore((s) => s.effects);
   const studying = useStore((s) => s.mode === 'etudier');
   const reflecting = useStore((s) => s.mode === 'reflechir');
   const analysing = useStore((s) => s.mode === 'analyser');
@@ -52,7 +53,7 @@ export function App() {
         data-reflection={hasReadingPanel}
       >
         {entered && <Panel />}
-        <main className="stage">
+        <main className="stage" data-effects={effects}>
           <div className="stage__canvas">
             <Suspense fallback={null}>{status === 'ready' && <Scene />}</Suspense>
           </div>

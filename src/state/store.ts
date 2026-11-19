@@ -15,7 +15,8 @@ import {
 } from '../domain/game.ts';
 import { trappedStones } from '../engine/features.ts';
 import { momentFor } from '../story/chapters.ts';
-import { reflectionMoves, reflectionsOf } from '../story/reflections.ts';
+import { reflectionMoves } from '../story/reflections.ts';
+import { reflectionLines, reflectionsOf } from './reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
 export type PanelName = 'recit' | 'parties' | null;
@@ -54,6 +55,7 @@ export interface Impact {
   seq: number;
   point: number;
   kind: ImpactKind;
+  tactical?: true;
 }
 
 export type GuessResult =
@@ -130,6 +132,7 @@ interface State {
   speed: number;
   /** Enchaîner automatiquement sur la partie suivante. */
   continuous: boolean;
+  tacticalPauses: boolean;
   view: ViewName;
   showNumbers: boolean;
   sound: boolean;
@@ -158,13 +161,13 @@ interface State {
   enter: () => void;
   setSceneReady: () => void;
   selectGame: (index: number, opts?: { play?: boolean; move?: number }) => void;
-  setMove: (move: number) => void;
+  setMove: (move: number, pause?: boolean) => void;
   step: (delta: number) => void;
   togglePlay: () => void;
   setPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
   setView: (view: ViewName) => void;
-  toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects') => void;
+  toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects' | 'tacticalPauses') => void;
   /** La scène signale que la pierre du coup affiché vient de toucher le goban. */
   notifyImpact: (point: number) => void;
   setPanel: (panel: PanelName) => void;
@@ -319,6 +322,7 @@ export const useStore = create<State>((set, get) => ({
   showNumbers: false,
   sound: true,
   effects: true,
+  tacticalPauses: true,
   impact: null,
   entered: false,
   sceneReady: false,
@@ -373,7 +377,7 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
-  setMove: (move) => {
+  setMove: (move, pause = false) => {
     const game = get().dataset?.games[get().gameIndex];
     if (!game) return;
     const g = get().guess;
@@ -381,6 +385,7 @@ export const useStore = create<State>((set, get) => ({
     const target = get().studyMove;
     set({
       move: next,
+      ...(pause ? { playing: false, impact: null } : {}),
       studyMove: target !== null && (next === target || next === target - 1) ? target : null,
       // Changer de position abandonne l'exploration et l'essai en cours, pas le bilan.
       variation: [],
@@ -428,6 +433,9 @@ export const useStore = create<State>((set, get) => ({
     const caught = new Set(marks.trapped);
     const traps = marks.threat.atari.some((p) => caught.has(p));
     const initiative = showsEarRedMove(game, s.move, s.variation);
+    const tactical =
+      s.variation.length === 0 &&
+      reflectionsOf(game).some((scene) => scene.tactical?.number === s.move);
     const kind: ImpactKind = initiative
       ? 'initiative'
       : s.variation.length === 0 && momentFor(game, s.move)
@@ -439,7 +447,14 @@ export const useStore = create<State>((set, get) => ({
             : marks.threat.connects.length > 0
               ? 'connexion'
               : 'coup';
-    set({ impact: { seq: (s.impact?.seq ?? 0) + 1, point, kind } });
+    set({
+      impact: {
+        seq: (s.impact?.seq ?? 0) + 1,
+        point,
+        kind,
+        ...(tactical ? { tactical: true } : {}),
+      },
+    });
   },
 
   setMode: (mode) =>
@@ -484,7 +499,7 @@ export const useStore = create<State>((set, get) => ({
     const game = s.dataset?.games[s.gameIndex];
     if (s.mode !== 'reflechir' || !game) return;
     const scene = reflectionsOf(game).find((scene) => scene.after === s.move);
-    const choice = scene?.lines[line];
+    const choice = scene && reflectionLines(game, scene)[line];
     if (!choice) return;
     set({ variation: reflectionMoves(game, s.move, choice).slice(0, step), impact: null });
   },

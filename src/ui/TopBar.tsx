@@ -1,5 +1,5 @@
 import { useCurrentGame, useStore } from '../state/store.ts';
-import { reflectionsOf } from '../story/reflections.ts';
+import { reflectionsOf } from '../state/reflections.ts';
 
 export function TopBar() {
   const panel = useStore((s) => s.panel);
@@ -40,8 +40,12 @@ export function TopBar() {
             className="chip chip--accent"
             onClick={() => {
               const s = useStore.getState();
-              const scene = scenes.find(({ after }) => after === s.move || after === s.move - 1);
-              const after = scene?.after ?? scenes[0]?.after;
+              const scene =
+                scenes.find(({ after }) => after === s.move) ??
+                scenes.find(({ after }) => after === s.move - 1) ??
+                scenes.find(({ after }) => after > s.move) ??
+                scenes.at(-1);
+              const after = scene?.after;
               if (after !== undefined) s.showReflection(after);
             }}
           >

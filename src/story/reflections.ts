@@ -1,4 +1,4 @@
-import { decodeMoves, type GameRecord } from '../domain/game.ts';
+import { decodeMoves, type GameRecord, type StudyMove } from '../domain/game.ts';
 
 export interface ReflectionLine {
   title: string;
@@ -7,12 +7,13 @@ export interface ReflectionLine {
   notes: readonly string[];
 }
 
-interface Reflection {
+export interface Reflection {
   after: number;
   title: string;
   context: string;
   question: string;
   sessionBreak?: true;
+  tactical?: StudyMove;
   lines: readonly ReflectionLine[];
 }
 
@@ -111,7 +112,7 @@ const EAR_RED: readonly Reflection[] = [
   },
 ];
 
-export function reflectionsOf(game: GameRecord): readonly Reflection[] {
+export function historicalReflectionsOf(game: GameRecord): readonly Reflection[] {
   return game.id === 's126' ? EAR_RED : [];
 }
 

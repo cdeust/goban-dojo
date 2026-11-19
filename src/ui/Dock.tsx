@@ -122,6 +122,7 @@ function Transport() {
   const sound = useStore((s) => s.sound);
   const continuous = useStore((s) => s.continuous);
   const effects = useStore((s) => s.effects);
+  const tacticalPauses = useStore((s) => s.tacticalPauses);
   const mode = useStore((s) => s.mode);
   const setMode = useStore((s) => s.setMode);
   const { step, togglePlay, setMove, setSpeed, setView, toggle, selectGame, setPlaying } =
@@ -292,6 +293,15 @@ function Transport() {
               onClick={() => toggle('effects')}
             >
               Effets
+            </button>
+            <button
+              type="button"
+              className="seg"
+              aria-pressed={tacticalPauses}
+              title="S’arrêter avant chaque coup tactique retenu"
+              onClick={() => toggle('tacticalPauses')}
+            >
+              Coups forts
             </button>
             <button
               type="button"
