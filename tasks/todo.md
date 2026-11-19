@@ -90,6 +90,6 @@ du kifu et révéler K11.
 - [x] Vérifier les 469 kifus et la légalité des défenses fournies.
 
 Une passe sur le corpus de 85 577 coups indexe 3 728 scènes (dont trois entrées
-historiques), dans 406 parties. Parmi les scènes tactiques, 1 267 permettent
+historiques), dans 406 parties. Parmi les scènes tactiques, 1 264 permettent
 d’essayer immédiatement une autre défense légale. L’index du corpus prend 136 ms
 dans un processus Node local, hors calcul des variantes.
