@@ -65,3 +65,31 @@ Depuis la position initiale de la partie s126, une mesure en Node avec le modèl
 livré et WASM sur un seul fil donne 240 coups en 53,57 s, pour 1 201 inférences. La
 relecture par le moteur de règles ne trouve aucun coup illégal. Chaque position
 calculée comporte 361 valeurs de propriété finies, comprises entre −1 et +1.
+
+## Références de mise en scène
+
+- [x] Examiner des scènes de jeu de _Hikaru no Go_ et rejouer la lecture de K11 sur le site publié.
+
+Dans [l’épisode 3, vers 19:20–20:20](https://archive.org/details/HNGjpAudio), le montage
+alterne main, regard et goban, puis isole le contact de la pierre. Dans l’épisode 56,
+vers 5:10–6:15 et 13:20–15:20, il passe du plateau informatique à un goban éclairé en
+bleu sur fond noir. Les gros plans rendent aux pierres leur place dans l’action.
+
+Sur le site publié (`56dfcef`), la projection lancée avant Noir 127 dans la partie du
+11 septembre 1846 atteint bien 60 coups. À 1 440 × 900, elle conserve le même cadrage
+et sollicite plusieurs commandes avant de montrer une suite. Le graphe commence
+en bas de la fenêtre. Cas à reprendre pour la mise en scène : isoler la menace sur
+le goban, jouer une branche jusqu’à sa conséquence tactique, revenir à la position
+du kifu et révéler K11.
+
+## Pauses tactiques dans le replay
+
+- [x] Repérer les captures de plusieurs pierres, les ataris de groupe et les coups
+      qui relient des groupes tout en attaquant.
+- [x] Suspendre la lecture avant chaque coup retenu et afficher les pierres concernées.
+- [x] Vérifier les 469 kifus et la légalité des défenses fournies.
+
+Une passe sur le corpus de 85 577 coups indexe 3 728 scènes (dont trois entrées
+historiques), dans 406 parties. Parmi les scènes tactiques, 1 264 permettent
+d’essayer immédiatement une autre défense légale. L’index du corpus prend 136 ms
+dans un processus Node local, hors calcul des variantes.

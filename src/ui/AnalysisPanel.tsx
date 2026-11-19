@@ -12,7 +12,7 @@ import type { Evaluation } from '../engine/decode.ts';
 import type { EnginePosition } from '../engine/features.ts';
 import { nextColor, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 import { colorName } from '../story/format.ts';
-import { reflectionsOf } from '../story/reflections.ts';
+import { reflectionsOf } from '../state/reflections.ts';
 
 interface Branch {
   lead: number;

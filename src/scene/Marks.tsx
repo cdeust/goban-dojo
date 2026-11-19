@@ -3,6 +3,7 @@ import { animate } from 'motion';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
+import { reflectionsOf } from '../state/reflections.ts';
 import { setProjector } from '../state/projection.ts';
 import { marksOf, showsEarRedMove, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
@@ -83,8 +84,19 @@ export function Marks() {
     const m = marksOf(s);
     const linked = m.threat.connects.length > 0 ? [m.last, ...m.threat.connects] : [];
     const game = s.dataset?.games[s.gameIndex];
-    const initiative = game && showsEarRedMove(game, s.move, s.variation) ? [m.last] : [];
-    return `${m.atari.join(',')}|${m.trapped.join(',')}|${linked.join(',')}|${initiative.join(',')}`;
+    const scenes = game ? reflectionsOf(game) : [];
+    const target =
+      s.variation.length === 0 && ((s.mode === 'lecture' && !s.playing) || s.mode === 'reflechir')
+        ? scenes.find(({ after }) => after === s.move)?.tactical
+        : undefined;
+    const initiative = new Set([...(target?.captures ?? []), ...(target?.atari ?? [])]);
+    if (
+      (game && showsEarRedMove(game, s.move, s.variation)) ||
+      (s.variation.length === 0 && scenes.some(({ tactical }) => tactical?.number === s.move))
+    ) {
+      initiative.add(m.last);
+    }
+    return `${m.atari.join(',')}|${m.trapped.join(',')}|${linked.join(',')}|${[...initiative].join(',')}`;
   });
   const impact = useStore((s) => s.impact);
   const invalidate = useThree((s) => s.invalidate);
@@ -168,9 +180,9 @@ export function Marks() {
         n++;
       }
     };
-    put(list(initiative), INITIATIVE_GLOW);
     put(list(linked), MARK_COLORS.connection);
     put(list(atari), MARK_COLORS.attack);
+    put(list(initiative), INITIATIVE_GLOW);
     haloMesh.count = n;
     haloMesh.instanceMatrix.needsUpdate = true;
     if (haloMesh.instanceColor) haloMesh.instanceColor.needsUpdate = true;
@@ -231,7 +243,7 @@ export function Marks() {
     const [x, z] = pointToWorld(impact.point);
     mesh.position.set(x, BOARD_TOP + 0.025, z);
     assets.flash.color.set(
-      impact.kind === 'initiative' || impact.kind === 'menace'
+      impact.tactical || impact.kind === 'initiative' || impact.kind === 'menace'
         ? INITIATIVE_GLOW
         : impact.kind === 'connexion'
           ? MARK_COLORS.connection
@@ -239,7 +251,7 @@ export function Marks() {
             ? '#f3e7c8'
             : MARK_COLORS.attack,
     );
-    const strong = impact.kind === 'moment' || impact.kind === 'initiative';
+    const strong = impact.tactical || impact.kind === 'moment' || impact.kind === 'initiative';
     const run = animate(0, 1, {
       duration: strong ? 2.4 : 0.9,
       ease: 'easeOut',

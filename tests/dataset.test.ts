@@ -4,8 +4,10 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { PASS } from '../src/domain/board.ts';
 import { buildTimeline, decodeMoves, decodePoints, type Dataset } from '../src/domain/game.ts';
+import { reflectionLines, reflectionsOf } from '../src/state/reflections.ts';
+import { studyOf } from '../src/state/study.ts';
 import { CHAPTERS, MOMENTS, chapterIndexOf, gamesOfChapter } from '../src/story/chapters.ts';
-import { reflectionMoves, reflectionsOf } from '../src/story/reflections.ts';
+import { reflectionMoves, historicalReflectionsOf } from '../src/story/reflections.ts';
 import { ageAt, ageLabel, dateToTime, formatDate } from '../src/story/format.ts';
 
 const root = join(import.meta.dirname, '..');
@@ -223,7 +225,7 @@ it('les scènes de réflexion suivent le bon kifu et chaque coup proposé est l�
   const game = byId.get('s126')!;
   const setup = decodePoints(game.setupBlack);
   const historical = decodeMoves(game.moves);
-  const scenes = reflectionsOf(game);
+  const scenes = historicalReflectionsOf(game);
   expect(scenes.filter((scene) => scene.sessionBreak).map((scene) => scene.after)).toEqual([
     89, 141,
   ]);
@@ -240,4 +242,42 @@ it('les scènes de réflexion suivent le bon kifu et chaque coup proposé est l�
       expect(timeline.illegal).toEqual([]);
     }
   }
+});
+
+it('indexe les coups forts des deux couleurs et ne propose que des défenses légales', () => {
+  const colors = new Set<string>();
+  let alternatives = 0;
+  let gamesWithTactics = 0;
+  for (const game of games) {
+    const moves = decodeMoves(game.moves);
+    const setup = decodePoints(game.setupBlack);
+    const scenes = reflectionsOf(game);
+    const tactical = scenes.filter((scene) => scene.tactical);
+    if (tactical.length) gamesWithTactics++;
+    const expected = studyOf(game).filter(({ captures, atari, connects, number }) => {
+      if (historicalReflectionsOf(game).some(({ after }) => after === number - 1)) return false;
+      return (
+        captures.length > 1 ||
+        atari.length > 1 ||
+        (connects.length > 0 && captures.length + atari.length > 0)
+      );
+    });
+    expect(tactical.map(({ after }) => after + 1)).toEqual(expected.map(({ number }) => number));
+    for (const scene of tactical) {
+      colors.add(moves[scene.after]!.color);
+      for (const line of reflectionLines(game, scene).slice(1)) {
+        const branch = reflectionMoves(game, scene.after, line);
+        expect(branch).toHaveLength(2);
+        expect(branch[0]).toEqual(moves[scene.after]);
+        expect(branch[1]?.color).not.toBe(branch[0]?.color);
+        expect(buildTimeline(setup, [...moves.slice(0, scene.after), ...branch]).illegal).toEqual(
+          buildTimeline(setup, moves.slice(0, scene.after)).illegal,
+        );
+        alternatives++;
+      }
+    }
+  }
+  expect(colors).toEqual(new Set(['B', 'W']));
+  expect(gamesWithTactics).toBeGreaterThan(1);
+  expect(alternatives).toBeGreaterThan(0);
 });

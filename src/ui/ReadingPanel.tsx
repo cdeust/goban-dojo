@@ -5,7 +5,7 @@ import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { readLine, READING_DEPTHS, type ReadingStep } from '../engine/reading.ts';
 import { nextColor, SPEEDS, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 import { colorName } from '../story/format.ts';
-import { reflectionsOf } from '../story/reflections.ts';
+import { reflectionsOf } from '../state/reflections.ts';
 
 function moveLabel(step: ReadingStep) {
   return `${colorName(step.move.color)} ${pointToHuman(step.move.point)}`;
