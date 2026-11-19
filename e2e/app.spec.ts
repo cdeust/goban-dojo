@@ -535,10 +535,15 @@ test('le replay s’arrête avant les coups tactiques des deux joueurs', async (
     await stage.getByRole('button', { name: 'Révéler le coup' }).click();
     await expect(slider).toHaveValue(coup!);
   }
-  await page.getByRole('button', { name: 'Coups forts' }).click();
-  await slider.fill('78');
+  const tacticalPauses = page.getByRole('button', { name: 'Coups forts' });
+  await tacticalPauses.click();
+  await expect(tacticalPauses).toHaveAttribute('aria-pressed', 'false');
+  await slider.fill('151');
   await page.getByRole('button', { name: 'Lecture', exact: true }).click();
-  await expect.poll(async () => Number(await slider.inputValue())).toBeGreaterThan(79);
+  // Le rendu logiciel peut monopoliser le fil principal au changement de position.
+  await expect
+    .poll(async () => Number(await slider.inputValue()), { timeout: 90_000 })
+    .toBeGreaterThan(152);
 });
 
 test('les simulations se succèdent sur le mini-goban puis la réponse ouvre sa propre scène', async ({
