@@ -7,7 +7,7 @@ import { reflectionsOf } from '../state/reflections.ts';
 import { setProjector } from '../state/projection.ts';
 import { marksOf, showsEarRedMove, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
-import { INK } from './textures.ts';
+import { haloTexture, INK } from './textures.ts';
 
 /** Nombre maximal de pierres marquées à la fois, par type de marque. */
 const CAPACITY = 96;
@@ -34,17 +34,6 @@ function texture(
   paint(ctx, size);
   return new THREE.CanvasTexture(canvas);
 }
-
-/** Halo : anneau doux, plein contre la pierre, qui s'efface vers l'extérieur. */
-const haloTexture = (): THREE.CanvasTexture =>
-  texture((ctx, s) => {
-    const g = ctx.createRadialGradient(s / 2, s / 2, s * 0.24, s / 2, s / 2, s / 2);
-    g.addColorStop(0, 'rgba(255,255,255,1)');
-    g.addColorStop(0.35, 'rgba(255,255,255,0.75)');
-    g.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, s, s);
-  });
 
 /** Cage : anneau de traits épais et interrompus, comme des barreaux vus de dessus. */
 const cageTexture = (): THREE.CanvasTexture =>

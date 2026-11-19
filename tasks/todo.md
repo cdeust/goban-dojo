@@ -152,3 +152,14 @@ Vérification Chromium à 1 440 × 900 et 390 × 844. Avant le coup 80, les
 pierres ajoutées par la variante portent le halo bleu. Le bouton Position
 initiale revient au coup 79 sans halo, puis rétablit la variante au même
 coup simulé. Le retour au kifu rétablit le décor et les pierres de lecture.
+
+## Adoucir le halo des coups simulés
+
+- [x] Réutiliser le dégradé radial des marques autour des pierres simulées.
+- [x] Comparer le rendu avant et après sur ordinateur et mobile.
+
+Chromium à 1 440 × 900 et 390 × 844, avant le coup 80. Sur la capture mobile,
+dans un carré de 12 px à (252, 270), 81 pixels gagnent en vert par rapport à
+la position initiale avec le fondu, contre 54 avec l’anneau. Le gain médian
+baisse de 27 à 17 sur 255. Les captures mobiles de la position initiale sont
+identiques et la révélation du kifu fonctionne sur les deux formats.

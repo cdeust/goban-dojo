@@ -12,3 +12,5 @@
   aussi les effets d’ambiance de la scène précédente.
 - Pour distinguer les coups simulés, vérifier sur le même goban que le halo
   apparaît sur les pierres ajoutées et disparaît à la position initiale.
+- Pour un halo discret, comparer la diffusion et l’intensité autour de la pierre
+  avec le rendu précédent, à la taille réelle du goban mobile.
