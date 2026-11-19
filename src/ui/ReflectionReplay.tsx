@@ -22,6 +22,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   );
   const [done, setDone] = useState(() => Boolean(finished.get(game)?.has(anchor)));
   const [failed, setFailed] = useState(false);
+  const [showStart, setShowStart] = useState(false);
   const [{ index, step }, setFrame] = useState({ index: 0, step: 0 });
   const moves = timelineOf(game).moves;
   const recorded = moves[anchor]!;
@@ -80,16 +81,17 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const shown = unavailable && !lines?.length ? fallback : lines;
   const allReceived = unavailable || done;
   const branch = shown?.[index];
-  const current = step ? branch?.moves[step - 1] : undefined;
-  const estimate = step ? branch?.estimates[step - 1] : undefined;
+  const visibleStep = showStart ? 0 : step;
+  const current = visibleStep ? branch?.moves[visibleStep - 1] : undefined;
+  const estimate = visibleStep ? branch?.estimates[visibleStep - 1] : undefined;
   const simulatedMoves = branch?.moves;
 
   useEffect(() => {
-    showSimulation(simulatedMoves?.slice(0, step) ?? []);
-  }, [showSimulation, simulatedMoves, step]);
+    showSimulation(simulatedMoves?.slice(0, visibleStep) ?? []);
+  }, [showSimulation, simulatedMoves, visibleStep]);
 
   useEffect(() => {
-    if (paused || !shown) return;
+    if (paused || showStart || !shown) return;
     const complete = !branch || step >= branch.moves.length;
     if (complete && index + 1 >= shown.length && !allReceived) return;
     const timer = window.setTimeout(
@@ -101,7 +103,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
       complete ? BRANCH_HOLD : FRAME_MS,
     );
     return () => window.clearTimeout(timer);
-  }, [paused, shown, branch, index, step, reveal, allReceived]);
+  }, [paused, shown, branch, index, step, reveal, allReceived, showStart]);
 
   return (
     <section className="simulation" aria-labelledby="simulation-title">
@@ -118,19 +120,13 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
       <div
         className="simulation__view"
         data-branch={branch ? index + 1 : undefined}
-        data-step={step}
+        data-step={visibleStep}
       >
         <p className="simulation__current">
           {current
-            ? colorName(current.color) +
-              ' ' +
-              pointToHuman(current.point) +
-              ' · ' +
-              step +
-              '/' +
-              branch?.moves.length
+            ? 'Coup simulé · ' + colorName(current.color) + ' ' + pointToHuman(current.point)
             : branch
-              ? 'Position de départ'
+              ? 'Position initiale · coups du kifu'
               : unavailable
                 ? 'Aucune variante disponible'
                 : 'KataGo prépare les variantes…'}
@@ -138,13 +134,34 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         </p>
       </div>
       <p className="simulation__source">
-        {unavailable && !lines?.length && branch ? 'Variante pédagogique' : 'Simulations KataGo'}
+        {unavailable && !lines?.length && branch ? 'Variante pédagogique' : 'Simulations KataGo'} ·
+        Halo bleu · coup simulé
       </p>
       <div className="simulation__controls" role="group" aria-label="Commandes de la simulation">
-        <button type="button" className="chip" onClick={() => setPaused(!paused)}>
+        <button
+          type="button"
+          className="chip"
+          onClick={() => {
+            setShowStart(false);
+            setPaused(!paused);
+          }}
+        >
           {paused ? 'Lire les variantes' : 'Pause des variantes'}
         </button>
-        {paused && branch && (
+        {step > 0 && (
+          <button
+            type="button"
+            className="chip"
+            aria-pressed={showStart}
+            onClick={() => {
+              setPaused(true);
+              setShowStart(!showStart);
+            }}
+          >
+            Position initiale
+          </button>
+        )}
+        {paused && !showStart && branch && (
           <button
             type="button"
             className="chip"

@@ -141,3 +141,14 @@ pierres fixes (carrés de 4 px à 498, 304 et 544, 303 sur la capture desktop
 à 1 000 px de large). La pierre noire passe de (50, 42, 34) à (54, 54, 62).
 La pierre blanche passe de (231, 227, 218) à (215, 217, 218). Les valeurs
 initiales reviennent après la pose du coup du kifu.
+
+## Distinguer les coups simulés
+
+- [x] Donner à l’estimation une palette bleue bien distincte.
+- [x] Entourer les pierres simulées d’un halo et permettre la comparaison avec le départ.
+- [x] Vérifier le rendu sur ordinateur et téléphone et le retour au kifu.
+
+Vérification Chromium à 1 440 × 900 et 390 × 844. Avant le coup 80, les
+pierres ajoutées par la variante portent le halo bleu. Le bouton Position
+initiale revient au coup 79 sans halo, puis rétablit la variante au même
+coup simulé. Le retour au kifu rétablit le décor et les pierres de lecture.

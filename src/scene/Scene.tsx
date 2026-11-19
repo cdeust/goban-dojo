@@ -11,6 +11,7 @@ import { Marks } from './Marks.tsx';
 import { ReadingOwnership } from './ReadingOwnership.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
+import { SimulationMarks } from './SimulationMarks.tsx';
 import { StudyMarks } from './StudyMarks.tsx';
 
 /**
@@ -65,6 +66,7 @@ export function Scene() {
       <StudyMarks />
       <BoardInput />
       <AnalysisMarks />
+      <SimulationMarks />
       <CameraRig />
       <RenderProbe />
     </Canvas>

@@ -66,12 +66,9 @@ const cageTexture = (): THREE.CanvasTexture =>
  */
 export function Marks() {
   const enabled = useStore((s) => s.effects);
-  const simulating = useStore(
-    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
-  );
   // Clé stable tant que les marques ne changent pas : évite de tout reconstruire à chaque coup.
   const key = useStore((s) => {
-    if (!s.effects) return '';
+    if (!s.effects || s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual') return '';
     const m = marksOf(s);
     const linked = m.threat.connects.length > 0 ? [m.last, ...m.threat.connects] : [];
     const game = s.dataset?.games[s.gameIndex];
@@ -194,7 +191,7 @@ export function Marks() {
     assets.halo.opacity = n > 0 ? 0.6 : 0;
     assets.cage.opacity = caged.length > 0 ? 1 : 0;
     invalidate();
-    if (still || simulating || (n === 0 && caged.length === 0)) return;
+    if (still || (n === 0 && caged.length === 0)) return;
     // Les halos battent lentement ; les cages tournent, comme un étau qui se resserre.
     const pulse = animate(0, 1, {
       duration: 1.3,
@@ -222,7 +219,7 @@ export function Marks() {
       pulse.stop();
       turn?.stop();
     };
-  }, [key, assets, invalidate, simulating]);
+  }, [key, assets, invalidate]);
 
   return (
     <group visible={enabled}>
