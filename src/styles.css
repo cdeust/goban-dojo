@@ -147,6 +147,7 @@ button:disabled {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(ellipse at 50% 48%, rgb(32 151 255 / 0.14), rgb(2 9 24 / 0.9));
@@ -159,6 +160,10 @@ button:disabled {
 
 .stage[data-effects='true']:has(.moment--tactical) .stage__canvas::before {
   opacity: 1;
+}
+
+.stage:has(.moment--tactical) .card {
+  visibility: hidden;
 }
 
 .stage__canvas canvas {
