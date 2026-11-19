@@ -130,3 +130,14 @@ avant et pendant le fondu, puis le décor reprend sa luminosité. Sur la capture
 desktop, la luma moyenne du rectangle de tatami (90 × 36 px, origine 50, 90 sur la
 capture redimensionnée à 1 000 px de large) passe de 132,1 à 42,2 puis revient à
 132,1 (FFmpeg, YAVG).
+
+## Teinte des pierres pendant l’estimation
+
+- [x] Appliquer une teinte froide distincte à chaque camp pendant l’estimation.
+- [x] Vérifier le rendu et le retour aux couleurs du kifu.
+
+Vérification sur Chromium à 1 440 × 900 et 390 × 844. Moyennes RVB sur deux
+pierres fixes (carrés de 4 px à 498, 304 et 544, 303 sur la capture desktop
+à 1 000 px de large). La pierre noire passe de (50, 42, 34) à (54, 54, 62).
+La pierre blanche passe de (231, 227, 218) à (215, 217, 218). Les valeurs
+initiales reviennent après la pose du coup du kifu.

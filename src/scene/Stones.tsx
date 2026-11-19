@@ -143,6 +143,9 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
   const stage = useStage();
   const invalidate = useThree((s) => s.invalidate);
   const showNumbers = useStore((s) => s.showNumbers);
+  const estimating = useStore(
+    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
+  );
 
   const blackRef = useRef<THREE.InstancedMesh>(null);
   const whiteRef = useRef<THREE.InstancedMesh>(null);
@@ -644,12 +647,14 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
       <instancedMesh
         ref={blackRef}
         args={[assets.geometry, assets.black, capacity]}
+        material={estimating ? assets.estimateBlack : assets.black}
         castShadow
         receiveShadow
       />
       <instancedMesh
         ref={whiteRef}
         args={[assets.geometry, assets.white, capacity]}
+        material={estimating ? assets.estimateWhite : assets.white}
         castShadow
         receiveShadow
       />
