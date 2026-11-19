@@ -38,8 +38,8 @@ export function Goban() {
 
   useLayoutEffect(() => {
     const top = materials[2]!;
-    top.color.set(simulation ? '#5cbdff' : '#ffffff');
-    top.emissive.set(simulation ? '#102c48' : '#000000');
+    top.color.set(simulation ? '#5595ff' : '#ffffff');
+    top.emissive.set(simulation ? '#102752' : '#000000');
     invalidate();
   }, [simulation, materials, invalidate]);
 

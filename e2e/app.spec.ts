@@ -554,7 +554,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await enter(page);
   await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
   await page.getByRole('button', { name: 'Partie suivante' }).click();
-  const slider = page.getByRole('slider', { name: 'Coup' });
+  const slider = page.locator('input[aria-label="Coup"]');
   await slider.fill('85');
   const goban = page.locator('canvas[data-rendered=true]');
   const position = await goban.boundingBox();
@@ -577,6 +577,9 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
   await expect(goban).toHaveCount(1);
   expect(await goban.boundingBox()).toEqual(position);
+  expect((await simulation.boundingBox())!.y).toBeGreaterThanOrEqual(
+    position!.y + position!.height,
+  );
   await expect(simulation.locator('svg')).toHaveCount(0);
   const started = performance.now();
   const variant = simulation.locator('.simulation__view');
