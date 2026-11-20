@@ -32,8 +32,8 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
 - **Simuler avec Leela Zero**, une reproduction publique d’AlphaGo Zero. Avant les coups forts,
   le goban rejoue les suites explorées par le moteur. Depuis « Analyser », ouvrez la lecture
   longue pour choisir une branche et suivre les réponses des deux camps, y compris dans
-  votre propre SGF. Pendant une pause, « Plus de variantes et de coups » permet de chercher
-  d’autres premiers coups et de prolonger la variante affichée. Pour étudier une fin de partie,
+  votre propre SGF. Pendant une estimation, choisissez directement la variante sous le goban ou avancez
+  d’un coup pour lire la réponse. Les réglages permettent de chercher d’autres premiers coups et de prolonger la suite. Pour étudier une fin de partie,
   filtrez « Parties terminées par abandon » puis choisissez « Continuer après l’abandon » dans
   la fiche. Depuis le dernier coup enregistré, choisissez « Comparer 10 variantes de 20 coups » pour étudier dix réponses possibles sur le même goban. À chaque coup, l’encart indique l’avance estimée et les points gagnés ou perdus par le joueur. Les variantes sont classées par gain estimé au premier coup. Vous pouvez ainsi comparer le coup du kifu au meilleur départ évalué.
   [Provenance des poids et vérification](docs/LEELA-ZERO.md)

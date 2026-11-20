@@ -15,6 +15,7 @@ import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
 import type { MoveScore } from '../state/variationScores.ts';
 import { nextColor, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 import { colorName } from '../story/format.ts';
+import { IconPause, IconPlay } from './icons.tsx';
 import { useVariationScores } from './useVariationScores.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 
@@ -99,7 +100,8 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
   const examine = useStore((s) => s.showReflection);
 
   useEffect(() => {
-    if (afterResignation) heading.current?.focus({ preventScroll: true });
+    if (afterResignation || useStore.getState().reflectionReplay === 'manual')
+      heading.current?.focus({ preventScroll: true });
   }, [afterResignation]);
 
   useEffect(() => {
@@ -255,138 +257,294 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
       className={afterResignation ? 'simulation simulation--resignation' : 'simulation'}
       aria-labelledby="simulation-title"
     >
-      <header className="simulation__header">
-        <h2 id="simulation-title" ref={heading} tabIndex={-1}>
-          {afterResignation
-            ? 'Variantes après l’abandon'
-            : colorName(next) + ' · avant le coup ' + (anchor + 1)}
-        </h2>
-        <span>
-          {branch?.moves[0]
-            ? 'Variante ' + pointToHuman(branch.moves[0].point)
-            : 'Lecture des variantes'}
-        </span>
-      </header>
-      {afterResignation && (
-        <p className="simulation__current">
-          {colorName(next)} au trait · suites hypothétiques depuis la position finale du kifu.
-        </p>
-      )}
-      <div
-        className="simulation__view"
-        data-branch={branch ? index + 1 : undefined}
-        data-step={visibleStep}
-      >
-        <p className="simulation__current">
-          {current
-            ? 'Coup simulé · ' + colorName(current.color) + ' ' + pointToHuman(current.point)
-            : branch
-              ? 'Position initiale · coups du kifu'
-              : unavailable
-                ? 'Aucune variante disponible'
-                : request
-                  ? 'Leela Zero prépare les variantes…'
-                  : 'Recherche arrêtée'}
-        </p>
-        {positionScore ? (
-          <dl className="simulation__score">
-            <div>
-              <dt>Avance estimée</dt>
-              <dd>{estimatedLead(positionScore.blackLead)}</dd>
-            </div>
-            {current && scores.visible && (
-              <div>
-                <dt>Variation pour {colorName(current.color)}</dt>
-                <dd>{signedScore.format(scores.visible.gain)} pt</dd>
-              </div>
-            )}
-            <div>
-              <dt>Komi d’équilibre estimé</dt>
-              <dd>{komiPoints(positionScore.evenKomi)}</dd>
-            </div>
-          </dl>
-        ) : (
-          <p className="simulation__source">
-            {scores.error
-              ? 'Score indisponible pour cette position.'
-              : 'Estimation du score en cours…'}
-          </p>
-        )}
-        {compareTurn && current && (
-          <p className="simulation__comparison simulation__reply">
-            {bestReply && scores.visible && scores.siblings.size > 1 ? (
-              <>
-                {bestReply.point === current.point
-                  ? 'Ce coup est en tête'
-                  : pointToHuman(bestReply.point) +
-                    ' conserverait ' +
-                    scoreNumber.format(bestReply.gain - scores.visible.gain) +
-                    ' pt de plus'}
-                {' sur ' + scores.siblings.size + ' réponses évaluées à ce tour.'}
-                {scores.siblingsPending && ' Comparaison en cours…'}
-              </>
-            ) : scores.error ? (
-              'Comparaison des réponses indisponible.'
-            ) : scores.siblingsPending ? (
-              'Comparaison des réponses en cours…'
+      <div className="simulation__body">
+        <header className="simulation__header">
+          <h2 id="simulation-title" ref={heading} tabIndex={-1}>
+            {afterResignation
+              ? 'Variantes après l’abandon'
+              : colorName(next) + ' · avant le coup ' + (anchor + 1)}
+          </h2>
+        </header>
+        <div
+          className="simulation__navigation"
+          role="group"
+          aria-label="Parcourir la variante"
+          onFocus={() => setPaused(true)}
+        >
+          <div className="simulation__field">
+            <label htmlFor="simulation-branch">Variante affichée</label>
+            <select
+              id="simulation-branch"
+              value={branch ? index : ''}
+              disabled={!branch}
+              onChange={(event) => selectBranch(Number(event.target.value))}
+            >
+              {!branch && <option value="">—</option>}
+              {ranked.map(({ i, first, score }, rank) => (
+                <option key={i} value={i}>
+                  {score ? rank + 1 : '…'}
+                  {first && ' · ' + pointToHuman(first.point)}
+                  {score && ' · ' + signedScore.format(score.gain) + ' pt'}
+                </option>
+              ))}
+            </select>
+          </div>
+          <label className="simulation__scrub">
+            Coup{' '}
+            <span aria-hidden="true">
+              {visibleStep} / {available}
+            </span>
+            <input
+              aria-label="Coup de la variante"
+              aria-valuetext={visibleStep + ' sur ' + available}
+              type="range"
+              min="0"
+              max={available}
+              disabled={!available}
+              value={visibleStep}
+              onChange={(event) => {
+                setPaused(true);
+                setShowStart(false);
+                setFrame({ index, step: Number(event.target.value) });
+              }}
+            />
+          </label>
+          <button
+            type="button"
+            className="chip simulation__origin"
+            disabled={step === 0}
+            aria-pressed={showStart}
+            onClick={() => {
+              setPaused(true);
+              setShowStart(!showStart);
+            }}
+          >
+            Position initiale
+          </button>
+        </div>
+        <div className="simulation__overview">
+          {afterResignation && (
+            <p className="simulation__current">
+              {colorName(next)} au trait · suites hypothétiques depuis la position finale du kifu.
+            </p>
+          )}
+          <div
+            className="simulation__view"
+            data-branch={branch ? index + 1 : undefined}
+            data-step={visibleStep}
+          >
+            <p className="simulation__current">
+              {current
+                ? 'Coup simulé · ' + colorName(current.color) + ' ' + pointToHuman(current.point)
+                : branch
+                  ? 'Position initiale · coups du kifu'
+                  : unavailable
+                    ? 'Aucune variante disponible'
+                    : request
+                      ? 'Leela Zero prépare les variantes…'
+                      : 'Recherche arrêtée'}
+            </p>
+            {positionScore ? (
+              <dl className="simulation__score">
+                <div>
+                  <dt>Avance estimée</dt>
+                  <dd>{estimatedLead(positionScore.blackLead)}</dd>
+                </div>
+                {current && scores.visible && (
+                  <div>
+                    <dt>Variation pour {colorName(current.color)}</dt>
+                    <dd>{signedScore.format(scores.visible.gain)} pt</dd>
+                  </div>
+                )}
+                <div>
+                  <dt>Komi d’équilibre estimé</dt>
+                  <dd>{komiPoints(positionScore.evenKomi)}</dd>
+                </div>
+              </dl>
             ) : (
-              'Une seule réponse évaluée à ce tour.'
+              <p className="simulation__source">
+                {scores.error
+                  ? 'Score indisponible pour cette position.'
+                  : 'Estimation du score en cours…'}
+              </p>
             )}
-          </p>
-        )}
-      </div>
-      {scores.error && (
-        <button type="button" className="chip" onClick={scores.retry}>
-          Réessayer l’estimation du score
-        </button>
-      )}
-      {best && (
-        <p className="simulation__comparison">
-          {scores.starts.size === 1
-            ? 'Premier coup évalué'
-            : 'Meilleur départ sur ' + scores.starts.size + ' coups évalués'}
-          {' · '}
-          {bestBranch >= 0 ? (
+            {compareTurn && current && (
+              <p className="simulation__comparison simulation__reply">
+                {bestReply && scores.visible && scores.siblings.size > 1 ? (
+                  <>
+                    {bestReply.point === current.point
+                      ? 'Ce coup est en tête'
+                      : pointToHuman(bestReply.point) +
+                        ' conserverait ' +
+                        scoreNumber.format(bestReply.gain - scores.visible.gain) +
+                        ' pt de plus'}
+                    {' sur ' + scores.siblings.size + ' réponses évaluées à ce tour.'}
+                    {scores.siblingsPending && ' Comparaison en cours…'}
+                  </>
+                ) : scores.error ? (
+                  'Comparaison des réponses indisponible.'
+                ) : scores.siblingsPending ? (
+                  'Comparaison des réponses en cours…'
+                ) : (
+                  'Une seule réponse évaluée à ce tour.'
+                )}
+              </p>
+            )}
+          </div>
+          {scores.error && (
+            <button type="button" className="chip" onClick={scores.retry}>
+              Réessayer l’estimation du score
+            </button>
+          )}
+          {best && (
+            <p className="simulation__comparison">
+              {scores.starts.size === 1
+                ? 'Premier coup évalué'
+                : 'Meilleur départ sur ' + scores.starts.size + ' coups évalués'}
+              {' · '}
+              {bestBranch >= 0 ? (
+                <button
+                  type="button"
+                  className="simulation__best"
+                  aria-label={'Voir la variante en ' + pointToHuman(best.point)}
+                  onClick={() => selectBranch(bestBranch)}
+                >
+                  {colorName(next)} {pointToHuman(best.point)}
+                </button>
+              ) : (
+                <strong>
+                  {colorName(next)} {pointToHuman(best.point)}
+                </strong>
+              )}
+              {' (' + signedScore.format(best.gain) + ' pt)'}
+              {recorded &&
+                (best.point === recorded.point
+                  ? ' · Coup du kifu'
+                  : ' · Kifu ' +
+                    pointToHuman(recorded.point) +
+                    (recordedScore
+                      ? ' · écart ' + scoreNumber.format(best.gain - recordedScore.gain) + ' pt'
+                      : scores.error
+                        ? ' · score indisponible'
+                        : ' · estimation en cours'))}
+            </p>
+          )}
+        </div>
+        <details
+          className="simulation__study"
+          onToggle={(event) => {
+            if (event.currentTarget.open) setPaused(true);
+          }}
+        >
+          <summary>Plus de variantes et de coups</summary>
+          <div className="simulation__options">
+            <div className="simulation__field">
+              <label htmlFor="simulation-width">Nombre de variantes</label>
+              <select
+                id="simulation-width"
+                value={width}
+                onChange={(event) => setWidth(Number(event.target.value))}
+              >
+                {[6, PREVIEW_BRANCHES, 12, 24, 60, 120, POINTS + 1].map((count) => (
+                  <option key={count} value={count}>
+                    {count === POINTS + 1 ? 'Tous les coups légaux' : count}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button
               type="button"
-              className="simulation__best"
-              aria-label={'Voir la variante en ' + pointToHuman(best.point)}
-              onClick={() => selectBranch(bestBranch)}
+              className="chip"
+              disabled={
+                exhausted ||
+                lines.length >= width ||
+                (request?.kind === 'branches' && request.target === width)
+              }
+              onClick={() => {
+                if (!lines[index]) {
+                  setShowStart(false);
+                  setFrame({ index: 0, step: 0 });
+                }
+                runManual({ kind: 'branches', target: width, existing: lines });
+              }}
             >
-              {colorName(next)} {pointToHuman(best.point)}
+              Chercher les variantes
             </button>
-          ) : (
-            <strong>
-              {colorName(next)} {pointToHuman(best.point)}
-            </strong>
+            <div className="simulation__field">
+              <label htmlFor="simulation-depth">Profondeur de la variante</label>
+              <select
+                id="simulation-depth"
+                value={depth}
+                onChange={(event) => setDepth(Number(event.target.value))}
+              >
+                {[16, PREVIEW_DEPTH, 32, 60, 120, 240, 480].map((count) => (
+                  <option key={count} value={count}>
+                    {count} coups
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="button"
+              className="chip"
+              disabled={
+                !lines[index] ||
+                branch?.complete ||
+                (branch?.moves.length ?? 0) >= depth ||
+                (request?.kind === 'depth' && request.index === index && request.target === depth)
+              }
+              onClick={() => {
+                const line = lines[index];
+                if (line) runManual({ kind: 'depth', index, line, target: depth });
+              }}
+            >
+              Prolonger la variante
+            </button>
+          </div>
+          <p className="simulation__progress" role="status">
+            {request?.kind === 'branches'
+              ? lines.length + ' / ' + request.target + ' variantes disponibles'
+              : request?.kind === 'depth'
+                ? (lines[request.index]?.moves.length ?? 0) +
+                  ' / ' +
+                  request.target +
+                  ' coups disponibles'
+                : failed
+                  ? 'Recherche interrompue par une erreur'
+                  : exhausted
+                    ? 'Tous les premiers coups légaux ont été examinés.'
+                    : branch?.complete
+                      ? 'Fin de cette variante.'
+                      : lines.length +
+                        (lines.length === 1 ? ' variante disponible' : ' variantes disponibles')}
+          </p>
+          {request && (
+            <button type="button" className="chip" onClick={() => runManual(null)}>
+              Arrêter la recherche
+            </button>
           )}
-          {' (' + signedScore.format(best.gain) + ' pt)'}
-          {recorded &&
-            (best.point === recorded.point
-              ? ' · Coup du kifu'
-              : ' · Kifu ' +
-                pointToHuman(recorded.point) +
-                (recordedScore
-                  ? ' · écart ' + scoreNumber.format(best.gain - recordedScore.gain) + ' pt'
-                  : scores.error
-                    ? ' · score indisponible'
-                    : ' · estimation en cours'))}
-        </p>
-      )}
-      <p className="simulation__source">
-        {(failed || status === 'failed') && !lines.length
-          ? branch
-            ? 'Variante pédagogique'
-            : 'Recherche Leela Zero indisponible'
-          : 'Suites Leela Zero'}
-        {' · Score KataGo en règles japonaises · '}
-        {game.komi === undefined ? 'Komi retenu ' : 'Komi du kifu '}
-        {komiPoints(game.komi ?? 0)}
-      </p>
+          {!afterResignation && (
+            <button type="button" className="chip" onClick={() => examine(anchor)}>
+              Examiner
+            </button>
+          )}
+          <p className="simulation__source">
+            {(failed || status === 'failed') && !lines.length
+              ? branch
+                ? 'Variante pédagogique'
+                : 'Recherche Leela Zero indisponible'
+              : 'Suites Leela Zero'}
+            {' · Score KataGo en règles japonaises · '}
+            {game.komi === undefined ? 'Komi retenu ' : 'Komi du kifu '}
+            {komiPoints(game.komi ?? 0)}
+          </p>
+        </details>
+      </div>
       <div className="simulation__controls" role="group" aria-label="Commandes de la simulation">
         <button
           type="button"
           className="chip"
+          aria-label={paused ? 'Lire les variantes' : 'Pause des variantes'}
           onClick={() => {
             setShowStart(false);
             if (
@@ -401,37 +559,26 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
             setPaused(!paused);
           }}
         >
-          {paused ? 'Lire les variantes' : 'Pause des variantes'}
+          {paused ? <IconPlay /> : <IconPause />}
+          {paused ? 'Lire' : 'Pause'}
         </button>
-        {step > 0 && (
-          <button
-            type="button"
-            className="chip"
-            aria-pressed={showStart}
-            onClick={() => {
-              setPaused(true);
-              setShowStart(!showStart);
-            }}
-          >
-            Position initiale
-          </button>
-        )}
-        {paused && !showStart && branch && (
-          <button
-            type="button"
-            className="chip"
-            disabled={step === branch.moves.length && index + 1 === shown?.length}
-            onClick={() =>
-              setFrame(
-                step < branch.moves.length
-                  ? { index, step: step + 1 }
-                  : { index: index + 1, step: 0 },
-              )
-            }
-          >
-            Coup simulé suivant
-          </button>
-        )}
+        <button
+          type="button"
+          className="chip"
+          aria-label="Coup simulé suivant"
+          disabled={!available || (visibleStep >= available && !hasNextBranch)}
+          onClick={() => {
+            setPaused(true);
+            setShowStart(false);
+            setFrame(
+              visibleStep < available
+                ? { index, step: visibleStep + 1 }
+                : { index: index + 1, step: 0 },
+            );
+          }}
+        >
+          Suivant
+        </button>
         {onClose ? (
           <button
             type="button"
@@ -445,150 +592,21 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
             Revenir à la lecture longue
           </button>
         ) : (
-          <>
-            <button type="button" className="chip" onClick={() => examine(anchor)}>
-              Examiner
-            </button>
-            <button type="button" className="chip chip--accent" onClick={reveal}>
-              Jouer le coup du kifu
-            </button>
-          </>
+          <button
+            type="button"
+            className="chip chip--accent"
+            onClick={(event) => {
+              const cursor = event.currentTarget
+                .closest('.stage')
+                ?.querySelector<HTMLInputElement>('.transport__scrub input');
+              reveal();
+              requestAnimationFrame(() => cursor?.focus({ preventScroll: true }));
+            }}
+          >
+            Jouer le coup du kifu
+          </button>
         )}
       </div>
-      <details
-        className="simulation__study"
-        open={afterResignation || undefined}
-        onToggle={(event) => {
-          if (event.currentTarget.open) setPaused(true);
-        }}
-      >
-        <summary>Plus de variantes et de coups</summary>
-        <div className="simulation__options">
-          {shown.length > 0 && (
-            <>
-              <div className="simulation__field">
-                <label htmlFor="simulation-branch">Variante affichée</label>
-                <select
-                  id="simulation-branch"
-                  value={index}
-                  onChange={(event) => selectBranch(Number(event.target.value))}
-                >
-                  {ranked.map(({ i, first, score }, rank) => (
-                    <option key={i} value={i}>
-                      {score ? rank + 1 : '…'}
-                      {first && ' · ' + pointToHuman(first.point)}
-                      {score && ' · ' + signedScore.format(score.gain) + ' pt'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <label>
-                Coup de la variante{' '}
-                <span aria-hidden="true">
-                  · {visibleStep} / {branch?.moves.length}
-                </span>
-                <input
-                  aria-label="Coup de la variante"
-                  aria-valuetext={visibleStep + ' sur ' + branch?.moves.length}
-                  type="range"
-                  min="0"
-                  max={branch?.moves.length ?? 0}
-                  value={visibleStep}
-                  onChange={(event) => {
-                    setPaused(true);
-                    setShowStart(false);
-                    setFrame({ index, step: Number(event.target.value) });
-                  }}
-                />
-              </label>
-            </>
-          )}
-          <div className="simulation__field">
-            <label htmlFor="simulation-width">Nombre de variantes</label>
-            <select
-              id="simulation-width"
-              value={width}
-              onChange={(event) => setWidth(Number(event.target.value))}
-            >
-              {[6, PREVIEW_BRANCHES, 12, 24, 60, 120, POINTS + 1].map((count) => (
-                <option key={count} value={count}>
-                  {count === POINTS + 1 ? 'Tous les coups légaux' : count}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="button"
-            className="chip"
-            disabled={
-              exhausted ||
-              lines.length >= width ||
-              (request?.kind === 'branches' && request.target === width)
-            }
-            onClick={() => {
-              if (!lines[index]) {
-                setShowStart(false);
-                setFrame({ index: 0, step: 0 });
-              }
-              runManual({ kind: 'branches', target: width, existing: lines });
-            }}
-          >
-            Chercher les variantes
-          </button>
-          <div className="simulation__field">
-            <label htmlFor="simulation-depth">Profondeur de la variante</label>
-            <select
-              id="simulation-depth"
-              value={depth}
-              onChange={(event) => setDepth(Number(event.target.value))}
-            >
-              {[16, PREVIEW_DEPTH, 32, 60, 120, 240, 480].map((count) => (
-                <option key={count} value={count}>
-                  {count} coups
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="button"
-            className="chip"
-            disabled={
-              !lines[index] ||
-              branch?.complete ||
-              (branch?.moves.length ?? 0) >= depth ||
-              (request?.kind === 'depth' && request.index === index && request.target === depth)
-            }
-            onClick={() => {
-              const line = lines[index];
-              if (line) runManual({ kind: 'depth', index, line, target: depth });
-            }}
-          >
-            Prolonger la variante
-          </button>
-        </div>
-        <p className="simulation__progress" role="status">
-          {request?.kind === 'branches'
-            ? lines.length + ' / ' + request.target + ' variantes disponibles'
-            : request?.kind === 'depth'
-              ? (lines[request.index]?.moves.length ?? 0) +
-                ' / ' +
-                request.target +
-                ' coups disponibles'
-              : failed
-                ? 'Recherche interrompue par une erreur'
-                : exhausted
-                  ? 'Tous les premiers coups légaux ont été examinés.'
-                  : branch?.complete
-                    ? 'Fin de cette variante.'
-                    : lines.length +
-                      (lines.length === 1 ? ' variante disponible' : ' variantes disponibles')}
-        </p>
-        {request && (
-          <button type="button" className="chip" onClick={() => runManual(null)}>
-            Arrêter la recherche
-          </button>
-        )}
-      </details>
     </section>
   );
 }
