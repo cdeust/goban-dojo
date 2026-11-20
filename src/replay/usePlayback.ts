@@ -4,7 +4,6 @@ import { chapterIndexOf } from '../story/chapters.ts';
 import { momentFor } from '../story/chapters.ts';
 import { reflectionsOf } from '../state/reflections.ts';
 import { moveCount, timelineOf, useStore } from '../state/store.ts';
-import { prefersReducedMotion } from './motionPreference.ts';
 
 /** Pause (ms) sur un instant remarquable, puis en fin de partie avant d'enchaîner. */
 const MOMENT_PAUSE = 5200;
@@ -43,7 +42,7 @@ export function usePlayback(): void {
           if (current.continuous && gameIndex + 1 < games.length)
             current.selectGame(gameIndex + 1, { play: true });
         } else if (playsReflectionBefore(move)) {
-          current.setMove(move, true, prefersReducedMotion() ? undefined : 'auto');
+          current.setMove(move, true, 'auto');
         } else {
           current.setPlaying(true);
         }
@@ -61,6 +60,12 @@ export function usePlayback(): void {
       return () => window.clearTimeout(id);
     }
 
+    // La lecture peut aussi démarrer sur la position à étudier (curseur ou pas à pas).
+    if (playsReflectionBefore(move)) {
+      state.setMove(move, true, 'auto');
+      return;
+    }
+
     let delay = 1000 / speed;
     if (move === 0) delay = Math.max(delay, 900);
     if (
@@ -75,9 +80,7 @@ export function usePlayback(): void {
     const next = move + 1;
     const pause = playsReflectionBefore(next);
     const id = window.setTimeout(() => {
-      useStore
-        .getState()
-        .setMove(next, pause, pause && !prefersReducedMotion() ? 'auto' : undefined);
+      useStore.getState().setMove(next, pause, pause ? 'auto' : undefined);
     }, delay);
     return () => window.clearTimeout(id);
   }, [playing, speed, gameIndex, move, tacticalPauses, replay]);

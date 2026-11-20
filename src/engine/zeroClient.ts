@@ -37,6 +37,7 @@ function failed(message: string) {
 /** Le worker est créé à la première demande. Son réseau reste en mémoire entre deux positions. */
 export function loadZeroEngine(): void {
   if (worker) return;
+  const reload = useZeroEngine.getState().status === 'failed';
   useZeroEngine.setState({ status: 'loading', progress: 0, error: undefined });
   try {
     const current = new Worker(new URL('./zeroWorker.ts', import.meta.url), { type: 'module' });
@@ -59,7 +60,10 @@ export function loadZeroEngine(): void {
     current.onerror = (event) => {
       if (worker === current) failed(event.message || 'Leela Zero s’est arrêté');
     };
-    send({ type: 'load' });
+    current.onmessageerror = () => {
+      if (worker === current) failed('Réponse de Leela Zero illisible');
+    };
+    send({ type: 'load', reload });
   } catch (error) {
     failed(error instanceof Error ? error.message : String(error));
   }

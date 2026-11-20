@@ -71,7 +71,7 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
   const [exhausted, setExhausted] = useState(Boolean(cached && cached.length < PREVIEW_BRANCHES));
   const [width, setWidth] = useState<number>(PREVIEW_BRANCHES);
   const [depth, setDepth] = useState<number>(PREVIEW_DEPTH);
-  const [failed, setFailed] = useState(false);
+  const [failure, setFailure] = useState<{ job: PreviewRequest; message: string } | null>(null);
   const [showStart, setShowStart] = useState(false);
   const [{ index, step }, setFrame] = useState({ index: 0, step: 0 });
   const moves = timelineOf(game).moves;
@@ -138,15 +138,20 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
       if (signal.aborted) return;
       setLines(result);
       setExhausted(result.length < job.target);
-      if (job.initial) {
+      if (job.initial && result.length) {
         const positions = finished.get(game) ?? new Map<number, SimulationLine[]>();
         positions.set(anchor, result);
         finished.set(game, positions);
       }
     }
     void calculate(request)
-      .catch(() => {
-        if (!signal.aborted) setFailed(true);
+      .catch((error: unknown) => {
+        if (!signal.aborted) {
+          setFailure({
+            job: request,
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
       })
       .finally(() => {
         if (!signal.aborted) setRequest(null);
@@ -157,11 +162,37 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
   function runManual(next: PreviewRequest | null) {
     active.current?.abort();
     setPaused(true);
-    setFailed(false);
+    setFailure(null);
     setRequest(next);
   }
 
-  const unavailable = failed || status === 'failed' || (exhausted && !lines.length);
+  const failed = failure !== null || status === 'failed';
+  const unavailable = failed || (exhausted && !lines.length);
+
+  function retrySearch() {
+    const job = failure?.job;
+    setFailure(null);
+    setExhausted(false);
+    if (job?.kind === 'depth') {
+      setRequest({ ...job, line: lines[job.index] ?? job.line });
+      return;
+    }
+    // Une branche peut avoir été publiée avant l’interruption de sa recherche.
+    // Garder les suites terminées et reprendre au premier départ incomplet.
+    const existing = lines.filter((line) => line.complete || line.moves.length >= PREVIEW_DEPTH);
+    if (index >= existing.length) {
+      setFrame({ index: existing.length, step: 0 });
+      setShowStart(false);
+    }
+    setLines(existing);
+    setRequest({
+      kind: 'branches',
+      target: job?.target ?? width,
+      existing,
+      initial: job?.initial ?? true,
+    });
+  }
+
   const shown = unavailable && !lines.length ? fallback : lines;
   const allReceived = request === null;
   const branch = shown?.[index];
@@ -217,7 +248,12 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
   const hasNextBranch = index + 1 < shown.length;
   const dueAt = useRef<number | undefined>(undefined);
   useEffect(() => {
-    if (paused || showStart || (step >= available && !hasNextBranch && !allReceived)) {
+    if (
+      !available ||
+      paused ||
+      showStart ||
+      (step >= available && !hasNextBranch && (!allReceived || unavailable))
+    ) {
       dueAt.current = undefined;
       return;
     }
@@ -249,6 +285,7 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
     allReceived,
     index,
     afterResignation,
+    unavailable,
     reveal,
   ]);
 
@@ -339,7 +376,9 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
                 : branch
                   ? 'Position initiale · coups du kifu'
                   : unavailable
-                    ? 'Aucune variante disponible'
+                    ? failed
+                      ? 'Simulation interrompue'
+                      : 'Aucune variante disponible'
                     : request
                       ? 'Leela Zero prépare les variantes…'
                       : 'Recherche arrêtée'}
@@ -391,6 +430,12 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
               </p>
             )}
           </div>
+          {failed && (
+            <p className="simulation__source" role="status">
+              Leela Zero n’a pas terminé la recherche. Vous pouvez la relancer depuis cette
+              position.
+            </p>
+          )}
           {scores.error && (
             <button type="button" className="chip" onClick={scores.retry}>
               Réessayer l’estimation du score
@@ -528,8 +573,9 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
               Examiner
             </button>
           )}
+          {failure && <p className="simulation__source">{failure.message}</p>}
           <p className="simulation__source">
-            {(failed || status === 'failed') && !lines.length
+            {failed && !lines.length
               ? branch
                 ? 'Variante pédagogique'
                 : 'Recherche Leela Zero indisponible'
@@ -541,9 +587,15 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
         </details>
       </div>
       <div className="simulation__controls" role="group" aria-label="Commandes de la simulation">
+        {unavailable && !request && (
+          <button type="button" className="chip" onClick={retrySearch}>
+            Réessayer les simulations
+          </button>
+        )}
         <button
           type="button"
           className="chip"
+          disabled={!available && unavailable}
           aria-label={paused ? 'Lire les variantes' : 'Pause des variantes'}
           onClick={() => {
             setShowStart(false);
@@ -573,7 +625,7 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
             setFrame(
               visibleStep < available
                 ? { index, step: visibleStep + 1 }
-                : { index: index + 1, step: 0 },
+                : { index: index + 1, step: 1 },
             );
           }}
         >

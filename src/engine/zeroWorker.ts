@@ -41,8 +41,11 @@ scope.onmessage = (event: MessageEvent<ZeroRequest>) => {
     return;
   }
   if (request.type === 'load') {
-    queue = openModel(modelUrl, ZERO_MODEL, (n, total) =>
-      post({ type: 'progress', progress: n / total }),
+    queue = openModel(
+      modelUrl,
+      ZERO_MODEL,
+      (n, total) => post({ type: 'progress', progress: n / total }),
+      request.reload === true,
     ).then(
       (s) => {
         session = s;
@@ -95,8 +98,8 @@ scope.onmessage = (event: MessageEvent<ZeroRequest>) => {
     } catch (error) {
       if (!controller.signal.aborted)
         post({
-          type: 'error',
-          id: request.id,
+          // Une session WASM qui a échoué en inférence peut rester inutilisable.
+          type: 'failed',
           message: error instanceof Error ? error.message : String(error),
         });
     } finally {

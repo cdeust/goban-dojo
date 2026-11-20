@@ -4,7 +4,7 @@ import type { GameRecord } from '../domain/game.ts';
 import { colorName } from '../story/format.ts';
 import { REFLECTION_SOURCE, reflectionMoves } from '../story/reflections.ts';
 import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
-import { useCurrentGame, useStore } from '../state/store.ts';
+import { timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 
 function ReflectionLine({
   game,
@@ -80,6 +80,7 @@ export function ReflectionPanel() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
   const select = useStore((s) => s.showReflection);
+  const simulate = useStore((s) => s.playReflectionReplay);
   const setMode = useStore((s) => s.setMode);
   const effects = useStore((s) => s.effects);
   const toggle = useStore((s) => s.toggle);
@@ -120,7 +121,12 @@ export function ReflectionPanel() {
         <p>{scene.context}</p>
         <p className="reflection__question">{scene.question}</p>
       </div>
-      <button type="button" className="chip chip--accent" onClick={() => setMode('analyser')}>
+      {timelineOf(game).moves[move] && (
+        <button type="button" className="chip chip--accent" onClick={simulate}>
+          Voir les simulations
+        </button>
+      )}
+      <button type="button" className="chip" onClick={() => setMode('analyser')}>
         Générer des variantes
       </button>
       <button type="button" className="chip" onClick={() => setMode('lire')}>

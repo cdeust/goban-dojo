@@ -2,7 +2,7 @@ import type { EnginePosition } from './features.ts';
 import type { ZeroResult } from './zeroSearch.ts';
 
 export type ZeroRequest =
-  | { type: 'load' }
+  | { type: 'load'; reload: boolean }
   | { type: 'search'; id: number; position: EnginePosition; visits: number; exclude?: number[] }
   | { type: 'cancel'; id: number };
 
