@@ -625,7 +625,7 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
             setFrame(
               visibleStep < available
                 ? { index, step: visibleStep + 1 }
-                : { index: index + 1, step: 0 },
+                : { index: index + 1, step: 1 },
             );
           }}
         >

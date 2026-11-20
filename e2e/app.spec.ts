@@ -675,8 +675,8 @@ test('une panne du réseau de variantes conserve la réflexion et permet de la r
   const view = simulation.locator('.simulation__view');
   await expect(view).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
   await expect(retry).toHaveCount(0);
-  await expect(view.getByText('Avance estimée')).toBeVisible({ timeout: 60_000 });
-  await simulation.getByRole('button', { name: 'Coup simulé suivant' }).click();
+  // La reprise automatique doit montrer une pierre et son évaluation sans clic supplémentaire.
+  await expect(view.getByText(/^Variation pour (Noir|Blanc)$/)).toBeVisible({ timeout: 60_000 });
   await expect(view).toContainText('Coup simulé');
   await expect(kifu).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
@@ -890,6 +890,13 @@ test('après un abandon, calculer une suite et retrouver le dernier coup du SGF'
     await branches.selectOption(String(i));
     await expect(projection).toHaveAttribute('max', '20', { timeout: 30_000 });
   }
+  await branches.selectOption('0');
+  await projection.fill('20');
+  await comparison.getByRole('button', { name: 'Coup simulé suivant' }).click();
+  await expect(simulated).toHaveAttribute('data-branch', '2');
+  await expect(simulated).toHaveAttribute('data-step', '1');
+  await expect(simulated).toContainText('Coup simulé');
+  await branches.selectOption(String(starts.length - 1));
   await projection.fill('20');
   await expect(comparison.locator('.simulation__view')).toHaveAttribute('data-step', '20');
   await comparison.getByRole('button', { name: 'Revenir à la lecture longue' }).click();
