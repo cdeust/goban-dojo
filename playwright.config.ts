@@ -12,7 +12,8 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['list']] : 'list',
   // Le rendu logiciel des machines de CI est plusieurs fois plus lent qu'un GPU.
   timeout: process.env.CI ? 180_000 : 60_000,
-  workers: process.env.CI ? 2 : undefined,
+  // Le job Linux partage son rendu WebGL logiciel entre les pages.
+  workers: process.env.CI ? 1 : undefined,
   use: {
     baseURL: 'http://127.0.0.1:4173',
     channel: 'chromium',
