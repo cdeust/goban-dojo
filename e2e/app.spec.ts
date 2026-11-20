@@ -539,12 +539,14 @@ test('la réduction des animations conserve les estimations au pas à pas pour l
   const slider = page.locator('input[aria-label="Coup"]');
   for (const [start, anchor, coup, color] of [
     ['78', '79', '80', 'Blanc'],
-    ['151', '152', '153', 'Noir'],
+    // Reprendre directement sur le point fort de Noir après avoir étudié celui de Blanc.
+    ['152', '152', '153', 'Noir'],
   ] as const) {
     await slider.fill(start);
     await page.getByRole('button', { name: 'Lecture', exact: true }).click();
     const simulation = page.getByRole('region', { name: color + ' · avant le coup ' + coup });
     const view = simulation.locator('.simulation__view');
+    await expect(simulation).toBeVisible({ timeout: 30_000 });
     await expect(simulation.getByRole('button', { name: 'Lire les variantes' })).toBeVisible();
     await expect(view).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
     await expect(view.getByText('Avance estimée')).toBeVisible({ timeout: 60_000 });
