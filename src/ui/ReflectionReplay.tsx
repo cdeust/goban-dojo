@@ -5,7 +5,6 @@ import { decodePoints, type GameRecord } from '../domain/game.ts';
 import { nextVariationStep, VARIATION_STEP_MS } from '../replay/variationClock.ts';
 import { analyzeZero, useZeroEngine } from '../engine/zeroClient.ts';
 import {
-  blackWinLabel,
   extendZeroLine,
   PREVIEW_BRANCHES,
   PREVIEW_DEPTH,
@@ -13,9 +12,35 @@ import {
   type SimulationLine,
 } from '../state/zeroReading.ts';
 import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
+import type { MoveScore } from '../state/variationScores.ts';
 import { nextColor, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 import { colorName } from '../story/format.ts';
+import { useVariationScores } from './useVariationScores.ts';
 import { reflectionMoves } from '../story/reflections.ts';
+
+const scoreNumber = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+const signedScore = new Intl.NumberFormat('fr-FR', {
+  maximumFractionDigits: 1,
+  signDisplay: 'exceptZero',
+});
+
+function estimatedLead(blackLead: number) {
+  const lead = scoreNumber.format(Math.abs(blackLead));
+  return lead === '0' ? 'Équilibre' : (blackLead > 0 ? 'Noir +' : 'Blanc +') + lead + ' pt';
+}
+
+function komiPoints(komi: number) {
+  const points = scoreNumber.format(Math.abs(komi));
+  return points === '0' ? '0 pt' : points + ' pt pour ' + (komi > 0 ? 'Blanc' : 'Noir');
+}
+
+function bestGain(scores: ReadonlyMap<number, MoveScore>) {
+  let best: { point: number; gain: number } | undefined;
+  for (const [point, { gain }] of scores) {
+    if (!best || gain > best.gain) best = { point, gain };
+  }
+  return best;
+}
 
 const BRANCH_HOLD = 750;
 const finished = new WeakMap<GameRecord, Map<number, SimulationLine[]>>();
@@ -141,12 +166,50 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
   const visibleStep = showStart ? 0 : step;
   const current = visibleStep ? branch?.moves[visibleStep - 1] : undefined;
   const simulatedMoves = branch?.moves;
+  const recorded = afterResignation ? undefined : moves[anchor];
+  const starts = useMemo(() => {
+    const points = new Set<number>();
+    for (const line of shown) {
+      if (line.moves[0]) points.add(line.moves[0].point);
+    }
+    if (recorded) points.add(recorded.point);
+    return [...points];
+  }, [shown, recorded]);
+  const compareTurn = paused && visibleStep >= 2;
+  const scores = useVariationScores(
+    position,
+    simulatedMoves ?? [],
+    visibleStep,
+    starts,
+    compareTurn,
+  );
+  const positionScore = current ? scores.visible : scores.root;
+  const recordedScore = recorded && scores.starts.get(recorded.point);
+  const best = bestGain(scores.starts);
+  const bestBranch = best ? shown.findIndex((line) => line.moves[0]?.point === best.point) : -1;
+  const bestReply = bestGain(scores.siblings);
+  const ranked = shown
+    .map((line, i) => {
+      const first = line.moves[0];
+      return { i, first, score: first && scores.starts.get(first.point) };
+    })
+    .sort((a, b) => {
+      if (!a.score) return b.score ? 1 : 0;
+      return b.score ? b.score.gain - a.score.gain : -1;
+    });
 
   useEffect(() => {
     const moves = simulatedMoves?.slice(0, visibleStep) ?? [];
     if (afterResignation) showReading(moves, null, null);
     else showSimulation(moves);
   }, [afterResignation, showReading, showSimulation, simulatedMoves, visibleStep]);
+
+  function selectBranch(i: number) {
+    if (request?.kind === 'depth') runManual(null);
+    setPaused(true);
+    setShowStart(false);
+    setFrame({ index: i, step: 1 });
+  }
 
   const available = branch?.moves.length ?? 0;
   const hasNextBranch = index + 1 < shown.length;
@@ -199,8 +262,8 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
             : colorName(next) + ' · avant le coup ' + (anchor + 1)}
         </h2>
         <span>
-          {branch
-            ? 'Variante ' + (index + 1) + (allReceived ? ' / ' + shown?.length : '')
+          {branch?.moves[0]
+            ? 'Variante ' + pointToHuman(branch.moves[0].point)
             : 'Lecture des variantes'}
         </span>
       </header>
@@ -225,20 +288,100 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
                   ? 'Leela Zero prépare les variantes…'
                   : 'Recherche arrêtée'}
         </p>
+        {positionScore ? (
+          <dl className="simulation__score">
+            <div>
+              <dt>Avance estimée</dt>
+              <dd>{estimatedLead(positionScore.blackLead)}</dd>
+            </div>
+            {current && scores.visible && (
+              <div>
+                <dt>Variation pour {colorName(current.color)}</dt>
+                <dd>{signedScore.format(scores.visible.gain)} pt</dd>
+              </div>
+            )}
+            <div>
+              <dt>Komi d’équilibre estimé</dt>
+              <dd>{komiPoints(positionScore.evenKomi)}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p className="simulation__source">
+            {scores.error
+              ? 'Score indisponible pour cette position.'
+              : 'Estimation du score en cours…'}
+          </p>
+        )}
+        {compareTurn && current && (
+          <p className="simulation__comparison simulation__reply">
+            {bestReply && scores.visible && scores.siblings.size > 1 ? (
+              <>
+                {bestReply.point === current.point
+                  ? 'Ce coup est en tête'
+                  : pointToHuman(bestReply.point) +
+                    ' conserverait ' +
+                    scoreNumber.format(bestReply.gain - scores.visible.gain) +
+                    ' pt de plus'}
+                {' sur ' + scores.siblings.size + ' réponses évaluées à ce tour.'}
+                {scores.siblingsPending && ' Comparaison en cours…'}
+              </>
+            ) : scores.error ? (
+              'Comparaison des réponses indisponible.'
+            ) : scores.siblingsPending ? (
+              'Comparaison des réponses en cours…'
+            ) : (
+              'Une seule réponse évaluée à ce tour.'
+            )}
+          </p>
+        )}
       </div>
+      {scores.error && (
+        <button type="button" className="chip" onClick={scores.retry}>
+          Réessayer l’estimation du score
+        </button>
+      )}
+      {best && (
+        <p className="simulation__comparison">
+          {scores.starts.size === 1
+            ? 'Premier coup évalué'
+            : 'Meilleur départ sur ' + scores.starts.size + ' coups évalués'}
+          {' · '}
+          {bestBranch >= 0 ? (
+            <button
+              type="button"
+              className="simulation__best"
+              aria-label={'Voir la variante en ' + pointToHuman(best.point)}
+              onClick={() => selectBranch(bestBranch)}
+            >
+              {colorName(next)} {pointToHuman(best.point)}
+            </button>
+          ) : (
+            <strong>
+              {colorName(next)} {pointToHuman(best.point)}
+            </strong>
+          )}
+          {' (' + signedScore.format(best.gain) + ' pt)'}
+          {recorded &&
+            (best.point === recorded.point
+              ? ' · Coup du kifu'
+              : ' · Kifu ' +
+                pointToHuman(recorded.point) +
+                (recordedScore
+                  ? ' · écart ' + scoreNumber.format(best.gain - recordedScore.gain) + ' pt'
+                  : scores.error
+                    ? ' · score indisponible'
+                    : ' · estimation en cours'))}
+        </p>
+      )}
       <p className="simulation__source">
         {(failed || status === 'failed') && !lines.length
-          ? 'Recherche Leela Zero indisponible' + (branch ? ' · variante pédagogique' : '')
-          : 'Leela Zero · reproduction d’AlphaGo Zero · komi 7,5 · score de surface'}
-        {branch?.excluded &&
-          branch.excluded.length > 0 &&
-          ' · Recherche alternative après exclusion de ' +
-            (branch.excluded.length < 4
-              ? branch.excluded.map(pointToHuman).join(', ')
-              : branch.excluded.length + ' premiers coups')}
-        {branch?.blackWin !== undefined &&
-          ' · ' + blackWinLabel(branch.blackWin) + ' après le premier coup'}
-        {' · Halo bleu · coup simulé'}
+          ? branch
+            ? 'Variante pédagogique'
+            : 'Recherche Leela Zero indisponible'
+          : 'Suites Leela Zero'}
+        {' · Score KataGo en règles japonaises · '}
+        {game.komi === undefined ? 'Komi retenu ' : 'Komi du kifu '}
+        {komiPoints(game.komi ?? 0)}
       </p>
       <div className="simulation__controls" role="group" aria-label="Commandes de la simulation">
         <button
@@ -328,17 +471,13 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
                 <select
                   id="simulation-branch"
                   value={index}
-                  onChange={(event) => {
-                    if (request?.kind === 'depth') runManual(null);
-                    setPaused(true);
-                    setShowStart(false);
-                    setFrame({ index: Number(event.target.value), step: 1 });
-                  }}
+                  onChange={(event) => selectBranch(Number(event.target.value))}
                 >
-                  {shown.map((line, i) => (
+                  {ranked.map(({ i, first, score }, rank) => (
                     <option key={i} value={i}>
-                      {i + 1}
-                      {line.moves[0] && ' · ' + pointToHuman(line.moves[0].point)}
+                      {score ? rank + 1 : '…'}
+                      {first && ' · ' + pointToHuman(first.point)}
+                      {score && ' · ' + signedScore.format(score.gain) + ' pt'}
                     </option>
                   ))}
                 </select>

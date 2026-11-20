@@ -2,10 +2,7 @@
 
 Le lecteur utilise **Leela Zero nº 116** pour les simulations des pauses tactiques et, par défaut,
 pour la lecture longue. Le réseau a appris par autojeu. Il propose des coups et estime l’issue
-d’une position. Le navigateur explore les réponses avec une recherche en arbre PUCT, puis
-classe les coups par nombre de visites. La probabilité affichée concerne Noir, sous les règles
-chinoises et avec 7,5 points de komi. Une partie de Shūsaku sans komi peut donc avoir une
-issue historique différente de celle que suggère cette estimation.
+d’une position. Le navigateur explore les réponses avec une recherche en arbre PUCT. La lecture longue indique la probabilité de victoire de Noir selon les règles chinoises avec le komi de 7,5 du réseau. Dans l’encart de simulation, les suites de Leela Zero reçoivent une estimation en points avec le komi du kifu.
 
 Les pauses rejouent les branches sur le goban de la partie. Lorsqu’un seul coup concentre
 toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux.
@@ -30,6 +27,10 @@ affiché pendant la simulation. Le joueur au trait se déduit du dernier coup en
 Dans le mode « Explorer », un réseau de neurones de KataGo juge chaque coup posé — et, pour
 comparaison, le coup réellement joué dans la partie. Tout tourne dans le navigateur : aucune
 position n’est envoyée à un serveur.
+
+Dans une simulation, l’avance est réévaluée après chaque coup affiché. La variation indique de combien cette avance a changé pour le joueur qui vient de jouer. Par exemple, si l’avance de Noir passe de 4,2 à 2,8 après une réponse blanche, Blanc a gagné 1,4 point dans l’estimation. Le classement compare les premiers coups depuis la même position, y compris le coup historique s’il existe. En pause sur une réponse, on peut aussi la comparer aux autres coups évalués à ce tour.
+
+Le komi d’équilibre est la compensation estimée qui mettrait les deux camps à égalité. Il s’obtient en ajoutant au komi du kifu l’avance signée de Noir. Un résultat négatif indique une compensation pour Noir. En l’absence de komi dans le kifu, le lecteur retient zéro. Il s’agit d’une estimation du score final en règles japonaises, qui comprend aussi les prisonniers. [Définition de l’avance dans KataGo](https://github.com/lightvector/KataGo/blob/v1.18.2/docs/Analysis_Engine.md#L218-L230) · [Calcul du komi d’équilibre](https://github.com/lightvector/KataGo/blob/v1.18.2/cpp/program/playutils.cpp#L569-L585)
 
 ## Ce qui est livré
 

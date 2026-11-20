@@ -1901,9 +1901,65 @@ progress {
   }
 }
 
+/* Le volet ouvert cède sa place aux simulations sans déplacer le goban.
+   Il reste monté pour retrouver le récit ou la recherche à la fin de la lecture. */
+.app:has(.simulation:not(.simulation--resignation)) > .panel {
+  visibility: hidden;
+}
+
+@media (width >= 60rem) {
+  .app[data-replay='true'][data-panel='closed'] {
+    --replay-rail: min(30vw, var(--panel-width));
+  }
+
+  .app[data-replay='true'][data-panel='closed'] .stage__canvas {
+    margin-inline-end: var(--replay-rail);
+  }
+
+  .simulation:not(.simulation--resignation) {
+    position: fixed;
+    grid-area: auto;
+    inset: 0 auto auto 0;
+    z-index: 6;
+    align-content: start;
+    align-self: start;
+    width: var(--panel-width);
+    max-block-size: 100dvh;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  .app[data-panel='closed'] .simulation:not(.simulation--resignation) {
+    inset: 4.25rem 0.5rem auto auto;
+    width: calc(var(--replay-rail) - 1rem);
+    max-block-size: calc(100dvh - 4.75rem);
+  }
+}
+
 @media (width < 60rem) {
-  .simulation {
+  .app[data-panel='open'] .simulation:not(.simulation--resignation) {
+    position: fixed;
+    grid-area: auto;
+    inset: auto 0 0;
+    z-index: 6;
+    height: min(50dvh, 34rem);
+    width: 100%;
+    align-content: start;
+    overscroll-behavior: contain;
+    padding-bottom: max(0.8rem, env(safe-area-inset-bottom));
+  }
+
+  .app[data-panel='closed'] .stage:has(.simulation:not(.simulation--resignation)) {
+    overflow-y: auto;
+  }
+
+  .app[data-panel='closed'] .simulation:not(.simulation--resignation) {
     grid-row-end: 4;
+    max-block-size: none;
+    width: 100%;
+    padding-bottom: max(0.8rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -1982,6 +2038,44 @@ progress {
 
 .simulation__source {
   color: #9cc4df;
+}
+
+.simulation__score {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  margin: 0.25rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.simulation__score dt {
+  color: #afdafa;
+  font-size: 0.72rem;
+}
+
+.simulation__score dd {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.simulation__comparison {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.simulation__best {
+  padding: 0.2rem 0.3rem;
+  border: 0;
+  color: #b9e4ff;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
 }
 
 .simulation__controls {
