@@ -36,16 +36,14 @@ async function enter(page: Page): Promise<void> {
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
 }
 
-async function expectClearGoban(page: Page, simulation: Locator): Promise<void> {
+async function expectDockedGoban(page: Page, simulation: Locator): Promise<void> {
   const board = await page.locator('canvas[data-rendered="true"]').boundingBox();
   const panel = await simulation.boundingBox();
   const viewport = page.viewportSize();
   if (!board || !panel || !viewport) throw new Error('Goban ou encart hors affichage');
-  const overlapX =
-    Math.min(board.x + board.width, panel.x + panel.width) - Math.max(board.x, panel.x);
-  const overlapY =
-    Math.min(board.y + board.height, panel.y + panel.height) - Math.max(board.y, panel.y);
-  expect(Math.min(overlapX, overlapY)).toBeLessThanOrEqual(0);
+  expect(panel.y).toBeGreaterThanOrEqual(board.y + board.height);
+  expect(panel.x).toBeLessThan(board.x + board.width);
+  expect(panel.x + panel.width).toBeGreaterThan(board.x);
   expect(panel.x).toBeGreaterThanOrEqual(0);
   expect(panel.y).toBeGreaterThanOrEqual(0);
   expect(panel.x + panel.width).toBeLessThanOrEqual(viewport.width);
@@ -597,9 +595,10 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   });
   await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
   await expect(goban).toHaveCount(1);
+  await expect(simulation.getByRole('heading')).not.toBeFocused();
   expect(await goban.boundingBox()).toEqual(position);
-  await expectClearGoban(page, simulation);
-  await expect(simulation.locator('svg')).toHaveCount(0);
+  await expectDockedGoban(page, simulation);
+  await expect(simulation.locator('canvas, svg:not(button svg)')).toHaveCount(0);
   const started = performance.now();
   const variant = simulation.locator('.simulation__view');
   await expect(variant).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
@@ -641,9 +640,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   });
 });
 
-test('sur MacBook les options de simulation restent accessibles autour du goban', async ({
-  page,
-}) => {
+test('le pupitre d’estimation suit le goban sur portable et mobile', async ({ page }) => {
   test.slow();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -651,36 +648,76 @@ test('sur MacBook les options de simulation restent accessibles autour du goban'
   const library = page.locator('.topbar').getByRole('button', { name: 'Parties', exact: true });
   await library.click();
   await page.getByRole('button', { name: 'Partie suivante' }).click();
-  await page.getByRole('slider', { name: 'Coup', exact: true }).fill('86');
-  await page.getByRole('button', { name: 'Voir les simulations' }).click();
+  const move = page.getByRole('slider', { name: 'Coup', exact: true });
+  const canvas = page.locator('canvas[data-rendered="true"]');
   const simulation = page.getByRole('region', { name: 'Noir · avant le coup 87' });
-  await simulation.locator('summary').click();
-  const options = simulation.getByLabel('Variante affichée');
-  await expect(options).toBeVisible({ timeout: 60_000 });
-  await simulation.getByLabel('Profondeur de la variante').selectOption('32');
-  const advance = simulation.getByRole('button', { name: 'Prolonger la variante' });
+  const settings = simulation.locator('details.simulation__study');
+  const branches = simulation.getByRole('combobox', { name: 'Variante affichée' });
+  const play = simulation.getByRole('button', { name: 'Lire les variantes' });
+  const back = simulation.getByRole('button', { name: 'Jouer le coup du kifu' });
+
   for (const size of [
     { width: 1280, height: 720 },
     { width: 1440, height: 800 },
+    { width: 390, height: 844 },
   ]) {
     await page.setViewportSize(size);
     for (const open of [true, false]) {
-      if ((await library.getAttribute('aria-expanded')) !== String(open)) await library.click();
-      await expect(page.locator('.app')).toHaveAttribute('data-panel', open ? 'open' : 'closed');
-      await expect(library).toHaveAttribute('aria-expanded', String(open));
-      await expect(simulation.locator('details')).toHaveAttribute('open', '');
-      await expectClearGoban(page, simulation);
-      for (const button of [
-        advance,
-        simulation.getByRole('button', { name: 'Jouer le coup du kifu' }),
-      ]) {
-        await button.click({ trial: true });
-        await expect(button).toBeInViewport();
+      const app = page.locator('.app');
+      if ((await app.getAttribute('data-panel')) !== (open ? 'open' : 'closed')) {
+        if (open) await library.click();
+        else await page.getByRole('button', { name: 'Fermer le volet' }).click();
       }
+      await expect(app).toHaveAttribute('data-panel', open ? 'open' : 'closed');
+      await move.fill('86');
+      const board = await page.locator('.stage__canvas').boundingBox();
+      await expect.poll(() => canvas.boundingBox()).toEqual(board);
+
+      await page.getByRole('button', { name: 'Voir les simulations' }).click();
+      await expect(simulation.getByRole('heading')).toBeFocused();
+      await page.keyboard.press('ArrowRight');
+      await expect(simulation.getByRole('heading')).toHaveText('Noir · avant le coup 87');
+      await expect(page.locator('input[aria-label="Coup"]')).toHaveValue('86');
+      await expect(branches).toBeVisible({ timeout: 60_000 });
+      await expect(settings).not.toHaveAttribute('open', '');
+      await expect.poll(() => canvas.boundingBox()).toEqual(board);
+      await expectDockedGoban(page, simulation);
+      for (const control of [branches, play, back]) {
+        await expect(control).toBeInViewport({ ratio: 1 });
+        await control.click({ trial: true });
+      }
+
+      if (size.width === 390 && !open) {
+        const projection = simulation.getByRole('slider', { name: 'Coup de la variante' });
+        await expect
+          .poll(async () => Number(await projection.getAttribute('max')))
+          .toBeGreaterThanOrEqual(2);
+        await projection.fill('2');
+        await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', '2');
+        await expect(branches).toBeInViewport({ ratio: 1 });
+      }
+      if (size.width === 1280 && open) {
+        await branches.selectOption('1', { timeout: 60_000 });
+        await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-branch', '2');
+      }
+      await settings.locator('summary').click();
+      await simulation.getByLabel('Profondeur de la variante').selectOption('32');
+      const extend = simulation.getByRole('button', { name: 'Prolonger la variante' });
+      await extend.click({ trial: true });
+      await expect(back).toBeInViewport({ ratio: 1 });
+      await expectDockedGoban(page, simulation);
+      if (size.width === 390 && open) {
+        await page.getByRole('button', { name: 'Fermer le volet' }).click();
+        await expect(app).toHaveAttribute('data-panel', 'closed');
+        await expect(simulation.getByRole('heading')).toHaveText('Noir · avant le coup 87');
+        await expect(back).toBeInViewport({ ratio: 1 });
+      }
+      await back.focus();
+      await page.keyboard.press('Enter');
+      await expect(move).toHaveValue('87');
+      await expect(move).toBeFocused();
     }
   }
-  await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
-  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('87');
 });
 
 test('import SGF local, bibliothèque persistante et entraînement avec le camp choisi', async ({

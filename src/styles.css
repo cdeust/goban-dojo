@@ -1087,7 +1087,8 @@ kbd {
   }
 
   .app[data-panel='open'] {
-    grid-template-rows: minmax(0, 1fr) min(50dvh, 34rem);
+    --library-height: min(50dvh, 34rem);
+    grid-template-rows: minmax(0, 1fr) var(--library-height);
   }
 
   .stage {
@@ -1877,111 +1878,124 @@ progress {
   grid-column: 1 / -1;
 }
 
+/* Les dimensions du dock de lecture réservent le même espace au goban pendant
+   l'estimation. Les réglages défilent dans la zone de lecture, les actions restent accessibles. */
 .simulation {
   position: absolute;
   grid-area: 2 / 1 / 3 / 2;
-  inset: 0 0 auto;
+  inset: 0;
   z-index: 4;
   display: grid;
-  justify-items: center;
-  gap: 0.25rem;
-  width: min(33rem, calc(100% - 1rem));
-  max-block-size: 100%;
-  overflow: auto;
-  margin-inline: auto;
-  padding: 0.55rem;
-  border: 1px solid rgb(120 198 255 / 0.42);
-  border-radius: 0.7rem;
-  background: rgb(5 17 34 / 0.96);
-  color: #e4f4ff;
-  text-align: center;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  container-type: inline-size;
+  background: linear-gradient(120deg, #101e2b, #0c141e 65%);
+  border-top: 1px solid #4e829e;
+  color: #e4f2fb;
 
   @media (prefers-reduced-motion: no-preference) {
     animation: simulation-enter 0.28s ease-out both;
   }
 }
 
-/* Le volet ouvert cède sa place aux simulations sans déplacer le goban.
-   Il reste monté pour retrouver le récit ou la recherche à la fin de la lecture. */
-.app:has(.simulation:not(.simulation--resignation)) > .panel {
-  visibility: hidden;
+.simulation__body {
+  display: grid;
+  align-content: start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem 1.5rem;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 0.65rem max(1rem, calc((100% - 68rem) / 2));
 }
 
-@media (width >= 60rem) {
-  .app[data-replay='true'][data-panel='closed'] {
-    --replay-rail: min(30vw, var(--panel-width));
-  }
-
-  .app[data-replay='true'][data-panel='closed'] .stage__canvas {
-    margin-inline-end: var(--replay-rail);
-  }
-
-  .simulation:not(.simulation--resignation) {
-    position: fixed;
-    grid-area: auto;
-    inset: 0 auto auto 0;
-    z-index: 6;
-    align-content: start;
-    align-self: start;
-    width: var(--panel-width);
-    max-block-size: 100dvh;
-    overscroll-behavior: contain;
-    scrollbar-gutter: stable;
-    margin: 0;
-    padding: 1rem;
-  }
-
-  .app[data-panel='closed'] .simulation:not(.simulation--resignation) {
-    inset: 4.25rem 0.5rem auto auto;
-    width: calc(var(--replay-rail) - 1rem);
-    max-block-size: calc(100dvh - 4.75rem);
-  }
+.simulation__overview,
+.simulation__navigation {
+  min-width: 0;
 }
 
-@media (width < 60rem) {
-  .app[data-panel='open'] .simulation:not(.simulation--resignation) {
-    position: fixed;
-    grid-area: auto;
-    inset: auto 0 0;
-    z-index: 6;
-    height: min(50dvh, 34rem);
-    width: 100%;
-    align-content: start;
-    overscroll-behavior: contain;
-    padding-bottom: max(0.8rem, env(safe-area-inset-bottom));
+.simulation__overview {
+  display: grid;
+  align-content: start;
+  gap: 0.18rem;
+}
+
+.simulation__navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  align-items: end;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+.simulation__navigation > .simulation__field,
+.simulation__scrub {
+  flex: 1 1 7rem;
+  min-width: 0;
+}
+
+.simulation__origin {
+  justify-self: start;
+}
+
+@container (min-width: 40rem) {
+  .simulation__body {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   }
 
-  .app[data-panel='closed'] .stage:has(.simulation:not(.simulation--resignation)) {
-    overflow-y: auto;
+  .simulation__header,
+  .simulation__overview {
+    grid-column: 1;
   }
 
-  .app[data-panel='closed'] .simulation:not(.simulation--resignation) {
-    grid-row-end: 4;
-    max-block-size: none;
-    width: 100%;
-    padding-bottom: max(0.8rem, env(safe-area-inset-bottom));
+  .simulation__navigation {
+    grid-area: 1 / 2 / 3 / 3;
+  }
+
+  .simulation__study {
+    grid-column: 1 / -1;
   }
 }
 
 .simulation--resignation {
-  position: static;
+  position: relative;
   grid-area: 1 / 2 / 3 / 3;
-  align-content: start;
-  width: 100%;
-  min-block-size: 0;
-  max-block-size: none;
-  padding: 4.4rem 0.8rem 1rem;
-}
-
-.stage:has(.simulation--resignation) .card {
-  display: none;
+  padding-block-start: 4rem;
+  border-top: 0;
+  border-inline-start: 1px solid var(--hairline);
 }
 
 @media (width < 60rem) {
+  .simulation:not(.simulation--resignation) {
+    grid-area: 2 / 1 / 4 / 2;
+  }
+
+  /* Le dock et la bibliothèque se partagent sa rangée. Le goban conserve sa hauteur
+     et les onglets du volet, sa fermeture et son contenu restent accessibles. */
+  .app[data-panel='open']:has(.simulation:not(.simulation--resignation)) {
+    --dock-extension: calc(var(--library-height) / 2);
+
+    > .panel {
+      align-self: end;
+      height: calc(100% - var(--dock-extension));
+    }
+
+    .stage {
+      overflow: visible;
+    }
+
+    .simulation {
+      inset-block-end: calc(-1 * var(--dock-extension));
+    }
+  }
+
   .simulation--resignation {
     grid-area: 4 / 1;
-    padding: 0.8rem;
-    overflow: visible;
+    padding: 0;
+    border: 0;
+    border-block-start: 1px solid #4e829e;
   }
 }
 
@@ -2017,92 +2031,94 @@ progress {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.2rem 0.75rem;
-  color: #afdafa;
-  font-size: 0.75rem;
+  gap: 0.2rem 0.65rem;
+  color: #a8d0e6;
+  font-size: 0.78rem;
 }
 
 .simulation__header h2 {
   margin: 0;
   color: #f3faff;
-  font: 600 1rem var(--serif);
+  font: 600 1.05rem var(--serif);
 }
 
 .simulation__current,
-.simulation__source {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.35;
-}
-
-.simulation__source {
-  color: #9cc4df;
-}
-
-.simulation__score {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.9rem;
-  margin: 0.25rem 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.simulation__score dt {
-  color: #afdafa;
-  font-size: 0.72rem;
-}
-
-.simulation__score dd {
-  margin: 0;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
+.simulation__source,
 .simulation__comparison {
-  margin: 0;
   font-size: 0.78rem;
   line-height: 1.4;
 }
 
+.simulation__source,
+.simulation__progress {
+  color: #a8c5d5;
+}
+
+.simulation__score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.05rem;
+  margin: 0.3rem 0 0.18rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.simulation__score dt {
+  color: #a8c5d5;
+  font-size: 0.72rem;
+}
+
+.simulation__score dd {
+  color: #f4faff;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .simulation__best {
-  padding: 0.2rem 0.3rem;
-  border: 0;
   color: #b9e4ff;
-  background: transparent;
-  font: inherit;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.18em;
-  cursor: pointer;
 }
 
 .simulation__controls {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.25rem;
-}
-
-.simulation__controls .chip[aria-pressed='true'] {
-  border-color: #fbd780;
-  color: #ffe2a4;
+  align-items: center;
+  gap: 0.25rem 0.4rem;
+  padding: 0.4rem max(1rem, calc((100% - 68rem) / 2));
+  padding-block-end: max(0.45rem, env(safe-area-inset-bottom));
+  background: #101923;
+  border-top: 1px solid rgb(149 197 225 / 0.2);
 }
 
 .simulation__controls .chip {
-  min-block-size: 2.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-block-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.simulation__controls svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.simulation__controls .chip--accent {
+  margin-inline-start: auto;
 }
 
 .simulation__study {
-  width: 100%;
-  border-block-start: 1px solid rgb(120 198 255 / 0.3);
+  min-width: 0;
   font-size: 0.82rem;
 }
 
 .simulation__study summary {
-  padding: 0.5rem;
-  color: #afdafa;
+  width: fit-content;
+  padding: 0.3rem 0;
+  color: #b6dff7;
   cursor: pointer;
 }
 
@@ -2110,18 +2126,22 @@ progress {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: end;
-  gap: 0.45rem 0.6rem;
-  text-align: start;
+  gap: 0.45rem 0.65rem;
+  padding: 0.25rem 0;
 }
 
-.simulation__field,
-.simulation__options > label {
+.simulation__field {
   display: grid;
-  gap: 0.2rem;
+  gap: 0.15rem;
 }
 
-.simulation__options select,
-.simulation__options input {
+.simulation__scrub input {
+  display: block;
+  margin-block-start: 0.15rem;
+}
+
+.simulation select,
+.simulation input {
   inline-size: 100%;
   min-inline-size: 0;
   min-block-size: 2rem;
@@ -2129,9 +2149,59 @@ progress {
   font: inherit;
 }
 
+.simulation select {
+  padding-inline: 0.5rem;
+  border: 1px solid #536674;
+  border-radius: 0.35rem;
+  background-color: #152534;
+  color: inherit;
+}
+
 .simulation__progress {
-  margin: 0.45rem 0;
-  color: #afdafa;
+  margin: 0.35rem 0;
+}
+
+@container (min-width: 40rem) {
+  .simulation__options {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 28rem) {
+  .simulation__body {
+    row-gap: 0.35rem;
+    padding-inline: 0.75rem;
+  }
+
+  .simulation__navigation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 0.45rem;
+  }
+
+  .simulation__origin {
+    padding: 0.3rem 0.5rem;
+    letter-spacing: normal;
+    font-size: inherit;
+  }
+
+  .simulation__controls {
+    gap: 0.25rem;
+    padding-inline: 0.5rem;
+  }
+
+  .simulation__controls .chip {
+    flex: 0 1 auto;
+    padding-inline: 0.55rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .simulation__controls .chip,
+  .simulation__study summary,
+  .simulation select {
+    min-block-size: 2.75rem;
+  }
 }
 
 .library-import {
