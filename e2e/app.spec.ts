@@ -588,9 +588,13 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   console.log(
     'Première branche du coup 87 visible après ' + Math.round(performance.now() - started) + ' ms',
   );
-  await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', /[1-8]/, {
-    timeout: 20_000,
-  });
+  await expect(simulation.locator('.simulation__view')).toHaveAttribute(
+    'data-step',
+    /^(?:[1-9]|1[0-2])$/,
+    {
+      timeout: 20_000,
+    },
+  );
   await expect(slider).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
   const pausedStep = await variant.getAttribute('data-step');
@@ -607,6 +611,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
   await expect(variant).toHaveAttribute('data-branch', '2', { timeout: 60_000 });
   await expect(variant).toHaveAttribute('data-branch', '3', { timeout: 60_000 });
+  await expect(variant).toHaveAttribute('data-branch', '4', { timeout: 60_000 });
   await expect(simulation.getByRole('heading')).toContainText('Blanc · avant le coup 88', {
     timeout: 90_000,
   });
