@@ -52,7 +52,18 @@ const NEIGHBOURS: readonly (readonly number[])[] = Array.from({ length: POINTS }
 export const neighbours = (p: number): readonly number[] => NEIGHBOURS[p] ?? [];
 
 const EMPTY = 0;
+// Les trois codes d'occupation (0, 1, 2) occupent chacun un octet UTF-8.
+const cellDecoder = new TextDecoder();
 const code = (c: Color): number => (c === 'B' ? 1 : 2);
+
+// Les positions reçues du worker traversent une frontière JavaScript non typée.
+function boardIndex(point: unknown): number {
+  if (typeof point === 'number' && point >= 0 && point < POINTS) {
+    const index = Math.floor(point);
+    if (index === point) return index;
+  }
+  throw new RangeError('Intersection du goban invalide');
+}
 
 export type IllegalReason = 'occupied' | 'suicide' | 'ko';
 
@@ -68,18 +79,34 @@ export class Board {
   /** Point interdit par la règle du ko pour le prochain coup, ou -1. */
   private koPoint = -1;
 
-  get(p: number): Color | null {
-    const v = this.cells[p];
+  /** Copie indépendante du goban et de son interdiction de ko. */
+  clone(): Board {
+    const copy = new Board();
+    copy.cells.set(this.cells);
+    copy.koPoint = this.koPoint;
+    return copy;
+  }
+
+  /** Identité exacte de l’occupation pour la règle de superko positionnel. */
+  positionKey(): string {
+    return cellDecoder.decode(this.cells);
+  }
+
+  get(point: number): Color | null {
+    if (point === PASS) return null;
+    const v = this.cells[boardIndex(point)];
     return v === 1 ? 'B' : v === 2 ? 'W' : null;
   }
 
   /** Pose une pierre de mise en place (handicap) sans appliquer les règles. */
-  setup(p: number, color: Color | null): void {
-    this.cells[p] = color ? code(color) : EMPTY;
+  setup(point: number, color: Color | null): void {
+    this.cells[boardIndex(point)] = color ? code(color) : EMPTY;
   }
 
   /** Pierres du groupe qui occupe p (vide si le point est libre). */
-  stonesOf(p: number): number[] {
+  stonesOf(point: number): number[] {
+    if (point === PASS) return [];
+    const p = boardIndex(point);
     return this.cells[p] === EMPTY ? [] : this.group(p).stones;
   }
 
@@ -104,11 +131,12 @@ export class Board {
     return { stones, hasLiberty };
   }
 
-  play(color: Color, p: number): PlayResult {
-    if (p === PASS) {
+  play(color: Color, point: number): PlayResult {
+    if (point === PASS) {
       this.koPoint = -1;
       return { captures: [] };
     }
+    const p = boardIndex(point);
     let illegal: IllegalReason | undefined;
     if (this.cells[p] !== EMPTY) illegal = 'occupied';
     else if (p === this.koPoint) illegal = 'ko';
@@ -142,7 +170,9 @@ export class Board {
   }
 
   /** Nombre de libertés du groupe qui occupe p (0 si le point est vide). */
-  libertyCount(p: number): number {
+  libertyCount(point: number): number {
+    if (point === PASS) return 0;
+    const p = boardIndex(point);
     if (this.cells[p] === EMPTY) return 0;
     const g = this.group(p);
     const libs = new Set<number>();

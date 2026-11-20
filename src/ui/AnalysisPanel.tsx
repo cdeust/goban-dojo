@@ -276,8 +276,8 @@ export function AnalysisPanel() {
           Lire les variantes
         </h2>
         <p>
-          KataGo propose des coups pour les deux camps. Le pourcentage indique la préférence
-          initiale du réseau. L’avance affichée est estimée après le coup.
+          Ouvrez la lecture longue pour simuler avec Leela Zero, reproduction d’AlphaGo Zero. KataGo
+          permet aussi de comparer les préférences du réseau et l’avance en points.
         </p>
       </header>
       <button type="button" className="chip" onClick={() => useStore.getState().setMode('lire')}>
@@ -299,8 +299,8 @@ export function AnalysisPanel() {
         </div>
       )}
       <p className="reflection__source">
-        Le moteur explore deux coups à partir de chaque position, sans recherche profonde. Ses choix
-        reflètent un réseau moderne. Les intentions de Shūsaku restent inconnues.
+        KataGo explore deux coups à partir de chaque position, sans recherche profonde. Ses choix
+        reflètent un réseau moderne. Les intentions des joueurs restent inconnues.
       </p>
       <button
         type="button"

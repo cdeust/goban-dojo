@@ -2,22 +2,22 @@ import { useReducedMotion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
 import { pointToHuman } from '../domain/board.ts';
 import { decodePoints, type GameRecord } from '../domain/game.ts';
-import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
-import { previewLines, type PreviewLine } from '../engine/preview.ts';
+import { analyzeZero, useZeroEngine } from '../engine/zeroClient.ts';
+import { blackWinLabel, previewZeroLines, type SimulationLine } from '../state/zeroReading.ts';
 import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
 import { timelineOf, useCurrentGame, useStore } from '../state/store.ts';
-import { colorName, formatLead } from '../story/format.ts';
+import { colorName } from '../story/format.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 
 const FRAME_MS = 230;
 const BRANCH_HOLD = 750;
-const finished = new WeakMap<GameRecord, Map<number, PreviewLine[]>>();
+const finished = new WeakMap<GameRecord, Map<number, SimulationLine[]>>();
 
 function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
-  const status = useEngine((s) => s.status);
+  const status = useZeroEngine((s) => s.status);
   const reduced = useReducedMotion();
   const [paused, setPaused] = useState<boolean>(Boolean(reduced));
-  const [lines, setLines] = useState<PreviewLine[] | undefined>(() =>
+  const [lines, setLines] = useState<SimulationLine[] | undefined>(() =>
     finished.get(game)?.get(anchor),
   );
   const [done, setDone] = useState(() => Boolean(finished.get(game)?.has(anchor)));
@@ -29,13 +29,12 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const history = useMemo(() => moves.slice(0, anchor), [moves, anchor]);
   const setup = useMemo(() => decodePoints(game.setupBlack), [game]);
   const scene = reflectionsOf(game).find(({ after }) => after === anchor)!;
-  const fallback = useMemo(
+  const fallback = useMemo<SimulationLine[]>(
     () =>
       reflectionLines(game, scene)
         .filter((line) => line.variation)
         .map((line) => ({
           moves: reflectionMoves(game, anchor, line),
-          estimates: [],
         })),
     [game, scene, anchor],
   );
@@ -43,29 +42,26 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const reveal = useStore((s) => s.revealReflectionMove);
   const examine = useStore((s) => s.showReflection);
 
-  useEffect(() => {
-    if (status === 'idle') loadEngine();
-  }, [status]);
-
   const cached = finished.get(game)?.get(anchor);
   useEffect(() => {
-    if (status !== 'ready' || cached) return;
+    if (cached) return;
     const controller = new AbortController();
-    void previewLines(
-      evaluate,
+    void previewZeroLines(
+      analyzeZero,
       { setupBlack: setup, komi: game.komi, moves: history, next: recorded.color },
-      recorded,
       controller.signal,
-      (line, index) =>
-        setLines((current) => {
-          const next = [...(current ?? [])];
-          next[index] = line;
-          return next;
-        }),
+      (line, branchIndex) => {
+        if (!controller.signal.aborted)
+          setLines((current) => {
+            const next = (current ?? []).slice();
+            next[branchIndex] = line;
+            return next;
+          });
+      },
     )
       .then((result) => {
         if (controller.signal.aborted) return;
-        const positions = finished.get(game) ?? new Map<number, PreviewLine[]>();
+        const positions = finished.get(game) ?? new Map<number, SimulationLine[]>();
         positions.set(anchor, result);
         finished.set(game, positions);
         setLines(result);
@@ -75,7 +71,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         if (!controller.signal.aborted) setFailed(true);
       });
     return () => controller.abort();
-  }, [status, cached, game, anchor, setup, history, recorded]);
+  }, [cached, game, anchor, setup, history, recorded]);
 
   const unavailable = failed || status === 'failed' || (done && lines?.length === 0);
   const shown = unavailable && !lines?.length ? fallback : lines;
@@ -83,7 +79,6 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const branch = shown?.[index];
   const visibleStep = showStart ? 0 : step;
   const current = visibleStep ? branch?.moves[visibleStep - 1] : undefined;
-  const estimate = visibleStep ? branch?.estimates[visibleStep - 1] : undefined;
   const simulatedMoves = branch?.moves;
 
   useEffect(() => {
@@ -129,13 +124,20 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
               ? 'Position initiale · coups du kifu'
               : unavailable
                 ? 'Aucune variante disponible'
-                : 'KataGo prépare les variantes…'}
-          {estimate !== undefined && <span> · {formatLead(estimate)}</span>}
+                : 'Leela Zero prépare les variantes…'}
         </p>
       </div>
       <p className="simulation__source">
-        {unavailable && !lines?.length && branch ? 'Variante pédagogique' : 'Simulations KataGo'} ·
-        Halo bleu · coup simulé
+        {unavailable && !lines?.length
+          ? 'Recherche Leela Zero indisponible' + (branch ? ' · variante pédagogique' : '')
+          : 'Leela Zero · reproduction d’AlphaGo Zero · komi 7,5 · score de surface'}
+        {branch?.excluded &&
+          branch.excluded.length > 0 &&
+          ' · Recherche alternative après exclusion de ' +
+            branch.excluded.map(pointToHuman).join(', ')}
+        {branch?.blackWin !== undefined &&
+          ' · ' + blackWinLabel(branch.blackWin) + ' après le premier coup'}
+        {' · Halo bleu · coup simulé'}
       </p>
       <div className="simulation__controls" role="group" aria-label="Commandes de la simulation">
         <button

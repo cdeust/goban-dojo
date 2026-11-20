@@ -2,11 +2,9 @@
  * Accès au moteur depuis la page. Le réseau (12 Mo) et son moteur d'exécution (15 Mo, 4 Mo
  * compressés) ne sont chargés que si l'utilisateur demande l'évaluation des coups.
  */
-import wasmUrl from 'onnxruntime-web/ort-wasm-simd-threaded.wasm?url';
 import { create } from 'zustand';
 import type { Evaluation } from './decode.ts';
 import type { EnginePosition } from './features.ts';
-import { MODEL } from './model.ts';
 import type { EngineRequest, EngineResponse } from './protocol.ts';
 
 interface EngineState {
@@ -51,12 +49,7 @@ export function loadEngine(): void {
     for (const p of pending.values()) p.reject(new Error('le moteur s’est arrêté'));
     pending.clear();
   };
-  const base = new URL(import.meta.env.BASE_URL, window.location.href);
-  send({
-    type: 'load',
-    modelUrl: new URL(MODEL.file, base).href,
-    wasmUrl: new URL(wasmUrl, window.location.href).href,
-  });
+  send({ type: 'load' });
 }
 
 export function evaluate(positions: EnginePosition[]): Promise<Evaluation[]> {

@@ -1,5 +1,21 @@
 # L’évaluation des coups
 
+Le lecteur utilise **Leela Zero nº 116** pour les simulations des pauses tactiques et, par défaut,
+pour la lecture longue. Le réseau a appris par autojeu. Il propose des coups et estime l’issue
+d’une position. Le navigateur explore les réponses avec une recherche en arbre PUCT, puis
+classe les coups par nombre de visites. La probabilité affichée concerne Noir, sous les règles
+chinoises et avec 7,5 points de komi. Une partie de Shūsaku sans komi peut donc avoir une
+issue historique différente de celle que suggère cette estimation.
+
+Les pauses rejouent les branches sur le goban de la partie. Lorsqu’un seul coup concentre
+toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux. La lecture longue peut poursuivre
+une branche pendant 60, 120 ou 240 demi-coups en relançant la recherche à chaque position.
+Deux passes mettent fin à la projection. Une succession de recherches locales ne mesure pas
+la profondeur atteinte par une recherche unique. Les positions d’un SGF importé sont analysées
+dans le navigateur selon la même procédure. [Poids, conversion et vérification](LEELA-ZERO.md)
+
+## Évaluation en points avec KataGo
+
 Dans le mode « Explorer », un réseau de neurones de KataGo juge chaque coup posé — et, pour
 comparaison, le coup réellement joué dans la partie. Tout tourne dans le navigateur : aucune
 position n’est envoyée à un serveur.
@@ -94,9 +110,9 @@ La comparaison avec le kifu porte sur l’avance estimée du joueur au trait apr
 coup. Ces sorties viennent d’un modèle moderne entraîné en autojeu. Elles ne renseignent
 pas sur les intentions historiques d’un joueur.
 
-## Lecture longue
+## Lecture longue avec KataGo
 
-Les écrans de réflexion et d’analyse ouvrent une projection de 60, 120 ou 240 coups. À
+Avec KataGo sélectionné, les écrans de réflexion et d’analyse ouvrent une projection de 60, 120 ou 240 coups. À
 chaque position, le navigateur compare les cinq coups préférés du réseau à partir de
 l’avance estimée après chacun, comme dans le jugement de coups. Il conserve les choix
 et répète le calcul pour le camp adverse. Le coup du kifu ou une bifurcation choisie
