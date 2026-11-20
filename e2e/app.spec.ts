@@ -39,8 +39,11 @@ async function enter(page: Page): Promise<void> {
 async function openRedEarGame(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Parties', exact: true }).first().click();
   await page.getByRole('searchbox').fill('1846-09-11');
-  await page.locator('.row').first().click();
-  await page.getByRole('button', { name: 'Pause' }).click();
+  const game = page.locator('.row').filter({ has: page.locator('time[datetime="1846-09-11"]') });
+  await game.click();
+  await expect(game).toHaveAttribute('aria-current', 'true');
+  await page.getByRole('button', { name: 'Premier coup', exact: true }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('0');
 }
 
 test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le récit', async ({
@@ -410,9 +413,10 @@ test('réflexion : le coup historique K11 déclenche les éclairs bleus', async 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await enter(page);
   await openRedEarGame(page);
+  await page.getByRole('slider', { name: 'Coup', exact: true }).fill('126');
   await page.getByRole('button', { name: 'Réflexion', exact: true }).click();
   const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
-  await reflection.getByLabel('Moment de la partie').selectOption('126');
+  await expect(reflection.getByLabel('Moment de la partie')).toHaveValue('126');
   await page.locator('canvas[data-rendered="true"]').waitFor();
   await page.evaluate(() => {
     const observer = new MutationObserver(() => {
@@ -588,9 +592,13 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   console.log(
     'Première branche du coup 87 visible après ' + Math.round(performance.now() - started) + ' ms',
   );
-  await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', /[1-8]/, {
-    timeout: 20_000,
-  });
+  await expect(simulation.locator('.simulation__view')).toHaveAttribute(
+    'data-step',
+    /^(?:[1-9]|1[0-9]|20)$/,
+    {
+      timeout: 20_000,
+    },
+  );
   await expect(slider).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
   const pausedStep = await variant.getAttribute('data-step');
@@ -605,8 +613,9 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(variant).toContainText('Coup simulé ·');
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
-  await expect(variant).toHaveAttribute('data-branch', '2', { timeout: 60_000 });
-  await expect(variant).toHaveAttribute('data-branch', '3', { timeout: 60_000 });
+  for (let i = 2; i <= 10; i++) {
+    await expect(variant).toHaveAttribute('data-branch', String(i), { timeout: 60_000 });
+  }
   await expect(simulation.getByRole('heading')).toContainText('Blanc · avant le coup 88', {
     timeout: 90_000,
   });
@@ -695,4 +704,57 @@ test('Leela Zero lit une partie importée, projette ses coups et rend la main au
   await reading.getByRole('button', { name: 'Revenir à l’analyse' }).click();
   await page.getByRole('button', { name: 'Revenir au kifu' }).click();
   await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('2');
+});
+
+test('après un abandon, calculer une suite et retrouver le dernier coup du SGF', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  const filter = page.getByRole('checkbox', { name: 'Parties terminées par abandon' });
+  await filter.check();
+  await expect(page.locator('.library__count')).toContainText('178 parties');
+  await page.getByLabel('Importer un fichier SGF').setInputFiles('data/cwi/007.sgf');
+  const card = page.getByRole('region', { name: 'Partie en cours' });
+  await card.getByRole('button', { name: 'Continuer après l’abandon' }).click();
+  const reading = page.getByRole('region', { name: 'Lecture longue' });
+  await expect(reading).toContainText('Dernier coup enregistré · 194');
+  await expect(reading).toContainText('Blanc au trait');
+  await reading.getByRole('button', { name: 'Comparer 10 variantes de 20 coups' }).click();
+  const comparison = page.getByRole('region', { name: 'Variantes après l’abandon' });
+  await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
+  const branches = comparison.getByLabel('Variante affichée');
+  await expect(branches.locator('option')).toHaveCount(10, { timeout: 240_000 });
+  const starts = (await branches.locator('option').allTextContents()).map(
+    (label) => label.split(' · ')[1],
+  );
+  expect(starts.every(Boolean)).toBe(true);
+  expect(new Set(starts).size).toBe(10);
+  const projection = comparison.getByRole('slider', { name: 'Coup de la variante' });
+  for (let i = 0; i < starts.length; i++) {
+    await branches.selectOption(String(i));
+    await expect(projection).toHaveAttribute('max', '20', { timeout: 30_000 });
+  }
+  await projection.fill('20');
+  await expect(comparison.locator('.simulation__view')).toHaveAttribute('data-step', '20');
+  await comparison.getByRole('button', { name: 'Revenir à la lecture longue' }).click();
+  await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'false');
+  await expect(reading).toContainText('Dernier coup enregistré · 194');
+  await reading.getByLabel('Profondeur de la suite').selectOption('240');
+  await reading.getByLabel('Profondeur de la suite').selectOption('more');
+  await expect(reading.getByLabel('Profondeur de la suite')).toHaveValue('300');
+  await reading.getByRole('button', { name: 'Calculer la suite après l’abandon' }).click();
+  const choices = reading.locator('.analysis__choice');
+  await expect(choices.first()).toBeVisible({ timeout: 60_000 });
+  await reading.getByRole('button', { name: 'Arrêter le calcul' }).click();
+  const first = await choices.first().locator('strong').innerText();
+  const count = await choices.count();
+  await reading.getByRole('button', { name: 'Chercher d’autres coups' }).click();
+  await expect.poll(() => choices.count(), { timeout: 60_000 }).toBeGreaterThan(count);
+  expect(await choices.first().locator('strong').innerText()).toBe(first);
+  await reading.getByRole('button', { name: 'Revenir au kifu' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('194');
+  await expect(card).toContainText('abandon');
 });

@@ -2,16 +2,14 @@ import { useThree } from '@react-three/fiber';
 import { useLayoutEffect, useMemo } from 'react';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { useStore } from '../state/store.ts';
+import { isEstimating, useStore } from '../state/store.ts';
 import { BOARD_LENGTH, BOARD_THICKNESS, BOARD_WIDTH, LEG_HEIGHT } from './dimensions.ts';
 import { legGeometry } from './geometry.ts';
 import { boardEndTexture, boardSideTexture, boardTopTexture } from './textures.ts';
 
 /** Goban de sol en kaya : plateau massif de 15 cm sur quatre pieds tournés. */
 export function Goban() {
-  const simulation = useStore(
-    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
-  );
+  const simulation = useStore(isEstimating);
   const invalidate = useThree((s) => s.invalidate);
   const anisotropy = useThree((s) => s.gl.capabilities.getMaxAnisotropy());
 

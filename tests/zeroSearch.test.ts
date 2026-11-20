@@ -61,6 +61,33 @@ describe('réseau Leela Zero', () => {
     }
   });
 
+  it.each([
+    [1.0000001192092896, 1],
+    [-1.0000001192092896, 0],
+  ])(
+    'borne la valeur tanh float32 %d pour que la probabilité reste dans [0, 1]',
+    async (raw, expected) => {
+      const { choices } = await searchZero(start, fixed(undefined, raw), { visits: 2 });
+      expect(choices.length).toBeGreaterThan(0);
+      for (const choice of choices) expect(choice.blackWin).toBe(expected);
+    },
+  );
+
+  it.each([1 + 2 ** -22, -1 - 2 ** -22, NaN, Infinity, -Infinity])(
+    'rejette une valeur hors tolérance ou non finie (%d)',
+    async (value) => {
+      await expect(searchZero(start, fixed(undefined, value), { visits: 1 })).rejects.toThrow(
+        'Sortie du réseau Leela Zero invalide',
+      );
+    },
+  );
+
+  it('rejette une politique dont la dimension est incorrecte même à la borne float32', async () => {
+    await expect(
+      searchZero(start, fixed(new Float32Array(POINTS), 1.0000001192092896), { visits: 1 }),
+    ).rejects.toThrow('Sortie du réseau Leela Zero invalide');
+  });
+
   it('renormalise les autres départs et autorise le coup écarté dès la réponse', async () => {
     const scores = new Float32Array(POINTS + 1).fill(-20);
     scores[0] = 300;

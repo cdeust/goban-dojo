@@ -45,10 +45,20 @@ diff -u tests/fixtures/leela-zero-native.json leela-zero-native.json
 À la racine, les visites sont réparties entre les coups légaux. Un coup très probable peut recevoir
 presque tout le budget. Le lecteur trie les branches visitées et peut relancer la recherche
 depuis la position choisie. Les budgets de 32 et 128 visites sont des réglages du lecteur.
-Pendant une pause, le lecteur présente jusqu’à trois suites. Si la recherche a visité moins
-de trois premiers coups, il relance une recherche en excluant les premiers coups déjà montrés.
+Pendant une pause, le lecteur présente d’abord jusqu’à dix suites de vingt demi-coups.
+On peut demander davantage de premiers coups et reprendre une branche à sa feuille. Si la
+recherche a visité moins de premiers coups que le nombre demandé, il relance une recherche en excluant les premiers coups déjà montrés.
 Cette contrainte vaut seulement pour le premier coup. Le libellé distingue ces variantes,
 dont les visites proviennent d’une recherche séparée.
+
+### Dix réponses depuis une même position
+
+Mesure avec le réseau nº 116 embarqué, ONNX Runtime WebAssembly 1.31.1 sur un fil et 32 visites par recherche. Pour chaque premier coup, les vingt coups de la variante ont été rejoués depuis le kifu en vérifiant la légalité, les captures et le superko. Les branches s’affichent progressivement.
+
+| Position                                | Premiers coups des dix variantes           | Calcul des dix suites sur le Mac de test |
+| --------------------------------------- | ------------------------------------------ | ---------------------------------------- |
+| s002, Noir après le coup 86             | F7, B5, D2, S15, F11, M17, O17, H9, C3, O3 | 91,7 s                                   |
+| s007, Blanc après l’abandon au coup 194 | E12, K6, P15, G7, C9, D2, E7, F7, P9, Q9   | 63,4 s                                   |
 
 Les parties à handicap reçoivent la compensation native de Leela Zero dans le décompte final
 après deux passes. Le réseau utilise le même komi pour l’inférence sur toutes les parties.

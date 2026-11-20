@@ -288,3 +288,37 @@ it('affiche une branche sur le goban du kifu, puis révèle le coup enregistré'
   expect(s().variation).toEqual([]);
   expect(displayOf(s())?.timeline.moves[126]?.point).toBe(P('ji'));
 });
+
+describe('lecture après abandon', () => {
+  it('rejoint la dernière position et rend le kifu intact après une simulation', () => {
+    const index = dataset.games.findIndex((game) => game.id === 's007');
+    const game = dataset.games[index]!;
+    const recorded = game.moves;
+    const total = timelineOf(game).moves.length;
+    s().selectGame(index, { move: 32, play: true });
+    s().readResignation();
+    expect(s()).toMatchObject({
+      mode: 'lire',
+      move: total,
+      readingFromKifu: true,
+      playing: false,
+      variation: [],
+    });
+    expect(nextColor(s())).toBe('W');
+    s().compareResignation(true);
+    expect(s().reflectionReplay).toBe('resignation');
+    s().compareResignation(false);
+    expect(s().reflectionReplay).toBeNull();
+    s().showReading([{ color: 'W', point: -1 }], null, null);
+    s().setMode('lecture');
+    expect(s()).toMatchObject({ move: total, variation: [], readingFromKifu: false });
+    expect(game.moves).toBe(recorded);
+    expect(game.result).toMatchObject({ resign: true, winner: 'B' });
+  });
+
+  it('garde la lecture ordinaire pour une partie gagnée aux points', () => {
+    s().setMove(63, true);
+    s().readResignation();
+    expect(s()).toMatchObject({ mode: 'lecture', move: 63 });
+  });
+});

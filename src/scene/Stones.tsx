@@ -6,7 +6,7 @@ import { NEVER, type StoneLife, type Timeline } from '../domain/game.ts';
 import { READING_DEPTHS } from '../engine/reading.ts';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { playStone } from '../replay/sound.ts';
-import { displayOf, useStore } from '../state/store.ts';
+import { displayOf, isEstimating, useStore } from '../state/store.ts';
 import {
   BOARD_TOP,
   BOWL,
@@ -138,14 +138,19 @@ function sameUpTo(a: Timeline, b: Timeline, upTo: number): boolean {
  * @param seed identifiant de la partie : fixe les petites irrégularités de pose.
  */
 export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
-  const capacity = Math.max(260, recorded) + VARIATION_STONES;
+  const baseCapacity = Math.max(260, recorded) + VARIATION_STONES;
+  const capacity = useStore((s) => {
+    if (!s.variation.length) return baseCapacity;
+    const counts = displayOf(s)?.timeline.counts;
+    const required = Math.max(counts?.B ?? 0, counts?.W ?? 0);
+    const blocks = Math.max(0, Math.ceil((required - baseCapacity) / VARIATION_STONES));
+    return baseCapacity + blocks * VARIATION_STONES;
+  });
   const assets = stoneAssets();
   const stage = useStage();
   const invalidate = useThree((s) => s.invalidate);
   const showNumbers = useStore((s) => s.showNumbers);
-  const estimating = useStore(
-    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
-  );
+  const estimating = useStore(isEstimating);
 
   const blackRef = useRef<THREE.InstancedMesh>(null);
   const whiteRef = useRef<THREE.InstancedMesh>(null);
@@ -548,7 +553,7 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
       const state = useStore.getState();
       const d = displayOf(state);
       if (!d) return;
-      const simulation = state.reflectionReplay === 'auto' || state.reflectionReplay === 'manual';
+      const simulation = isEstimating(state);
       if (!simulation && simulatedAnchor !== undefined && d.move === simulatedAnchor + 1) {
         sync(d.timeline, simulatedAnchor, true);
       }

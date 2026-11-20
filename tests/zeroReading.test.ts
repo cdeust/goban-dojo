@@ -2,7 +2,12 @@ import { expect, test, vi } from 'vitest';
 import { PASS, POINTS } from '../src/domain/board.ts';
 import type { EnginePosition } from '../src/engine/features.ts';
 import { searchZero } from '../src/engine/zeroSearch.ts';
-import { previewZeroLines, readZeroLine, type ZeroReadingStep } from '../src/state/zeroReading.ts';
+import {
+  extendZeroLine,
+  previewZeroLines,
+  readZeroLine,
+  type ZeroReadingStep,
+} from '../src/state/zeroReading.ts';
 
 const root: EnginePosition = { setupBlack: [], moves: [], next: 'B' };
 const result = (point: number, line = [point]) => ({
@@ -101,7 +106,9 @@ test('un premier coup dominant laisse voir les deux meilleures alternatives par 
       searchZero(position, infer, { ...options, visits: 1 }),
   );
   const onLine = vi.fn();
-  const lines = await previewZeroLines(search, root, new AbortController().signal, onLine);
+  const lines = await previewZeroLines(search, root, new AbortController().signal, onLine, {
+    branches: 3,
+  });
   const points = lines.map((line) => line.moves[0]!.point);
   expect(points).toEqual([342, 343, 344]);
   expect(lines.map((line) => line.excluded)).toEqual([[], [342], [342, 343]]);
@@ -131,7 +138,9 @@ test('trois branches naturelles ne nécessitent aucune exclusion', async () => {
       blackWin: 0.5,
     })),
   }));
-  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn());
+  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn(), {
+    branches: 3,
+  });
   expect(search).toHaveBeenCalledTimes(1);
   expect(lines.map((line) => line.moves[0]!.point)).toEqual([30, 60, 80]);
   expect(lines.every((line) => line.excluded?.length === 0)).toBe(true);
@@ -183,4 +192,106 @@ test('une recherche alternative interrompue peut repartir depuis la racine libre
   const lines = await previewZeroLines(second, root, signal, vi.fn());
   expect(lines.map((line) => line.moves[0]!.point)).toEqual([12]);
   expect(opts).toEqual([undefined, [12], undefined, [12]]);
+});
+
+test('élargir conserve les branches existantes et les candidats naturels non encore affichés', async () => {
+  const signal = new AbortController().signal;
+  const search = vi.fn(async () => ({
+    visits: 6,
+    choices: [10, 11, 12, 13, 14, 15].map((point) => ({
+      point,
+      line: [point, PASS, PASS],
+      visits: 1,
+      blackWin: 0.6,
+    })),
+  }));
+  const initial = await previewZeroLines(search, root, signal, vi.fn(), { branches: 3 });
+  const update = vi.fn();
+  const more = await previewZeroLines(search, root, signal, update, {
+    existing: initial,
+    branches: 6,
+  });
+  expect(search).toHaveBeenCalledTimes(1);
+  expect(more.map((line) => line.moves[0]!.point)).toEqual([10, 11, 12, 13, 14, 15]);
+  expect(more[0]).toBe(initial[0]);
+  expect(update.mock.calls.map(([, index]) => index)).toEqual([3, 4, 5]);
+  expect(more.every((line) => line.excluded?.length === 0)).toBe(true);
+});
+
+test('approfondir utilise le reste de la variante puis recherche à sa feuille sans modifier le préfixe', async () => {
+  const signal = new AbortController().signal;
+  const search = vi.fn(async (pos: EnginePosition) =>
+    pos === root ? result(7, [7, 8, 9, 10]) : result(11, [11, 12, PASS, PASS]),
+  );
+  const [initial] = await previewZeroLines(search, root, signal, vi.fn(), {
+    branches: 1,
+    depth: 2,
+  });
+  const update = vi.fn();
+  const deep = await extendZeroLine(search, root, initial!, 8, signal, update);
+  expect(search).toHaveBeenCalledTimes(2);
+  expect(search.mock.calls[1]![0].moves.map((move) => move.point)).toEqual([7, 8, 9, 10]);
+  expect(initial!.moves.map((move) => move.point)).toEqual([7, 8]);
+  expect(deep.moves.map((move) => move.point)).toEqual([7, 8, 9, 10, 11, 12, PASS, PASS]);
+  expect(deep.blackWin).toBe(initial!.blackWin);
+  expect(deep.complete).toBe(true);
+  expect(update.mock.calls.map(([line]) => line.moves.length)).toEqual([4, 8]);
+  await expect(extendZeroLine(search, root, deep, 60, signal, vi.fn())).resolves.toBe(deep);
+  expect(search).toHaveBeenCalledTimes(2);
+});
+
+test('une extension interrompue conserve le dernier préfixe publié et oublie les sorties tardives', async () => {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const initial = { moves: [{ color: 'B' as const, point: 0 }], blackWin: 0.5 };
+  const search = vi.fn(async (position: EnginePosition) => {
+    if (position.moves.length > 1) controller.abort();
+    return result(2, [2, 3]);
+  });
+  const onUpdate = vi.fn();
+  const partial = await extendZeroLine(search, root, initial, 8, signal, onUpdate);
+  expect(onUpdate).toHaveBeenCalledTimes(1);
+  expect(partial.moves.map((m) => m.point)).toEqual([0, 2, 3]);
+});
+
+test('plus de cent alternatives demandées conservent des premiers coups distincts et arrêtent la recherche aux choix légaux disponibles', async () => {
+  const points = Array.from({ length: 120 }, (_, i) => i);
+  const search = vi.fn(
+    async (
+      _position: EnginePosition,
+      { exclude = [] }: { signal: AbortSignal; exclude?: number[] },
+    ) => {
+      const point = points.find((p) => !exclude.includes(p));
+      return point === undefined ? { visits: 0, choices: [] } : result(point, [point, PASS, PASS]);
+    },
+  );
+  const signal = new AbortController().signal;
+  const initial = await previewZeroLines(search, root, signal, vi.fn(), { branches: 12 });
+  const resultLines = await previewZeroLines(search, root, signal, vi.fn(), {
+    branches: POINTS + 1,
+    existing: initial,
+  });
+  expect(resultLines.map((line) => line.moves[0]!.point)).toEqual(points);
+  expect(resultLines[12]!.excluded).toEqual(points.slice(0, 12));
+  expect(search).toHaveBeenCalledTimes(121);
+});
+
+test('la lecture par défaut calcule dix premiers coups distincts et vingt coups par suite', async () => {
+  const search = vi.fn(async () => ({
+    visits: 32,
+    choices: Array.from({ length: 10 }, (_, i) => ({
+      point: i,
+      visits: 1,
+      blackWin: 0.5,
+      line: [i, ...Array.from({ length: 20 }, (_, j) => 40 + j)],
+    })),
+  }));
+  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn());
+  expect(search).toHaveBeenCalledTimes(1);
+  expect(lines).toHaveLength(10);
+  expect(new Set(lines.map(({ moves }) => moves[0]!.point)).size).toBe(10);
+  for (const { moves } of lines) {
+    expect(moves).toHaveLength(20);
+    expect(moves.at(-1)).toEqual({ point: 58, color: 'W' });
+  }
 });

@@ -6,6 +6,8 @@ import type { EnginePosition } from './features.ts';
 // https://github.com/leela-zero/leela-zero/blob/master/src/Network.cpp
 const HISTORY = 8;
 export const ZERO_KOMI = 7.5;
+// Sur s007, le tanh WASM a renvoyé la première valeur float32 au-delà de 1.
+const FLOAT32_ULP_AT_ONE = 2 ** -23;
 
 /** Les lignes du tenseur natif partent de A1, celles du kifu de A19. */
 function netIndex(point: number): number {
@@ -154,10 +156,15 @@ async function expand(
   }
   if (!points.length) return node;
   const { policy, value } = await infer(position);
-  if (policy.length !== POINTS + 1 || !Number.isFinite(value) || Math.abs(value) > 1) {
+  if (
+    policy.length !== POINTS + 1 ||
+    !Number.isFinite(value) ||
+    Math.abs(value) > 1 + FLOAT32_ULP_AT_ONE
+  ) {
     throw new Error('Sortie du réseau Leela Zero invalide');
   }
-  node.blackWin = (1 + (position.next === 'B' ? value : -value)) / 2;
+  const bounded = Math.max(-1, Math.min(1, value));
+  node.blackWin = (1 + (position.next === 'B' ? bounded : -bounded)) / 2;
   let max = -Infinity;
   for (const point of points) {
     const logit = policy[netIndex(point)]!;
