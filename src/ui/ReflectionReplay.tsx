@@ -2,6 +2,7 @@ import { useReducedMotion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { POINTS, pointToHuman } from '../domain/board.ts';
 import { decodePoints, type GameRecord } from '../domain/game.ts';
+import { nextVariationStep, VARIATION_STEP_MS } from '../replay/variationClock.ts';
 import { analyzeZero, useZeroEngine } from '../engine/zeroClient.ts';
 import {
   blackWinLabel,
@@ -16,7 +17,6 @@ import { nextColor, timelineOf, useCurrentGame, useStore } from '../state/store.
 import { colorName } from '../story/format.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 
-const FRAME_MS = 230;
 const BRANCH_HOLD = 750;
 const finished = new WeakMap<GameRecord, Map<number, SimulationLine[]>>();
 
@@ -148,28 +148,41 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
     else showSimulation(moves);
   }, [afterResignation, showReading, showSimulation, simulatedMoves, visibleStep]);
 
-  const hasNextStep = step < (branch?.moves.length ?? 0);
+  const available = branch?.moves.length ?? 0;
   const hasNextBranch = index + 1 < shown.length;
+  const dueAt = useRef<number | undefined>(undefined);
   useEffect(() => {
-    if (paused || showStart || (!hasNextStep && !hasNextBranch && !allReceived)) return;
+    if (paused || showStart || (step >= available && !hasNextBranch && !allReceived)) {
+      dueAt.current = undefined;
+      return;
+    }
+    const now = performance.now();
+    const deadline = dueAt.current ?? now + (step < available ? VARIATION_STEP_MS : BRANCH_HOLD);
+    dueAt.current = deadline;
     const timer = window.setTimeout(
       () => {
-        if (hasNextStep) setFrame({ index, step: step + 1 });
-        else if (hasNextBranch) setFrame({ index: index + 1, step: 0 });
-        else if (afterResignation) setPaused(true);
-        else reveal();
+        if (step < available) {
+          const frame = nextVariationStep(step, available, deadline, performance.now());
+          dueAt.current = frame.nextDue;
+          setFrame({ index, step: frame.step });
+        } else {
+          dueAt.current = undefined;
+          if (hasNextBranch) setFrame({ index: index + 1, step: 0 });
+          else if (afterResignation) setPaused(true);
+          else reveal();
+        }
       },
-      hasNextStep ? FRAME_MS : BRANCH_HOLD,
+      Math.max(0, deadline - now),
     );
     return () => window.clearTimeout(timer);
   }, [
     paused,
     showStart,
-    hasNextStep,
+    step,
+    available,
     hasNextBranch,
     allReceived,
     index,
-    step,
     afterResignation,
     reveal,
   ]);

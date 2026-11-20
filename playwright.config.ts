@@ -15,6 +15,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   use: {
     baseURL: 'http://127.0.0.1:4173',
+    channel: 'chromium',
     trace: 'retain-on-failure',
     launchOptions: { args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] },
   },

@@ -39,8 +39,11 @@ async function enter(page: Page): Promise<void> {
 async function openRedEarGame(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Parties', exact: true }).first().click();
   await page.getByRole('searchbox').fill('1846-09-11');
-  await page.locator('.row').first().click();
-  await page.getByRole('button', { name: 'Pause' }).click();
+  const game = page.locator('.row').filter({ has: page.locator('time[datetime="1846-09-11"]') });
+  await game.click();
+  await expect(game).toHaveAttribute('aria-current', 'true');
+  await page.getByRole('button', { name: 'Premier coup', exact: true }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('0');
 }
 
 test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le récit', async ({
@@ -410,9 +413,10 @@ test('réflexion : le coup historique K11 déclenche les éclairs bleus', async 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await enter(page);
   await openRedEarGame(page);
+  await page.getByRole('slider', { name: 'Coup', exact: true }).fill('126');
   await page.getByRole('button', { name: 'Réflexion', exact: true }).click();
   const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
-  await reflection.getByLabel('Moment de la partie').selectOption('126');
+  await expect(reflection.getByLabel('Moment de la partie')).toHaveValue('126');
   await page.locator('canvas[data-rendered="true"]').waitFor();
   await page.evaluate(() => {
     const observer = new MutationObserver(() => {
