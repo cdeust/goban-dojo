@@ -48,8 +48,7 @@ depuis la position choisie. Les budgets de 32 et 128 visites sont des réglages 
 Pendant une pause, le lecteur présente d’abord jusqu’à dix suites de vingt demi-coups.
 On peut demander davantage de premiers coups et reprendre une branche à sa feuille. Si la
 recherche a visité moins de premiers coups que le nombre demandé, il relance une recherche en excluant les premiers coups déjà montrés.
-Cette contrainte vaut seulement pour le premier coup. Le libellé distingue ces variantes,
-dont les visites proviennent d’une recherche séparée.
+Cette contrainte vaut seulement pour le premier coup. Le sélecteur classe les départs par gain estimé pour le joueur au trait. KataGo évalue pour cela chaque position avec le komi du kifu. [Calcul du score et du komi d’équilibre](MOTEUR.md#évaluation-en-points-avec-katago)
 
 ### Dix réponses depuis une même position
 
@@ -59,6 +58,8 @@ Mesure avec le réseau nº 116 embarqué, ONNX Runtime WebAssembly 1.31.1 sur un
 | --------------------------------------- | ------------------------------------------ | ---------------------------------------- |
 | s002, Noir après le coup 86             | F7, B5, D2, S15, F11, M17, O17, H9, C3, O3 | 91,7 s                                   |
 | s007, Blanc après l’abandon au coup 194 | E12, K6, P15, G7, C9, D2, E7, F7, P9, Q9   | 63,4 s                                   |
+
+Sur s007, les 32 visites de la première recherche vont à E12. Parmi les dix réponses évaluées au komi historique de zéro, F7 préserve 3,28 points de plus pour Blanc. L’avance estimée de Noir atteint 45,65 points après F7 et 48,94 après E12. Sur s002, le coup du kifu F7 est aussi le meilleur départ évalué pour Noir (+0,17 point).
 
 Les parties à handicap reçoivent la compensation native de Leela Zero dans le décompte final
 après deux passes. Le réseau utilise le même komi pour l’inférence sur toutes les parties.
