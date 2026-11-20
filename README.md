@@ -29,6 +29,11 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
 - **Temps de réflexion** : dans la partie de l’oreille rouge, revenez aux interruptions après
   les coups 89 et 141 ou à la position avant Noir 127. Comparez les coups du kifu avec des
   variantes pédagogiques, à votre rythme. Les temps de réflexion individuels sont inconnus.
+- **Simuler avec Leela Zero**, une reproduction publique d’AlphaGo Zero. Avant les coups forts,
+  le goban rejoue les suites explorées par le moteur. Depuis « Analyser », ouvrez la lecture
+  longue pour choisir une branche et suivre les réponses des deux camps, y compris dans
+  votre propre SGF. L’écran indique les chances de Noir avec le komi de 7,5 du modèle.
+  [Provenance des poids et vérification](docs/LEELA-ZERO.md)
 - **Lire les variantes** : depuis une position du kifu, le bouton « Analyser » ouvre jusqu’à
   144 suites de deux coups avec KataGo. Cliquez sur un repère lumineux pour jouer un coup,
   examiner les réponses et comparer l’avance estimée à celle du coup historique.

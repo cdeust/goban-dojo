@@ -52,6 +52,8 @@ const NEIGHBOURS: readonly (readonly number[])[] = Array.from({ length: POINTS }
 export const neighbours = (p: number): readonly number[] => NEIGHBOURS[p] ?? [];
 
 const EMPTY = 0;
+// Les trois codes d'occupation (0, 1, 2) occupent chacun un octet UTF-8.
+const cellDecoder = new TextDecoder();
 const code = (c: Color): number => (c === 'B' ? 1 : 2);
 
 export type IllegalReason = 'occupied' | 'suicide' | 'ko';
@@ -67,6 +69,19 @@ export class Board {
   private readonly cells = new Uint8Array(POINTS);
   /** Point interdit par la règle du ko pour le prochain coup, ou -1. */
   private koPoint = -1;
+
+  /** Copie indépendante du goban et de son interdiction de ko. */
+  clone(): Board {
+    const copy = new Board();
+    copy.cells.set(this.cells);
+    copy.koPoint = this.koPoint;
+    return copy;
+  }
+
+  /** Identité exacte de l’occupation pour la règle de superko positionnel. */
+  positionKey(): string {
+    return cellDecoder.decode(this.cells);
+  }
 
   get(p: number): Color | null {
     const v = this.cells[p];

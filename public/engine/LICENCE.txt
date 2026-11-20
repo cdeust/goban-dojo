@@ -31,3 +31,10 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 L'encodage des positions (src/engine/features.ts) est un portage de code de KataGo, sous licence
 MIT : https://github.com/lightvector/KataGo/blob/master/LICENSE
+
+leela-zero.onnx
+
+Poids du réseau Leela Zero nº 116, issus de l’entraînement public en autojeu et
+placés dans le domaine public par le mainteneur, Gian-Carlo Pascutto.
+https://github.com/leela-zero/leela-zero/issues/1220#issuecomment-382456362
+Empreintes, source d’origine et commande de conversion : docs/LEELA-ZERO.md.

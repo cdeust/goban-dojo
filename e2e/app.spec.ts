@@ -472,6 +472,7 @@ test('lecture longue : 60 coups après K11, bifurcation et retour à la branche'
   await page.getByRole('button', { name: 'Examiner cette position' }).click();
   await page.getByRole('button', { name: 'Lire 60 coups d’avance' }).click();
   const reading = page.getByRole('region', { name: 'Lecture longue' });
+  await reading.getByRole('radio', { name: 'KataGo' }).check();
   await reading.getByRole('button', { name: 'Lancer KataGo' }).click();
   const start = reading.getByRole('button', { name: /Lire après K11/ });
   await expect(start).toBeVisible({ timeout: 60_000 });
@@ -658,4 +659,40 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await page.getByRole('searchbox').fill('Émile');
   await page.getByRole('button', { name: /Alice — Émile/ }).click();
   await expect(card).toContainText('Émile');
+});
+
+test('Leela Zero lit une partie importée, projette ses coups et rend la main au kifu', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  await page.getByLabel('Importer un fichier SGF').setInputFiles({
+    name: 'leela.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from('(;SZ[19]PB[Alice]PW[Émile]KM[0.5];B[pd];W[dd];B[qp];W[dp])'),
+  });
+  await page.getByRole('slider', { name: 'Coup', exact: true }).fill('2');
+  await page.getByRole('button', { name: 'Analyser', exact: true }).click();
+  await page.getByRole('button', { name: 'Lire 60 coups d’avance' }).click();
+  const reading = page.getByRole('region', { name: 'Lecture longue' });
+  await expect(reading.getByRole('radio', { name: 'Leela Zero' })).toBeChecked();
+  await expect(reading).toContainText('komi fixe de 7,5');
+  await reading.getByRole('button', { name: 'Lancer Leela Zero' }).click();
+  await expect(reading.getByLabel('Recherche par position')).toHaveValue('32', { timeout: 60_000 });
+  await reading.getByRole('button', { name: 'Calculer la suite' }).click();
+  const choices = reading.locator('.analysis__choice');
+  await expect(choices.first()).toContainText('Chances de Noir', { timeout: 60_000 });
+  await expect(choices.first()).toContainText('visite');
+  const chosen = await choices.first().locator('strong').innerText();
+  await reading.getByRole('button', { name: 'Arrêter le calcul' }).click();
+  await reading.getByRole('button', { name: 'Avancer' }).click();
+  await expect(reading.getByRole('heading', { name: 'Noir ' + chosen, exact: true })).toBeVisible();
+  await expect(reading.getByRole('button', { name: 'Territoires estimés' })).toHaveCount(0);
+  await reading.getByLabel('Recherche par position').selectOption('128');
+  await expect(reading.getByRole('slider')).toHaveCount(0);
+  await reading.getByRole('button', { name: 'Revenir à l’analyse' }).click();
+  await page.getByRole('button', { name: 'Revenir au kifu' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('2');
 });

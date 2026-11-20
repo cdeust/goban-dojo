@@ -39,7 +39,7 @@ module.exports = {
       severity: 'error',
       comment:
         'Le moteur d’inférence n’est importé que par le fil d’exécution du moteur (et son client, pour l’URL du binaire).',
-      from: { pathNot: '^(src/engine/(worker|client)\\.ts|tests/)' },
+      from: { pathNot: '^(src/engine/(worker|workerRuntime|zeroWorker|client|zeroClient)\\.ts|tests/)' },
       to: { path: 'onnxruntime-web' },
     },
     {
