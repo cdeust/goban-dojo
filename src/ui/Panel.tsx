@@ -272,15 +272,17 @@ function Library() {
   const games = useStore((s) => s.dataset?.games);
   const gameIndex = useStore((s) => s.gameIndex);
   const [query, setQuery] = useState('');
+  const [resignedOnly, setResignedOnly] = useState(false);
 
   const groups = useMemo(() => {
     if (!games) return [];
     const q = query.trim().toLowerCase();
     const matches = (g: GameRecord): boolean =>
-      q === '' ||
-      `${prettyName(g.black)} ${prettyName(g.white)} ${g.date} ${g.event ?? ''} ${g.place ?? ''}`
-        .toLowerCase()
-        .includes(q);
+      (!resignedOnly || g.result.resign === true) &&
+      (q === '' ||
+        `${prettyName(g.black)} ${prettyName(g.white)} ${g.date} ${g.event ?? ''} ${g.place ?? ''}`
+          .toLowerCase()
+          .includes(q));
     const imports = games.flatMap((g, i) => (g.imported && matches(g) ? [{ g, i }] : []));
     const out = CHAPTERS.map((c, ci) => ({
       key: c.id,
@@ -293,7 +295,7 @@ function Library() {
     return [{ key: 'imports', title: 'Mes parties', years: '', items: imports }, ...out].filter(
       (grp) => grp.items.length > 0,
     );
-  }, [games, query]);
+  }, [games, query, resignedOnly]);
 
   const total = groups.reduce((n, g) => n + g.items.length, 0);
 
@@ -310,6 +312,14 @@ function Library() {
           autoComplete="off"
           spellCheck={false}
         />
+      </label>
+      <label className="chip">
+        <input
+          type="checkbox"
+          checked={resignedOnly}
+          onChange={(e) => setResignedOnly(e.target.checked)}
+        />
+        Parties terminées par abandon
       </label>
       <p className="library__count" role="status">
         {total} partie{total > 1 ? 's' : ''}

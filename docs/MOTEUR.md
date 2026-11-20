@@ -8,11 +8,22 @@ chinoises et avec 7,5 points de komi. Une partie de Shūsaku sans komi peut donc
 issue historique différente de celle que suggère cette estimation.
 
 Les pauses rejouent les branches sur le goban de la partie. Lorsqu’un seul coup concentre
-toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux. La lecture longue peut poursuivre
-une branche pendant 60, 120 ou 240 demi-coups en relançant la recherche à chaque position.
+toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux.
+Chaque pause propose d’abord quatre branches de douze demi-coups au maximum. Le lecteur peut
+demander davantage de branches ou prolonger uniquement celle qu’il souhaite étudier.
+En lecture longue, les horizons de départ sont de 60, 120 et 240 demi-coups. On peut augmenter
+l’horizon par tranches de 60 et demander d’autres réponses à une position déjà calculée.
 Deux passes mettent fin à la projection. Une succession de recherches locales ne mesure pas
 la profondeur atteinte par une recherche unique. Les positions d’un SGF importé sont analysées
 dans le navigateur selon la même procédure. [Poids, conversion et vérification](LEELA-ZERO.md)
+
+## Continuer après un abandon
+
+Dans la bibliothèque, cochez « Parties terminées par abandon ». Le bouton « Continuer après
+l’abandon » dans la fiche ouvre la position finale du kifu. Les imports SGF avec un résultat
+`B+R`, `W+R`, `B+Resign` ou `W+Resign` suivent le même parcours. Le résultat de la partie reste
+affiché pendant la simulation. Le joueur au trait se déduit du dernier coup enregistré.
+« Revenir au kifu » rétablit cette position et le résultat historique.
 
 ## Évaluation en points avec KataGo
 

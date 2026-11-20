@@ -1978,6 +1978,46 @@ progress {
   min-block-size: 2.125rem;
 }
 
+.simulation__study {
+  width: 100%;
+  border-block-start: 1px solid rgb(120 198 255 / 0.3);
+  font-size: 0.82rem;
+}
+
+.simulation__study summary {
+  padding: 0.5rem;
+  color: #afdafa;
+  cursor: pointer;
+}
+
+.simulation__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.45rem 0.6rem;
+  text-align: start;
+}
+
+.simulation__field,
+.simulation__options > label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.simulation__options select,
+.simulation__options input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2rem;
+  color-scheme: dark;
+  font: inherit;
+}
+
+.simulation__progress {
+  margin: 0.45rem 0;
+  color: #afdafa;
+}
+
 .library-import {
   display: grid;
   gap: 0.4rem;

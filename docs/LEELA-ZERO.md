@@ -45,8 +45,9 @@ diff -u tests/fixtures/leela-zero-native.json leela-zero-native.json
 À la racine, les visites sont réparties entre les coups légaux. Un coup très probable peut recevoir
 presque tout le budget. Le lecteur trie les branches visitées et peut relancer la recherche
 depuis la position choisie. Les budgets de 32 et 128 visites sont des réglages du lecteur.
-Pendant une pause, le lecteur présente jusqu’à trois suites. Si la recherche a visité moins
-de trois premiers coups, il relance une recherche en excluant les premiers coups déjà montrés.
+Pendant une pause, le lecteur présente d’abord jusqu’à quatre suites de douze demi-coups.
+On peut demander davantage de premiers coups et reprendre une branche à sa feuille. Si la
+recherche a visité moins de premiers coups que le nombre demandé, il relance une recherche en excluant les premiers coups déjà montrés.
 Cette contrainte vaut seulement pour le premier coup. Le libellé distingue ces variantes,
 dont les visites proviennent d’une recherche séparée.
 

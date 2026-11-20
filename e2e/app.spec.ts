@@ -696,3 +696,36 @@ test('Leela Zero lit une partie importée, projette ses coups et rend la main au
   await page.getByRole('button', { name: 'Revenir au kifu' }).click();
   await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('2');
 });
+
+test('après un abandon, calculer une suite et retrouver le dernier coup du SGF', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  const filter = page.getByRole('checkbox', { name: 'Parties terminées par abandon' });
+  await filter.check();
+  await expect(page.locator('.library__count')).toContainText('178 parties');
+  await page.getByLabel('Importer un fichier SGF').setInputFiles('data/cwi/007.sgf');
+  const card = page.getByRole('region', { name: 'Partie en cours' });
+  await card.getByRole('button', { name: 'Continuer après l’abandon' }).click();
+  const reading = page.getByRole('region', { name: 'Lecture longue' });
+  await expect(reading).toContainText('Dernier coup enregistré · 194');
+  await expect(reading).toContainText('Blanc au trait');
+  await reading.getByLabel('Profondeur de la suite').selectOption('240');
+  await reading.getByLabel('Profondeur de la suite').selectOption('more');
+  await expect(reading.getByLabel('Profondeur de la suite')).toHaveValue('300');
+  await reading.getByRole('button', { name: 'Calculer la suite après l’abandon' }).click();
+  const choices = reading.locator('.analysis__choice');
+  await expect(choices.first()).toBeVisible({ timeout: 60_000 });
+  await reading.getByRole('button', { name: 'Arrêter le calcul' }).click();
+  const first = await choices.first().locator('strong').innerText();
+  const count = await choices.count();
+  await reading.getByRole('button', { name: 'Chercher d’autres coups' }).click();
+  await expect.poll(() => choices.count(), { timeout: 60_000 }).toBeGreaterThan(count);
+  expect(await choices.first().locator('strong').innerText()).toBe(first);
+  await reading.getByRole('button', { name: 'Revenir au kifu' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('194');
+  await expect(card).toContainText('abandon');
+});

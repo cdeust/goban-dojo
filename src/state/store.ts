@@ -156,6 +156,7 @@ interface State {
   /** Coups ajoutés par l'utilisateur après le coup `move` de la partie (mode « explorer »). */
   variation: Move[];
   analysisMarks: AnalysisMark[];
+  readingFromKifu: boolean;
   readingPace: number | null;
   readingOwnership: Float32Array | null;
   /** Message bref à l'utilisateur (coup refusé, etc.). */
@@ -182,6 +183,7 @@ interface State {
   setPanel: (panel: PanelName) => void;
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
+  readResignation: () => void;
   showStudyMove: (number: number | null, after?: boolean) => void;
   showReflection: (after: number) => void;
   playReflection: (line: number, step: number) => void;
@@ -344,6 +346,7 @@ export const useStore = create<State>((set, get) => ({
   guessColor: 'B',
   variation: [],
   analysisMarks: [],
+  readingFromKifu: false,
   readingPace: null,
   readingOwnership: null,
   notice: null,
@@ -516,9 +519,18 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
+  readResignation: () => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (s.mode !== 'lecture' || !game?.result.resign || !moveCount(game)) return;
+    s.setMove(moveCount(game), true);
+    s.setMode('lire');
+  },
+
   setMode: (mode) =>
     set((s) => ({
       mode,
+      readingFromKifu: mode === 'lire' && s.mode === 'lecture',
       reflectionReplay: null,
       ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
         ? { panel: null, view: 'dessus' }

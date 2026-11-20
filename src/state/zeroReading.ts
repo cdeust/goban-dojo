@@ -1,4 +1,4 @@
-import { PASS } from '../domain/board.ts';
+import { opposite, PASS, POINTS } from '../domain/board.ts';
 import { threatOf, type Move } from '../domain/game.ts';
 import { afterCandidate } from '../engine/analysis.ts';
 import type { EnginePosition } from '../engine/features.ts';
@@ -17,6 +17,11 @@ export interface ZeroReadingStep {
 }
 
 export interface SimulationLine {
+  /** Autres choix déjà visités à la même racine et avec les mêmes exclusions. */
+  rootChoices?: ZeroResult['choices'];
+  /** Fin déjà calculée de la variante principale, au-delà du dernier coup affiché. */
+  pending?: number[];
+  complete?: boolean;
   excluded?: number[];
   moves: Move[];
   blackWin?: number;
@@ -56,54 +61,116 @@ export async function readZeroLine(
   }
 }
 
-/** Rejoue les branches les plus visitées et prolonge leurs feuilles par une nouvelle recherche. */
+export const PREVIEW_BRANCHES = 3;
+export const PREVIEW_DEPTH = 8;
+
+/** Prolonge le préfixe réellement lu. La suite non affichée d’une recherche reste disponible. */
+export async function extendZeroLine(
+  search: Search,
+  start: EnginePosition,
+  line: SimulationLine,
+  depth: number,
+  signal: AbortSignal,
+  onUpdate: (line: SimulationLine) => void,
+): Promise<SimulationLine> {
+  if (!Number.isSafeInteger(depth) || depth < 1)
+    throw new RangeError('Profondeur de lecture invalide');
+  if (line.complete || signal.aborted || line.moves.length >= depth) return line;
+  const last = line.moves.at(-1);
+  let position = last
+    ? { ...start, next: opposite(last.color), moves: [...start.moves, ...line.moves] }
+    : start;
+  let current = line;
+  while (current.moves.length < depth && !signal.aborted) {
+    if (position.moves.at(-1)?.point === PASS && position.moves.at(-2)?.point === PASS) {
+      current = { ...current, complete: true };
+      onUpdate(current);
+      break;
+    }
+    const continuation = current.pending?.length
+      ? current.pending
+      : ((await search(position, { signal })).choices[0]?.line ?? []);
+    if (signal.aborted) break;
+    const added: Move[] = [];
+    let next = position.next;
+    let previous = position.moves.at(-1)?.point;
+    let complete = continuation.length === 0;
+    for (const point of continuation) {
+      added.push({ color: next, point });
+      next = opposite(next);
+      complete = point === PASS && previous === PASS;
+      if (complete || current.moves.length + added.length === depth) break;
+      previous = point;
+    }
+    current = {
+      ...current,
+      moves: [...current.moves, ...added],
+      pending: complete ? [] : continuation.slice(added.length),
+      complete,
+    };
+    onUpdate(current);
+    if (complete) break;
+    position = { ...position, moves: [...position.moves, ...added], next };
+  }
+  return current;
+}
+
+/** Montre les branches dans l’ordre des visites, puis exclut les premiers coups déjà étudiés. */
 export async function previewZeroLines(
   search: Search,
   start: EnginePosition,
   signal: AbortSignal,
   onLine: (line: SimulationLine, index: number) => void,
+  {
+    branches = PREVIEW_BRANCHES,
+    depth = PREVIEW_DEPTH,
+    existing = [],
+  }: {
+    branches?: number;
+    depth?: number;
+    existing?: readonly SimulationLine[];
+  } = {},
 ): Promise<SimulationLine[]> {
-  if (signal.aborted) return [];
-  const lines: SimulationLine[] = [];
-  const shown = new Set<number>();
-  while (lines.length < 3 && !signal.aborted) {
-    const excluded = [...shown];
-    const { choices } = await search(
-      start,
-      excluded.length ? { signal, exclude: excluded } : { signal },
+  if (!Number.isSafeInteger(branches) || branches < 1)
+    throw new RangeError('Nombre de variantes invalide');
+  if (!Number.isSafeInteger(depth) || depth < 1)
+    throw new RangeError('Profondeur de lecture invalide');
+  const target = Math.min(POINTS + 1, branches);
+  const lines = [...existing];
+  const shown = new Set(
+    existing.flatMap((line) => line.moves.slice(0, 1).map((move) => move.point)),
+  );
+  const last = existing.at(-1);
+  let cached = last?.rootChoices;
+  while (lines.length < target && !signal.aborted) {
+    const excluded = cached ? (last?.excluded ?? []) : [...shown];
+    const choices =
+      cached ??
+      (await search(start, excluded.length ? { signal, exclude: excluded } : { signal })).choices;
+    const available = choices.filter(
+      (choice) => !shown.has(choice.point) && choice.line.length > 0,
     );
-    for (const branch of choices) {
-      if (signal.aborted) return [];
-      if (shown.has(branch.point) || branch.line.length === 0) continue;
-      const source = { blackWin: branch.blackWin, excluded };
-      let position = start;
-      const moves: Move[] = [];
-      let continuation = branch.line;
-      while (continuation.length > 0) {
-        for (const point of continuation) {
-          moves.push({ color: position.next, point });
-          position = afterCandidate(position, point);
-          if (moves.length === 8) break;
-        }
-        onLine({ ...source, moves: moves.slice() }, lines.length);
-        if (signal.aborted) return [];
-        if (
-          moves.length === 8 ||
-          (position.moves.at(-1)?.point === PASS && position.moves.at(-2)?.point === PASS)
-        )
-          break;
-        continuation = (await search(position, { signal })).choices[0]?.line ?? [];
-        if (signal.aborted) return [];
-      }
-      lines.push({ ...source, moves });
+    if (signal.aborted || (!cached && !available.length)) break;
+    cached = undefined;
+    for (const branch of available) {
+      const index = lines.length;
+      const source: SimulationLine = {
+        blackWin: branch.blackWin,
+        excluded,
+        moves: [],
+        rootChoices: choices,
+        pending: branch.line,
+      };
+      const line = await extendZeroLine(search, start, source, depth, signal, (update) =>
+        onLine(update, index),
+      );
+      if (signal.aborted) return [...existing];
+      lines.push(line);
       shown.add(branch.point);
-      if (lines.length === 3) break;
+      if (lines.length === target) break;
     }
-    // Aucun nouveau premier coup légal n'a reçu de visite dans cette recherche.
-    if (shown.size === excluded.length) break;
   }
-  if (signal.aborted) return [];
-  return lines;
+  return signal.aborted ? [...existing] : lines;
 }
 
 const percent = new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 1 });

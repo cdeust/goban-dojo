@@ -24,6 +24,8 @@ function Player({ game, color }: { game: GameRecord; color: 'B' | 'W' }) {
 export function GameCard() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
+  const replaying = useStore((s) => s.mode === 'lecture' && !s.reflectionReplay);
+  const readResignation = useStore((s) => s.readResignation);
   if (!game) return null;
   const finished = move >= moveCount(game);
   return (
@@ -106,6 +108,11 @@ export function GameCard() {
             {formatResult(game.result)}
           </dd>
         </dl>
+        {game.result.resign && replaying && moveCount(game) > 0 && (
+          <button type="button" className="chip" onClick={readResignation}>
+            Continuer après l’abandon
+          </button>
+        )}
       </motion.section>
     </AnimatePresence>
   );
