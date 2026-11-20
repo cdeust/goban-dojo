@@ -11,8 +11,9 @@ export async function openModel(
   url: string,
   model: ModelAsset,
   onProgress: (loaded: number, total: number) => void,
+  reload = false,
 ): Promise<ort.InferenceSession> {
-  const res = await fetch(url, { credentials: 'omit' });
+  const res = await fetch(url, { credentials: 'omit', cache: reload ? 'reload' : 'default' });
   if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
   const bytes = new Uint8Array(model.bytes);
   const reader = res.body.getReader();
@@ -35,5 +36,15 @@ export async function openModel(
 
   ort.env.wasm.numThreads = 1;
   ort.env.wasm.wasmPaths = { wasm: wasmUrl };
-  return ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] });
+  if (reload) {
+    // ORT ne transmet pas d’option de cache au navigateur pour son propre téléchargement.
+    const wasm = await fetch(wasmUrl, { credentials: 'omit', cache: 'reload' });
+    if (!wasm.ok) throw new Error(`WebAssembly · HTTP ${wasm.status}`);
+    ort.env.wasm.wasmBinary = await wasm.arrayBuffer();
+  }
+  try {
+    return await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'] });
+  } finally {
+    if (reload) delete ort.env.wasm.wasmBinary;
+  }
 }

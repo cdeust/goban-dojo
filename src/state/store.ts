@@ -445,7 +445,18 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
-  playReflectionReplay: () => set({ reflectionReplay: 'manual', playing: false, impact: null }),
+  playReflectionReplay: () => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (!game || s.move >= moveCount(game)) return;
+    set({
+      mode: 'lecture',
+      reflectionReplay: 'manual',
+      playing: false,
+      variation: [],
+      impact: null,
+    });
+  },
 
   revealReflectionMove: () => {
     const { move, reflectionReplay, setMove } = get();

@@ -402,7 +402,7 @@ test('réflexion : interruption documentée, variante, puis retour au kifu', asy
   await enter(page);
   await openRedEarGame(page);
   await page.getByRole('slider', { name: 'Coup' }).fill('89');
-  await page.getByRole('button', { name: 'Examiner cette position' }).click();
+  await page.getByRole('button', { name: 'Réflexion', exact: true }).click();
   const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
   await expect(reflection.getByRole('heading', { name: 'Temps de réflexion' })).toBeFocused();
   await expect(reflection).toContainText('Interruption documentée');
@@ -419,8 +419,12 @@ test('réflexion : interruption documentée, variante, puis retour au kifu', asy
   await expect(reflection).toContainText('Blanc E18');
   await reflection.getByRole('button', { name: 'Reculer' }).click();
   await expect(reflection).toContainText('Noir G4');
-  await reflection.getByRole('button', { name: 'Revenir à la partie' }).click();
-  await expect(page.getByRole('slider', { name: 'Coup' })).toHaveValue('126');
+  await reflection.getByRole('button', { name: 'Voir les simulations' }).click();
+  const simulation = page.getByRole('region', { name: 'Noir · avant le coup 127' });
+  await expect(simulation.getByRole('button', { name: 'Lire les variantes' })).toBeVisible();
+  await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', '0');
+  await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('127');
 });
 
 test('réflexion : le coup historique K11 déclenche les éclairs bleus', async ({ page }) => {
@@ -525,34 +529,32 @@ test('lecture longue : 60 coups après K11, bifurcation et retour à la branche'
   await expect(slider).toHaveAttribute('max', '60');
 });
 
-test('le replay s’arrête avant les coups tactiques des deux joueurs', async ({ page }) => {
+test('la réduction des animations conserve les estimations au pas à pas pour les deux camps', async ({
+  page,
+}) => {
+  test.slow();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enter(page);
   await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
-  const slider = page.getByRole('slider', { name: 'Coup' });
-  const stage = page.locator('.stage');
+  const slider = page.locator('input[aria-label="Coup"]');
   for (const [start, anchor, coup, color] of [
     ['78', '79', '80', 'Blanc'],
     ['151', '152', '153', 'Noir'],
-  ]) {
-    await slider.fill(start!);
+  ] as const) {
+    await slider.fill(start);
     await page.getByRole('button', { name: 'Lecture', exact: true }).click();
-    const cue = stage.getByRole('heading', { name: 'Avant le coup ' + coup });
-    await expect(cue).toBeVisible({ timeout: 15_000 });
-    await expect(stage.locator('.simulation')).toHaveCount(0);
-    await expect(slider).toHaveValue(anchor!);
-    await expect(page.getByRole('button', { name: 'Lecture', exact: true })).toBeVisible();
-    await stage.getByRole('button', { name: 'Examiner cette position' }).click();
-    const reflection = stage.getByRole('region', { name: 'Temps de réflexion' });
-    await expect(reflection.getByRole('combobox', { name: 'Moment de la partie' })).toHaveValue(
-      anchor!,
-    );
-    await expect(
-      reflection.getByRole('combobox', { name: 'Moment de la partie' }).locator('option:checked'),
-    ).toContainText(color!);
-    await reflection.getByRole('button', { name: 'Revenir à la partie' }).click();
-    await stage.getByRole('button', { name: 'Révéler le coup' }).click();
-    await expect(slider).toHaveValue(coup!);
+    const simulation = page.getByRole('region', { name: color + ' · avant le coup ' + coup });
+    const view = simulation.locator('.simulation__view');
+    await expect(simulation.getByRole('button', { name: 'Lire les variantes' })).toBeVisible();
+    await expect(view).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
+    await expect(view.getByText('Avance estimée')).toBeVisible({ timeout: 60_000 });
+    await expect(view).toHaveAttribute('data-step', '0');
+    await simulation.getByRole('button', { name: 'Coup simulé suivant' }).click();
+    await expect(view).toHaveAttribute('data-step', '1');
+    await expect(view.getByText('Variation pour ' + color)).toBeVisible({ timeout: 60_000 });
+    await expect(slider).toHaveValue(anchor);
+    await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+    await expect(slider).toHaveValue(coup);
   }
   const tacticalPauses = page.getByRole('button', { name: 'Coups forts' });
   await tacticalPauses.click();
@@ -574,7 +576,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
   await page.getByRole('button', { name: 'Partie suivante' }).click();
   const slider = page.locator('input[aria-label="Coup"]');
-  await slider.fill('85');
+  await slider.fill('86');
   const goban = page.locator('canvas[data-rendered=true]');
   const position = await goban.boundingBox();
   await page.evaluate(() => {
@@ -640,6 +642,47 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   });
 });
 
+test('une panne du réseau de variantes conserve la réflexion et permet de la relancer', async ({
+  page,
+}) => {
+  test.slow();
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const weights = '**/leela-zero.onnx';
+  await page.context().route(weights, (route) => route.fulfill({ status: 503 }));
+  await enter(page);
+  await page.getByRole('button', { name: 'Partie suivante' }).click();
+  const kifu = page.locator('input[aria-label="Coup"]');
+  await kifu.fill('86');
+  await page.getByRole('button', { name: 'Lecture', exact: true }).click();
+
+  const simulation = page.getByRole('region', { name: 'Noir · avant le coup 87' });
+  const retry = simulation.getByRole('button', { name: 'Réessayer les simulations' });
+  await expect(retry).toBeVisible({ timeout: 30_000 });
+  await expect(simulation.getByRole('status')).toContainText('Leela Zero');
+  // L'ancienne sortie automatique révélait le coup après 750 ms d'écran vide.
+  await page.waitForTimeout(1500);
+  await expect(retry).toBeVisible();
+  await expect(kifu).toHaveValue('86');
+  await expect(simulation.locator('.simulation__view')).toHaveAttribute('data-step', '0');
+
+  await page.context().unroute(weights);
+  const loaded = page.context().waitForEvent('response', {
+    predicate: (response) => response.url().endsWith('/leela-zero.onnx') && response.ok(),
+    timeout: 60_000,
+  });
+  await retry.click();
+  await loaded;
+  const view = simulation.locator('.simulation__view');
+  await expect(view).toHaveAttribute('data-branch', '1', { timeout: 60_000 });
+  await expect(retry).toHaveCount(0);
+  await expect(view.getByText('Avance estimée')).toBeVisible({ timeout: 60_000 });
+  await simulation.getByRole('button', { name: 'Coup simulé suivant' }).click();
+  await expect(view).toContainText('Coup simulé');
+  await expect(kifu).toHaveValue('86');
+  await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+  await expect(kifu).toHaveValue('87');
+});
+
 test('le pupitre d’estimation suit le goban sur portable et mobile', async ({ page }) => {
   test.slow();
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -669,7 +712,9 @@ test('le pupitre d’estimation suit le goban sur portable et mobile', async ({ 
         else await page.getByRole('button', { name: 'Fermer le volet' }).click();
       }
       await expect(app).toHaveAttribute('data-panel', open ? 'open' : 'closed');
-      await move.fill('86');
+      await move.fill('85');
+      await page.getByRole('button', { name: 'Coup suivant', exact: true }).click();
+      await expect(move).toHaveValue('86');
       const board = await page.locator('.stage__canvas').boundingBox();
       await expect.poll(() => canvas.boundingBox()).toEqual(board);
 
