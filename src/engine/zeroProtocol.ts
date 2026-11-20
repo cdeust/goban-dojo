@@ -2,8 +2,8 @@ import type { EnginePosition } from './features.ts';
 import type { ZeroResult } from './zeroSearch.ts';
 
 export type ZeroRequest =
-  | { type: 'load'; url: string; wasmUrl: string }
-  | { type: 'search'; id: number; position: EnginePosition; visits: number }
+  | { type: 'load' }
+  | { type: 'search'; id: number; position: EnginePosition; visits: number; exclude?: number[] }
   | { type: 'cancel'; id: number };
 
 export type ZeroResponse =

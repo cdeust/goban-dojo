@@ -61,6 +61,39 @@ describe('réseau Leela Zero', () => {
     }
   });
 
+  it('renormalise les autres départs et autorise le coup écarté dès la réponse', async () => {
+    const scores = new Float32Array(POINTS + 1).fill(-20);
+    scores[0] = 300;
+    scores[1] = 20;
+    const natural = await searchZero(start, fixed(scores), { visits: 8 });
+    expect(natural.choices.map((choice) => choice.point)).toEqual([p('as')]);
+    const alternative = await searchZero(start, fixed(scores), { visits: 8, exclude: [p('as')] });
+    expect(alternative.visits).toBe(8);
+    expect(alternative.choices[0]?.line.slice(0, 2)).toEqual([p('bs'), p('as')]);
+    // Même arbre que si cette unique politique de départ avait omis A1.
+    const rootScores = scores.slice();
+    rootScores[0] = -1000;
+    const reference = await searchZero(
+      start,
+      async (position) => ({
+        policy: position.moves.length ? scores : rootScores,
+        value: 0,
+      }),
+      { visits: 8 },
+    );
+    expect(alternative).toEqual(reference);
+  });
+
+  it('renvoie zéro visite lorsque tous les départs légaux sont écartés', async () => {
+    const all = Array.from({ length: POINTS + 1 }, (_, i) => i - 1);
+    const infer = vi.fn(fixed());
+    expect(await searchZero(start, infer, { visits: 8, exclude: all })).toEqual({
+      visits: 0,
+      choices: [],
+    });
+    expect(infer).not.toHaveBeenCalled();
+  });
+
   it('classe les branches par visites et change de branche en observant une réfutation', async () => {
     const logits = new Float32Array(POINTS + 1).fill(-18);
     logits[0] = 1;

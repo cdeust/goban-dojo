@@ -1,3 +1,4 @@
+import wasmUrl from 'onnxruntime-web/ort-wasm-simd-threaded.wasm?url';
 import * as ort from 'onnxruntime-web/wasm';
 
 interface ModelAsset {
@@ -8,7 +9,6 @@ interface ModelAsset {
 /** Vérifie la taille et l'empreinte des poids avant de les transmettre à WASM. */
 export async function openModel(
   url: string,
-  wasmUrl: string,
   model: ModelAsset,
   onProgress: (loaded: number, total: number) => void,
 ): Promise<ort.InferenceSession> {

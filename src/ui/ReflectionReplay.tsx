@@ -131,6 +131,10 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         {unavailable && !lines?.length
           ? 'Recherche Leela Zero indisponible' + (branch ? ' · variante pédagogique' : '')
           : 'Leela Zero · reproduction d’AlphaGo Zero · komi 7,5 · score de surface'}
+        {branch?.excluded &&
+          branch.excluded.length > 0 &&
+          ' · Recherche alternative après exclusion de ' +
+            branch.excluded.map(pointToHuman).join(', ')}
         {branch?.blackWin !== undefined &&
           ' · ' + blackWinLabel(branch.blackWin) + ' après le premier coup'}
         {' · Halo bleu · coup simulé'}

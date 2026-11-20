@@ -1,7 +1,5 @@
-import wasmUrl from 'onnxruntime-web/ort-wasm-simd-threaded.wasm?url';
 import { create } from 'zustand';
 import type { EnginePosition } from './features.ts';
-import { ZERO_MODEL } from './zeroModel.ts';
 import type { ZeroRequest, ZeroResponse } from './zeroProtocol.ts';
 import type { ZeroResult } from './zeroSearch.ts';
 
@@ -61,12 +59,7 @@ export function loadZeroEngine(): void {
     current.onerror = (event) => {
       if (worker === current) failed(event.message || 'Leela Zero s’est arrêté');
     };
-    const base = new URL(import.meta.env.BASE_URL, location.href);
-    send({
-      type: 'load',
-      url: new URL(ZERO_MODEL.file, base).href,
-      wasmUrl: new URL(wasmUrl, location.href).href,
-    });
+    send({ type: 'load' });
   } catch (error) {
     failed(error instanceof Error ? error.message : String(error));
   }
@@ -75,7 +68,11 @@ export function loadZeroEngine(): void {
 /** Les visites sont des simulations PUCT au départ de cette position. */
 export async function analyzeZero(
   position: EnginePosition,
-  { visits = 32, signal }: { visits?: number; signal?: AbortSignal } = {},
+  {
+    visits = 32,
+    signal,
+    exclude,
+  }: { visits?: number; signal?: AbortSignal; exclude?: number[] } = {},
 ): Promise<ZeroResult> {
   signal?.throwIfAborted();
   loadZeroEngine();
@@ -93,6 +90,6 @@ export async function analyzeZero(
       reject,
       cleanup: () => signal?.removeEventListener('abort', abort),
     });
-    send({ type: 'search', id, position, visits });
+    send({ type: 'search', id, position, visits, exclude });
   });
 }

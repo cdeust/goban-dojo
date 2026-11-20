@@ -3,12 +3,13 @@
  * Fil d'exécution du moteur : charge le réseau, en vérifie l'empreinte, puis évalue des
  * positions à la demande, sans jamais bloquer l'affichage.
  */
+import modelUrl from '/engine/kata1-b10c128-s1141046784-d204142634.onnx?url';
 import * as ort from 'onnxruntime-web/wasm';
 import { decodeOutputs } from './decode.ts';
 import { AREA, GLOBAL_FEATURES, SPATIAL_PLANES, encodePosition } from './features.ts';
 import { openModel } from './workerRuntime.ts';
 import { MODEL } from './model.ts';
-import type { EngineRequest, EngineResponse } from './protocol.ts';
+import { isEnginePosition, type EngineRequest, type EngineResponse } from './protocol.ts';
 
 const scope = self as unknown as DedicatedWorkerGlobalScope;
 const post = (message: EngineResponse): void => scope.postMessage(message);
@@ -17,11 +18,12 @@ let session: ort.InferenceSession | null = null;
 let evaluationQueue = Promise.resolve();
 
 scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
+  // Un Worker dédié reçoit les messages de son port avec une origine vide.
+  if (event.origin !== '' && event.origin !== scope.location.origin) return;
   const request = event.data;
+  if (!request || typeof request !== 'object') return;
   if (request.type === 'load') {
-    openModel(request.modelUrl, request.wasmUrl, MODEL, (loaded, total) =>
-      post({ type: 'progress', loaded, total }),
-    ).then(
+    openModel(modelUrl, MODEL, (loaded, total) => post({ type: 'progress', loaded, total })).then(
       (s) => {
         session = s;
         post({ type: 'ready' });
@@ -30,7 +32,12 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
     );
     return;
   }
+  if (request.type !== 'evaluate') return;
   const { id, positions } = request;
+  if (!Array.isArray(positions) || !positions.every(isEnginePosition)) {
+    post({ type: 'error', id, message: 'Position de go invalide' });
+    return;
+  }
   evaluationQueue = evaluationQueue.then(async () => {
     try {
       if (!session) throw new Error('moteur non chargé');

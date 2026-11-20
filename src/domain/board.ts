@@ -56,6 +56,15 @@ const EMPTY = 0;
 const cellDecoder = new TextDecoder();
 const code = (c: Color): number => (c === 'B' ? 1 : 2);
 
+// Les positions reçues du worker traversent une frontière JavaScript non typée.
+function boardIndex(point: unknown): number {
+  if (typeof point === 'number' && point >= 0 && point < POINTS) {
+    const index = Math.floor(point);
+    if (index === point) return index;
+  }
+  throw new RangeError('Intersection du goban invalide');
+}
+
 export type IllegalReason = 'occupied' | 'suicide' | 'ko';
 
 export interface PlayResult {
@@ -83,18 +92,21 @@ export class Board {
     return cellDecoder.decode(this.cells);
   }
 
-  get(p: number): Color | null {
-    const v = this.cells[p];
+  get(point: number): Color | null {
+    if (point === PASS) return null;
+    const v = this.cells[boardIndex(point)];
     return v === 1 ? 'B' : v === 2 ? 'W' : null;
   }
 
   /** Pose une pierre de mise en place (handicap) sans appliquer les règles. */
-  setup(p: number, color: Color | null): void {
-    this.cells[p] = color ? code(color) : EMPTY;
+  setup(point: number, color: Color | null): void {
+    this.cells[boardIndex(point)] = color ? code(color) : EMPTY;
   }
 
   /** Pierres du groupe qui occupe p (vide si le point est libre). */
-  stonesOf(p: number): number[] {
+  stonesOf(point: number): number[] {
+    if (point === PASS) return [];
+    const p = boardIndex(point);
     return this.cells[p] === EMPTY ? [] : this.group(p).stones;
   }
 
@@ -119,11 +131,12 @@ export class Board {
     return { stones, hasLiberty };
   }
 
-  play(color: Color, p: number): PlayResult {
-    if (p === PASS) {
+  play(color: Color, point: number): PlayResult {
+    if (point === PASS) {
       this.koPoint = -1;
       return { captures: [] };
     }
+    const p = boardIndex(point);
     let illegal: IllegalReason | undefined;
     if (this.cells[p] !== EMPTY) illegal = 'occupied';
     else if (p === this.koPoint) illegal = 'ko';
@@ -157,7 +170,9 @@ export class Board {
   }
 
   /** Nombre de libertés du groupe qui occupe p (0 si le point est vide). */
-  libertyCount(p: number): number {
+  libertyCount(point: number): number {
+    if (point === PASS) return 0;
+    const p = boardIndex(point);
     if (this.cells[p] === EMPTY) return 0;
     const g = this.group(p);
     const libs = new Set<number>();

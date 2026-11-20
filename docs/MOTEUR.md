@@ -7,7 +7,8 @@ classe les coups par nombre de visites. La probabilité affichée concerne Noir,
 chinoises et avec 7,5 points de komi. Une partie de Shūsaku sans komi peut donc avoir une
 issue historique différente de celle que suggère cette estimation.
 
-Les pauses rejouent les branches sur le goban de la partie. La lecture longue peut poursuivre
+Les pauses rejouent les branches sur le goban de la partie. Lorsqu’un seul coup concentre
+toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux. La lecture longue peut poursuivre
 une branche pendant 60, 120 ou 240 demi-coups en relançant la recherche à chaque position.
 Deux passes mettent fin à la projection. Une succession de recherches locales ne mesure pas
 la profondeur atteinte par une recherche unique. Les positions d’un SGF importé sont analysées

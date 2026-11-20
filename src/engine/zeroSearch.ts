@@ -136,21 +136,30 @@ interface Node extends State {
   visitedPrior: number;
 }
 
-async function expand(position: EnginePosition, state: State, infer: Infer): Promise<Node> {
+async function expand(
+  position: EnginePosition,
+  state: State,
+  infer: Infer,
+  excluded?: ReadonlySet<number>,
+): Promise<Node> {
   const node: Node = { ...state, position, edges: [], visits: 0, blackWin: 0, visitedPrior: 0 };
   if (finished(position)) {
     node.blackWin = terminalBlackWin(node.board, position.setupBlack.length);
     return node;
   }
+  const points: number[] = [];
+  for (let action = 0; action <= POINTS; action++) {
+    const point = action === POINTS ? PASS : action;
+    if (!excluded?.has(point) && legalMove(state, position.next, point)) points.push(point);
+  }
+  if (!points.length) return node;
   const { policy, value } = await infer(position);
   if (policy.length !== POINTS + 1 || !Number.isFinite(value) || Math.abs(value) > 1) {
     throw new Error('Sortie du réseau Leela Zero invalide');
   }
   node.blackWin = (1 + (position.next === 'B' ? value : -value)) / 2;
   let max = -Infinity;
-  for (let action = 0; action <= POINTS; action++) {
-    const point = action === POINTS ? PASS : action;
-    if (!legalMove(state, position.next, point)) continue;
+  for (const point of points) {
     const logit = policy[netIndex(point)]!;
     if (!Number.isFinite(logit)) throw new Error('Politique Leela Zero invalide');
     max = Math.max(max, logit);
@@ -217,13 +226,20 @@ function lineOf(first: Edge): number[] {
 export async function searchZero(
   position: EnginePosition,
   infer: Infer,
-  { visits, signal }: { visits: number; signal?: AbortSignal },
+  { visits, signal, exclude }: { visits: number; signal?: AbortSignal; exclude?: number[] },
 ): Promise<ZeroResult> {
   if (!Number.isSafeInteger(visits) || visits < 1)
     throw new RangeError('Budget de visites invalide');
   signal?.throwIfAborted();
   if (finished(position)) return { visits: 0, choices: [] };
-  const root = await expand(position, rootState(position), infer);
+  // Une recherche conditionnelle écarte uniquement les premiers coups déjà présentés.
+  const root = await expand(
+    position,
+    rootState(position),
+    infer,
+    exclude?.length ? new Set(exclude) : undefined,
+  );
+  if (!root.edges.length) return { visits: 0, choices: [] };
   for (let visit = 0; visit < visits; visit++) {
     signal?.throwIfAborted();
     let node = root;

@@ -6,7 +6,7 @@ import { isLegalZeroMove, type ZeroResult } from '../engine/zeroSearch.ts';
 
 type Search = (
   position: EnginePosition,
-  options: { signal: AbortSignal; visits?: number },
+  options: { signal: AbortSignal; visits?: number; exclude?: number[] },
 ) => Promise<ZeroResult>;
 
 export interface ZeroReadingStep {
@@ -17,6 +17,7 @@ export interface ZeroReadingStep {
 }
 
 export interface SimulationLine {
+  excluded?: number[];
   moves: Move[];
   blackWin?: number;
 }
@@ -63,30 +64,45 @@ export async function previewZeroLines(
   onLine: (line: SimulationLine, index: number) => void,
 ): Promise<SimulationLine[]> {
   if (signal.aborted) return [];
-  const root = await search(start, { signal });
   const lines: SimulationLine[] = [];
-  for (const branch of root.choices.slice(0, 3)) {
-    let position = start;
-    const moves: Move[] = [];
-    let continuation = branch.line;
-    while (!signal.aborted && continuation.length > 0) {
-      for (const point of continuation) {
-        moves.push({ color: position.next, point });
-        position = afterCandidate(position, point);
-        if (moves.length === 8) break;
+  const shown = new Set<number>();
+  while (lines.length < 3 && !signal.aborted) {
+    const excluded = [...shown];
+    const { choices } = await search(
+      start,
+      excluded.length ? { signal, exclude: excluded } : { signal },
+    );
+    for (const branch of choices) {
+      if (signal.aborted) return [];
+      if (shown.has(branch.point) || branch.line.length === 0) continue;
+      const source = { blackWin: branch.blackWin, excluded };
+      let position = start;
+      const moves: Move[] = [];
+      let continuation = branch.line;
+      while (continuation.length > 0) {
+        for (const point of continuation) {
+          moves.push({ color: position.next, point });
+          position = afterCandidate(position, point);
+          if (moves.length === 8) break;
+        }
+        onLine({ ...source, moves: moves.slice() }, lines.length);
+        if (signal.aborted) return [];
+        if (
+          moves.length === 8 ||
+          (position.moves.at(-1)?.point === PASS && position.moves.at(-2)?.point === PASS)
+        )
+          break;
+        continuation = (await search(position, { signal })).choices[0]?.line ?? [];
+        if (signal.aborted) return [];
       }
-      onLine({ moves: moves.slice(), blackWin: branch.blackWin }, lines.length);
-      if (
-        moves.length === 8 ||
-        (position.moves.at(-1)?.point === PASS && position.moves.at(-2)?.point === PASS)
-      )
-        break;
-      continuation = (await search(position, { signal })).choices[0]?.line ?? [];
+      lines.push({ ...source, moves });
+      shown.add(branch.point);
+      if (lines.length === 3) break;
     }
-    if (signal.aborted) return [];
-    const line = { moves, blackWin: branch.blackWin };
-    lines.push(line);
+    // Aucun nouveau premier coup légal n'a reçu de visite dans cette recherche.
+    if (shown.size === excluded.length) break;
   }
+  if (signal.aborted) return [];
   return lines;
 }
 
