@@ -61,8 +61,8 @@ export async function readZeroLine(
   }
 }
 
-export const PREVIEW_BRANCHES = 3;
-export const PREVIEW_DEPTH = 8;
+export const PREVIEW_BRANCHES = 10;
+export const PREVIEW_DEPTH = 20;
 
 /** Prolonge le préfixe réellement lu. La suite non affichée d’une recherche reste disponible. */
 export async function extendZeroLine(

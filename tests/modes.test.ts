@@ -305,6 +305,10 @@ describe('lecture après abandon', () => {
       variation: [],
     });
     expect(nextColor(s())).toBe('W');
+    s().compareResignation(true);
+    expect(s().reflectionReplay).toBe('resignation');
+    s().compareResignation(false);
+    expect(s().reflectionReplay).toBeNull();
     s().showReading([{ color: 'W', point: -1 }], null, null);
     s().setMode('lecture');
     expect(s()).toMatchObject({ move: total, variation: [], readingFromKifu: false });

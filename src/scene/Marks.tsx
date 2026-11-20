@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { reflectionsOf } from '../state/reflections.ts';
 import { setProjector } from '../state/projection.ts';
-import { marksOf, showsEarRedMove, useStore } from '../state/store.ts';
+import { marksOf, showsEarRedMove, isEstimating, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
 import { haloTexture, INK } from './textures.ts';
 
@@ -57,7 +57,7 @@ export function Marks() {
   const enabled = useStore((s) => s.effects);
   // Clé stable tant que les marques ne changent pas : évite de tout reconstruire à chaque coup.
   const key = useStore((s) => {
-    if (!s.effects || s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual') return '';
+    if (!s.effects || isEstimating(s)) return '';
     const m = marksOf(s);
     const linked = m.threat.connects.length > 0 ? [m.last, ...m.threat.connects] : [];
     const game = s.dataset?.games[s.gameIndex];

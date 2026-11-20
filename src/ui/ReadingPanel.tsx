@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { opposite, PASS, pointToHuman } from '../domain/board.ts';
 import { decodePoints, type GameRecord, type Move } from '../domain/game.ts';
 import { analyzeZero, loadZeroEngine, useZeroEngine } from '../engine/zeroClient.ts';
 import { ReadingAlternatives } from './ReadingAlternatives.tsx';
+import { ResignationReplay } from './ReflectionReplay.tsx';
 import type { ReadingCandidate, ReadingAlternativesState } from '../state/readingAlternatives.ts';
 import { ZERO_KOMI } from '../engine/zeroSearch.ts';
-import { blackWinLabel, readZeroLine, type ZeroReadingStep } from '../state/zeroReading.ts';
+import {
+  blackWinLabel,
+  PREVIEW_BRANCHES,
+  PREVIEW_DEPTH,
+  readZeroLine,
+  type ZeroReadingStep,
+} from '../state/zeroReading.ts';
 import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { readLine, READING_DEPTHS, type ReadingStep } from '../engine/reading.ts';
 import { nextColor, SPEEDS, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
@@ -77,6 +84,13 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
   const [ended, setEnded] = useState(false);
   const [error, setError] = useState<string>();
   const [replaying, setReplaying] = useState(false);
+  const comparing = useStore((s) => s.reflectionReplay === 'resignation');
+  const compareResignation = useStore((s) => s.compareResignation);
+  const compareButton = useRef<HTMLButtonElement>(null);
+  const closeComparison = useCallback(() => {
+    compareResignation(false);
+    requestAnimationFrame(() => compareButton.current?.focus({ preventScroll: true }));
+  }, [compareResignation]);
   const [pace, setPace] = useState<number>(SPEEDS.at(-1)!);
   const [showOwnership, setOwnership] = useState(false);
   const controller = useRef<AbortController>(null);
@@ -88,6 +102,7 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
   }, []);
 
   useEffect(() => {
+    if (comparing) return;
     const step = steps[Math.max(0, cursor - 1)];
     const map =
       step && 'ownership' in step
@@ -100,7 +115,7 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
       replaying ? pace : null,
       showOwnership ? (map ?? null) : null,
     );
-  }, [seed, steps, cursor, replaying, pace, showMoves, showOwnership]);
+  }, [comparing, seed, steps, cursor, replaying, pace, showMoves, showOwnership]);
 
   useEffect(() => {
     if (!replaying || cursor >= steps.length) return;
@@ -110,7 +125,8 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
 
   const history = timelineOf(game).moves;
   const afterResignation = game.result.resign && seed.length === 0 && base === history.length;
-  const directZero = readingFromKifu && afterResignation && source === 'zero';
+  const resignationWithZero = afterResignation && source === 'zero';
+  const directZero = readingFromKifu && resignationWithZero;
   const recorded = seed.length === 0 && history[base]?.color === mover ? history[base] : undefined;
   const scene = reflectionsOf(game).find(({ after }) => after === base);
   const current = steps[cursor - 1];
@@ -229,6 +245,10 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
     setCursor(value);
   }
 
+  if (comparing) {
+    return <ResignationReplay game={game} anchor={base} onClose={closeComparison} />;
+  }
+
   const branchKey = steps
     .slice(0, cursor)
     .map((step) => step.move.point)
@@ -282,9 +302,9 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
           game.komi !== ZERO_KOMI &&
           ' Komi du kifu · ' + game.komi.toLocaleString('fr-FR') + '.'}
       </p>
-      {status === 'ready' || directZero ? (
+      {status === 'ready' || resignationWithZero ? (
         <>
-          {directZero && status === 'loading' && (
+          {resignationWithZero && status === 'loading' && (
             <label className="study__filter">
               Chargement de Leela Zero
               <progress value={progress || undefined} />
@@ -357,6 +377,20 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
                   </button>
                 )}
               </>
+            )}
+            {resignationWithZero && (
+              <button
+                type="button"
+                className="chip"
+                ref={compareButton}
+                onClick={() => {
+                  stop();
+                  setReplaying(false);
+                  compareResignation(true);
+                }}
+              >
+                Comparer {PREVIEW_BRANCHES} variantes de {PREVIEW_DEPTH} coups
+              </button>
             )}
           </div>
           {(running || steps.length > 0) && (

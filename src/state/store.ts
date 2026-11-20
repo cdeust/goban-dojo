@@ -20,7 +20,7 @@ import { localGames, saveGame } from './localGames.ts';
 import { reflectionLines, reflectionsOf } from './reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
-type ReflectionReplay = 'auto' | 'manual' | 'return';
+type ReflectionReplay = 'auto' | 'manual' | 'resignation' | 'return';
 export type PanelName = 'recit' | 'parties' | null;
 /**
  * lecture  : la partie se déroule seule ;
@@ -184,6 +184,7 @@ interface State {
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
   readResignation: () => void;
+  compareResignation: (open: boolean) => void;
   showStudyMove: (number: number | null, after?: boolean) => void;
   showReflection: (after: number) => void;
   playReflection: (line: number, step: number) => void;
@@ -207,6 +208,10 @@ export interface Display {
 }
 
 const variationTimelines = new WeakMap<Move[], Timeline>();
+
+export function isEstimating({ reflectionReplay }: Pick<State, 'reflectionReplay'>): boolean {
+  return reflectionReplay !== null && reflectionReplay !== 'return';
+}
 
 export function displayOf(
   s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>,
@@ -483,7 +488,7 @@ export const useStore = create<State>((set, get) => ({
 
   notifyImpact: (point) => {
     const s = get();
-    if (s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual') return;
+    if (isEstimating(s)) return;
     if (s.mode === 'lire' && s.readingPace !== null && s.readingPace > 3) return;
     const game = s.dataset?.games[s.gameIndex];
     const d = displayOf(s);
@@ -517,6 +522,13 @@ export const useStore = create<State>((set, get) => ({
         ...(tactical ? { tactical: true } : {}),
       },
     });
+  },
+
+  compareResignation: (open) => {
+    const s = get();
+    const game = s.dataset?.games[s.gameIndex];
+    if (s.mode !== 'lire' || !game?.result.resign || s.move !== moveCount(game)) return;
+    set({ reflectionReplay: open ? 'resignation' : null, impact: null });
   },
 
   readResignation: () => {

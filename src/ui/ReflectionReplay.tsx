@@ -6,52 +6,62 @@ import { analyzeZero, useZeroEngine } from '../engine/zeroClient.ts';
 import {
   blackWinLabel,
   extendZeroLine,
+  PREVIEW_BRANCHES,
+  PREVIEW_DEPTH,
   previewZeroLines,
   type SimulationLine,
 } from '../state/zeroReading.ts';
 import { reflectionLines, reflectionsOf } from '../state/reflections.ts';
-import { timelineOf, useCurrentGame, useStore } from '../state/store.ts';
+import { nextColor, timelineOf, useCurrentGame, useStore } from '../state/store.ts';
 import { colorName } from '../story/format.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 
 const FRAME_MS = 230;
 const BRANCH_HOLD = 750;
-const REPLAY_BRANCHES = 4;
-const REPLAY_DEPTH = 12;
 const finished = new WeakMap<GameRecord, Map<number, SimulationLine[]>>();
 
 type PreviewRequest =
   | { kind: 'branches'; target: number; existing: SimulationLine[]; initial?: boolean }
   | { kind: 'depth'; target: number; index: number; line: SimulationLine };
 
-function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
+interface ReplayProps {
+  game: GameRecord;
+  anchor: number;
+  onClose?: () => void;
+}
+
+function Replay({ game, anchor, onClose }: ReplayProps) {
+  const afterResignation = onClose !== undefined;
+  const heading = useRef<HTMLHeadingElement>(null);
   const status = useZeroEngine((s) => s.status);
   const reduced = useReducedMotion();
-  const [paused, setPaused] = useState<boolean>(Boolean(reduced));
+  const [paused, setPaused] = useState<boolean>(afterResignation || Boolean(reduced));
   const [cached] = useState(() => finished.get(game)?.get(anchor));
   const [lines, setLines] = useState<SimulationLine[]>(cached ?? []);
   const [request, setRequest] = useState<PreviewRequest | null>(
-    cached ? null : { kind: 'branches', target: REPLAY_BRANCHES, existing: [], initial: true },
+    cached ? null : { kind: 'branches', target: PREVIEW_BRANCHES, existing: [], initial: true },
   );
   const active = useRef<AbortController | null>(null);
-  const [exhausted, setExhausted] = useState(Boolean(cached && cached.length < REPLAY_BRANCHES));
-  const [width, setWidth] = useState(6);
-  const [depth, setDepth] = useState(16);
+  const [exhausted, setExhausted] = useState(Boolean(cached && cached.length < PREVIEW_BRANCHES));
+  const [width, setWidth] = useState<number>(PREVIEW_BRANCHES);
+  const [depth, setDepth] = useState<number>(PREVIEW_DEPTH);
   const [failed, setFailed] = useState(false);
   const [showStart, setShowStart] = useState(false);
   const [{ index, step }, setFrame] = useState({ index: 0, step: 0 });
   const moves = timelineOf(game).moves;
-  const recorded = moves[anchor]!;
+  const [next] = useState(() => nextColor({ ...useStore.getState(), move: anchor, variation: [] }));
   const history = useMemo(() => moves.slice(0, anchor), [moves, anchor]);
   const setup = useMemo(() => decodePoints(game.setupBlack), [game]);
   const position = useMemo(
-    () => ({ setupBlack: setup, komi: game.komi, moves: history, next: recorded.color }),
-    [setup, game.komi, history, recorded.color],
+    () => ({ setupBlack: setup, komi: game.komi, moves: history, next }),
+    [setup, game.komi, history, next],
   );
-  const scene = reflectionsOf(game).find(({ after }) => after === anchor)!;
+  const scene = afterResignation
+    ? undefined
+    : reflectionsOf(game).find(({ after }) => after === anchor);
   const fallback = useMemo<SimulationLine[]>(
     () =>
-      reflectionLines(game, scene)
+      (scene ? reflectionLines(game, scene) : [])
         .filter((line) => line.variation)
         .map((line) => ({
           moves: reflectionMoves(game, anchor, line),
@@ -59,8 +69,13 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
     [game, scene, anchor],
   );
   const showSimulation = useStore((s) => s.showSimulation);
+  const showReading = useStore((s) => s.showReading);
   const reveal = useStore((s) => s.revealReflectionMove);
   const examine = useStore((s) => s.showReflection);
+
+  useEffect(() => {
+    if (afterResignation) heading.current?.focus({ preventScroll: true });
+  }, [afterResignation]);
 
   useEffect(() => {
     if (!request) return;
@@ -90,7 +105,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
       }
       const result = await previewZeroLines(analyzeZero, position, signal, updateLine, {
         branches: job.target,
-        depth: REPLAY_DEPTH,
+        depth: PREVIEW_DEPTH,
         existing: job.existing,
       });
       if (signal.aborted) return;
@@ -128,29 +143,47 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
   const simulatedMoves = branch?.moves;
 
   useEffect(() => {
-    showSimulation(simulatedMoves?.slice(0, visibleStep) ?? []);
-  }, [showSimulation, simulatedMoves, visibleStep]);
+    const moves = simulatedMoves?.slice(0, visibleStep) ?? [];
+    if (afterResignation) showReading(moves, null, null);
+    else showSimulation(moves);
+  }, [afterResignation, showReading, showSimulation, simulatedMoves, visibleStep]);
 
+  const hasNextStep = step < (branch?.moves.length ?? 0);
+  const hasNextBranch = index + 1 < shown.length;
   useEffect(() => {
-    if (paused || showStart) return;
-    const complete = !branch || step >= branch.moves.length;
-    if (complete && index + 1 >= shown.length && !allReceived) return;
+    if (paused || showStart || (!hasNextStep && !hasNextBranch && !allReceived)) return;
     const timer = window.setTimeout(
       () => {
-        if (!complete) setFrame({ index, step: step + 1 });
-        else if (index + 1 < shown.length) setFrame({ index: index + 1, step: 0 });
+        if (hasNextStep) setFrame({ index, step: step + 1 });
+        else if (hasNextBranch) setFrame({ index: index + 1, step: 0 });
+        else if (afterResignation) setPaused(true);
         else reveal();
       },
-      complete ? BRANCH_HOLD : FRAME_MS,
+      hasNextStep ? FRAME_MS : BRANCH_HOLD,
     );
     return () => window.clearTimeout(timer);
-  }, [paused, shown, branch, index, step, reveal, allReceived, showStart]);
+  }, [
+    paused,
+    showStart,
+    hasNextStep,
+    hasNextBranch,
+    allReceived,
+    index,
+    step,
+    afterResignation,
+    reveal,
+  ]);
 
   return (
-    <section className="simulation" aria-labelledby="simulation-title">
+    <section
+      className={afterResignation ? 'simulation simulation--resignation' : 'simulation'}
+      aria-labelledby="simulation-title"
+    >
       <header className="simulation__header">
-        <h2 id="simulation-title">
-          {colorName(recorded.color)} · avant le coup {anchor + 1}
+        <h2 id="simulation-title" ref={heading} tabIndex={-1}>
+          {afterResignation
+            ? 'Variantes après l’abandon'
+            : colorName(next) + ' · avant le coup ' + (anchor + 1)}
         </h2>
         <span>
           {branch
@@ -158,6 +191,11 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
             : 'Lecture des variantes'}
         </span>
       </header>
+      {afterResignation && (
+        <p className="simulation__current">
+          {colorName(next)} au trait · suites hypothétiques depuis la position finale du kifu.
+        </p>
+      )}
       <div
         className="simulation__view"
         data-branch={branch ? index + 1 : undefined}
@@ -176,13 +214,13 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
         </p>
       </div>
       <p className="simulation__source">
-        {unavailable && !lines?.length
+        {(failed || status === 'failed') && !lines.length
           ? 'Recherche Leela Zero indisponible' + (branch ? ' · variante pédagogique' : '')
           : 'Leela Zero · reproduction d’AlphaGo Zero · komi 7,5 · score de surface'}
         {branch?.excluded &&
           branch.excluded.length > 0 &&
           ' · Recherche alternative après exclusion de ' +
-            (branch.excluded.length <= REPLAY_BRANCHES
+            (branch.excluded.length < 4
               ? branch.excluded.map(pointToHuman).join(', ')
               : branch.excluded.length + ' premiers coups')}
         {branch?.blackWin !== undefined &&
@@ -195,6 +233,15 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
           className="chip"
           onClick={() => {
             setShowStart(false);
+            if (
+              afterResignation &&
+              paused &&
+              branch &&
+              index + 1 === shown.length &&
+              step === branch.moves.length
+            ) {
+              setFrame({ index: 0, step: 0 });
+            }
             setPaused(!paused);
           }}
         >
@@ -229,15 +276,32 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
             Coup simulé suivant
           </button>
         )}
-        <button type="button" className="chip" onClick={() => examine(anchor)}>
-          Examiner
-        </button>
-        <button type="button" className="chip chip--accent" onClick={reveal}>
-          Jouer le coup du kifu
-        </button>
+        {onClose ? (
+          <button
+            type="button"
+            className="chip chip--accent"
+            onClick={() => {
+              active.current?.abort();
+              showReading([], null, null);
+              onClose();
+            }}
+          >
+            Revenir à la lecture longue
+          </button>
+        ) : (
+          <>
+            <button type="button" className="chip" onClick={() => examine(anchor)}>
+              Examiner
+            </button>
+            <button type="button" className="chip chip--accent" onClick={reveal}>
+              Jouer le coup du kifu
+            </button>
+          </>
+        )}
       </div>
       <details
         className="simulation__study"
+        open={afterResignation || undefined}
         onToggle={(event) => {
           if (event.currentTarget.open) setPaused(true);
         }}
@@ -294,7 +358,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
               value={width}
               onChange={(event) => setWidth(Number(event.target.value))}
             >
-              {[6, 12, 24, 60, 120, POINTS + 1].map((count) => (
+              {[6, PREVIEW_BRANCHES, 12, 24, 60, 120, POINTS + 1].map((count) => (
                 <option key={count} value={count}>
                   {count === POINTS + 1 ? 'Tous les coups légaux' : count}
                 </option>
@@ -326,7 +390,7 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
               value={depth}
               onChange={(event) => setDepth(Number(event.target.value))}
             >
-              {[16, 32, 60, 120, 240, 480].map((count) => (
+              {[16, PREVIEW_DEPTH, 32, 60, 120, 240, 480].map((count) => (
                 <option key={count} value={count}>
                   {count} coups
                 </option>
@@ -375,6 +439,10 @@ function Replay({ game, anchor }: { game: GameRecord; anchor: number }) {
       </details>
     </section>
   );
+}
+
+export function ResignationReplay({ game, anchor, onClose }: Required<ReplayProps>) {
+  return <Replay key={game.id + ':' + anchor} game={game} anchor={anchor} onClose={onClose} />;
 }
 
 export function ReflectionReplay() {

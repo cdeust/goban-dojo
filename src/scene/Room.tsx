@@ -5,7 +5,7 @@ import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
-import { useStore } from '../state/store.ts';
+import { isEstimating, useStore } from '../state/store.ts';
 import { tatamiTexture } from './textures.ts';
 import { Washitsu } from './Washitsu.tsx';
 
@@ -18,9 +18,7 @@ const FADE_SECONDS = 0.45;
 
 /** La pièce : le salon, le sol de tatamis, les coussins des joueurs et la lumière. */
 export function Room() {
-  const estimating = useStore(
-    (s) => s.reflectionReplay === 'auto' || s.reflectionReplay === 'manual',
-  );
+  const estimating = useStore(isEstimating);
   const decor = useRef<THREE.Group>(null);
   const level = useRef(1);
   const invalidate = useThree((s) => s.invalidate);

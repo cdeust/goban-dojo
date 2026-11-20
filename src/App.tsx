@@ -2,7 +2,7 @@ import { MotionConfig } from 'motion/react';
 import { lazy, Suspense, useEffect } from 'react';
 import { useGuessDriver } from './replay/useGuessDriver.ts';
 import { usePlayback } from './replay/usePlayback.ts';
-import { useStore } from './state/store.ts';
+import { isEstimating, useStore } from './state/store.ts';
 import { Dock } from './ui/Dock.tsx';
 import { AnalysisPanel } from './ui/AnalysisPanel.tsx';
 import { GameCard } from './ui/GameCard.tsx';
@@ -30,8 +30,7 @@ export function App() {
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
   const effects = useStore((s) => s.effects);
-  const replay = useStore((s) => s.reflectionReplay);
-  const showReplay = replay === 'auto' || replay === 'manual';
+  const showReplay = useStore(isEstimating);
   const studying = useStore((s) => s.mode === 'etudier');
   const reflecting = useStore((s) => s.mode === 'reflechir');
   const analysing = useStore((s) => s.mode === 'analyser');

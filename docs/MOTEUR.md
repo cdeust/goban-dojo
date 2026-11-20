@@ -9,7 +9,7 @@ issue historique différente de celle que suggère cette estimation.
 
 Les pauses rejouent les branches sur le goban de la partie. Lorsqu’un seul coup concentre
 toutes les visites, une recherche séparée permet d’examiner d’autres premiers coups légaux.
-Chaque pause propose d’abord quatre branches de douze demi-coups au maximum. Le lecteur peut
+Chaque pause propose d’abord dix branches de vingt demi-coups au maximum. Le lecteur peut
 demander davantage de branches ou prolonger uniquement celle qu’il souhaite étudier.
 En lecture longue, les horizons de départ sont de 60, 120 et 240 demi-coups. On peut augmenter
 l’horizon par tranches de 60 et demander d’autres réponses à une position déjà calculée.
@@ -23,7 +23,7 @@ Dans la bibliothèque, cochez « Parties terminées par abandon ». Le bouton «
 l’abandon » dans la fiche ouvre la position finale du kifu. Les imports SGF avec un résultat
 `B+R`, `W+R`, `B+Resign` ou `W+Resign` suivent le même parcours. Le résultat de la partie reste
 affiché pendant la simulation. Le joueur au trait se déduit du dernier coup enregistré.
-« Revenir au kifu » rétablit cette position et le résultat historique.
+« Comparer 10 variantes de 20 coups » ouvre dix continuations depuis cette position. Chaque variante part d’un premier coup différent et peut se terminer plus tôt après deux passes. « Revenir au kifu » rétablit la position et le résultat historique.
 
 ## Évaluation en points avec KataGo
 

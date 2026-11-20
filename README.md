@@ -35,7 +35,7 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   votre propre SGF. Pendant une pause, « Plus de variantes et de coups » permet de chercher
   d’autres premiers coups et de prolonger la variante affichée. Pour étudier une fin de partie,
   filtrez « Parties terminées par abandon » puis choisissez « Continuer après l’abandon » dans
-  la fiche. La simulation reprend au dernier coup enregistré. L’écran indique les chances de Noir avec le komi de 7,5 du modèle.
+  la fiche. Depuis le dernier coup enregistré, choisissez « Comparer 10 variantes de 20 coups » pour étudier dix réponses possibles sur le même goban. L’écran indique les chances de Noir avec le komi de 7,5 du modèle.
   [Provenance des poids et vérification](docs/LEELA-ZERO.md)
 - **Lire les variantes** : depuis une position du kifu, le bouton « Analyser » ouvre jusqu’à
   144 suites de deux coups avec KataGo. Cliquez sur un repère lumineux pour jouer un coup,

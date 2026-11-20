@@ -590,7 +590,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   );
   await expect(simulation.locator('.simulation__view')).toHaveAttribute(
     'data-step',
-    /^(?:[1-9]|1[0-2])$/,
+    /^(?:[1-9]|1[0-9]|20)$/,
     {
       timeout: 20_000,
     },
@@ -609,9 +609,9 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(variant).toContainText('Coup simulé ·');
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
-  await expect(variant).toHaveAttribute('data-branch', '2', { timeout: 60_000 });
-  await expect(variant).toHaveAttribute('data-branch', '3', { timeout: 60_000 });
-  await expect(variant).toHaveAttribute('data-branch', '4', { timeout: 60_000 });
+  for (let i = 2; i <= 10; i++) {
+    await expect(variant).toHaveAttribute('data-branch', String(i), { timeout: 60_000 });
+  }
   await expect(simulation.getByRole('heading')).toContainText('Blanc · avant le coup 88', {
     timeout: 90_000,
   });
@@ -718,6 +718,26 @@ test('après un abandon, calculer une suite et retrouver le dernier coup du SGF'
   const reading = page.getByRole('region', { name: 'Lecture longue' });
   await expect(reading).toContainText('Dernier coup enregistré · 194');
   await expect(reading).toContainText('Blanc au trait');
+  await reading.getByRole('button', { name: 'Comparer 10 variantes de 20 coups' }).click();
+  const comparison = page.getByRole('region', { name: 'Variantes après l’abandon' });
+  await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'true');
+  const branches = comparison.getByLabel('Variante affichée');
+  await expect(branches.locator('option')).toHaveCount(10, { timeout: 240_000 });
+  const starts = (await branches.locator('option').allTextContents()).map(
+    (label) => label.split(' · ')[1],
+  );
+  expect(starts.every(Boolean)).toBe(true);
+  expect(new Set(starts).size).toBe(10);
+  const projection = comparison.getByRole('slider', { name: 'Coup de la variante' });
+  for (let i = 0; i < starts.length; i++) {
+    await branches.selectOption(String(i));
+    await expect(projection).toHaveAttribute('max', '20', { timeout: 30_000 });
+  }
+  await projection.fill('20');
+  await expect(comparison.locator('.simulation__view')).toHaveAttribute('data-step', '20');
+  await comparison.getByRole('button', { name: 'Revenir à la lecture longue' }).click();
+  await expect(page.locator('.stage')).toHaveAttribute('data-simulation', 'false');
+  await expect(reading).toContainText('Dernier coup enregistré · 194');
   await reading.getByLabel('Profondeur de la suite').selectOption('240');
   await reading.getByLabel('Profondeur de la suite').selectOption('more');
   await expect(reading.getByLabel('Profondeur de la suite')).toHaveValue('300');

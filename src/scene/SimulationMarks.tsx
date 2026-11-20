@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { displayOf, useStore } from '../state/store.ts';
+import { displayOf, isEstimating, useStore } from '../state/store.ts';
 import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from './dimensions.ts';
 import { haloTexture } from './textures.ts';
 
@@ -9,7 +9,7 @@ export function SimulationMarks() {
   const anchor = useStore((s) => s.move);
   const played = useStore((s) => s.variation.length);
   const stones = useStore((s) => {
-    if (s.reflectionReplay !== 'auto' && s.reflectionReplay !== 'manual') return null;
+    if (!isEstimating(s)) return null;
     if (!s.variation.length) return null;
     return displayOf(s)?.timeline.stones ?? null;
   });

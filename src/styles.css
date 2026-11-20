@@ -1907,6 +1907,28 @@ progress {
   }
 }
 
+.simulation--resignation {
+  position: static;
+  grid-area: 1 / 2 / 3 / 3;
+  align-content: start;
+  width: 100%;
+  min-block-size: 0;
+  max-block-size: none;
+  padding: 4.4rem 0.8rem 1rem;
+}
+
+.stage:has(.simulation--resignation) .card {
+  display: none;
+}
+
+@media (width < 60rem) {
+  .simulation--resignation {
+    grid-area: 4 / 1;
+    padding: 0.8rem;
+    overflow: visible;
+  }
+}
+
 @keyframes simulation-enter {
   from {
     opacity: 0;

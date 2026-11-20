@@ -106,7 +106,9 @@ test('un premier coup dominant laisse voir les deux meilleures alternatives par 
       searchZero(position, infer, { ...options, visits: 1 }),
   );
   const onLine = vi.fn();
-  const lines = await previewZeroLines(search, root, new AbortController().signal, onLine);
+  const lines = await previewZeroLines(search, root, new AbortController().signal, onLine, {
+    branches: 3,
+  });
   const points = lines.map((line) => line.moves[0]!.point);
   expect(points).toEqual([342, 343, 344]);
   expect(lines.map((line) => line.excluded)).toEqual([[], [342], [342, 343]]);
@@ -136,7 +138,9 @@ test('trois branches naturelles ne nécessitent aucune exclusion', async () => {
       blackWin: 0.5,
     })),
   }));
-  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn());
+  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn(), {
+    branches: 3,
+  });
   expect(search).toHaveBeenCalledTimes(1);
   expect(lines.map((line) => line.moves[0]!.point)).toEqual([30, 60, 80]);
   expect(lines.every((line) => line.excluded?.length === 0)).toBe(true);
@@ -201,7 +205,7 @@ test('élargir conserve les branches existantes et les candidats naturels non en
       blackWin: 0.6,
     })),
   }));
-  const initial = await previewZeroLines(search, root, signal, vi.fn());
+  const initial = await previewZeroLines(search, root, signal, vi.fn(), { branches: 3 });
   const update = vi.fn();
   const more = await previewZeroLines(search, root, signal, update, {
     existing: initial,
@@ -270,4 +274,24 @@ test('plus de cent alternatives demandées conservent des premiers coups distinc
   expect(resultLines.map((line) => line.moves[0]!.point)).toEqual(points);
   expect(resultLines[12]!.excluded).toEqual(points.slice(0, 12));
   expect(search).toHaveBeenCalledTimes(121);
+});
+
+test('la lecture par défaut calcule dix premiers coups distincts et vingt coups par suite', async () => {
+  const search = vi.fn(async () => ({
+    visits: 32,
+    choices: Array.from({ length: 10 }, (_, i) => ({
+      point: i,
+      visits: 1,
+      blackWin: 0.5,
+      line: [i, ...Array.from({ length: 20 }, (_, j) => 40 + j)],
+    })),
+  }));
+  const lines = await previewZeroLines(search, root, new AbortController().signal, vi.fn());
+  expect(search).toHaveBeenCalledTimes(1);
+  expect(lines).toHaveLength(10);
+  expect(new Set(lines.map(({ moves }) => moves[0]!.point)).size).toBe(10);
+  for (const { moves } of lines) {
+    expect(moves).toHaveLength(20);
+    expect(moves.at(-1)).toEqual({ point: 58, color: 'W' });
+  }
 });
