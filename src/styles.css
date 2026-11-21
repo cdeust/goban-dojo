@@ -1086,6 +1086,12 @@ kbd {
     transition: none;
   }
 
+  /* Le volet en transition et le pupitre peuvent dépasser leur rangée. Leurs zones
+     internes défilent, tandis que le goban garde son origine dans la fenêtre. */
+  .app[data-study='false'] {
+    overflow: clip;
+  }
+
   .app[data-panel='open'] {
     --library-height: min(50dvh, 34rem);
     grid-template-rows: minmax(0, 1fr) var(--library-height);
