@@ -32,14 +32,11 @@ export function Intro() {
             囲碁
           </motion.p>
           <motion.h1 id="intro-title" className="intro__title" variants={rise}>
-            Atelier de go
+            Goban Dojo
           </motion.h1>
-          <motion.p className="intro__dates" variants={rise}>
-            Replay · Analyse · Entraînement
-          </motion.p>
           <motion.p className="intro__lede" variants={rise}>
-            Rejouez les parties de Shūsaku ou importez les vôtres. Explorez les variantes et
-            entraînez-vous à trouver le prochain coup.
+            Rejouez les parties de Shūsaku, de votre mentor ou les vôtres. Essayez vos propres coups
+            contre Leela Zero et comparez les variantes en points.
           </motion.p>
           <motion.div variants={rise}>
             <button

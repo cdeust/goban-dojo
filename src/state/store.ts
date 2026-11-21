@@ -13,7 +13,8 @@ import {
   type Threat,
   type Timeline,
 } from '../domain/game.ts';
-import { trappedStones } from '../engine/features.ts';
+import { trappedStones, type EnginePosition } from '../engine/features.ts';
+import { isLegalZeroMove } from '../engine/zeroSearch.ts';
 import { momentFor } from '../story/chapters.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 import { localGames, saveGame } from './localGames.ts';
@@ -122,6 +123,10 @@ export function pointDistance(a: number, b: number): number {
 /** Coups par seconde proposés à la lecture. */
 export const SPEEDS = [0.5, 1, 2, 4, 8] as const;
 
+export interface ExploreMove extends Move {
+  playedBy?: 'human' | 'leela';
+}
+
 interface State {
   status: 'loading' | 'ready' | 'error';
   error?: string;
@@ -153,8 +158,9 @@ interface State {
   studyMove: number | null;
   guess: GuessState;
   guessColor: Color;
-  /** Coups ajoutés par l'utilisateur après le coup `move` de la partie (mode « explorer »). */
-  variation: Move[];
+  exploreOpponent: boolean;
+  /** Suite jouée sur le goban depuis le coup `move` du kifu. */
+  variation: ExploreMove[];
   analysisMarks: AnalysisMark[];
   readingFromKifu: boolean;
   readingPace: number | null;
@@ -197,6 +203,7 @@ interface State {
   hint: () => void;
   /** Mode « deviner » : montrer le coup et passer au suivant. */
   reveal: () => void;
+  setExploreOpponent: (enabled: boolean) => void;
   undoVariation: () => void;
   clearVariation: () => void;
 }
@@ -251,6 +258,45 @@ function boardOf(s: Pick<State, 'dataset' | 'gameIndex' | 'move' | 'variation'>)
   const board = boardAt(decodePoints(game.setupBlack), timelineOf(game).moves, s.move);
   for (const m of s.variation) board.play(m.color, m.point);
   return board;
+}
+
+export function explorePosition(s: State, game: GameRecord): EnginePosition {
+  return {
+    setupBlack: decodePoints(game.setupBlack),
+    komi: game.komi,
+    moves: [
+      ...timelineOf(game).moves.slice(0, s.move),
+      ...s.variation.map(({ color, point }) => ({ color, point })),
+    ],
+    next: nextColor(s),
+  };
+}
+
+function variationEnd(s: State): string | null {
+  const d = displayOf(s);
+  if (
+    d &&
+    d.timeline.moves[d.move - 1]?.point === PASS &&
+    d.timeline.moves[d.move - 2]?.point === PASS
+  )
+    return 'Deux passes terminent cette branche. Vous pouvez revenir en arrière.';
+  return s.variation.length >= MAX_VARIATION
+    ? `Une exploration est limitée à ${MAX_VARIATION} coups.`
+    : null;
+}
+
+export function exploreFinished(s: State): boolean {
+  return s.mode === 'explorer' && variationEnd(s) !== null;
+}
+
+/** L’identité de la branche distingue deux essais, même si les coups sont identiques. */
+export function exploreReplyTo(s: State): ExploreMove[] | null {
+  return s.mode === 'explorer' &&
+    s.exploreOpponent &&
+    s.variation.at(-1)?.playedBy === 'human' &&
+    !exploreFinished(s)
+    ? s.variation
+    : null;
 }
 
 const ILLEGAL_LABEL = {
@@ -349,6 +395,7 @@ export const useStore = create<State>((set, get) => ({
   studyMove: null,
   guess: emptyGuess(),
   guessColor: 'B',
+  exploreOpponent: true,
   variation: [],
   analysisMarks: [],
   readingFromKifu: false,
@@ -645,31 +692,34 @@ export const useStore = create<State>((set, get) => ({
     if (
       !game ||
       !Number.isInteger(point) ||
-      ((point < 0 || point >= SIZE * SIZE) && !(analysis && point === PASS))
+      ((point < 0 || point >= SIZE * SIZE) &&
+        !((analysis || s.mode === 'explorer') && point === PASS))
     )
       return;
 
     if (s.mode === 'explorer' || analysis) {
-      if (analysis) {
-        const last = [...timelineOf(game).moves.slice(0, s.move).slice(-2), ...s.variation];
-        if (last.at(-1)?.point === PASS && last.at(-2)?.point === PASS) {
-          set({ notice: 'Deux passes terminent cette branche. Vous pouvez revenir en arrière.' });
-          return;
-        }
-      }
-      if (s.variation.length >= MAX_VARIATION) {
-        set({ notice: `Une exploration est limitée à ${MAX_VARIATION} coups.` });
+      const end = variationEnd(s);
+      if (end) {
+        set({ notice: end });
         return;
       }
-      const board = boardOf(s);
-      if (!board) return;
+      const assisted = s.mode === 'explorer' && s.exploreOpponent;
+      if (assisted && s.variation.at(-1)?.playedBy === 'human') return;
       const color = nextColor(s);
-      const res = board.play(color, point);
-      if (res.illegal) {
-        set({ notice: ILLEGAL_LABEL[res.illegal] });
+      const legal = assisted
+        ? isLegalZeroMove(explorePosition(s, game), point)
+        : !boardOf(s)!.play(color, point).illegal;
+      if (!legal) {
+        const reason = boardOf(s)!.play(color, point).illegal;
+        set({
+          notice: reason
+            ? ILLEGAL_LABEL[reason]
+            : 'Coup interdit par le superko : cette position a déjà été jouée.',
+        });
         return;
       }
-      set({ variation: [...s.variation, { color, point }], analysisMarks: [], notice: null });
+      const move: ExploreMove = assisted ? { color, point, playedBy: 'human' } : { color, point };
+      set({ variation: [...s.variation, move], analysisMarks: [], notice: null });
       return;
     }
 
@@ -745,7 +795,21 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
-  undoVariation: () => set((s) => ({ variation: s.variation.slice(0, -1), notice: null })),
+  setExploreOpponent: (enabled) =>
+    set((s) =>
+      s.exploreOpponent === enabled
+        ? s
+        : { exploreOpponent: enabled, variation: [...s.variation], notice: null },
+    ),
+  undoVariation: () =>
+    set((s) => {
+      const pair =
+        s.mode === 'explorer' &&
+        s.exploreOpponent &&
+        s.variation.at(-1)?.playedBy === 'leela' &&
+        s.variation.at(-2)?.playedBy === 'human';
+      return { variation: s.variation.slice(0, pair ? -2 : -1), notice: null };
+    }),
   clearVariation: () => set({ variation: [], notice: null }),
 }));
 

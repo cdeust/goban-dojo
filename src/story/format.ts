@@ -1,3 +1,4 @@
+import { parseSgfDate } from '../domain/importSgf.ts';
 import type { GameRecord, GameResult } from '../domain/game.ts';
 
 /** Restitue les voyelles longues des noms les plus fréquents du corpus (romanisé sans macrons). */
@@ -34,19 +35,38 @@ const DAY = new Intl.DateTimeFormat('fr-FR', {
 });
 const MONTH = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-/** Met en forme une date AAAA-MM-JJ, AAAA-MM ou AAAA, selon la précision connue. */
-export function formatDate(iso: string): string {
-  const [y, m, d] = iso.split('-');
-  if (!y || !m) return iso;
-  const date = new Date(Date.UTC(Number(y), Number(m) - 1, d ? Number(d) : 1));
-  if (Number.isNaN(date.getTime())) return iso;
-  return d ? DAY.format(date).replace(/^1 /, '1ᵉʳ ') : MONTH.format(date);
+const DATES = new Intl.ListFormat('fr-FR', { type: 'conjunction' });
+
+/** DT peut abréger année et mois d’après la date précédente (FF[4], propriété DT). */
+export function formatDate(source: string): string {
+  const labels: string[] = [];
+  let previous = '';
+  for (let date of source.split(',')) {
+    if (previous.length > 4) {
+      if (/^\d{2}-\d{2}$/.test(date)) date = previous.slice(0, 5) + date;
+      else if (/^\d{2}$/.test(date)) date = previous.slice(0, -2) + date;
+    }
+    const instant = parseSgfDate(date);
+    if (!instant) return source;
+    previous = date;
+    const [year, month, day] = date.split('-');
+    if (!month) {
+      labels.push(date);
+      continue;
+    }
+    const label = (day ? DAY : MONTH)
+      .formatToParts(instant)
+      .map((part) => (part.type === 'year' ? String(Number(year)) : part.value))
+      .join('');
+    labels.push(label.replace(/^1 /, '1ᵉʳ '));
+  }
+  return labels.length === 1 ? labels[0]! : DATES.format(labels);
 }
 
 /** Instant (ms) du début d'une date éventuellement partielle : le milieu de la période inconnue. */
 export function dateToTime(iso: string): number {
   const [y, m, d] = iso.split('-');
-  return Date.UTC(Number(y), m ? Number(m) - 1 : 6, d ? Number(d) : m ? 15 : 1);
+  return new Date(`${y}-${m ?? '07'}-${d ?? (m ? '15' : '01')}T00:00:00Z`).getTime();
 }
 
 export const colorName = (c: 'B' | 'W'): string => (c === 'B' ? 'Noir' : 'Blanc');

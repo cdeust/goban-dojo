@@ -26,6 +26,7 @@ const s = () => useStore.getState();
 beforeEach(() => {
   useStore.setState({ dataset, status: 'ready', entered: true, mode: 'lecture', playing: false });
   s().selectGame(RED_EAR);
+  s().setExploreOpponent(false); // Les scénarios ci-dessous posent les deux couleurs à la main.
 });
 
 describe('hintZone', () => {

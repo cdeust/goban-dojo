@@ -38,7 +38,13 @@ export function GameCard() {
       transition={{ duration: 0.45, ease: 'easeOut' }}
     >
       <p className="card__date">
-        {game.date ? <time dateTime={game.date}>{formatDate(game.date)}</time> : 'Partie importée'}
+        {game.imported && game.sessions ? (
+          formatDate(game.sessions)
+        ) : game.date ? (
+          <time dateTime={game.date}>{formatDate(game.date)}</time>
+        ) : (
+          'Partie importée'
+        )}
         {!game.imported && <span className="card__age"> · Shūsaku a {ageLabel(game.date)}</span>}
       </p>
       {game.dateJapanese && (

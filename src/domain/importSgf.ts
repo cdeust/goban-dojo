@@ -15,6 +15,15 @@ function resultOf(raw: string): GameResult {
     : { winner, raw };
 }
 
+/** DT (SGF FF[4]) conserve la précision fournie : année, mois ou jour grégorien. */
+export function parseSgfDate(value: string): Date | null {
+  const [year = '', month = '01', day = '01', ...rest] = value.split('-');
+  if (rest.length || !/^\d{4}$/.test(year) || !/^\d{2}$/.test(month) || !/^\d{2}$/.test(day))
+    return null;
+  const instant = new Date(`${year}-${month}-${day}T00:00:00Z`);
+  return instant.getUTCDate() === Number(day) ? instant : null;
+}
+
 export function importSgf(text: string, id: string, name: string): ImportedGameRecord {
   const root = parseSgf(text, { strict: true });
   const gameType = prop(root, 'GM') ?? '1';
@@ -70,21 +79,16 @@ export function importSgf(text: string, id: string, name: string): ImportedGameR
   const komi = Number(prop(root, 'KM') ?? '0');
   if (!Number.isFinite(komi)) throw new Error('Le komi indiqué dans le kifu est invalide.');
   const declaredHandicap = Number(prop(root, 'HA'));
-  const date = prop(root, 'DT')?.trim().split(',')[0] ?? '';
-  const [year = '', month = '01', day = '01', ...rest] = date.split('-');
-  const validParts =
-    rest.length === 0 &&
-    /^\d{4}$/.test(year) &&
-    /^(0[1-9]|1[0-2])$/.test(month) &&
-    /^(0[1-9]|[12]\d|3[01])$/.test(day);
-  const dateCheck = validParts ? new Date(year + '-' + month + '-' + day + 'T00:00:00Z') : null;
-  const safeDate = dateCheck?.getUTCDate() === Number(day) ? date : '';
+  const dt = prop(root, 'DT')?.trim() ?? '';
+  const firstDate = dt.split(',', 1)[0] ?? '';
+  const date = parseSgfDate(firstDate) ? firstDate : '';
   const title = prop(root, 'GN')?.trim() || name.replace(/\.sgf$/i, '');
   return {
     id,
     imported: true,
     ...(tesujis.length && { tesujis }),
-    date: safeDate,
+    date,
+    ...(date && dt !== date && { sessions: dt }),
     black: prop(root, 'PB')?.trim() || 'Noir',
     white: prop(root, 'PW')?.trim() || 'Blanc',
     blackRank: prop(root, 'BR'),

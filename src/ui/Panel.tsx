@@ -5,6 +5,8 @@ import type { GameRecord } from '../domain/game.ts';
 import { CHAPTERS, chapterIndexOf, gamesOfChapter } from '../story/chapters.ts';
 import { formatDate, outcomeFor, prettyName } from '../story/format.ts';
 import { moveCount, useStore } from '../state/store.ts';
+import { mentorsOf, type Mentor } from '../story/mentors.ts';
+import { MentorStory } from './MentorStory.tsx';
 import { IconClose, IconPlay } from './icons.tsx';
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
@@ -13,6 +15,9 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 export function Panel() {
   const panel = useStore((s) => s.panel);
   const setPanel = useStore((s) => s.setPanel);
+  const [storyChoice, setStoryChoice] = useState('');
+  const games = useStore((s) => s.dataset?.games);
+  const mentors = useMemo(() => mentorsOf(games ?? []), [games]);
   const studying = useStore((s) => s.mode === 'etudier');
   return (
     <AnimatePresence initial={false}>
@@ -61,14 +66,32 @@ export function Panel() {
               <IconClose />
             </button>
           </div>
-          {panel === 'recit' ? <Story /> : <Library />}
+          {panel === 'recit' ? (
+            <Story mentors={mentors} choice={storyChoice} onChoose={setStoryChoice} />
+          ) : (
+            <Library
+              hasMentors={mentors.length > 0}
+              onBrowsePlayers={() => {
+                setStoryChoice('choose');
+                setPanel('recit');
+              }}
+            />
+          )}
         </motion.aside>
       )}
     </AnimatePresence>
   );
 }
 
-function Story() {
+function Story({
+  mentors,
+  choice,
+  onChoose,
+}: {
+  mentors: Mentor[];
+  choice: string;
+  onChoose: (key: string) => void;
+}) {
   const games = useStore((s) => s.dataset?.games);
   const chapterIndex = useStore((s) => s.chapterIndex);
   const gameIndex = useStore((s) => s.gameIndex);
@@ -77,6 +100,9 @@ function Story() {
   const setPanel = useStore((s) => s.setPanel);
   const chapter = CHAPTERS[chapterIndex];
   const scroller = useRef<HTMLDivElement>(null);
+  const selected =
+    choice || (games?.[gameIndex]?.imported && mentors.length ? 'choose' : 'history');
+  const mentor = mentors.find((player) => 'player:' + player.key === selected);
 
   const inChapter = useMemo(
     () => (games ? gamesOfChapter(games, chapterIndex) : []),
@@ -85,7 +111,7 @@ function Story() {
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
-  }, [chapterIndex]);
+  }, [chapterIndex, selected]);
 
   if (!chapter || !games) return null;
 
@@ -102,80 +128,109 @@ function Story() {
 
   return (
     <div className="panel__body" ref={scroller}>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.article
-          key={chapter.id}
-          className="chapter"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-          <p className="chapter__index">
-            Chapitre {ROMAN[chapterIndex]} <span aria-hidden="true">·</span>{' '}
-            {chapter.from === chapter.to ? chapter.from : `${chapter.from} – ${chapter.to}`}
-          </p>
-          <p className="chapter__kanji" lang="ja" aria-hidden="true">
-            {chapter.kanji}
-          </p>
-          <p className="chapter__reading">{chapter.reading}</p>
-          <h2 className="chapter__title">{chapter.title}</h2>
-          {chapter.paragraphs.map((p) => (
-            <p key={p} className="chapter__text">
-              {p}
-            </p>
-          ))}
+      <div className="story-picker">
+        {mentors.length > 0 && (
+          <label>
+            Joueur du récit
+            <select value={selected} onChange={(event) => onChoose(event.target.value)}>
+              <option value="choose">Choisir un joueur</option>
+              <option value="history">Hon’inbō Shūsaku · récit historique</option>
+              <optgroup label="Joueurs de vos SGF">
+                {mentors.map((player) => (
+                  <option key={player.key} value={'player:' + player.key}>
+                    {player.name}
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </label>
+        )}
+        <button type="button" className="link" onClick={() => setPanel('parties')}>
+          Importer les parties de mon mentor
+        </button>
+      </div>
+      {mentor ? (
+        <MentorStory mentor={mentor} />
+      ) : selected === 'choose' && mentors.length ? (
+        <p>Choisissez le nom de votre mentor pour retrouver ses parties importées.</p>
+      ) : (
+        <>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.article
+              key={chapter.id}
+              className="chapter"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <p className="chapter__index">
+                Chapitre {ROMAN[chapterIndex]} <span aria-hidden="true">·</span>{' '}
+                {chapter.from === chapter.to ? chapter.from : `${chapter.from} – ${chapter.to}`}
+              </p>
+              <p className="chapter__kanji" lang="ja" aria-hidden="true">
+                {chapter.kanji}
+              </p>
+              <p className="chapter__reading">{chapter.reading}</p>
+              <h2 className="chapter__title">{chapter.title}</h2>
+              {chapter.paragraphs.map((p) => (
+                <p key={p} className="chapter__text">
+                  {p}
+                </p>
+              ))}
 
-          {chapter.featured.length > 0 && (
-            <>
-              <h3 className="chapter__sub">À revoir</h3>
-              <ul className="featured">
-                {chapter.featured.map((f) => {
-                  const index = games.findIndex((g) => g.id === f.gameId);
-                  if (index < 0) return null;
-                  return (
-                    <li key={f.gameId + f.label}>
-                      <button
-                        type="button"
-                        className="featured__button"
-                        aria-current={index === gameIndex ? 'true' : undefined}
-                        onClick={() => selectGame(index, { play: true })}
-                      >
-                        <IconPlay />
-                        <span>{f.label}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </>
-          )}
-          {inChapter.length > 0 && (
-            <button type="button" className="link" onClick={() => setPanel('parties')}>
-              Les {inChapter.length} parties de ces années →
+              {chapter.featured.length > 0 && (
+                <>
+                  <h3 className="chapter__sub">À revoir</h3>
+                  <ul className="featured">
+                    {chapter.featured.map((f) => {
+                      const index = games.findIndex((g) => g.id === f.gameId);
+                      if (index < 0) return null;
+                      return (
+                        <li key={f.gameId + f.label}>
+                          <button
+                            type="button"
+                            className="featured__button"
+                            aria-current={index === gameIndex ? 'true' : undefined}
+                            onClick={() => selectGame(index, { play: true })}
+                          >
+                            <IconPlay />
+                            <span>{f.label}</span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              )}
+              {inChapter.length > 0 && (
+                <button type="button" className="link" onClick={() => setPanel('parties')}>
+                  Les {inChapter.length} parties de ces années →
+                </button>
+              )}
+            </motion.article>
+          </AnimatePresence>
+
+          <nav className="chapter-nav" aria-label="Chapitres">
+            <button
+              type="button"
+              className="chip"
+              disabled={chapterIndex === 0}
+              onClick={() => go(chapterIndex - 1)}
+            >
+              ← Précédent
             </button>
-          )}
-        </motion.article>
-      </AnimatePresence>
-
-      <nav className="chapter-nav" aria-label="Chapitres">
-        <button
-          type="button"
-          className="chip"
-          disabled={chapterIndex === 0}
-          onClick={() => go(chapterIndex - 1)}
-        >
-          ← Précédent
-        </button>
-        <button
-          type="button"
-          className="chip chip--accent"
-          disabled={chapterIndex === CHAPTERS.length - 1}
-          onClick={() => go(chapterIndex + 1)}
-        >
-          Suivant →
-        </button>
-      </nav>
+            <button
+              type="button"
+              className="chip chip--accent"
+              disabled={chapterIndex === CHAPTERS.length - 1}
+              onClick={() => go(chapterIndex + 1)}
+            >
+              Suivant →
+            </button>
+          </nav>
+        </>
+      )}
     </div>
   );
 }
@@ -207,7 +262,9 @@ function Row({ game, index, current }: { game: GameRecord; index: number; curren
               : prettyName(game.opponent)}
           </span>
           <span className="row__meta">
-            {game.date && <time dateTime={game.date}>{formatDate(game.date)}</time>}
+            {game.imported && game.sessions
+              ? formatDate(game.sessions)
+              : game.date && <time dateTime={game.date}>{formatDate(game.date)}</time>}
             {!game.imported && ' · ' + (game.shusaku === 'B' ? 'noir' : 'blanc')}
             {game.handicap > 0 && ` · ${game.handicap} p.`}
             {game.rengo && ' · rengo'}
@@ -268,7 +325,13 @@ function ImportGame() {
   );
 }
 
-function Library() {
+function Library({
+  hasMentors,
+  onBrowsePlayers,
+}: {
+  hasMentors: boolean;
+  onBrowsePlayers: () => void;
+}) {
   const games = useStore((s) => s.dataset?.games);
   const gameIndex = useStore((s) => s.gameIndex);
   const [query, setQuery] = useState('');
@@ -302,6 +365,11 @@ function Library() {
   return (
     <div className="panel__body">
       <ImportGame />
+      {hasMentors && (
+        <button type="button" className="link" onClick={onBrowsePlayers}>
+          Parcourir les joueurs importés
+        </button>
+      )}
       <label className="search">
         <span className="sr-only">Chercher un joueur, une année, un lieu</span>
         <input

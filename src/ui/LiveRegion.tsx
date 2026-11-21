@@ -17,7 +17,7 @@ export function LiveRegion() {
   const variation = useStore((s) => s.variation);
   let text = '';
   if (game && entered && !playing && replay !== 'auto' && (!reading || readingPace === null)) {
-    const head = `${prettyName(game.black)} contre ${prettyName(game.white)}${game.date ? ', ' + formatDate(game.date) : ''}.`;
+    const head = `${prettyName(game.black)} contre ${prettyName(game.white)}${game.date ? ', ' + formatDate(game.imported ? (game.sessions ?? game.date) : game.date) : ''}.`;
     const explored = variation.at(-1);
     if (explored) {
       text = `${reading || replay === 'manual' ? 'Simulation' : 'Exploration'}, coup ${move + variation.length} : ${colorName(explored.color)} ${pointToHuman(explored.point)}.`;

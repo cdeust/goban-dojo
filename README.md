@@ -1,10 +1,12 @@
-# 秀策 — Hon’inbō Shūsaku, 1829-1862
+# Goban Dojo
 
-Un goban en 3D pour revoir, coup après coup, **469 parties** de Hon’inbō Shūsaku : de la plus
-ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernière, inachevée, du
-19 juin 1862, dix semaines avant sa mort.
+Apprenez le go en rejouant une partie sur un goban en 3D. Importez vos kifu au format SGF ou ceux de votre mentor. À la position qui vous intéresse, choisissez « Explorer » pour jouer votre coup et affronter Leela Zero. Le bilan de KataGo estime le gain ou la perte en points en tenant compte du komi du kifu.
 
-**En ligne : <https://cdeust.github.io/shusaku-goban/>**
+Leela Zero est une reproduction ouverte de la méthode d’AlphaGo Zero. Le réseau embarqué a été entraîné par le projet Leela Zero avec ses propres parties d’autojeu. [Origine et vérification des poids](docs/LEELA-ZERO.md)
+
+Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **469 parties**, de celle du 14 décembre 1839, à l’âge de dix ans, à sa dernière partie, inachevée, du 19 juin 1862. Après un import, ce mode permet aussi de choisir un joueur des SGF pour retrouver ses parties dans l’ordre des dates. Vous pouvez y rechercher sa biographie sur Wikipédia en français ou en anglais, puis choisir l’article à conserver. Seul le nom saisi est transmis à Wikipédia quand vous lancez la recherche. Les SGF restent dans votre navigateur.
+
+[Ouvrir Goban Dojo](https://cdeust.github.io/goban-dojo/)
 
 ![La partie de l’oreille rouge, coup 127](docs/oreille-rouge.png)
 
@@ -14,8 +16,7 @@ ancienne qui nous soit parvenue (14 décembre 1839, il a dix ans) à la dernièr
   renvoyant aux parties de la période.
 - **Un goban de sol aux cotes réelles** (42,42 × 45,45 × 15,15 cm, lignes à 22 et 23,7 mm), en
   rendu réaliste : kaya à fil droit sur ses pieds tournés, pierres d’ardoise et de coquillage,
-  bols de bois, dans un salon à tatamis éclairé par ses shōji. Tout est procédural : aucune image,
-  aucun modèle, aucun son n’est téléchargé.
+  bols de bois, dans un salon à tatamis éclairé par ses shōji. Le bois du goban, les pierres et le décor sont générés dans le navigateur.
 - **Une relecture animée par [Motion](https://motion.dev)** : la pierre sort du bol, vient au-dessus
   de l’intersection, frappe et oscille un instant ; revenir en arrière rejoue le geste à l’envers.
 - **Des pierres qui tombent pour de bon** : une pierre capturée vole jusqu’au-dessus du couvercle
@@ -140,8 +141,7 @@ le goban, prisonnière) se déduit du numéro de coup ; Motion anime le passage 
 - [docs/JOURNAL.md](docs/JOURNAL.md) — journal des expériences, échecs compris.
 - Dépendances en versions exactes, lockfile figé, actions GitHub épinglées par empreinte,
   SBOM CycloneDX, `pnpm audit`, ESLint avec règles de sécurité et CodeQL (SAST), tests Playwright
-  contre la version construite avec vérification de la CSP et de l’absence de toute requête
-  sortante (DAST).
+  sur la version construite pour vérifier la CSP et les requêtes réseau (DAST).
 
 ## Licences
 

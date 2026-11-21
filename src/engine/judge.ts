@@ -9,7 +9,7 @@
  * le réseau b10c128. D'où des catégories larges plutôt qu'un chiffre au demi-point.
  */
 import { opposite, type Color } from '../domain/board.ts';
-import { topMoves, type Evaluation } from './decode.ts';
+import { rankedLegalPoints, type Evaluation } from './decode.ts';
 import type { EnginePosition } from './features.ts';
 
 /** Nombre de coups préférés du réseau auxquels on compare le coup joué. */
@@ -29,9 +29,16 @@ export interface Judgement {
   best: number;
   /** Rang du coup jugé dans les préférences du réseau (1 = premier choix), 0 s'il n'y figure pas. */
   rank: number;
+  /** Avance de Noir avant le coup, au komi de la position. */
+  blackLeadBefore: number;
   /** Avance de Noir estimée après le coup jugé. */
   blackLeadAfter: number;
   blackWinrateAfter: number;
+}
+
+/** Écart depuis la position précédant le coup du joueur, éventuellement après la réponse. */
+export function scoreChange(player: Color, move: Judgement, end: Judgement = move): number {
+  return (end.blackLeadAfter - move.blackLeadBefore) * (player === 'B' ? 1 : -1);
 }
 
 export type Evaluator = (positions: EnginePosition[]) => Promise<Evaluation[]>;
@@ -58,8 +65,8 @@ export async function judgeMoves(
   const sign = mover === 'B' ? 1 : -1;
   const [root] = await evaluate([position]);
   if (!root) throw new Error('évaluation absente');
-  const candidates = topMoves(root.policy, CANDIDATES);
-  const ranked = topMoves(root.policy, 361);
+  const ranked = rankedLegalPoints(root.policy);
+  const candidates = ranked.slice(0, CANDIDATES);
   const all = [...new Set([...candidates, ...points])];
   const evals = await evaluate(all.map((m) => after(position, mover, m)));
   const leadFor = new Map(all.map((m, i) => [m, sign * (evals[i] as Evaluation).blackLead]));
@@ -77,6 +84,7 @@ export async function judgeMoves(
       verdict: verdictOf(loss),
       best,
       rank: ranked.indexOf(m) + 1,
+      blackLeadBefore: root.blackLead,
       blackLeadAfter: e.blackLead,
       blackWinrateAfter: e.blackWinrate,
     };
