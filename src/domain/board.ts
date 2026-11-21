@@ -57,7 +57,7 @@ const cellDecoder = new TextDecoder();
 const code = (c: Color): number => (c === 'B' ? 1 : 2);
 
 // Les positions reçues du worker traversent une frontière JavaScript non typée.
-function boardIndex(point: unknown): number {
+export function boardIndex(point: unknown): number {
   if (typeof point === 'number' && point >= 0 && point < POINTS) {
     const index = Math.floor(point);
     if (index === point) return index;

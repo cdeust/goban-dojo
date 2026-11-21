@@ -10,7 +10,7 @@
  *
  * Limite connue : le cas particulier « double ko » de la recherche de shicho n'est pas porté.
  */
-import type { Color } from '../domain/board.ts';
+import { boardIndex, PASS, type Color } from '../domain/board.ts';
 import type { Move } from '../domain/game.ts';
 
 const N = 19;
@@ -233,10 +233,19 @@ export interface Encoded {
   legal: Uint8Array;
 }
 
+function initialBoard(setupBlack: readonly number[]): NetBoard {
+  const board = new NetBoard();
+  for (const point of setupBlack) board.c[boardIndex(point)] = BLACK;
+  return board;
+}
+
+function movePoint(point: number): number {
+  return point === PASS ? PASS : boardIndex(point);
+}
+
 export function encodePosition(position: EnginePosition): Encoded {
-  const boards = [new NetBoard()];
-  for (const p of position.setupBlack) (boards[0] as NetBoard).c[p] = BLACK;
-  const moves = position.moves.map((m) => ({ pla: stoneOf(m.color), pos: m.point }));
+  const boards = [initialBoard(position.setupBlack)];
+  const moves = position.moves.map((m) => ({ pla: stoneOf(m.color), pos: movePoint(m.point) }));
   for (const m of moves) {
     const b = (boards[boards.length - 1] as NetBoard).clone();
     b.play(m.pos, m.pla);
@@ -304,9 +313,8 @@ export function encodePosition(position: EnginePosition): Encoded {
  * s'échapper, même en jouant le premier (shicho qui fonctionne, ou capture immédiate).
  */
 export function trappedStones(position: EnginePosition): number[] {
-  const board = new NetBoard();
-  for (const p of position.setupBlack) board.c[p] = BLACK;
-  for (const m of position.moves) board.play(m.point, stoneOf(m.color));
+  const board = initialBoard(position.setupBlack);
+  for (const m of position.moves) board.play(movePoint(m.point), stoneOf(m.color));
   const pla = stoneOf(position.next);
   const out: number[] = [];
   const done = new Uint8Array(AREA);
