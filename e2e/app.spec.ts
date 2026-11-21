@@ -65,7 +65,7 @@ test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le ré
 }) => {
   const w = watch(page);
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Atelier de go' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Goban Dojo' })).toBeVisible();
   await expect(page.locator('.intro__count')).toContainText('469 parties');
   await page.getByRole('button', { name: 'Entrer' }).click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
@@ -301,9 +301,10 @@ test('mode « deviner » : indice, coup montré, bilan', async ({ page }) => {
   expect(w.problems).toEqual([]);
 });
 
-test('mode « explorer » : un clic sur le goban pose un coup hors de la partie', async ({
+test('exercice : Leela répond au coup humain sur le goban et le bilan mesure cet échange', async ({
   page,
 }) => {
+  test.slow();
   // Sans animation, la caméra est en place immédiatement : le centre du canvas vise le goban.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const w = watch(page);
@@ -316,10 +317,20 @@ test('mode « explorer » : un clic sur le goban pose un coup hors de la partie'
   const box = await page.locator('canvas').boundingBox();
   if (!box) throw new Error('canvas introuvable');
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(panel).toContainText('1 coup hors de la partie', { timeout: 15_000 });
-  await expect(page.getByTestId('live')).toContainText('Exploration, coup 1 : Noir');
-  await panel.getByRole('button', { name: 'Revenir à la partie' }).click();
-  await expect(panel).toContainText('Position après le coup 0');
+  const sequence = panel.locator('.mode__moves li');
+  await expect(sequence).toHaveCount(2, { timeout: 90_000 });
+  await expect(sequence.nth(0)).toContainText('Vous');
+  await expect(sequence.nth(1)).toContainText('Leela Zero');
+  const balance = panel.locator('.exercise-score');
+  await expect(balance.getByRole('heading')).toHaveText('Bilan en points pour Noir');
+  await expect(balance.locator('dd').nth(1)).toHaveText(/[+−-]?\d+(?:,\d+)? pt/, {
+    timeout: 90_000,
+  });
+  await expect(panel).toContainText('À vous de jouer avec Noir.');
+  await expect(page.locator('input[aria-label="Coup"]')).toHaveValue('0');
+  await panel.getByRole('button', { name: 'Annuler le tour' }).click();
+  await expect(sequence).toHaveCount(0);
+  await expect(balance).toHaveCount(0);
   expect(w.problems).toEqual([]);
 });
 
@@ -341,11 +352,15 @@ test('évaluation des coups : le réseau se charge, juge le coup de la partie et
   await page.getByRole('button', { name: 'Fermer le volet' }).click();
   await page.getByRole('button', { name: 'Explorer' }).click();
   const panel = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await panel.getByLabel('Adversaire').selectOption('free');
   await panel.getByRole('button', { name: 'Évaluer les coups' }).click();
   // Le premier coup de l'enfant de dix ans, R16, est un coin : le réseau ne le distingue pas du meilleur.
-  await expect(panel.locator('.mode__actual')).toContainText('noir a joué R16', {
-    timeout: 90_000,
-  });
+  await expect(panel.locator('.mode__actual').filter({ hasText: 'Dans la partie' })).toContainText(
+    'noir a joué R16',
+    {
+      timeout: 90_000,
+    },
+  );
   await expect(panel.locator('.mode__actual .verdict')).toHaveText(/bon coup/, { timeout: 90_000 });
   // Un coup au centre du goban vide, lui, perd nettement.
   await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
@@ -925,4 +940,50 @@ test('après un abandon, calculer une suite et retrouver le dernier coup du SGF'
   await reading.getByRole('button', { name: 'Revenir au kifu' }).click();
   await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('194');
   await expect(card).toContainText('abandon');
+});
+
+test('le récit du mentor suit les parties importées et ne consulte une biographie que sur demande', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const requested: string[] = [];
+  await page.route('https://fr.wikipedia.org/w/api.php?**', async (route) => {
+    const name = new URL(route.request().url()).searchParams.get('titles')!;
+    requested.push(name);
+    await route.fulfill({
+      json: {
+        query: {
+          pages: [{ ns: 0, title: name, lastrevid: 42, extract: 'Notice de démonstration.' }],
+        },
+      },
+      headers: { 'access-control-allow-origin': '*' },
+    });
+  });
+  await enter(page);
+  await page.getByRole('button', { name: 'Importer les parties de mon mentor' }).click();
+  await page.getByLabel('Importer un fichier SGF').setInputFiles({
+    name: 'partie-mentor.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from(
+      '(;FF[4]GM[1]SZ[19]PB[Go Seigen]PW[Élève]DT[1951-02]GN[Étude privée];B[pd];W[dd];B[qp])',
+    ),
+  });
+  await page.locator('.topbar').getByRole('button', { name: 'Récit', exact: true }).click();
+  const chooser = page.getByLabel('Joueur du récit');
+  await chooser.selectOption({ label: 'Go Seigen' });
+  const story = page.getByRole('article', { name: 'Parcours de Go Seigen' });
+  await expect(story).toContainText('février 1951');
+  expect(requested).toEqual([]);
+  await story.getByText('Associer une biographie', { exact: true }).click();
+  await story.getByRole('button', { name: 'Chercher sur Wikipédia' }).click();
+  await story.getByRole('button', { name: 'Associer cette notice à Go Seigen' }).click();
+  const source = story.getByRole('link', { name: 'Go Seigen · Wikipédia (fr)' });
+  await expect(source).toHaveAttribute('href', 'https://fr.wikipedia.org/w/index.php?oldid=42');
+  await chooser.selectOption('history');
+  await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
+  await chooser.selectOption({ label: 'Go Seigen' });
+  await expect(source).toBeVisible();
+  await story.getByRole('button', { name: /Rejouer la partie/ }).click();
+  await expect(page.getByRole('region', { name: 'Partie en cours' })).toContainText('Élève');
+  expect(requested).toEqual(['Go Seigen']);
 });

@@ -2,8 +2,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { PASS, opposite, pointToHuman } from '../domain/board.ts';
 import { loadEngine, useEngine } from '../engine/client.ts';
-import { GOOD_BELOW, type Judgement, type Verdict } from '../engine/judge.ts';
+import { GOOD_BELOW, scoreChange, type Judgement, type Verdict } from '../engine/judge.ts';
 import { useJudgements } from '../engine/useJudgements.ts';
+import { useExploreOpponent } from '../replay/useExploreOpponent.ts';
 import { colorName, prettyName } from '../story/format.ts';
 import {
   GUESS_POINTS,
@@ -128,6 +129,11 @@ function VerdictTag({ judgement }: { judgement: Judgement | undefined }) {
   );
 }
 
+const pointChange = new Intl.NumberFormat('fr-FR', {
+  maximumFractionDigits: 1,
+  signDisplay: 'exceptZero',
+});
+
 const leadLabel = (blackLead: number): string => {
   const n = Math.round(Math.abs(blackLead));
   return n === 0
@@ -157,13 +163,13 @@ function EngineControl() {
     <>
       <div className="mode__actions">
         <button type="button" className="chip chip--accent" onClick={loadEngine}>
-          Évaluer les coups
+          {status === 'failed' ? 'Réessayer l’évaluation' : 'Évaluer les coups'}
         </button>
       </div>
       <p className="mode__note">
         {status === 'failed'
           ? `Le moteur n’a pas pu démarrer (${error}).`
-          : 'Charge un réseau de neurones KataGo (16 Mo) qui tourne sur votre appareil : rien n’est envoyé ailleurs.'}
+          : 'KataGo estime le score sur votre appareil.'}
       </p>
     </>
   );
@@ -182,68 +188,164 @@ function Explore() {
   const undo = useStore((s) => s.undoVariation);
   const clear = useStore((s) => s.clearVariation);
   const color = useStore((s) => nextColor(s));
-  const engineReady = useEngine((s) => s.status === 'ready');
+  const assisted = useStore((s) => s.exploreOpponent);
+  const setAssisted = useStore((s) => s.setExploreOpponent);
+  const click = useStore((s) => s.clickPoint);
+  const opponent = useExploreOpponent();
+  const status = useEngine((s) => s.status);
+  const engineReady = status === 'ready';
   const judgements = useJudgements(game, move, variation);
+  const lastIndex = variation.length - 1;
+  const lastMove = variation[lastIndex];
+  const reply = lastMove?.playedBy === 'leela' ? lastMove : undefined;
+  const turnIndex = reply ? lastIndex - 1 : lastIndex;
+  const turn = variation[turnIndex];
+  const human = turn?.playedBy === 'human' ? turn : undefined;
+  const humanScore = judgements.explored[turnIndex];
+  const lastScore = judgements.explored[lastIndex];
+  useEffect(() => {
+    if (assisted && human && useEngine.getState().status === 'idle') loadEngine();
+  }, [assisted, human]);
+
   if (!game) return null;
   const actual = timelineOf(game).moves[move];
-  const last = judgements.explored.at(-1);
+  const scoreState = judgements.error || status === 'failed' ? 'Indisponible' : 'Calcul…';
   return (
     <>
       <h2 className="mode__title" ref={title} tabIndex={-1}>
         Explorer une autre suite
       </h2>
-      <p className="mode__lead">
-        {variation.length === 0
-          ? `Position après le coup ${move}. Posez un coup sur le goban : ${colorName(color)} joue.`
-          : `${variation.length} coup${variation.length > 1 ? 's' : ''} hors de la partie. ${colorName(color)} joue.`}
-      </p>
-      {actual && actual.point !== PASS && (
-        <p className="mode__actual">
-          Dans la partie, {colorName(actual.color).toLowerCase()} a joué{' '}
-          {pointToHuman(actual.point)}
-          {engineReady && (
-            <>
-              {' '}
-              <VerdictTag judgement={judgements.actual} />
-            </>
-          )}
-        </p>
-      )}
-      {variation.length > 0 && (
-        <ol className="mode__moves" start={move + 1}>
-          {variation.map((m, i) => (
-            <li key={`${i}:${m.point}`}>
-              <span
-                className={`stone stone--${m.color === 'B' ? 'black' : 'white'}`}
-                aria-hidden="true"
-              />
-              <span className="sr-only">{colorName(m.color)} </span>
-              <b>{pointToHuman(m.point)}</b>
-              {engineReady && <VerdictTag judgement={judgements.explored[i]} />}
-            </li>
-          ))}
-        </ol>
-      )}
-      {engineReady && last && (
-        <p className="mode__lead-estimate">Après ce coup : {leadLabel(last.blackLeadAfter)}.</p>
-      )}
-      <p className="mode__feedback" role="status" aria-live="polite">
-        {notice ?? (judgements.error ? `Évaluation impossible (${judgements.error}).` : null)}
+      <label className="study__filter">
+        Adversaire
+        <select
+          value={assisted ? 'engine' : 'free'}
+          onChange={(e) => setAssisted(e.currentTarget.value === 'engine')}
+        >
+          <option value="engine">Leela Zero</option>
+          <option value="free">Jouer les deux camps</option>
+        </select>
+      </label>
+      <p className="mode__lead" role="status">
+        {opponent.finished
+          ? 'Fin de cette variante.'
+          : assisted && opponent.error
+            ? `La réponse de Leela Zero a échoué (${opponent.error}).`
+            : assisted && opponent.waiting
+              ? `Leela Zero prépare sa réponse avec ${colorName(color)}…`
+              : assisted
+                ? `À vous de jouer avec ${colorName(color)}.${variation.length === 0 ? ' Choisissez une intersection sur le goban.' : ''}`
+                : `${colorName(color)} joue. Vous placez les pierres des deux camps.`}
       </p>
       <div className="mode__actions">
-        <button type="button" className="chip" disabled={variation.length === 0} onClick={undo}>
-          Reprendre un coup
+        {assisted && opponent.error && (
+          <button className="chip chip--accent" type="button" onClick={opponent.retry}>
+            Réessayer la réponse
+          </button>
+        )}
+        <button
+          className="chip"
+          type="button"
+          disabled={opponent.finished || opponent.waiting || !!opponent.error}
+          onClick={() => click(PASS)}
+        >
+          Passer
         </button>
-        <button type="button" className="chip" disabled={variation.length === 0} onClick={clear}>
+        <button className="chip" type="button" disabled={!variation.length} onClick={undo}>
+          {assisted ? 'Annuler le tour' : 'Reprendre un coup'}
+        </button>
+        <button className="chip" type="button" disabled={!variation.length} onClick={clear}>
           Revenir à la partie
         </button>
       </div>
+      {notice && (
+        <p className="mode__feedback" role="status">
+          {notice}
+        </p>
+      )}
+      {assisted && human && (
+        <section className="exercise-score">
+          <h3>Bilan en points pour {colorName(human.color)}</h3>
+          <dl aria-label={'Bilan en points pour ' + colorName(human.color)}>
+            <div>
+              <dt>Votre coup · {pointToHuman(human.point)}</dt>
+              <dd>
+                {humanScore
+                  ? pointChange.format(scoreChange(human.color, humanScore)) + ' pt'
+                  : scoreState}
+              </dd>
+            </div>
+            {reply && (
+              <div>
+                <dt>Après la réponse · {pointToHuman(reply.point)}</dt>
+                <dd>
+                  {humanScore && lastScore
+                    ? pointChange.format(scoreChange(human.color, humanScore, lastScore)) + ' pt'
+                    : scoreState}
+                </dd>
+              </div>
+            )}
+          </dl>
+          <p>
+            Variation du score estimé depuis la position avant votre coup. Komi du calcul{' '}
+            {(game.komi ?? 0).toLocaleString('fr-FR')} pt.
+          </p>
+        </section>
+      )}
+      {engineReady && lastScore && (
+        <p className="mode__lead-estimate">Après ce coup, {leadLabel(lastScore.blackLeadAfter)}.</p>
+      )}
+      <div className="exercise-line">
+        <p className="mode__anchor">
+          Position après le coup {move}
+          {variation.length > 0 &&
+            ` · ${variation.length} coup${variation.length > 1 ? 's' : ''} hors de la partie`}
+        </p>
+        {actual && (
+          <p className="mode__actual">
+            Dans la partie, {colorName(actual.color).toLowerCase()} a joué{' '}
+            {pointToHuman(actual.point)}
+            {engineReady && (
+              <>
+                {' '}
+                <VerdictTag judgement={judgements.actual} />
+              </>
+            )}
+          </p>
+        )}
+        {variation.length > 0 && (
+          <ol className="mode__moves" start={move + 1}>
+            {variation.map((m, i) => (
+              <li key={`${i}:${m.point}`}>
+                <span
+                  className={`stone stone--${m.color === 'B' ? 'black' : 'white'}`}
+                  aria-hidden="true"
+                />
+                <span className="sr-only">{colorName(m.color)} </span>
+                {m.playedBy && <span>{m.playedBy === 'human' ? 'Vous' : 'Leela Zero'}</span>}
+                <b>{pointToHuman(m.point)}</b>
+                {engineReady && <VerdictTag judgement={judgements.explored[i]} />}
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+      {engineReady && judgements.error && (
+        <>
+          <p className="mode__feedback" role="status">
+            Évaluation impossible ({judgements.error}).
+          </p>
+          <button className="chip" type="button" onClick={judgements.retry}>
+            Réessayer l’évaluation
+          </button>
+        </>
+      )}
       <EngineControl />
-      <p className="mode__note">
-        {engineReady
-          ? 'Jugement d’un réseau KataGo interrogé sans lecture en profondeur : son erreur moyenne est d’environ 2 points. Un « bon coup » est un coup qu’il ne sait pas distinguer du meilleur.'
-          : 'Les règles sont appliquées (captures, ko, suicide).'}
-      </p>
+      {engineReady && (
+        <p className="mode__note">
+          KataGo évalue les positions en règles japonaises. Les écarts proches de deux points
+          restent dans la marge d’erreur moyenne mesurée.
+        </p>
+      )}
     </>
   );
 }
@@ -255,7 +357,7 @@ export function ModePanel() {
       {(mode === 'deviner' || mode === 'explorer') && (
         <motion.section
           key={mode}
-          className="mode"
+          className={mode === 'explorer' ? 'study study--explore' : 'mode'}
           aria-labelledby={mode === 'deviner' ? 'guess-title' : undefined}
           aria-label={mode === 'explorer' ? 'Explorer une autre suite' : undefined}
           initial={{ opacity: 0, x: -16 }}

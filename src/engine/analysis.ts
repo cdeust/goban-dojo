@@ -12,6 +12,17 @@ export interface Candidate {
   recorded: boolean;
 }
 
+/** Classe les coups légaux par probabilité. Une passe ex æquo suit les intersections concernées. */
+export function rankedLegalPoints(policy: Evaluation['policy']): number[] {
+  const ranked = topMoves(policy, policy.length - 1);
+  const passPrior = policy.at(-1) ?? 0;
+  if (passPrior > 0) {
+    const before = ranked.findIndex((point) => (policy[point] ?? 0) < passPrior);
+    ranked.splice(before < 0 ? ranked.length : before, 0, PASS);
+  }
+  return ranked;
+}
+
 export function candidatesOf(
   position: EnginePosition,
   policy: Evaluation['policy'],
@@ -19,13 +30,8 @@ export function candidatesOf(
 ): Candidate[] {
   const { moves } = position;
   if (moves.at(-1)?.point === PASS && moves.at(-2)?.point === PASS) return [];
-  const passPrior = policy.at(-1) ?? 0;
-  const prior = (point: number) => (point === PASS ? passPrior : (policy[point] ?? 0));
-  const ranked = topMoves(policy, policy.length - 1);
-  if (passPrior > 0) {
-    const before = ranked.findIndex((point) => prior(point) < passPrior);
-    ranked.splice(before < 0 ? ranked.length : before, 0, PASS);
-  }
+  const prior = (point: number) => (point === PASS ? policy.at(-1) : policy[point]) ?? 0;
+  const ranked = rankedLegalPoints(policy);
   const shortlist = ranked.slice(0, ANALYSIS_WIDTH);
   if (recorded !== undefined && prior(recorded) > 0 && !shortlist.includes(recorded)) {
     shortlist[ANALYSIS_WIDTH - 1] = recorded;

@@ -1388,6 +1388,57 @@ kbd {
   color: var(--paper-dim);
 }
 
+/* Dans Explorer, les commandes et les points restent à côté de la surface de jeu. */
+.study--explore {
+  align-content: start;
+}
+
+.study--explore .mode__lead,
+.study--explore .mode__actions,
+.study--explore .mode__feedback,
+.study--explore .mode__note,
+.study--explore .mode__lead-estimate {
+  margin: 0;
+}
+
+.study--explore .mode__note {
+  display: block;
+}
+
+.exercise-score {
+  padding-block: 0.65rem;
+  border-block: 1px solid var(--hairline);
+}
+
+.exercise-score dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-block: 0.6rem;
+}
+
+.exercise-score dt,
+.exercise-score p {
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.exercise-score dd {
+  margin: 0;
+  color: var(--paper);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.exercise-line .mode__anchor {
+  color: var(--paper-dim);
+  font-size: 0.82rem;
+}
+
+.exercise-line .mode__moves li {
+  flex-wrap: wrap;
+}
+
 .verdict {
   margin-left: 0.3rem;
   padding: 0.05rem 0.5rem;
@@ -2237,4 +2288,43 @@ progress {
 
 .intro__import {
   margin: 0.5rem;
+}
+
+.story-picker {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
+  margin-block-end: 1.25rem;
+}
+
+.story-picker label {
+  display: grid;
+  gap: 0.25rem;
+  width: 100%;
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+}
+
+.story-picker select {
+  min-width: 0;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.35rem;
+  background: var(--ink-2);
+  color: var(--paper);
+  font: inherit;
+}
+
+.mentor-story__games {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mentor-story .row svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--kaya);
 }

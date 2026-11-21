@@ -2,16 +2,16 @@
 
 ## Système
 
-Site **statique** : HTML, CSS, JavaScript et un fichier `games.json`, servis depuis une seule
-origine. Pas de serveur applicatif, pas de compte, pas de formulaire transmis, pas de cookie, pas
-de stockage local, pas de télémétrie, aucune donnée personnelle. Les seules entrées de
-l’utilisateur sont des clics, des touches et un champ de recherche filtré en mémoire.
+Le site statique sert le lecteur, les kifu historiques et les modèles depuis sa propre origine. Le navigateur conserve les SGF importés dans son stockage local. L’analyse et les réponses de Leela Zero sont calculées sur l’appareil.
+
+Dans le parcours d’un mentor, une recherche volontaire transmet uniquement le nom saisi à Wikipédia en français ou en anglais. Le lecteur affiche la source et conserve localement l’extrait que l’utilisateur choisit.
 
 Frontières de confiance :
 
 1. **Amont des données** — les SGF d’un dépôt tiers, lus par le pipeline de construction.
 2. **Chaîne d’approvisionnement** — paquets npm et actions GitHub.
-3. **Navigateur** — le code livré et `games.json`, face au réseau et à l’hébergeur.
+3. **Navigateur** — le code livré, les kifu personnels et les biographies conservés localement.
+4. **Wikipédia** — réponses publiques des API de recherche en français et en anglais.
 
 ## Menaces et mesures
 
@@ -23,7 +23,7 @@ Frontières de confiance :
 | **T**ampering              | Injection de script dans la page                         | CSP `default-src 'none'; script-src 'self'`, sans `unsafe-eval` ni script en ligne ; React échappe tout texte ; aucun `dangerouslySetInnerHTML` ; `base-uri 'none'`, `form-action 'none'` | `e2e/app.spec.ts` injecte un script et constate son blocage    |
 | **T**ampering              | `games.json` altéré provoquant un comportement inattendu | Validation de forme avant usage (`isDataset`) ; coordonnées bornées au goban ; les données ne sont jamais interprétées comme du code ou du HTML                                           | `tests/board.test.ts`                                          |
 | **R**epudiation            | Origine d’une partie invérifiable                        | Chaque partie garde ses chemins source ; rapport de construction versionné ; CI qui échoue si les données régénérées diffèrent                                                            | étape « git diff » de la CI                                    |
-| **I**nformation disclosure | Fuite vers des tiers (polices, CDN, référent)            | Aucune requête hors origine : polices auto-hébergées, textures et sons procéduraux, `connect-src 'self'`, `referrer: no-referrer`, liens externes en `noopener noreferrer`                | `e2e` échoue à la moindre requête sortante                     |
+| **I**nformation disclosure | Fuite vers des tiers (polices, CDN, référent)            | Ressources servies depuis le site. Seule la recherche biographique demandée par le joueur interroge les API Wikipédia prévues par la CSP. Politique `no-referrer`.                        | Contrôles CSP et réseau dans `e2e`                             |
 | **D**enial of service      | SGF hostile (géant, profondément imbriqué)               | Taille plafonnée à 512 Ko ; analyseur itératif, sans récursion ni expression régulière à retour arrière                                                                                   | `tests/sgf.test.ts` (20 000 niveaux, 30 000 coups)             |
 | **D**enial of service      | Navigateur saturé par le rendu                           | Instanciation (3 appels de dessin pour toutes les pierres), rendu à la demande après l’ouverture, densité de pixels plafonnée à 2                                                         | mesure manuelle                                                |
 | **E**levation of privilege | Jeton CI trop puissant                                   | Jeton en lecture seule ; écriture limitée au seul travail de publication, déclenché à la main                                                                                             | workflows                                                      |
@@ -42,6 +42,4 @@ Frontières de confiance :
 
 ## Données sensibles
 
-Aucune. Le pilier « sécurité d’infrastructure » (cloisonnement réseau, RBAC, comité d’éthique)
-est sans objet : le projet ne traite que des parties de go du XIXᵉ siècle et des faits
-biographiques publiés.
+Les SGF personnels peuvent contenir des noms de joueurs et des lieux. Les fichiers restent dans le navigateur qui les a importés. Une recherche biographique envoie le terme de recherche choisi au service Wikipédia. Les positions, les coups et le contenu du SGF restent sur l’appareil.

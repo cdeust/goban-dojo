@@ -13,7 +13,7 @@ export function TopBar() {
         <span className="brand__kanji" lang="ja" aria-hidden="true">
           囲碁
         </span>
-        <span className="brand__name">Atelier de go</span>
+        <span className="brand__name">Goban Dojo</span>
       </p>
       <nav className="topbar__nav" aria-label="Volets">
         <button

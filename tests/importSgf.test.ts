@@ -1,3 +1,4 @@
+import { dateToTime, formatDate } from '../src/story/format.ts';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { importSgf } from '../src/domain/importSgf.ts';
 import { decodeMoves, decodePoints } from '../src/domain/game.ts';
@@ -30,6 +31,54 @@ describe('import SGF', () => {
       'D4',
     ]);
   });
+
+  it.each([
+    ['1985', '1985'],
+    ['1985-03', 'mars 1985'],
+    ['1985-03-01', '1ᵉʳ mars 1985'],
+    ['0085-03', 'mars 85'],
+    ['2000-02-29', '29 février 2000'],
+  ])('respecte la précision et l’année de DT[%s]', (dt, expected) => {
+    const game = importSgf(`(;DT[${dt}];B[dd])`, 'local-date', 'Kifu.sgf');
+    expect(game.date).toBe(dt);
+    expect(game.sessions).toBeUndefined();
+    expect(formatDate(game.date)).toBe(expected);
+    expect(new Date(dateToTime(game.date)).getUTCFullYear()).toBe(Number(dt.slice(0, 4)));
+  });
+
+  it.each([
+    ['1996-05,06', 'mai 1996 et juin 1996'],
+    ['1996-05-06,07,08', '6 mai 1996, 7 mai 1996 et 8 mai 1996'],
+    ['1996,1997', '1996 et 1997'],
+    [
+      '1996-12-27,28,1997-01-03,04',
+      '27 décembre 1996, 28 décembre 1996, 3 janvier 1997 et 4 janvier 1997',
+    ],
+    ['1985-01,02-28,03-01', 'janvier 1985, 28 février 1985 et 1ᵉʳ mars 1985'],
+  ])('préserve toutes les séances de DT[%s]', (dt, expected) => {
+    const game = importSgf(`(;DT[${dt}];B[dd])`, 'local-date', 'Kifu.sgf');
+    expect(game.date).toBe(dt.split(',')[0]);
+    expect(game.sessions).toBe(dt);
+    expect(formatDate(game.sessions!)).toBe(expected);
+  });
+
+  it.each(['2023-02-29', '1985-00', '1985-03-00', '1985-4', 'mars 1985'])(
+    'laisse la date inconnue pour DT[%s]',
+    (dt) => {
+      expect(importSgf(`(;DT[${dt}];B[dd])`, 'local-date', 'Kifu.sgf').date).toBe('');
+      expect(formatDate(dt)).toBe(dt);
+    },
+  );
+
+  it.each(['1985,03', '1985-03,32', '1985-02-28,29'])(
+    'conserve une liste ambiguë telle que la source l’écrit : %s',
+    (dt) => {
+      const game = importSgf(`(;DT[${dt}];B[dd])`, 'local-date', 'Kifu.sgf');
+      expect(game.date).toBe(dt.split(',')[0]);
+      expect(game.sessions).toBe(dt);
+      expect(formatDate(game.sessions!)).toBe(dt);
+    },
+  );
 
   it('indexe les deux degrés de TE sur les seuls coups de la première variante', () => {
     const game = importSgf(

@@ -31,6 +31,7 @@ export function App() {
   const panel = useStore((s) => s.panel);
   const effects = useStore((s) => s.effects);
   const showReplay = useStore(isEstimating);
+  const exploring = useStore((s) => s.mode === 'explorer');
   const studying = useStore((s) => s.mode === 'etudier');
   const reflecting = useStore((s) => s.mode === 'reflechir');
   const analysing = useStore((s) => s.mode === 'analyser');
@@ -51,7 +52,7 @@ export function App() {
       <div
         className="app"
         data-panel={entered && panel ? 'open' : 'closed'}
-        data-study={studying || hasReadingPanel}
+        data-study={studying || hasReadingPanel || exploring}
         data-reflection={hasReadingPanel}
       >
         {entered && <Panel />}

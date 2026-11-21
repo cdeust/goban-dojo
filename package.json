@@ -1,8 +1,8 @@
 {
-  "name": "shusaku-goban",
+  "name": "goban-dojo",
   "version": "1.0.0",
   "private": true,
-  "description": "Goban 3D pour revivre les parties de Hon'inbō Shūsaku (1829-1862), de ses débuts à sa mort.",
+  "description": "Apprendre le go en rejouant ses kifu et les parties de Shūsaku, en essayant ses variantes et en affrontant Leela Zero.",
   "type": "module",
   "packageManager": "pnpm@10.34.9",
   "engines": {

@@ -4,7 +4,8 @@ import { defineConfig } from 'vitest/config';
 
 /**
  * Politique de sécurité du contenu, injectée dans la page construite.
- * L'application est statique : elle ne charge rien hors de sa propre origine.
+ * L'application est statique : les fichiers du jeu sont servis par la même origine.
+ * La recherche biographique lancée par le joueur peut aussi interroger Wikipédia.
  * (Absente en développement, où Vite injecte des styles et un client HMR en ligne.)
  */
 const CSP = [
@@ -15,7 +16,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://fr.wikipedia.org/w/api.php https://en.wikipedia.org/w/api.php",
   "worker-src 'self' blob:",
   "media-src 'none'",
   "object-src 'none'",

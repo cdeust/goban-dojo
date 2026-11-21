@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as ort from 'onnxruntime-web/wasm';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { opposite, type Color } from '../src/domain/board.ts';
+import { opposite, PASS, type Color } from '../src/domain/board.ts';
 import { buildTimeline } from '../src/domain/game.ts';
 import { afterCandidate, candidatesOf } from '../src/engine/analysis.ts';
 import { decodeOutputs, topMoves, type Evaluation } from '../src/engine/decode.ts';
@@ -12,7 +12,7 @@ import {
   trappedStones,
   type EnginePosition,
 } from '../src/engine/features.ts';
-import { judgeMoves, verdictOf } from '../src/engine/judge.ts';
+import { judgeMoves, scoreChange, verdictOf } from '../src/engine/judge.ts';
 import { previewLines, type PreviewLine } from '../src/engine/preview.ts';
 
 /**
@@ -145,6 +145,52 @@ describe('jugement d’un coup', () => {
     // Le meilleur coup selon le réseau est le même dans les deux jugements.
     expect(bad?.best).toBe(good?.best);
   }, 60_000);
+
+  it.each(['B', 'W'] as const)(
+    'mesure le coup et l’échange depuis la position initiale de %s',
+    async (player) => {
+      const base: EnginePosition = { setupBlack: [], moves: [], next: player, komi: 6.5 };
+      const leads = [1.5, 4.5, -0.5];
+      const fake = async (positions: EnginePosition[]): Promise<Evaluation[]> =>
+        positions.map((position) => {
+          expect(position.komi).toBe(6.5);
+          return {
+            policy: new Float64Array(AREA + 1),
+            blackWinrate: 0.5,
+            blackLead: leads[position.moves.length]!,
+          };
+        });
+      const human = (await judgeMoves(fake, base, [0]))[0]!;
+      const response = (await judgeMoves(fake, afterCandidate(base, 0), [PASS]))[0]!;
+      expect(human).toMatchObject({ blackLeadBefore: 1.5, blackLeadAfter: 4.5 });
+      expect(response).toMatchObject({ blackLeadBefore: 4.5, blackLeadAfter: -0.5 });
+      expect(scoreChange(player, human)).toBe(player === 'B' ? 3 : -3);
+      expect(scoreChange(player, human, response)).toBe(player === 'B' ? -2 : 2);
+    },
+  );
+
+  it('compare la passe dans les cinq candidats et conserve les ex æquo', async () => {
+    const base: EnginePosition = { setupBlack: [], moves: [], next: 'B' };
+    const policy = new Float64Array(AREA + 1);
+    for (let point = 0; point < 6; point++) policy[point] = 0.1;
+    policy[AREA] = 0.4;
+    const batches: number[][] = [];
+    const evaluate = async (positions: EnginePosition[]): Promise<Evaluation[]> => {
+      batches.push(positions.flatMap((p) => p.moves.map((m) => m.point)));
+      return positions.map((p) => ({
+        policy,
+        blackWinrate: 0.5,
+        blackLead: p.moves.at(-1)?.point === PASS ? 2 : 0,
+      }));
+    };
+    const [stone, pass] = await judgeMoves(evaluate, base, [0, PASS]);
+    expect(batches[1]).toEqual([PASS, 0, 1, 2, 3]);
+    expect(stone).toMatchObject({ rank: 2, loss: 2, best: PASS });
+    expect(pass).toMatchObject({ rank: 1, loss: 0, best: PASS });
+    policy[AREA] = 0.1;
+    const [tiedPass] = await judgeMoves(evaluate, base, [PASS]);
+    expect(tiedPass?.rank).toBe(7);
+  });
 
   it('avec un évaluateur simulé : la perte est l’écart au meilleur candidat, du point de vue du joueur', async () => {
     // Blanc au trait. L'avance de Noir après chaque coup est donnée par cette table.
