@@ -376,9 +376,10 @@ test('évaluation des coups : le réseau se charge, juge le coup de la partie et
   expect(w.problems).toEqual([]);
 });
 
-test('étudier une capture sur mobile : filtrer, comparer et ouvrir une variante', async ({
+test('étudier la position du kifu, comparer les suites et retrouver une capture sur mobile', async ({
   page,
 }) => {
+  test.slow();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enter(page);
@@ -386,8 +387,14 @@ test('étudier une capture sur mobile : filtrer, comparer et ouvrir une variante
   const study = page.getByRole('region', { name: 'Étude du kifu' });
   await expect(study.getByRole('heading', { name: 'Étude du kifu' })).toBeFocused();
   await page.keyboard.press('Tab');
+  await expect(study.getByRole('button', { name: 'Comparer les suites' })).toBeFocused();
+  const slider = page.getByRole('slider', { name: 'Coup', exact: true });
+  await expect(slider).toHaveValue('0');
+  await expect(study.locator('.study__anchor')).toContainText('Position initiale');
+  const tactics = study.getByText('Repères tactiques du kifu', { exact: true });
+  await tactics.click();
+  await page.keyboard.press('Tab');
   await expect(study.getByLabel('Thème')).toBeFocused();
-  const slider = page.getByRole('slider', { name: 'Coup' });
   await study.getByLabel('Thème').selectOption('captures');
   await expect(study.getByRole('heading', { name: 'Coup 84' })).toBeVisible();
   await expect(slider).toHaveValue('83');
@@ -410,6 +417,68 @@ test('étudier une capture sur mobile : filtrer, comparer et ouvrir une variante
   await study.getByRole('button', { name: 'Essayer une variante' }).click();
   await expect(page.getByRole('heading', { name: 'Explorer une autre suite' })).toBeFocused();
   await expect(slider).toHaveValue('86');
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.getByRole('button', { name: 'Revenir à l’étude' }).click();
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Parties' })
+    .click();
+  await page.getByLabel('Importer un fichier SGF').setInputFiles({
+    name: 'quatre-coins.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from('(;FF[4]GM[1]SZ[19]PB[Prof]PW[Élève]KM[6.5];B[pd];W[dp];B[qp];W[dd])'),
+  });
+  await slider.fill('1');
+  await page.getByRole('button', { name: 'Étudier', exact: true }).click();
+  await expect(study.locator('.study__anchor')).toContainText('Blanc au trait · Après le coup 1');
+  await tactics.click();
+  await expect(study).toContainText('Aucune position pour ce thème');
+  await tactics.click();
+
+  await study.getByRole('button', { name: 'Comparer les suites' }).click();
+  const ranking = study.getByRole('table', { name: 'Premiers coups évalués' });
+  await expect(ranking.getByRole('columnheader', { name: 'Score pour Blanc' })).toBeVisible({
+    timeout: 60_000,
+  });
+  await expect(ranking.getByRole('columnheader', { name: 'Écart au kifu' })).toBeVisible();
+  await expect(study.locator('.study__benchmark')).toContainText('Blanc D4');
+  await expect(study.locator('.study__score-note')).toContainText('komi de 6,5 pt');
+  await expect(study.locator('.study__lines tbody tr')).toHaveCount(10, { timeout: 60_000 });
+  const baseline = study.locator('.study__lines tbody tr').filter({ hasText: 'Kifu' });
+  await expect(baseline.locator('td').last()).toHaveText('0 pt');
+  const alternatives = ranking
+    .getByRole('row')
+    .filter({ has: page.getByRole('button'), hasNotText: 'Kifu' });
+  await expect(alternatives.first().getByRole('cell').nth(1)).toHaveText(/[\d,]+ pt/, {
+    timeout: 60_000,
+  });
+  const choice = await alternatives.first().getByRole('button').getAttribute('aria-label');
+  if (!choice) throw new Error('Une variante doit nommer son premier coup');
+  const point = choice.replace('Lire la suite ', '');
+  // La ligne choisie garde son identité quand les résultats suivants changent le classement.
+  await study.getByRole('button', { name: choice, exact: true }).click();
+  const reader = study.getByRole('region', { name: 'Suite en ' + point });
+  const progress = reader.getByRole('slider', { name: 'Coup de la suite' });
+  const live = page.getByTestId('live');
+  await expect(progress).toHaveValue('1');
+  await expect(live).toContainText('coup 2 : Blanc ' + point);
+  await reader.getByRole('button', { name: 'Coup suivant de la suite' }).click({ timeout: 60_000 });
+  await expect(progress).toHaveValue('2');
+  await expect(live).toContainText('coup 3 : Noir ');
+  const reply = await live.innerText();
+  await expect(slider).toHaveValue('1');
+  await reader.getByRole('button', { name: 'Essayer cette suite' }).click();
+  const explorer = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await explorer.getByLabel('Adversaire').selectOption('free');
+  await explorer.getByRole('button', { name: 'Passer' }).click();
+  await expect(live).toContainText('coup 4 : Blanc');
+  await explorer.getByRole('button', { name: 'Revenir à l’étude' }).click();
+  await expect(progress).toHaveValue('2');
+  await expect(live).toHaveText(reply);
+  await progress.fill('0');
+  await expect(live).toContainText('Coup 1 sur 4 : Noir Q16');
+  await expect(slider).toHaveValue('1');
 });
 
 test('réflexion : interruption documentée, variante, puis retour au kifu', async ({ page }) => {

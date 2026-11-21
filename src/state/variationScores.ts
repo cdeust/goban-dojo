@@ -1,6 +1,6 @@
-import { opposite, pointToSgf, type Color } from '../domain/board.ts';
+import { opposite, PASS, pointToSgf, type Color } from '../domain/board.ts';
 import { decodeMoves, type Move } from '../domain/game.ts';
-import { candidatesOf } from '../engine/analysis.ts';
+import { rankedLegalPoints } from '../engine/decode.ts';
 import type { EnginePosition } from '../engine/features.ts';
 import { CANDIDATES, type Evaluator } from '../engine/judge.ts';
 
@@ -30,7 +30,10 @@ export class VariationScoreCache {
   private readonly position: EnginePosition;
   private readonly evaluate: Evaluator;
 
-  constructor(position: EnginePosition, evaluate: Evaluator) {
+  private readonly candidateLimit: number;
+
+  constructor(position: EnginePosition, evaluate: Evaluator, candidateLimit = CANDIDATES) {
+    this.candidateLimit = candidateLimit;
     this.position = position;
     this.evaluate = evaluate;
   }
@@ -103,9 +106,9 @@ export class VariationScoreCache {
         throw new Error('Avance estimée indisponible');
       this.candidates.set(
         path,
-        candidatesOf(position, result.policy)
-          .slice(0, CANDIDATES)
-          .map(({ point }) => point),
+        position.moves.at(-1)?.point === PASS && position.moves.at(-2)?.point === PASS
+          ? []
+          : rankedLegalPoints(result.policy).slice(0, this.candidateLimit),
       );
       // KataGo définit le lead comme la compensation en points qui équilibrerait la position.
       this.leads.set(path, {

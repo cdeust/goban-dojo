@@ -5,7 +5,7 @@ import { useEffect, useRef, type ComponentRef } from 'react';
 import * as THREE from 'three';
 import { prefersReducedMotion } from '../replay/motionPreference.ts';
 import { useStore, type ViewName } from '../state/store.ts';
-import { BOARD_TOP } from './dimensions.ts';
+import { BOARD_LENGTH, BOARD_TOP, BOARD_WIDTH, PITCH_X, PITCH_Z } from './dimensions.ts';
 
 const TARGET = new THREE.Vector3(0, BOARD_TOP - 1, 0);
 
@@ -25,6 +25,9 @@ export function CameraRig() {
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const view = useStore((s) => s.view);
   const entered = useStore((s) => s.entered);
+  const studying = useStore((s) => s.mode === 'etudier' || s.studyOrigin !== null);
+  const compactStudy =
+    studying && entered && view === 'dessus' && window.matchMedia('(width < 60rem)').matches;
   const first = useRef(true);
   // Écran étroit : on recule pour garder le goban entier dans le cadre.
   const narrow = Math.min(2.4, Math.max(1, 1.18 / aspect));
@@ -37,7 +40,14 @@ export function CameraRig() {
         ? (forced as [number, number, number])
         : VIEWS[entered ? view : 'ouverture'];
     const to = new THREE.Spherical().setFromVector3(new THREE.Vector3(...preset));
-    to.radius *= narrow;
+    if (compactStudy && !forced && camera instanceof THREE.PerspectiveCamera) {
+      // Garder une intersection de marge de chaque côté pour voir et jouer sur les bords.
+      const height = Math.max(BOARD_LENGTH + 2 * PITCH_Z, (BOARD_WIDTH + 2 * PITCH_X) / aspect);
+      const halfAngle = THREE.MathUtils.degToRad(camera.getEffectiveFOV()) / 2;
+      to.radius = height / (2 * Math.tan(halfAngle)) + BOARD_TOP - TARGET.y;
+    } else {
+      to.radius *= narrow;
+    }
     const from = new THREE.Spherical().setFromVector3(camera.position.clone().sub(TARGET));
     // Plus court chemin autour du goban.
     let dTheta = to.theta - from.theta;
@@ -67,7 +77,7 @@ export function CameraRig() {
       run.stop();
       c?.removeEventListener('start', cancel);
     };
-  }, [view, entered, narrow, camera, invalidate]);
+  }, [view, entered, narrow, aspect, compactStudy, camera, invalidate]);
 
   return (
     <OrbitControls

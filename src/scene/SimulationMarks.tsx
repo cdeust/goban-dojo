@@ -9,7 +9,7 @@ export function SimulationMarks() {
   const anchor = useStore((s) => s.move);
   const played = useStore((s) => s.variation.length);
   const stones = useStore((s) => {
-    if (!isEstimating(s)) return null;
+    if (!isEstimating(s) && s.mode !== 'etudier') return null;
     if (!s.variation.length) return null;
     return displayOf(s)?.timeline.stones ?? null;
   });

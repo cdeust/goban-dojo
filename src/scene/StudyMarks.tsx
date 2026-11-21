@@ -4,7 +4,7 @@ import { BOARD_TOP, STONE_DIAMETER_BLACK, STONE_THICKNESS, pointToWorld } from '
 
 export function StudyMarks() {
   const entry = useStore((s) => {
-    if (s.mode !== 'etudier' || s.studyMove !== s.move) return null;
+    if (s.mode !== 'etudier' || s.variation.length || s.studyMove !== s.move) return null;
     const game = s.dataset?.games[s.gameIndex];
     return game ? (studyOf(game).find((item) => item.number === s.move) ?? null) : null;
   });

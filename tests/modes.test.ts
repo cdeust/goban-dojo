@@ -323,3 +323,46 @@ describe('lecture après abandon', () => {
     expect(s()).toMatchObject({ mode: 'lecture', move: 63 });
   });
 });
+
+describe('essayer depuis une suite étudiée', () => {
+  const opening = [{ color: 'B' as const, point: P('dd') }];
+
+  beforeEach(() => s().setMode('etudier'));
+
+  it('affiche la suite sur le goban et revient au même pas après un essai', () => {
+    s().setMove(2);
+    s().showStudyLine(opening);
+    expect(displayOf(s())?.move).toBe(3);
+    expect(s().move).toBe(2);
+    s().setMode('explorer');
+    expect(s().variation).toEqual(opening);
+    s().undoVariation();
+    expect(s().variation).toEqual(opening);
+    s().clickPoint(P('pp'));
+    expect(s().variation).toHaveLength(2);
+    s().clearVariation();
+    expect(s().variation).toEqual(opening);
+    s().clickPoint(P('jj'));
+    s().setMode('etudier');
+    expect(s().move).toBe(2);
+    expect(s().variation).toEqual(opening);
+    expect(s().studyOrigin).toBeNull();
+  });
+
+  it('revient au préfixe étudié après une lecture longue et le quitte en changeant de position', () => {
+    s().showStudyLine(opening);
+    s().setMode('lire');
+    s().showReading([...opening, { color: 'W', point: P('pp') }], null, null);
+    s().setMode('etudier');
+    expect(s().variation).toEqual(opening);
+    s().setMode('explorer');
+    s().setMove(4);
+    s().setMode('etudier');
+    expect(s().variation).toEqual([]);
+    expect(s().move).toBe(4);
+    s().showStudyLine(opening);
+    s().setMode('explorer');
+    s().selectGame(0);
+    expect(s().studyOrigin).toBeNull();
+  });
+});

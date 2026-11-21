@@ -156,6 +156,8 @@ interface State {
   chapterIndex: number;
   mode: Mode;
   studyMove: number | null;
+  /** Préfixe étudié à restaurer après un essai ou une lecture longue. */
+  studyOrigin: ExploreMove[] | null;
   guess: GuessState;
   guessColor: Color;
   exploreOpponent: boolean;
@@ -191,6 +193,7 @@ interface State {
   setMode: (mode: Mode) => void;
   readResignation: () => void;
   compareResignation: (open: boolean) => void;
+  showStudyLine: (moves: Move[]) => void;
   showStudyMove: (number: number | null, after?: boolean) => void;
   showReflection: (after: number) => void;
   playReflection: (line: number, step: number) => void;
@@ -393,6 +396,7 @@ export const useStore = create<State>((set, get) => ({
   chapterIndex: 0,
   mode: 'lecture',
   studyMove: null,
+  studyOrigin: null,
   guess: emptyGuess(),
   guessColor: 'B',
   exploreOpponent: true,
@@ -467,6 +471,7 @@ export const useStore = create<State>((set, get) => ({
       // On ne lance pas la lecture automatique par-dessus un mode interactif.
       playing: mode === 'lecture' ? (opts?.play ?? false) : false,
       studyMove: null,
+      studyOrigin: null,
       variation: [],
       analysisMarks: [],
       guess: emptyGuess(),
@@ -484,6 +489,7 @@ export const useStore = create<State>((set, get) => ({
       move: next,
       reflectionReplay: replay ?? null,
       ...(pause || replay ? { playing: false, impact: null } : {}),
+      studyOrigin: null,
       studyMove: target !== null && (next === target || next === target - 1) ? target : null,
       // Changer de position abandonne l'exploration et l'essai en cours, pas le bilan.
       variation: [],
@@ -531,6 +537,7 @@ export const useStore = create<State>((set, get) => ({
             mode: 'lecture',
             reflectionReplay: null,
             studyMove: null,
+            studyOrigin: null,
             variation: [],
             notice: null,
           }
@@ -598,26 +605,32 @@ export const useStore = create<State>((set, get) => ({
   },
 
   setMode: (mode) =>
-    set((s) => ({
-      mode,
-      readingFromKifu: mode === 'lire' && s.mode === 'lecture',
-      reflectionReplay: null,
-      ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
-        ? { panel: null, view: 'dessus' }
-        : {}),
-      studyMove: null,
-      playing: false,
-      variation: mode === 'lire' && s.mode === 'analyser' ? s.variation : [],
-      analysisMarks: [],
-      readingPace: null,
-      readingOwnership: null,
-      impact: null,
-      notice: null,
-      guess:
-        mode === 'deviner'
-          ? emptyGuess()
-          : { ...s.guess, tries: 0, wrong: [], zone: null, last: null },
-    })),
+    set((s) => {
+      const leavingStudy = s.mode === 'etudier' && (mode === 'explorer' || mode === 'lire');
+      const returningToStudy = mode === 'etudier' && s.studyOrigin !== null;
+      const keepLine = leavingStudy || (mode === 'lire' && s.mode === 'analyser');
+      return {
+        mode,
+        readingFromKifu: mode === 'lire' && s.mode === 'lecture',
+        reflectionReplay: null,
+        ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
+          ? { panel: null, view: 'dessus' }
+          : {}),
+        studyMove: leavingStudy || returningToStudy ? s.studyMove : null,
+        studyOrigin: leavingStudy ? s.variation : null,
+        playing: false,
+        variation: returningToStudy ? s.studyOrigin! : keepLine ? s.variation : [],
+        analysisMarks: [],
+        readingPace: null,
+        readingOwnership: null,
+        impact: null,
+        notice: null,
+        guess:
+          mode === 'deviner'
+            ? emptyGuess()
+            : { ...s.guess, tries: 0, wrong: [], zone: null, last: null },
+      };
+    }),
 
   showReflection: (after) => {
     const s = get();
@@ -627,6 +640,7 @@ export const useStore = create<State>((set, get) => ({
       mode: 'reflechir',
       reflectionReplay: null,
       move: after,
+      studyOrigin: null,
       playing: false,
       view: 'dessus',
       panel: null,
@@ -673,6 +687,19 @@ export const useStore = create<State>((set, get) => ({
     }
   },
 
+  showStudyLine: (moves) => {
+    const s = get();
+    if (
+      s.mode !== 'etudier' ||
+      (moves.length === s.variation.length &&
+        moves.every(
+          (m, i) => m.point === s.variation[i]?.point && m.color === s.variation[i]?.color,
+        ))
+    )
+      return;
+    set({ variation: moves, impact: null });
+  },
+
   showStudyMove: (number, after = false) => {
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
@@ -682,7 +709,13 @@ export const useStore = create<State>((set, get) => ({
       return;
     }
     if (!Number.isInteger(number) || number < 1 || number > moveCount(game)) return;
-    set({ studyMove: number, move: after ? number : number - 1, playing: false });
+    set({
+      studyMove: number,
+      move: after ? number : number - 1,
+      variation: [],
+      impact: null,
+      playing: false,
+    });
   },
 
   clickPoint: (point) => {
@@ -808,9 +841,10 @@ export const useStore = create<State>((set, get) => ({
         s.exploreOpponent &&
         s.variation.at(-1)?.playedBy === 'leela' &&
         s.variation.at(-2)?.playedBy === 'human';
-      return { variation: s.variation.slice(0, pair ? -2 : -1), notice: null };
+      const length = Math.max(s.studyOrigin?.length ?? 0, s.variation.length - (pair ? 2 : 1));
+      return { variation: s.variation.slice(0, length), notice: null };
     }),
-  clearVariation: () => set({ variation: [], notice: null }),
+  clearVariation: () => set((s) => ({ variation: s.studyOrigin ?? [], notice: null })),
 }));
 
 // Accès de mise au point (scripts/dev) ; absent de la version construite.

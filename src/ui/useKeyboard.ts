@@ -23,7 +23,12 @@ export function useKeyboard(): void {
       if (s.mode === 'reflechir' || s.mode === 'analyser' || s.mode === 'lire') return;
       const t = e.target;
       if (t instanceof HTMLElement) {
-        if (t.closest('input, select, textarea, dialog, .simulation, [contenteditable]')) return;
+        if (
+          t.closest(
+            'input, select, textarea, dialog, .simulation, .study__comparison, [contenteditable]',
+          )
+        )
+          return;
         // Espace et Entrée gardent leur rôle sur un bouton qui a le focus.
         if ((e.key === ' ' || e.key === 'Enter') && t.closest('button, a, summary')) return;
       }

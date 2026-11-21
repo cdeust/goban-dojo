@@ -104,7 +104,7 @@ const VIEW_LABELS: [ViewName, string][] = [
 
 const MODE_LABELS: [Mode, string, string][] = [
   ['lecture', 'Regarder', 'Regarder la partie se dérouler'],
-  ['etudier', 'Étudier', 'Comparer les positions avant et après les coups tactiques'],
+  ['etudier', 'Étudier', 'Comparer des suites en points ou essayer son coup depuis cette position'],
   [
     'analyser',
     'Analyser',
