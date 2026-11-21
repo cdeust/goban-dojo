@@ -112,11 +112,13 @@ export function ReflectionPanel() {
       </label>
       <div className="reflection__context">
         <p className="study__index">
-          {scene.tactical
-            ? 'Coup tactique'
-            : scene.sessionBreak
-              ? 'Interruption documentée'
-              : 'Position commentée'}
+          {scene.tesuji
+            ? 'Coup fort annoté dans le SGF'
+            : scene.tactical
+              ? 'Coup tactique'
+              : scene.sessionBreak
+                ? 'Interruption documentée'
+                : 'Position commentée'}
         </p>
         <p>{scene.context}</p>
         <p className="reflection__question">{scene.question}</p>
@@ -140,7 +142,7 @@ export function ReflectionPanel() {
       <ReflectionLine key={scene.after} game={game} scene={scene} />
       <p className="reflection__source">
         Les variantes illustrent des options légales. Les pensées des joueurs ne sont pas connues.{' '}
-        {!scene.tactical && (
+        {!game.imported && !scene.tactical && (
           <a href={REFLECTION_SOURCE} target="_blank" rel="noopener noreferrer">
             Commentaire de Miyamoto Naoki
           </a>

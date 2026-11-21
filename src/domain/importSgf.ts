@@ -24,6 +24,7 @@ export function importSgf(text: string, id: string, name: string): ImportedGameR
 
   const setup = new Set<number>();
   const moves = [];
+  const tesujis: NonNullable<ImportedGameRecord['tesujis']> = [];
   for (const node of mainLine(root)) {
     if (node.props.has('AW') || node.props.has('AE') || (moves.length && node.props.has('AB')))
       throw new Error('Ce kifu contient une position composée ou modifiée en cours de partie.');
@@ -47,11 +48,19 @@ export function importSgf(text: string, id: string, name: string): ImportedGameR
     const white = node.props.get('W');
     if ((black && white) || ((black ?? white)?.length !== 1 && (black || white)))
       throw new Error('Un nœud SGF doit contenir un seul coup.');
-    if (black || white)
+    if (black || white) {
       moves.push({
         color: black ? ('B' as const) : ('W' as const),
         point: pointFromSgf((black ?? white)![0]!),
       });
+      // FF[4] : TE est une valeur Double, exclusive avec les autres jugements sur le coup.
+      const values = node.props.get('TE');
+      if (values?.length === 1 && !['BM', 'DO', 'IT'].some((key) => node.props.has(key))) {
+        const value = values[0];
+        if (value === '1' || value === '2')
+          tesujis.push({ number: moves.length, emphasis: value === '1' ? 1 : 2 });
+      }
+    }
   }
   if (!moves.length) throw new Error('Ce kifu ne contient aucun coup.');
   const timeline = buildTimeline([...setup], moves);
@@ -74,6 +83,7 @@ export function importSgf(text: string, id: string, name: string): ImportedGameR
   return {
     id,
     imported: true,
+    ...(tesujis.length && { tesujis }),
     date: safeDate,
     black: prop(root, 'PB')?.trim() || 'Noir',
     white: prop(root, 'PW')?.trim() || 'Blanc',
