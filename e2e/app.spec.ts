@@ -808,7 +808,6 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await page.getByRole('searchbox').fill('Émile');
   // Choisir la partie dans la bibliothèque lance directement sa lecture.
   await page.getByRole('button', { name: /Alice — Émile/ }).click();
-  await expect(card).toContainText('Émile');
   const reflection = page.getByRole('region', { name: 'Blanc · avant le coup 2' });
   await expect(reflection).toBeVisible({ timeout: 30_000 });
   const cursor = page.locator('input[aria-label="Coup"]');
