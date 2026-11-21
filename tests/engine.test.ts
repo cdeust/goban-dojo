@@ -77,6 +77,42 @@ beforeAll(async () => {
 }, 60_000);
 
 describe('portage de l’encodeur KataGo', () => {
+  it('refuse les intersections invalides avant de les employer dans les plans ou le shicho', () => {
+    // Le worker reçoit des données JavaScript, même si le protocole TypeScript déclare un nombre.
+    const textPoint = '0' as unknown as number;
+    for (const point of [PASS, AREA, 0.5, NaN, textPoint]) {
+      const position: EnginePosition = { setupBlack: [point], moves: [], next: 'B' };
+      expect(() => encodePosition(position)).toThrow(RangeError);
+      expect(() => trappedStones(position)).toThrow(RangeError);
+    }
+    for (const point of [PASS - 1, AREA, 0.5, NaN, textPoint]) {
+      const position: EnginePosition = {
+        setupBlack: [],
+        moves: [{ color: 'B', point }],
+        next: 'W',
+      };
+      expect(() => encodePosition(position)).toThrow(RangeError);
+      expect(() => trappedStones(position)).toThrow(RangeError);
+    }
+  });
+
+  it('accepte les deux intersections extrêmes et distingue la passe du handicap', () => {
+    const position: EnginePosition = {
+      setupBlack: [AREA - 1],
+      moves: [
+        { color: 'W', point: 0 },
+        { color: 'B', point: PASS },
+      ],
+      next: 'W',
+    };
+    const { spatial, global, legal } = encodePosition(position);
+    expect(spatial[AREA]).toBe(1); // Blanc au premier point
+    expect(spatial[2 * AREA + AREA - 1]).toBe(1); // Noir au dernier point
+    expect(global[0]).toBe(1); // dernier coup passé
+    expect(legal[AREA]).toBe(1);
+    expect(trappedStones(position)).toEqual([]);
+  });
+
   it('redonne les sorties du moteur natif sur 53 positions du corpus', async () => {
     expect(reference.positions).toHaveLength(53);
     let worstPolicy = 0;
