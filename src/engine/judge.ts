@@ -9,8 +9,7 @@
  * le réseau b10c128. D'où des catégories larges plutôt qu'un chiffre au demi-point.
  */
 import { opposite, type Color } from '../domain/board.ts';
-import { rankedLegalPoints } from './analysis.ts';
-import type { Evaluation } from './decode.ts';
+import { rankedLegalPoints, type Evaluation } from './decode.ts';
 import type { EnginePosition } from './features.ts';
 
 /** Nombre de coups préférés du réseau auxquels on compare le coup joué. */

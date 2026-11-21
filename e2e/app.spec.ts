@@ -323,7 +323,7 @@ test('exercice : Leela répond au coup humain sur le goban et le bilan mesure ce
   await expect(sequence.nth(1)).toContainText('Leela Zero');
   const balance = panel.locator('.exercise-score');
   await expect(balance.getByRole('heading')).toHaveText('Bilan en points pour Noir');
-  await expect(balance.locator('dd').nth(1)).toHaveText(/[+−-]?\d+(?:,\d+)? pt/, {
+  await expect(balance.locator('dd').nth(1)).toHaveText(/^[+−-]?\d+(?:,\d)? pt$/, {
     timeout: 90_000,
   });
   await expect(panel).toContainText('À vous de jouer avec Noir.');

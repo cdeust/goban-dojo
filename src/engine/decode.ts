@@ -3,7 +3,7 @@
  * Portage du post-traitement de `NNEvaluator` (KataGo v1.18.2, cpp/neuralnet/nneval.cpp,
  * l. 1195-1450).
  */
-import type { Color } from '../domain/board.ts';
+import { PASS, type Color } from '../domain/board.ts';
 import { AREA, PASS_INDEX } from './features.ts';
 
 export interface RawOutputs {
@@ -75,4 +75,15 @@ export function topMoves(policy: Float64Array, count: number): number[] {
     .filter((i) => (policy[i] as number) > 0)
     .sort((a, b) => (policy[b] as number) - (policy[a] as number))
     .slice(0, count);
+}
+
+/** Classe les coups légaux par probabilité. Une passe ex æquo suit les intersections concernées. */
+export function rankedLegalPoints(policy: Evaluation['policy']): number[] {
+  const ranked = topMoves(policy, policy.length - 1);
+  const passPrior = policy.at(-1) ?? 0;
+  if (passPrior > 0) {
+    const before = ranked.findIndex((point) => (policy[point] ?? 0) < passPrior);
+    ranked.splice(before < 0 ? ranked.length : before, 0, PASS);
+  }
+  return ranked;
 }

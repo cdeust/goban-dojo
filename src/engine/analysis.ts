@@ -1,5 +1,5 @@
 import { PASS, opposite } from '../domain/board.ts';
-import { topMoves, type Evaluation } from './decode.ts';
+import { rankedLegalPoints, type Evaluation } from './decode.ts';
 import type { EnginePosition } from './features.ts';
 
 /** Deux niveaux de douze options donnent jusqu’à 144 suites à comparer. */
@@ -10,17 +10,6 @@ export interface Candidate {
   rank: number;
   prior: number;
   recorded: boolean;
-}
-
-/** Classe les coups légaux par probabilité. Une passe ex æquo suit les intersections concernées. */
-export function rankedLegalPoints(policy: Evaluation['policy']): number[] {
-  const ranked = topMoves(policy, policy.length - 1);
-  const passPrior = policy.at(-1) ?? 0;
-  if (passPrior > 0) {
-    const before = ranked.findIndex((point) => (policy[point] ?? 0) < passPrior);
-    ranked.splice(before < 0 ? ranked.length : before, 0, PASS);
-  }
-  return ranked;
 }
 
 export function candidatesOf(
