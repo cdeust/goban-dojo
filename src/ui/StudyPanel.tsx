@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { pointToHuman } from '../domain/board.ts';
+import type { GameRecord } from '../domain/game.ts';
+import { StudyLines } from './StudyLines.tsx';
 import { momentFor } from '../story/chapters.ts';
 import { colorName } from '../story/format.ts';
 import { useCurrentGame, useStore } from '../state/store.ts';
@@ -23,18 +25,10 @@ const QUESTIONS: Record<Theme, string> = {
 
 const coordinates = (points: number[]) => points.map(pointToHuman).join(', ');
 
-export function StudyPanel() {
-  const game = useCurrentGame();
-  const move = useStore((s) => s.move);
+function Tactics({ game, move }: { game: GameRecord; move: number }) {
   const target = useStore((s) => s.studyMove);
   const show = useStore((s) => s.showStudyMove);
   const [theme, setTheme] = useState<Theme>('all');
-  const title = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    title.current?.focus({ preventScroll: true });
-  }, []);
-  if (!game) return null;
-
   const all = studyOf(game);
   const matching = theme === 'all' ? all : all.filter((item) => item[theme].length > 0);
   const selected = matching.findIndex((item) => item.number === target);
@@ -46,14 +40,8 @@ export function StudyPanel() {
   const moment = after ? momentFor(game, move) : null;
 
   return (
-    <section className="study" aria-labelledby="study-title">
-      <header>
-        <h2 id="study-title" ref={title} tabIndex={-1}>
-          Étude du kifu
-        </h2>
-        <p>Repérez une idée tactique, puis rejouez le coup de la partie.</p>
-      </header>
-
+    <details className="study__tactics">
+      <summary>Repères tactiques du kifu</summary>
       <label className="study__filter">
         Thème
         <select
@@ -190,6 +178,27 @@ export function StudyPanel() {
           Aucune position pour ce thème dans cette partie.
         </p>
       )}
+    </details>
+  );
+}
+
+export function StudyPanel() {
+  const game = useCurrentGame();
+  const move = useStore((s) => s.move);
+  const title = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    title.current?.focus({ preventScroll: true });
+  }, []);
+  if (!game) return null;
+  return (
+    <section className="study study--workbench" aria-labelledby="study-title">
+      <header>
+        <h2 id="study-title" ref={title} tabIndex={-1}>
+          Étude du kifu
+        </h2>
+      </header>
+      <StudyLines key={game.id + ':' + move} game={game} base={move} />
+      <Tactics key={game.id} game={game} move={move} />
     </section>
   );
 }

@@ -68,6 +68,7 @@ export function ReadingPanel() {
 function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
   const showMoves = useStore((s) => s.showReading);
   const readingFromKifu = useStore((s) => s.readingFromKifu);
+  const readingFromStudy = useStore((s) => s.studyOrigin !== null);
   const [source, setSource] = useState<Source>('zero');
   const [visits, setVisits] = useState(32);
   const zero = useZeroEngine();
@@ -620,16 +621,19 @@ function ReadingPosition({ game, base }: { game: GameRecord; base: number }) {
         className="chip"
         onClick={() => {
           const s = useStore.getState();
-          if (readingFromKifu) s.setMode('lecture');
+          if (readingFromStudy) s.setMode('etudier');
+          else if (readingFromKifu) s.setMode('lecture');
           else if (scene) s.showReflection(scene.after);
           else s.setMode('analyser');
         }}
       >
-        {readingFromKifu
-          ? 'Revenir au kifu'
-          : scene
-            ? 'Revenir à la réflexion'
-            : 'Revenir à l’analyse'}
+        {readingFromStudy
+          ? 'Revenir à l’étude'
+          : readingFromKifu
+            ? 'Revenir au kifu'
+            : scene
+              ? 'Revenir à la réflexion'
+              : 'Revenir à l’analyse'}
       </button>
     </section>
   );

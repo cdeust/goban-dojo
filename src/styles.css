@@ -2334,3 +2334,99 @@ progress {
   flex-shrink: 0;
   color: var(--kaya);
 }
+
+.study--workbench .study__workspace,
+.study__comparison,
+.study__line-reader {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.study--workbench .study__anchor {
+  color: var(--paper);
+}
+.study__lines {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.study__lines th,
+.study__lines td {
+  padding: 0.35rem 0.25rem;
+  border-block-end: 1px solid var(--hairline);
+  text-align: end;
+}
+.study__lines th {
+  color: var(--paper-dim);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.study__lines :is(th, td):first-child {
+  text-align: start;
+}
+.study__line-choice {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  color: #b9e4ff;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.study__line-choice[aria-pressed='true'] {
+  border-color: #82bce0;
+  background: #203442;
+}
+.study__kifu {
+  color: var(--kaya);
+  font-size: 0.75rem;
+}
+.study__line-reader {
+  padding: 0.8rem;
+  border-inline-start: 2px solid #82bce0;
+  background: #19252b;
+}
+.study__line-reader input[type='range'] {
+  width: 100%;
+  accent-color: #a4d5f3;
+}
+.study__more > summary,
+.study__tactics > summary {
+  cursor: pointer;
+  padding-block: 0.65rem;
+  color: var(--paper);
+}
+.study__tactics {
+  border-block-start: 1px solid var(--hairline);
+}
+.study__tactics[open] > :not(summary) {
+  margin-block-start: 0.65rem;
+}
+@media (width < 60rem) {
+  [data-study='true'] .stage:has(.study--workbench) .card {
+    grid-row: 4;
+  }
+  .study--workbench {
+    grid-row: 3;
+  }
+}
+
+/* Pendant la comparaison, la liste et son lecteur défilent sous le goban. */
+@media (width < 60rem) {
+  .app:has(.study__comparison) {
+    scroll-padding-block-start: min(46dvh, 26rem);
+  }
+  .stage:has(.study__comparison) {
+    overflow: clip;
+  }
+  .stage:has(.study__comparison) .stage__canvas {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 4;
+    background: var(--ink);
+  }
+}

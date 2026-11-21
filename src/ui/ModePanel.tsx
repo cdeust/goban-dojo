@@ -185,6 +185,8 @@ function Explore() {
   const move = useStore((s) => s.move);
   const variation = useStore((s) => s.variation);
   const notice = useStore((s) => s.notice);
+  const studyOrigin = useStore((s) => s.studyOrigin);
+  const canUndo = variation.length > (studyOrigin?.length ?? 0);
   const undo = useStore((s) => s.undoVariation);
   const clear = useStore((s) => s.clearVariation);
   const color = useStore((s) => nextColor(s));
@@ -215,6 +217,15 @@ function Explore() {
       <h2 className="mode__title" ref={title} tabIndex={-1}>
         Explorer une autre suite
       </h2>
+      {studyOrigin && (
+        <button
+          type="button"
+          className="chip"
+          onClick={() => useStore.getState().setMode('etudier')}
+        >
+          Revenir à l’étude
+        </button>
+      )}
       <label className="study__filter">
         Adversaire
         <select
@@ -250,11 +261,11 @@ function Explore() {
         >
           Passer
         </button>
-        <button className="chip" type="button" disabled={!variation.length} onClick={undo}>
+        <button className="chip" type="button" disabled={!canUndo} onClick={undo}>
           {assisted ? 'Annuler le tour' : 'Reprendre un coup'}
         </button>
-        <button className="chip" type="button" disabled={!variation.length} onClick={clear}>
-          Revenir à la partie
+        <button className="chip" type="button" disabled={!canUndo} onClick={clear}>
+          {studyOrigin ? 'Recommencer mon essai' : 'Revenir à la partie'}
         </button>
       </div>
       {notice && (

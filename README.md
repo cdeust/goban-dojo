@@ -24,9 +24,7 @@ Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **4
   pierres simulées de la même façon (moteur physique [Rapier](https://rapier.rs), obstacles tirés
   des maillages des bols et couvercles). Sauter à n’importe quel coup montre le même couvercle
   qu’y arriver coup par coup.
-- **Étudier le kifu** (mode « Étudier ») : filtrez les captures, les ataris et les connexions de
-  la partie. Comparez la position avant et après le coup, repérez les pierres sur le goban et
-  essayez une variante depuis la position de départ.
+- **Étudier une position.** Au coup affiché, choisissez « Comparer les suites » pour voir jusqu’à dix premiers coups, dont celui du kifu quand il est disponible. Le classement compare le score estimé pour le joueur au trait après une réponse adverse, avec le komi du kifu. Ouvrez une suite pour la parcourir sur le goban ou y jouer votre propre coup. Les captures, ataris et connexions de la partie figurent sous « Repères tactiques du kifu ».
 - **Temps de réflexion** : dans la partie de l’oreille rouge, revenez aux interruptions après
   les coups 89 et 141 ou à la position avant Noir 127. Comparez les coups du kifu avec des
   variantes pédagogiques, à votre rythme. Les temps de réflexion individuels sont inconnus.
