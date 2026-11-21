@@ -52,8 +52,12 @@ export interface HistoricalGameRecord extends CommonGameRecord {
   rengo?: boolean;
 }
 
+export type TesujiEmphasis = 1 | 2;
+
 export interface ImportedGameRecord extends CommonGameRecord {
   imported: true;
+  /** Coups de la ligne principale annotés TE, numérotés à partir de 1. */
+  tesujis?: { number: number; emphasis: TesujiEmphasis }[];
   shusaku?: never;
   shusakuName?: never;
   opponent?: never;

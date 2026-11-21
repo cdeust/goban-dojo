@@ -49,6 +49,27 @@ export function reflectionsOf(game: GameRecord): readonly Reflection[] {
       lines: [{ title: 'Suite du kifu', notes: [`${colorName(move.color)} ${impact}.`] }],
     });
   }
+  if (game.imported && game.tesujis?.length) {
+    const moves = decodeMoves(game.moves);
+    for (const { number, emphasis } of game.tesujis) {
+      const after = number - 1;
+      const existing = scenes.get(after);
+      if (existing) {
+        scenes.set(after, { ...existing, tesuji: emphasis });
+        continue;
+      }
+      const player = colorName(moves[after]!.color);
+      const quality = emphasis === 2 ? 'Très bon coup' : 'Bon coup';
+      scenes.set(after, {
+        after,
+        tesuji: emphasis,
+        title: `${number} · ${player} · ${quality}`,
+        context: `Le kifu signale un ${quality.toLowerCase()} pour ${player} dans cette position.`,
+        question: 'Quel coup choisiriez-vous et quelle réponse attendez-vous ?',
+        lines: [{ title: 'Suite du kifu', notes: ['Le kifu marque ce coup comme un tesuji.'] }],
+      });
+    }
+  }
   const result = [...scenes.values()].sort((a, b) => a.after - b.after);
   index.set(game, result);
   return result;

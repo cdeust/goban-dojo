@@ -4,7 +4,7 @@ import type { EnginePosition } from './features.ts';
 
 /** Messages échangés entre la page et le fil d'exécution du moteur. */
 export type EngineRequest =
-  { type: 'load' } | { type: 'evaluate'; id: number; positions: EnginePosition[] };
+  { type: 'load'; reload: boolean } | { type: 'evaluate'; id: number; positions: EnginePosition[] };
 
 export type EngineResponse =
   | { type: 'progress'; loaded: number; total: number }

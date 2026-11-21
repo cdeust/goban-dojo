@@ -23,7 +23,12 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
   const request = event.data;
   if (!request || typeof request !== 'object') return;
   if (request.type === 'load') {
-    openModel(modelUrl, MODEL, (loaded, total) => post({ type: 'progress', loaded, total })).then(
+    openModel(
+      modelUrl,
+      MODEL,
+      (loaded, total) => post({ type: 'progress', loaded, total }),
+      request.reload === true,
+    ).then(
       (s) => {
         session = s;
         post({ type: 'ready' });
@@ -38,13 +43,18 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
     post({ type: 'error', id, message: 'Position de go invalide' });
     return;
   }
+  const active = session;
+  if (!active) {
+    post({ type: 'error', id, message: 'moteur non chargé' });
+    return;
+  }
   evaluationQueue = evaluationQueue.then(async () => {
+    if (session !== active) return; // Une évaluation précédente a invalidé la session.
     try {
-      if (!session) throw new Error('moteur non chargé');
       const evaluations = [];
       for (const position of positions) {
         const enc = encodePosition(position);
-        const out = await session.run({
+        const out = await active.run({
           InputSpatial: new ort.Tensor('float32', enc.spatial, [1, SPATIAL_PLANES, 19, 19]),
           InputGlobal: new ort.Tensor('float32', enc.global, [1, GLOBAL_FEATURES, 1, 1]),
           InputMask: new ort.Tensor('float32', enc.spatial.slice(0, AREA), [1, 1, 19, 19]),
@@ -71,7 +81,8 @@ scope.onmessage = (event: MessageEvent<EngineRequest>): void => {
       }
       post({ type: 'evaluated', id, evaluations });
     } catch (e) {
-      post({ type: 'error', id, message: e instanceof Error ? e.message : String(e) });
+      session = null;
+      post({ type: 'failed', message: e instanceof Error ? e.message : String(e) });
     }
   });
 };

@@ -784,7 +784,7 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
     name: 'finale.sgf',
     mimeType: 'application/x-go-sgf',
     buffer: Buffer.from(
-      '(;FF[4]GM[1]CA[UTF-8]SZ[19]PB[Alice]PW[Émile]KM[6.5];B[pd];W[dd];B[ab];W[bb];B[ba];W[dp];B[cb];W[pp];B[bc])',
+      '(;FF[4]GM[1]CA[UTF-8]SZ[19]PB[Alice]PW[Émile]KM[6.5];B[pd];W[dd]TE[2];B[ab];W[bb];B[ba];W[dp];B[cb];W[pp];B[bc])',
     ),
   });
 
@@ -806,8 +806,14 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Mes parties' })).toBeVisible();
   await page.getByRole('searchbox').fill('Émile');
+  // Choisir la partie dans la bibliothèque lance directement sa lecture.
   await page.getByRole('button', { name: /Alice — Émile/ }).click();
-  await expect(card).toContainText('Émile');
+  const reflection = page.getByRole('region', { name: 'Blanc · avant le coup 2' });
+  await expect(reflection).toBeVisible({ timeout: 30_000 });
+  const cursor = page.locator('input[aria-label="Coup"]');
+  await expect(cursor).toHaveValue('1');
+  await reflection.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
+  await expect(cursor).toHaveValue('2');
 });
 
 test('Leela Zero lit une partie importée, projette ses coups et rend la main au kifu', async ({

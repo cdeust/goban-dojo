@@ -23,41 +23,55 @@ const pending = new Map<
   { resolve: (e: Evaluation[]) => void; reject: (e: Error) => void }
 >();
 
-const send = (message: EngineRequest): void => worker?.postMessage(message);
+function failed(message: string): void {
+  worker?.terminate();
+  worker = null;
+  for (const request of pending.values()) request.reject(new Error(message));
+  pending.clear();
+  useEngine.setState({ status: 'failed', error: message, progress: 0 });
+}
 
 /** Démarre le chargement du moteur (sans effet s'il est déjà chargé ou en cours). */
 export function loadEngine(): void {
-  if (useEngine.getState().status !== 'idle' && useEngine.getState().status !== 'failed') return;
-  useEngine.setState({ status: 'loading', progress: 0 });
-  worker?.terminate();
-  worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
-  worker.onmessage = (event: MessageEvent<EngineResponse>) => {
-    const m = event.data;
-    if (m.type === 'progress') useEngine.setState({ progress: m.loaded / m.total });
-    else if (m.type === 'ready') useEngine.setState({ status: 'ready', progress: 1 });
-    else if (m.type === 'failed') useEngine.setState({ status: 'failed', error: m.message });
-    else if (m.type === 'evaluated') {
-      pending.get(m.id)?.resolve(m.evaluations);
-      pending.delete(m.id);
-    } else {
-      pending.get(m.id)?.reject(new Error(m.message));
-      pending.delete(m.id);
-    }
-  };
-  worker.onerror = (e) => {
-    useEngine.setState({ status: 'failed', error: e.message || 'le moteur s’est arrêté' });
-    for (const p of pending.values()) p.reject(new Error('le moteur s’est arrêté'));
-    pending.clear();
-  };
-  send({ type: 'load' });
+  const { status } = useEngine.getState();
+  if (status !== 'idle' && status !== 'failed') return;
+  useEngine.setState({ status: 'loading', progress: 0, error: undefined });
+  try {
+    const current = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
+    worker = current;
+    current.onmessage = (event: MessageEvent<EngineResponse>) => {
+      if (worker !== current) return;
+      const m = event.data;
+      if (m.type === 'progress') useEngine.setState({ progress: m.loaded / m.total });
+      else if (m.type === 'ready') useEngine.setState({ status: 'ready', progress: 1 });
+      else if (m.type === 'failed') failed(m.message);
+      else {
+        const request = pending.get(m.id);
+        if (!request) return;
+        pending.delete(m.id);
+        if (m.type === 'evaluated') request.resolve(m.evaluations);
+        else request.reject(new Error(m.message));
+      }
+    };
+    current.onerror = (event) => {
+      if (worker === current) failed(event.message || 'Le moteur de score s’est arrêté');
+    };
+    current.onmessageerror = () => {
+      if (worker === current) failed('Réponse du moteur de score illisible');
+    };
+    current.postMessage({ type: 'load', reload: status === 'failed' } satisfies EngineRequest);
+  } catch (error) {
+    failed(error instanceof Error ? error.message : String(error));
+  }
 }
 
 export function evaluate(positions: EnginePosition[]): Promise<Evaluation[]> {
-  if (useEngine.getState().status !== 'ready')
+  const current = worker;
+  if (!current || useEngine.getState().status !== 'ready')
     return Promise.reject(new Error('moteur non chargé'));
   const id = nextId++;
   return new Promise((resolve, reject) => {
+    current.postMessage({ type: 'evaluate', id, positions } satisfies EngineRequest);
     pending.set(id, { resolve, reject });
-    send({ type: 'evaluate', id, positions });
   });
 }
