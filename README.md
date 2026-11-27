@@ -43,6 +43,10 @@ Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **4
 - **Jouer comme Shūsaku** (mode « Deviner ») : la partie s’arrête à chacun de ses coups et vous
   demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
   premier coup, 2 après un indice, 1 après deux, puis le coup est montré.
+- **Première leçon guidée, « La dernière liberté »** : au coup 84 d’un kifu de 1839, repérez
+  la dernière liberté d’une pierre, jouez vous-même et voyez la capture. Comparez ensuite les
+  suites avec KataGo ou explorez avec Leela Zero. La règle de capture est certaine ; les
+  évaluations de la partie entière sont des estimations, pas des solutions imposées.
 - **Carnet du dojo** : les positions rencontrées dans « Deviner » reviennent à intervalles
   espacés. Un rappel exact allonge l’intervalle (1, 3, 7, 14 puis 30 jours), un indice ou une
   réponse révélée le ramène à un jour. Proposez un coup sur le goban ou au clavier (coordonnée

@@ -7,6 +7,7 @@ import {
   practiceDay,
   recentDays,
 } from '../domain/practice.ts';
+import { FIRST_LESSON } from '../story/lessons.ts';
 import { prettyName } from '../story/format.ts';
 import { timelineOf, useStore } from '../state/store.ts';
 
@@ -18,6 +19,7 @@ export function PracticePanel() {
   const dataset = useStore((s) => s.dataset);
   const index = useStore((s) => s.gameIndex);
   const move = useStore((s) => s.move);
+  const startLesson = useStore((s) => s.startLesson);
   const start = useStore((s) => s.startPractice);
   const [today, setToday] = useState(() => practiceDay());
 
@@ -56,6 +58,15 @@ export function PracticePanel() {
       <p className="practice__lead">
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
+
+      <section className="practice__card">
+        <p className="chapter__index">Leçon guidée · Libertés et capture</p>
+        <h3>{FIRST_LESSON.title}</h3>
+        <p>Un kifu de 1839, un coup à jouer. La règle d’abord, les suites du moteur ensuite.</p>
+        <button type="button" className="chip chip--accent" onClick={startLesson}>
+          Commencer la leçon
+        </button>
+      </section>
 
       <section className="practice__card">
         <p className="chapter__index">
