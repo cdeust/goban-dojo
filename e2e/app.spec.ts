@@ -728,7 +728,7 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(slider).toHaveValue('86');
   await compare.click();
   await expect(variant).toHaveAttribute('data-step', pausedStep!);
-  await expect(variant).toContainText('Coup simulé ·');
+  await expect(variant).toContainText(`Coup simulé ${86 + Number(pausedStep)} ·`);
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
   for (let i = 2; i <= 10; i++) {
@@ -986,7 +986,7 @@ test('après un abandon, calculer une suite et retrouver le dernier coup du SGF'
   await expect(branches.locator('option').nth(2)).toHaveText(/3 · E12 · [−-]10,6 pt/);
   await comparison.getByRole('button', { name: 'Voir la variante en F7' }).click();
   const simulated = comparison.locator('.simulation__view');
-  await expect(simulated).toContainText('Coup simulé · Blanc F7');
+  await expect(simulated).toContainText('Coup simulé 195 · Blanc F7');
   await expect(simulated.getByText('Avance estimée').locator('..')).toContainText('Noir +45,7 pt');
   await expect(simulated.getByText('Variation pour Blanc').locator('..')).toContainText(
     /[−-]7,3 pt/,
@@ -1004,7 +1004,7 @@ test('après un abandon, calculer une suite et retrouver le dernier coup du SGF'
   await comparison.getByRole('button', { name: 'Coup simulé suivant' }).click();
   await expect(simulated).toHaveAttribute('data-branch', '2');
   await expect(simulated).toHaveAttribute('data-step', '1');
-  await expect(simulated).toContainText('Coup simulé');
+  await expect(simulated).toContainText('Coup simulé 195 ·');
   await branches.selectOption(String(starts.length - 1));
   await projection.fill('20');
   await expect(comparison.locator('.simulation__view')).toHaveAttribute('data-step', '20');
