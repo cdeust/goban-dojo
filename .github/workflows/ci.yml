@@ -76,7 +76,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Démarrer la base Auth locale isolée
-        run: pnpm dlx supabase@3.4.0 start -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > /tmp/supabase-local.log 2>&1
+        env:
+          GOBAN_FRONTEND_URL: http://127.0.0.1:4173/
+        run: pnpm dlx supabase@3.4.0 start -x realtime,storage-api,imgproxy,postgres-meta,studio,logflare,vector,supavisor > /tmp/supabase-local.log 2>&1
       - run: pnpm exec playwright install --with-deps chromium
       - name: Vérifier les politiques de propriété de la base locale
         run: pnpm dlx supabase@3.4.0 test db

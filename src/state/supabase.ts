@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { GoTrueClient } from '@supabase/auth-js';
 import {
   PROGRESS_SPACES,
   type ProgressBackend,
@@ -6,33 +6,65 @@ import {
   type ProgressSpace,
 } from './accountPersistence.ts';
 
+export interface AccountClient {
+  auth: GoTrueClient;
+  endpoint: string;
+}
+
+/** The browser knows only the gateway URL, never a Supabase API key. */
 export async function createAccountClient(
   url: string | undefined,
-  key: string | undefined,
   allowLocalTest = false,
-): Promise<SupabaseClient | null> {
-  if (!url || !key || !key.startsWith('sb_publishable_')) return null;
+): Promise<AccountClient | null> {
+  if (!url) return null;
   try {
     const parsed = new URL(url);
     const localTest =
       allowLocalTest && parsed.protocol === 'http:' && parsed.hostname === '127.0.0.1';
     if ((!localTest && parsed.protocol !== 'https:') || parsed.origin !== url.replace(/\/$/, ''))
       return null;
-    const { createClient } = await import('@supabase/supabase-js');
-    return createClient(parsed.origin, key, { auth: { flowType: 'pkce' } });
+    const { GoTrueClient } = await import('@supabase/auth-js');
+    const endpoint = `${parsed.origin}/functions/v1`;
+    return {
+      endpoint,
+      auth: new GoTrueClient({
+        url: `${endpoint}/goban-auth`,
+        flowType: 'pkce',
+        storageKey: 'goban-dojo-auth-v1',
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      }),
+    };
   } catch {
     return null;
   }
 }
 
-export function progressBackend(client: SupabaseClient, userId: string): ProgressBackend {
+export function progressBackend(client: AccountClient, userId: string): ProgressBackend {
+  async function request(method: 'GET' | 'PUT', input?: unknown): Promise<unknown> {
+    const {
+      data: { session },
+      error,
+    } = await client.auth.getSession();
+    if (error || !session || session.user.id !== userId) throw new Error('Session expirée.');
+    const response = await fetch(`${client.endpoint}/goban-progress`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        ...(input ? { 'Content-Type': 'application/json' } : {}),
+      },
+      body: input ? JSON.stringify(input) : undefined,
+      cache: 'no-store',
+      redirect: 'error',
+    });
+    if (!response.ok) throw new Error('Synchronisation interrompue.');
+    return response.json();
+  }
   return {
     async read(): Promise<ProgressEntry[]> {
-      const { data, error } = await client
-        .from('user_progress')
-        .select('space,payload,revision')
-        .eq('user_id', userId);
-      if (error) throw new Error('Impossible de récupérer le carnet.');
+      const data = await request('GET');
+      if (!Array.isArray(data)) throw new Error('Carnet invalide.');
       return data.flatMap((entry) =>
         PROGRESS_SPACES.includes(entry.space as ProgressSpace) && typeof entry.payload === 'string'
           ? [
@@ -46,22 +78,12 @@ export function progressBackend(client: SupabaseClient, userId: string): Progres
       );
     },
     async write(space, payload, expectedRevision): Promise<number> {
-      const table = client.from('user_progress');
-      const result =
-        expectedRevision === 0
-          ? await table
-              .insert({ user_id: userId, space, payload, revision: 1 })
-              .select('revision')
-              .single()
-          : await table
-              .update({ payload, revision: expectedRevision + 1 })
-              .eq('user_id', userId)
-              .eq('space', space)
-              .eq('revision', expectedRevision)
-              .select('revision')
-              .single();
-      if (result.error) throw new Error('Synchronisation interrompue.');
-      return Number(result.data.revision);
+      const result = (await request('PUT', { space, payload, revision: expectedRevision })) as {
+        revision?: unknown;
+      };
+      if (typeof result.revision !== 'number' || result.revision !== expectedRevision + 1)
+        throw new Error('Révision inattendue.');
+      return result.revision;
     },
   };
 }

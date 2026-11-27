@@ -13,7 +13,7 @@ Objectifs mesurables :
 
 ## Frontière des données
 
-Trois couches : les calculs de progression et règles de go restent purs ; un dépôt de session dans `state` expose un cache mémoire de données validées ; l'adaptateur Supabase est l'unique frontière réseau d'authentification et de persistance. L'interface ne connaît pas les clés ni les requêtes SQL. La session charge ses données avant d'afficher son carnet.
+Trois couches : les calculs de progression et règles de go restent purs ; un dépôt de session dans `state` expose un cache mémoire de données validées ; le navigateur utilise uniquement deux fonctions Edge dédiées, sans aucune clé API. Le SDK Auth gère les jetons de session utilisateur, qui ne sont pas des clés du projet. La fonction publique `goban-auth` accepte uniquement les routes Auth nécessaires ; `goban-progress` conserve la vérification JWT de la plateforme et une vérification de l'identité auprès d'Auth, puis utilise RLS au nom du propriétaire. L'interface ne connaît pas les clés ni les requêtes SQL. La session charge ses données avant d'afficher son carnet.
 
 Chaque espace (`school`, `practice`, `training`, `history`, `imports`) porte une version de format validée par les décodeurs existants. Les écritures sont sérialisées et utilisent une révision attendue afin de refuser un conflit multi-appareils. L'utilisateur doit être informé d'un conflit et pouvoir récupérer sa session sans perte. À la déconnexion : attendre les écritures en cours, vider les données mémoire, ne jamais réattribuer une progression à un autre compte.
 
@@ -21,7 +21,7 @@ La migration des données locales existantes est explicite et facultative après
 
 ## Configuration et hébergement
 
-Variables de build publiques : URL exacte du projet Supabase et clé publishable. Restreindre `connect-src` de la CSP à l'origine du projet configuré. Pas de wildcard pour les hébergeurs Supabase, de secret ou de service role dans Vite. Confirmation de l'adresse électronique par le service Auth et lien de récupération du mot de passe borné au domaine du dojo. Prévoir suppression du compte et export de ses données avant ouverture commerciale. Aucun projet de production ni changement de plan sans autorisation de Clément.
+Variable de build publique unique : `VITE_GOBAN_API_URL`, URL du backend. Aucune clé API, même publishable, ne se trouve dans le build ou les requêtes navigateur. Les fonctions obtiennent exclusivement la clé publishable de leur environnement serveur et ne lisent jamais les clés privilégiées. Restreindre `connect-src` de la CSP à l'origine du projet configuré. Pas de wildcard pour les hébergeurs Supabase, de secret ou de service role dans Vite. Confirmation de l'adresse électronique par le service Auth et lien de récupération du mot de passe borné au domaine du dojo. Prévoir suppression du compte et export de ses données avant ouverture commerciale. Aucun projet de production ni changement de plan sans autorisation de Clément.
 
 ## Validation attendue
 
@@ -31,17 +31,25 @@ Sources officielles : [Auth par mot de passe](https://supabase.com/docs/guides/a
 
 ## Tests et exploitation
 
-Exécuter `pnpm dlx supabase@3.4.0 start -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor` dans un environnement Docker de test dédié, puis `pnpm dlx supabase@3.4.0 test db` et `pnpm e2e:accounts`. Le script de test utilise uniquement l'instance loopback et refuse toute URL distante. `pnpm e2e` vérifie le parcours visiteur sans configuration Supabase. Pour une production, configurer les deux variables du dépôt GitHub et reproduire les réglages Auth du projet local, sans jamais importer la clé privée. La configuration distante n'est pas incluse dans cette PR. Le workflow de publication refuse de construire une version publique si les variables de compte sont absentes, afin de conserver le déploiement précédent plutôt que de perdre la sauvegarde des utilisateurs.
+Définir `GOBAN_FRONTEND_URL=http://127.0.0.1:4173/` et exécuter `pnpm dlx supabase@3.4.0 start -x realtime,storage-api,imgproxy,postgres-meta,studio,logflare,vector,supavisor` dans un environnement Docker de test dédié, puis `pnpm dlx supabase@3.4.0 test db` et `pnpm e2e:accounts`. Le script de test utilise uniquement l'instance loopback et refuse toute URL distante. `pnpm e2e` vérifie le parcours visiteur sans configuration Supabase. Pour une production, configurer la variable publique unique du dépôt GitHub et `GOBAN_FRONTEND_URL` côté serveur et reproduire les réglages Auth du projet local, sans jamais importer la clé privée. La configuration distante n'est pas incluse dans cette PR. Le workflow de publication refuse de construire une version publique si la variable du backend est absente, afin de conserver le déploiement précédent plutôt que de perdre la sauvegarde des utilisateurs.
 
 Le stockage actuel utilise cinq espaces de progression versionnés, plafonnés à 8 Mio par espace. Avant ouverture commerciale à grande échelle, mesurer la volumétrie et déplacer les archives longues vers des lignes par partie, ainsi que les événements d'apprentissage vers des enregistrements incrémentaux.
 
 ### Mise en service publique (non effectuée)
 
 - Créer ou sélectionner un projet Supabase dédié, appliquer la migration, désactiver les comptes anonymes, imposer la confirmation des adresses et les paramètres mots de passe documentés ici.
-- Configurer `Site URL` et l'autorisation de redirection sur l'URL de production effective du dojo, incluant `/goban-dojo/` sur GitHub Pages, puis ajouter les deux variables publiques du dépôt. Ne jamais ajouter de clé de service au frontend.
+- Configurer `Site URL` et l'autorisation de redirection sur l'URL de production effective du dojo, incluant `/goban-dojo/` sur GitHub Pages, puis configurer l'URL du backend et l'URL autorisée côté fonctions. Ne jamais ajouter de clé de service au frontend.
 - Le service SMTP hébergé par défaut de Supabase est réservé aux adresses de l'équipe du projet : configurer un SMTP personnalisé avant de proposer l'inscription au public. Valider réellement confirmation et récupération avec une adresse de test externe autorisée. Le test local Mailpit vérifie le parcours fonctionnel sans envoyer de mail externe ; il ne prouve pas la délivrabilité en production.
 - Vérifier les limites du plan, l'emplacement des données, la politique de confidentialité, la suppression du compte et l'export de données avant toute commercialisation. La réinitialisation PKCE dans le client statique doit être effectuée sur le navigateur qui a demandé le lien.
 
 Sources officielles : [SMTP personnalisé](https://supabase.com/docs/guides/auth/auth-smtp), [tests des parcours Auth](https://supabase.com/docs/guides/auth/testing-auth-flows), [exposition des tables à la Data API](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically).
 
 Les commandes de compte sont intégrées à l'écran d'accueil, au carnet et à l'entête de l'école, sans superposition fixe sur les commandes de lecture. Un scénario de régression vérifie notamment que l'indicateur ne bloque pas les boutons de simulation.
+
+## Sécurité des fonctions
+
+Les routes Auth publiques ont besoin d’accepter un utilisateur qui n’a pas encore de JWT : la vérification de plateforme est désactivée uniquement pour `goban-auth`, qui n’accorde aucun accès à la progression. `goban-progress` impose un JWT utilisateur et la vérification de son identité, dérive les identifiants du serveur et conserve les politiques RLS en profondeur. Les routes Auth sont limitées aux méthodes et paramètres du contrat, et les redirections à l’URL configurée. Une suite vérifie les contrats et le build est inspecté pour détecter la présence des vraies clés API locales. La fonction ne journalise ni mots de passe, ni jetons, ni clés. Sources : [Auth Edge Functions](https://supabase.com/docs/guides/functions/auth), [variables serveur](https://supabase.com/docs/guides/functions/secrets).
+
+### État du projet hébergé au 27 novembre 2026
+
+Le projet gratuit dédié a été créé en Europe. La migration initiale a été appliquée en SQL via le tableau de bord et vérifiée : RLS actif, quatre politiques, aucune permission directe pour le rôle anonyme, zéro ligne initiale. Les inscriptions sont volontairement fermées jusqu'au déploiement validé des fonctions, au raccordement SMTP et à la vérification de production. Le SQL a été exécuté via le tableau de bord, donc ne pas réappliquer aveuglément la migration via CLI : réconcilier son historique par la commande de réparation officielle avant une future migration CLI. Aucun identifiant sensible n'est enregistré ici.

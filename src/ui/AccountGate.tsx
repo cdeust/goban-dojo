@@ -1,5 +1,4 @@
 import { useEffect, useState, useSyncExternalStore, type FormEvent } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { App } from '../App.tsx';
 import { AccountControlsContext } from './AccountControls.tsx';
 import {
@@ -8,12 +7,11 @@ import {
   type ProgressSpace,
 } from '../state/accountPersistence.ts';
 import { progressSession, setProgressSession } from '../state/sessionProgress.ts';
-import { createAccountClient, progressBackend } from '../state/supabase.ts';
+import { createAccountClient, progressBackend, type AccountClient } from '../state/supabase.ts';
 
-const configured = Boolean(import.meta.env.VITE_SUPABASE_URL);
+const configured = Boolean(import.meta.env.VITE_GOBAN_API_URL);
 const clientPromise = createAccountClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  import.meta.env.VITE_GOBAN_API_URL,
   import.meta.env.MODE === 'account-test',
 );
 type Mode = 'login' | 'register' | 'forgot' | 'reset';
@@ -24,7 +22,7 @@ function AccountForm({
   onMode,
   onVisitor,
 }: {
-  client: SupabaseClient;
+  client: AccountClient;
   mode: Mode;
   onMode: (mode: Mode) => void;
   onVisitor: () => void;
@@ -237,7 +235,7 @@ export function AccountGate() {
   const [view, setView] = useState<
     'loading' | 'auth' | 'visitor' | 'account' | 'migration' | 'error'
   >(configured ? 'loading' : 'visitor');
-  const [client, setClient] = useState<SupabaseClient | null>(null);
+  const [client, setClient] = useState<AccountClient | null>(null);
   const [mode, setMode] = useState<Mode>('login');
   const [legacy, setLegacy] = useState<Partial<Record<ProgressSpace, string>>>({});
   const [migrating, setMigrating] = useState(false);

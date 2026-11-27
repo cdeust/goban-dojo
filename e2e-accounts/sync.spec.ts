@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from 'node:crypto';
 
 // These credentials belong only to the disposable local Supabase test stack.
-const url = process.env.VITE_SUPABASE_URL;
+const url = process.env.VITE_GOBAN_API_URL;
 const key = process.env.SUPABASE_LOCAL_SECRET_KEY;
 if (!url || new URL(url).origin !== 'http://127.0.0.1:55421' || !key) {
   throw new Error('Le serveur Auth local isolé est requis.');
@@ -11,7 +11,27 @@ if (!url || new URL(url).origin !== 'http://127.0.0.1:55421' || !key) {
 const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 const password = `Dojo-${randomUUID()}!`;
 
+const observed = new WeakMap<Page, string[]>();
+function watchGateway(page: Page) {
+  const unexpected: string[] = [];
+  observed.set(page, unexpected);
+  page.on('request', (request) => {
+    const target = new URL(request.url());
+    const publicConfirmation =
+      request.isNavigationRequest() && target.pathname === '/auth/v1/verify';
+    if (
+      target.origin === url &&
+      ((!target.pathname.startsWith('/functions/v1/') && !publicConfirmation) ||
+        Boolean(request.headers()['apikey']))
+    )
+      unexpected.push(target.pathname);
+  });
+}
+function checkGateway(page: Page) {
+  expect(observed.get(page) ?? []).toEqual([]);
+}
 async function signIn(page: Page, email: string) {
+  watchGateway(page);
   await page.goto('/');
   await page.getByLabel('Adresse e-mail').fill(email);
   await page.getByLabel('Mot de passe', { exact: true }).fill(password);
@@ -19,6 +39,7 @@ async function signIn(page: Page, email: string) {
   await expect(page.getByText('Progression synchronisée')).toBeVisible();
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
   await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+  checkGateway(page);
 }
 
 test('une progression réelle est retrouvée sur un autre navigateur, mais pas sur un autre compte', async ({
@@ -82,6 +103,7 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await three.getByRole('button', { name: 'Entrer dans l’école' }).click();
     await expect(three.getByText('0 / 652', { exact: false }).first()).toBeVisible();
     await expect(three.getByRole('button', { name: 'Exporter la progression' })).toBeDisabled();
+    for (const page of [one, two, three]) checkGateway(page);
   } finally {
     for (const context of contexts) await context.close();
     for (const id of ids) await admin.auth.admin.deleteUser(id);
@@ -127,6 +149,8 @@ test('une partie contre Leela et son kifu sont repris par le même compte après
     await resumed.getByRole('button', { name: 'Abandonner', exact: true }).click();
     await expect(resumed.getByText('Blanc gagnant par abandon')).toBeVisible();
     await expect(two.getByText('Progression synchronisée')).toBeVisible();
+    checkGateway(one);
+    checkGateway(two);
     await first.close();
     const fresh = await browser.newContext();
     contexts.push(fresh);
@@ -137,6 +161,7 @@ test('une partie contre Leela et son kifu sont repris par le même compte après
     await expect(three.getByRole('region', { name: 'Partie d’entraînement' })).toContainText(
       'Blanc gagnant par abandon',
     );
+    checkGateway(three);
   } finally {
     for (const context of contexts) await context.close();
     await admin.auth.admin.deleteUser(user.data.user.id);
@@ -182,6 +207,7 @@ test('inscription, confirmation e-mail et nouveau mot de passe avec de vrais mes
 }) => {
   const email = `dojo-register-${randomUUID()}@example.invalid`;
   const newPassword = `Dojo-${randomUUID()}!`;
+  watchGateway(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   try {
     await page.goto('/');
@@ -211,6 +237,7 @@ test('inscription, confirmation e-mail et nouveau mot de passe avec de vrais mes
     await page.getByLabel('Mot de passe', { exact: true }).fill(newPassword);
     await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
     await expect(page.getByText('Progression synchronisée')).toBeVisible({ timeout: 30_000 });
+    checkGateway(page);
   } finally {
     const { data } = await admin.auth.admin.listUsers();
     const user = data?.users.find((item) => item.email === email);

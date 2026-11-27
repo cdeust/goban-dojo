@@ -39,19 +39,17 @@ const csp = (authOrigin: string): Plugin => ({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   let authOrigin = '';
-  if (Boolean(env.VITE_SUPABASE_URL) !== Boolean(env.VITE_SUPABASE_PUBLISHABLE_KEY))
-    throw new Error('Configuration Supabase incomplète.');
-  if (env.VITE_SUPABASE_URL) {
-    if (!env.VITE_SUPABASE_PUBLISHABLE_KEY?.startsWith('sb_publishable_'))
-      throw new Error('Clé publishable Supabase attendue.');
-    const url = new URL(env.VITE_SUPABASE_URL);
+  if (env.VITE_SUPABASE_URL || env.VITE_SUPABASE_PUBLISHABLE_KEY)
+    throw new Error('Aucune clé Supabase ne doit être configurée dans Vite.');
+  if (env.VITE_GOBAN_API_URL) {
+    const url = new URL(env.VITE_GOBAN_API_URL);
     const localTest =
       mode === 'account-test' && url.protocol === 'http:' && url.hostname === '127.0.0.1';
     if (
       (!localTest && url.protocol !== 'https:') ||
-      url.origin !== env.VITE_SUPABASE_URL.replace(/\/$/, '')
+      url.origin !== env.VITE_GOBAN_API_URL.replace(/\/$/, '')
     )
-      throw new Error('URL Supabase HTTPS attendue.');
+      throw new Error('URL HTTPS du backend attendue.');
     authOrigin = url.origin;
   }
   return {
