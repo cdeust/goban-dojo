@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useRef } from 'react';
-import { PASS, opposite, pointToHuman } from '../domain/board.ts';
+import { useEffect, useRef, useState } from 'react';
+import { PASS, opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
 import { loadEngine, useEngine } from '../engine/client.ts';
 import { GOOD_BELOW, scoreChange, type Judgement, type Verdict } from '../engine/judge.ts';
 import { useJudgements } from '../engine/useJudgements.ts';
@@ -14,6 +14,59 @@ import {
   useCurrentGame,
   useStore,
 } from '../state/store.ts';
+
+function GuessCoordinate() {
+  const [coordinate, setCoordinate] = useState('');
+  const [error, setError] = useState('');
+  return (
+    <details className="guess-coordinate">
+      <summary>Saisir une coordonnée</summary>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const point = pointFromHuman(coordinate);
+          if (point === null) {
+            setError('Saisissez une intersection comme D4 ou Q16, sans colonne I.');
+            return;
+          }
+          const s = useStore.getState();
+          s.clickPoint(point);
+          const next = useStore.getState();
+          if (next.move === s.move && next.guess === s.guess) {
+            setError('Cette intersection est occupée ou a déjà été essayée.');
+            return;
+          }
+          setError('');
+          setCoordinate('');
+        }}
+      >
+        <label htmlFor="guess-coordinate">Intersection (par ex. D4)</label>
+        <div>
+          <input
+            id="guess-coordinate"
+            aria-describedby={error ? 'guess-coordinate-error' : undefined}
+            autoComplete="off"
+            spellCheck={false}
+            maxLength={3}
+            value={coordinate}
+            onChange={(event) => {
+              setCoordinate(event.target.value);
+              setError('');
+            }}
+          />
+          <button type="submit" className="chip">
+            Proposer
+          </button>
+        </div>
+        {error && (
+          <p role="alert" id="guess-coordinate-error">
+            {error}
+          </p>
+        )}
+      </form>
+    </details>
+  );
+}
 
 /** Panneau du mode « deviner » : consigne, retour sur le dernier essai, bilan. */
 function Guess() {
@@ -65,7 +118,7 @@ function Guess() {
         {finished
           ? 'La partie est terminée.'
           : mine
-            ? `À vous : où ${name} (${colorName(color).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban.`
+            ? `À vous : où ${name} (${colorName(color).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban ou saisissez une coordonnée.`
             : `${player(opposite(color))} répond…`}
       </p>
       <p className="mode__feedback" role="status" aria-live="polite">
@@ -81,6 +134,7 @@ function Guess() {
           </button>
         </div>
       )}
+      {mine && <GuessCoordinate key={game.id + ':' + move} />}
       <dl className="mode__score">
         <div>
           <dt>Trouvés</dt>

@@ -745,7 +745,7 @@ input[type='range']::-moz-range-thumb {
 .panel__tabs {
   display: flex;
   align-items: center;
-  gap: 1.4rem;
+  gap: clamp(0.5rem, 2vw, 1rem);
   padding: 1rem 1rem 0 1.6rem;
   padding-top: max(1rem, env(safe-area-inset-top));
   border-bottom: 1px solid var(--hairline);
@@ -2429,4 +2429,92 @@ progress {
     z-index: 4;
     background: var(--ink);
   }
+}
+
+.practice > .chapter__index {
+  margin-bottom: 0.5rem;
+}
+
+.practice__lead,
+.practice__card p {
+  color: var(--paper-dim);
+  line-height: 1.55;
+}
+
+.practice__card {
+  margin-block: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.practice__card h3 {
+  margin: 0 0 0.4rem;
+  color: var(--kaya);
+  font-family: var(--serif);
+}
+
+.practice__card p {
+  margin: 0.4rem 0;
+}
+
+.practice__card progress {
+  inline-size: 100%;
+  accent-color: var(--kaya);
+}
+
+.practice__card .chip {
+  min-block-size: 2.75rem;
+  margin-block: 0.25rem;
+}
+
+.practice__week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+}
+
+.practice__week span:first-child {
+  display: block;
+  font-size: 1.15rem;
+}
+
+.practice__week [data-active='true'] {
+  color: var(--kaya);
+}
+
+.guess-coordinate {
+  margin-block: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--paper-dim);
+}
+
+.guess-coordinate summary {
+  cursor: pointer;
+}
+
+.guess-coordinate form {
+  margin-block: 0.4rem;
+}
+
+.guess-coordinate form > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block: 0.35rem;
+}
+
+.guess-coordinate input {
+  width: 4rem;
+  min-height: 2.2rem;
+  padding-inline: 0.5rem;
+  color: var(--paper);
+  background: var(--ink-2);
+  border: 1px solid var(--hairline);
+  border-radius: 0.35rem;
 }

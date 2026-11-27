@@ -43,6 +43,12 @@ Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **4
 - **Jouer comme Shūsaku** (mode « Deviner ») : la partie s’arrête à chacun de ses coups et vous
   demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
   premier coup, 2 après un indice, 1 après deux, puis le coup est montré.
+- **Carnet du dojo** : les positions rencontrées dans « Deviner » reviennent à intervalles
+  espacés. Un rappel exact allonge l’intervalle (1, 3, 7, 14 puis 30 jours), un indice ou une
+  réponse révélée le ramène à un jour. Proposez un coup sur le goban ou au clavier (coordonnée
+  comme D4). Le carnet suit les jours d’entraînement et les paliers
+  d’XP sans récompenser la répétition immédiate d’un même coup. Ces paliers ne sont pas des grades
+  de go. Le carnet et le réglage des numéros restent dans ce navigateur.
 - **Explorer une autre suite** (mode « Explorer ») : à partir de n’importe quelle position, posez
   vos propres coups, captures et ko compris, puis revenez à la partie. Sur demande, un réseau de
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur

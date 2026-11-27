@@ -30,12 +30,22 @@ export function pointToSgf(p: number): string {
   return String.fromCharCode(97 + (p % SIZE)) + String.fromCharCode(97 + Math.floor(p / SIZE));
 }
 
+const HUMAN_COLUMNS = 'ABCDEFGHJKLMNOPQRST';
+
 /** Notation usuelle des kifus occidentaux : colonnes A–T sans I, lignes 1–19 depuis le bas. */
 export function pointToHuman(p: number): string {
   if (p === PASS) return 'passe';
   const x = p % SIZE;
   const y = Math.floor(p / SIZE);
-  return 'ABCDEFGHJKLMNOPQRST'.charAt(x) + String(SIZE - y);
+  return HUMAN_COLUMNS.charAt(x) + String(SIZE - y);
+}
+
+/** Coordonnée affichée du goban, pas une coordonnée SGF ; la colonne I n’existe pas. */
+export function pointFromHuman(input: string): number | null {
+  const match = /^([A-HJ-T])([1-9]|1[0-9])$/i.exec(input.trim());
+  if (!match) return null;
+  const x = HUMAN_COLUMNS.indexOf(match[1]!.toUpperCase());
+  return (SIZE - Number(match[2])) * SIZE + x;
 }
 
 const NEIGHBOURS: readonly (readonly number[])[] = Array.from({ length: POINTS }, (_, p) => {

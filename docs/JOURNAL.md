@@ -122,3 +122,16 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
 - Dans la vue du joueur, le bol de Noir est en partie masqué par les commandes de lecture.
 - Aucun commentaire de partie : le corpus n’en contient pas d’exploitable. Quatre parties portent des légendes
   écrites d’après les sources citées ; les autres n’ont que celles tirées du kifu (ouverture).
+
+## Carnet du dojo et numéros de coups
+
+- Mesure produit : passer de zéro à une file de révisions qui survit au rechargement ; vérifier
+  par un exercice réel rouvert au même coup le lendemain. Une position révélée ou aidée revient
+  demain ; cinq rappels exacts espacés atteignent le palier mémoire.
+- L’XP montre l’activité, pas la force du joueur. Une position non échue ne donne pas d’XP
+  supplémentaire, et les jours sans entraînement ne font pas perdre de points.
+- Mesure d’affichage : au-delà des 720 entrées de l’ancien atlas, composer le numéro avec
+  dix chiffres réutilisables (2 949 120 → 25 600 texels de base). Ne compter ni les pierres de handicap ni celles déjà capturées
+  comme numéros visibles. Les passes restent incluses dans la numérotation réelle du kifu.
+- Persistance locale, sans dépendance, compte ou appel réseau supplémentaire. Les données de
+  progression ne sont pas synchronisées entre navigateurs.
