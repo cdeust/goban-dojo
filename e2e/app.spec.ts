@@ -34,7 +34,7 @@ async function enter(page: Page): Promise<void> {
   await page.goto('/');
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
   await page
-    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('complementary', { name: 'Carnet' })
     .getByRole('button', { name: 'Récit', exact: true })
     .click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
