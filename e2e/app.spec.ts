@@ -1237,7 +1237,12 @@ test.describe('leçon sur téléphone tactile', () => {
       .poll(() =>
         canvas.evaluate((element: HTMLCanvasElement) => {
           const rect = element.getBoundingClientRect();
-          return Math.abs(element.height / element.width - rect.height / rect.width) < 0.01;
+          const stage = element.closest('.stage__canvas')!.getBoundingClientRect();
+          return (
+            Math.abs(rect.height - stage.height) < 1 &&
+            Math.abs(rect.width - stage.width) < 1 &&
+            Math.abs(element.height / element.width - rect.height / rect.width) < 0.01
+          );
         }),
       )
       .toBe(true);
