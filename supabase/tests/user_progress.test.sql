@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
-select plan(6);
+select plan(9);
 
 -- Dedicated test users in the disposable local database, never in production.
 insert into auth.users (id, email) values
@@ -19,8 +19,13 @@ set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000001","role":"authenticated","is_anonymous":false}', true);
 select is((select count(*) from public.user_progress), 1::bigint, 'account sees one personal space');
 select is((select user_id::text from public.user_progress), '10000000-0000-4000-8000-000000000001', 'only owner data returned');
+with updated as (update public.user_progress set payload = '{"owner":"a"}' where space = 'school' returning user_id)
+select is(count(*), 1::bigint, 'update is scoped to the owner') from updated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000002","role":"authenticated","is_anonymous":false}', true);
 select is((select user_id::text from public.user_progress), '10000000-0000-4000-8000-000000000002', 'second account sees its data only');
+select is((select payload from public.user_progress), '{}', 'second account data stays unchanged');
+select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000002","role":"authenticated","is_anonymous":true}', true);
+select is((select count(*) from public.user_progress), 0::bigint, 'anonymous Auth session cannot see progress');
 reset role;
 select * from finish();
 rollback;

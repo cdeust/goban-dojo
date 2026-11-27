@@ -80,6 +80,8 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - name: Vérifier les politiques de propriété de la base locale
         run: pnpm dlx supabase@3.4.0 test db
+      - name: Contrôler les advisors Supabase locaux
+        run: pnpm dlx supabase@3.4.0 db advisors --type all --level warn --fail-on warn
       - run: pnpm e2e:accounts
       - name: Arrêter la base de test locale
         if: always()

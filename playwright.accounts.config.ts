@@ -14,7 +14,7 @@ export default defineConfig({
     launchOptions: { args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] },
   },
   webServer: {
-    command: 'pnpm exec vite preview',
+    command: 'pnpm exec vite preview --mode account-test',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     timeout: 60_000,

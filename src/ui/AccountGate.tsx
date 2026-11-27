@@ -263,8 +263,10 @@ export function AccountGate() {
             setMode('reset');
             setView('auth');
           }
-          if (userId && (event === 'SIGNED_OUT' || (session && session.user.id !== userId)))
+          if (userId && (event === 'SIGNED_OUT' || (session && session.user.id !== userId))) {
+            progressSession().discard();
             location.reload();
+          }
         });
         unsubscribe = () => subscription.unsubscribe();
         const {

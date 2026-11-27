@@ -12,11 +12,11 @@ revoke all on public.user_progress from public, anon, authenticated;
 grant select, insert, update, delete on public.user_progress to authenticated;
 
 create policy owner_select on public.user_progress for select to authenticated
-  using ((select auth.uid()) = user_id and coalesce((select (auth.jwt()->>'is_anonymous')::boolean), false) = false);
+  using ((select auth.uid()) = user_id and coalesce(((select auth.jwt())->>'is_anonymous')::boolean, false) = false);
 create policy owner_insert on public.user_progress for insert to authenticated
-  with check ((select auth.uid()) = user_id and coalesce((select (auth.jwt()->>'is_anonymous')::boolean), false) = false);
+  with check ((select auth.uid()) = user_id and coalesce(((select auth.jwt())->>'is_anonymous')::boolean, false) = false);
 create policy owner_update on public.user_progress for update to authenticated
-  using ((select auth.uid()) = user_id and coalesce((select (auth.jwt()->>'is_anonymous')::boolean), false) = false)
-  with check ((select auth.uid()) = user_id and coalesce((select (auth.jwt()->>'is_anonymous')::boolean), false) = false);
+  using ((select auth.uid()) = user_id and coalesce(((select auth.jwt())->>'is_anonymous')::boolean, false) = false)
+  with check ((select auth.uid()) = user_id and coalesce(((select auth.jwt())->>'is_anonymous')::boolean, false) = false);
 create policy owner_delete on public.user_progress for delete to authenticated
-  using ((select auth.uid()) = user_id and coalesce((select (auth.jwt()->>'is_anonymous')::boolean), false) = false);
+  using ((select auth.uid()) = user_id and coalesce(((select auth.jwt())->>'is_anonymous')::boolean, false) = false);

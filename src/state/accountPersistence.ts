@@ -74,17 +74,18 @@ export class AccountPersistence {
     this.#flight = Promise.resolve().then(async () => {
       if (this.#pending.size) this.#setStatus('pending');
       try {
-        while (this.#pending.size) {
+        while (!this.#closed && this.#pending.size) {
           const [space, value] = this.#pending.entries().next().value!;
           const expected = this.#entries.get(space)?.revision ?? 0;
           const revision = await backend.write(space, value, expected);
+          if (this.#closed) return;
           if (revision !== expected + 1) throw new Error('Révision inattendue.');
           this.#entries.set(space, { space, value, revision });
           if (this.#pending.get(space) === value) this.#pending.delete(space);
         }
         this.#setStatus('ready');
       } catch {
-        this.#setStatus('error');
+        if (!this.#closed) this.#setStatus('error');
       } finally {
         this.#flight = null;
       }

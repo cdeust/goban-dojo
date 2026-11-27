@@ -65,3 +65,26 @@ it('préserve une nouvelle modification produite pendant une sauvegarde', async 
   ]);
   expect(account.read('school')).toBe('second');
 });
+
+it('ignore une réponse tardive après fermeture du compte, sans contaminer une nouvelle session', async () => {
+  let resolve!: (revision: number) => void;
+  const response = new Promise<number>((done) => {
+    resolve = done;
+  });
+  const old = await AccountPersistence.connected({
+    read: async () => [],
+    write: async () => response,
+  });
+  old.write('school', 'compte-a');
+  await Promise.resolve();
+  old.discard();
+  const other = await AccountPersistence.connected({
+    read: async () => [{ space: 'school', value: 'compte-b', revision: 1 }],
+    write: async (_space, _value, revision) => revision + 1,
+  });
+  resolve(1);
+  await Promise.resolve();
+  await Promise.resolve();
+  expect(old.read('school')).toBeNull();
+  expect(other.read('school')).toBe('compte-b');
+});

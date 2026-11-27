@@ -142,3 +142,78 @@ test('une partie contre Leela et son kifu sont repris par le même compte après
     await admin.auth.admin.deleteUser(user.data.user.id);
   }
 });
+
+async function localMailLink(email: string, type: 'signup' | 'recovery'): Promise<string> {
+  let link: string | undefined;
+  await expect
+    .poll(
+      async () => {
+        const response = await fetch(
+          `http://127.0.0.1:55424/view/latest.html?query=${encodeURIComponent(`to:${email}`)}`,
+        );
+        if (!response.ok) return false;
+        const html = await response.text();
+        for (const match of html.matchAll(/href="([^"]+)"/g)) {
+          try {
+            const candidate = new URL(match[1]!.replaceAll('&amp;', '&'));
+            if (
+              candidate.origin === url &&
+              candidate.pathname === '/auth/v1/verify' &&
+              candidate.searchParams.get('type') === type
+            ) {
+              link = candidate.href;
+              return true;
+            }
+          } catch {
+            /* Only accept a valid local confirmation URL. */
+          }
+        }
+        return false;
+      },
+      { timeout: 30_000 },
+    )
+    .toBe(true);
+  if (!link) throw new Error('Lien de courrier local absent.');
+  return link;
+}
+
+test('inscription, confirmation e-mail et nouveau mot de passe avec de vrais messages locaux', async ({
+  page,
+}) => {
+  const email = `dojo-register-${randomUUID()}@example.invalid`;
+  const newPassword = `Dojo-${randomUUID()}!`;
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  try {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Créer un compte', exact: true }).click();
+    await page.getByLabel('Adresse e-mail').fill(email);
+    await page.getByLabel('Mot de passe', { exact: true }).fill(password);
+    await page.getByRole('button', { name: 'Créer mon compte', exact: true }).click();
+    await expect(page.getByRole('status')).toContainText('Vérifiez votre messagerie');
+    await page.goto(await localMailLink(email, 'signup'));
+    await expect(page.getByText('Progression synchronisée')).toBeVisible({ timeout: 30_000 });
+    await page.getByRole('button', { name: 'Se déconnecter' }).click();
+    await page.getByRole('button', { name: 'Mot de passe oublié ?' }).click();
+    await page.getByLabel('Adresse e-mail').fill(email);
+    await page.getByRole('button', { name: 'Envoyer le lien' }).click();
+    await expect(page.getByRole('status')).toContainText(
+      'une demande de récupération a été envoyée',
+    );
+    await page.goto(await localMailLink(email, 'recovery'));
+    await expect(page.getByRole('heading', { name: 'Nouveau mot de passe' })).toBeVisible({
+      timeout: 30_000,
+    });
+    await page.getByLabel('Mot de passe', { exact: true }).fill(newPassword);
+    await page.getByRole('button', { name: 'Modifier le mot de passe' }).click();
+    await expect(page.getByText('Progression synchronisée')).toBeVisible({ timeout: 30_000 });
+    await page.getByRole('button', { name: 'Se déconnecter' }).click();
+    await page.getByLabel('Adresse e-mail').fill(email);
+    await page.getByLabel('Mot de passe', { exact: true }).fill(newPassword);
+    await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
+    await expect(page.getByText('Progression synchronisée')).toBeVisible({ timeout: 30_000 });
+  } finally {
+    const { data } = await admin.auth.admin.listUsers();
+    const user = data?.users.find((item) => item.email === email);
+    if (user) await admin.auth.admin.deleteUser(user.id);
+  }
+});
