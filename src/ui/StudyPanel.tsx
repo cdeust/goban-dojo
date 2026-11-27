@@ -185,6 +185,7 @@ function Tactics({ game, move }: { game: GameRecord; move: number }) {
 export function StudyPanel() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
+  const lesson = useStore((s) => s.lesson);
   const title = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     title.current?.focus({ preventScroll: true });
@@ -197,7 +198,27 @@ export function StudyPanel() {
           Étude du kifu
         </h2>
       </header>
-      <StudyLines key={game.id + ':' + move} game={game} base={move} />
+      {lesson && (
+        <div className="study__position">
+          <p>{lesson.comparison}</p>
+          <p>
+            Sur cette position, Leela Zero a exploré O13, R13, S10 dans une recherche de 32 visites.
+            Ce sont aussi les trois coups joués en 1839.
+          </p>
+          <button
+            type="button"
+            className="chip"
+            onClick={() => {
+              const s = useStore.getState();
+              s.showStudyLine([]);
+              s.setMode('lire');
+            }}
+          >
+            Explorer avec Leela Zero
+          </button>
+        </div>
+      )}
+      <StudyLines key={game.id + ':' + move} game={game} base={move} open={!!lesson} />
       <Tactics key={game.id} game={game} move={move} />
     </section>
   );

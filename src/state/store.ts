@@ -16,6 +16,7 @@ import {
 import { practiceDay, recordRecall, type Practice, type Recall } from '../domain/practice.ts';
 import { trappedStones, type EnginePosition } from '../engine/features.ts';
 import { isLegalZeroMove } from '../engine/zeroSearch.ts';
+import { FIRST_LESSON, type Lesson } from '../story/lessons.ts';
 import { momentFor } from '../story/chapters.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 import { localGames, saveGame } from './localGames.ts';
@@ -162,6 +163,7 @@ interface State {
   studyOrigin: ExploreMove[] | null;
   guess: GuessState;
   practice: Practice;
+  lesson: Lesson | null;
   practiceSaved: boolean;
   guessColor: Color;
   exploreOpponent: boolean;
@@ -208,6 +210,8 @@ interface State {
   clickPoint: (point: number) => void;
   /** Mode « deviner » : demander un indice (compte comme un essai manqué). */
   hint: () => void;
+  startLesson: () => void;
+  compareLesson: () => void;
   startPractice: (gameId: string, before: number) => void;
   /** Mode « deviner » : montrer le coup et passer au suivant. */
   reveal: () => void;
@@ -396,6 +400,7 @@ export const useStore = create<State>((set, get) => ({
   view: 'trois-quarts',
   showNumbers: loadNumbers(),
   practice: loadPractice(),
+  lesson: null,
   practiceSaved: true,
   sound: true,
   effects: true,
@@ -476,6 +481,7 @@ export const useStore = create<State>((set, get) => ({
         : previousMode;
     set({
       gameIndex: i,
+      lesson: null,
       guessColor: game.shusaku ?? 'B',
       mode,
       reflectionReplay: null,
@@ -499,6 +505,7 @@ export const useStore = create<State>((set, get) => ({
     const target = get().studyMove;
     set({
       move: next,
+      lesson: null,
       reflectionReplay: replay ?? null,
       ...(pause || replay ? { playing: false, impact: null } : {}),
       studyOrigin: null,
@@ -627,6 +634,7 @@ export const useStore = create<State>((set, get) => ({
       const keepLine = leavingStudy || (mode === 'lire' && s.mode === 'analyser');
       return {
         mode,
+        lesson: null,
         readingFromKifu: mode === 'lire' && s.mode === 'lecture',
         reflectionReplay: null,
         ...(mode === 'etudier' || mode === 'analyser' || mode === 'lire'
@@ -811,6 +819,23 @@ export const useStore = create<State>((set, get) => ({
         last: { kind: 'miss', distance: pointDistance(point, target.point) },
       },
     });
+  },
+
+  startLesson: () => {
+    const { gameId, before } = FIRST_LESSON;
+    const s = get();
+    if (!s.dataset?.games.some((game) => game.id === gameId)) return;
+    s.startPractice(gameId, before);
+    set({ lesson: FIRST_LESSON });
+  },
+
+  compareLesson: () => {
+    const s = get();
+    const lesson = s.lesson;
+    if (s.mode !== 'deviner' || !lesson || s.move !== lesson.before + 1) return;
+    s.setMode('etudier');
+    s.setMove(lesson.before, true);
+    set({ lesson });
   },
 
   startPractice: (gameId, before) => {
