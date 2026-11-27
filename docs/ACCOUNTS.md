@@ -43,3 +43,5 @@ Le stockage actuel utilise cinq espaces de progression versionnés, plafonnés �
 - Vérifier les limites du plan, l'emplacement des données, la politique de confidentialité, la suppression du compte et l'export de données avant toute commercialisation. La réinitialisation PKCE dans le client statique doit être effectuée sur le navigateur qui a demandé le lien.
 
 Sources officielles : [SMTP personnalisé](https://supabase.com/docs/guides/auth/auth-smtp), [tests des parcours Auth](https://supabase.com/docs/guides/auth/testing-auth-flows), [exposition des tables à la Data API](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically).
+
+Les commandes de compte sont intégrées à l'écran d'accueil, au carnet et à l'entête de l'école, sans superposition fixe sur les commandes de lecture. Un scénario de régression vérifie notamment que l'indicateur ne bloque pas les boutons de simulation.

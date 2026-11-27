@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { unlockAudio } from '../replay/sound.ts';
 import { useStore } from '../state/store.ts';
+import { AccountControls } from './AccountControls.tsx';
 
 const rise = {
   hidden: { opacity: 0, y: 18 },
@@ -66,6 +67,7 @@ export function Intro() {
               Importer un SGF
             </button>
           </motion.div>
+          <AccountControls />
           {status === 'ready' && (
             <motion.p className="intro__count" variants={rise}>
               {games} parties · {moves.toLocaleString('fr-FR')} coups

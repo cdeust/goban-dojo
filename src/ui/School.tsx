@@ -1,3 +1,4 @@
+import { AccountControls } from './AccountControls.tsx';
 import { progressSession } from '../state/sessionProgress.ts';
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
@@ -448,9 +449,12 @@ export function School() {
           </p>
           <h1>École de go</h1>
         </div>
-        <button className="chip" type="button" onClick={() => close(false)}>
-          Retour au dojo
-        </button>
+        <div className="school-account-actions">
+          <button className="chip" type="button" onClick={() => close(false)}>
+            Retour au dojo
+          </button>
+          <AccountControls />
+        </div>
       </header>
       {counting ? (
         <JapaneseCountWorkshop

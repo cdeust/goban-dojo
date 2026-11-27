@@ -1,6 +1,7 @@
 import { useEffect, useState, useSyncExternalStore, type FormEvent } from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { App } from '../App.tsx';
+import { AccountControlsContext } from './AccountControls.tsx';
 import {
   AccountPersistence,
   PROGRESS_SPACES,
@@ -165,68 +166,70 @@ function DojoSession({ account, onLeave }: { account: boolean; onLeave: () => Pr
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [session, status]);
-  return (
-    <>
-      <aside className="account-indicator" aria-label="Compte et sauvegarde">
-        <span aria-live="polite">
-          {status === 'visitor'
-            ? 'Visiteur · aucune sauvegarde'
-            : status === 'pending'
-              ? 'Synchronisation…'
-              : status === 'error'
-                ? 'Synchronisation interrompue'
-                : 'Progression synchronisée'}
-        </span>
-        {status === 'error' && (
-          <>
-            <button className="chip" onClick={() => void session.flush()}>
-              Réessayer
-            </button>
-            <button
-              className="chip"
-              onClick={() => {
-                if (!window.confirm('Quitter sans enregistrer les modifications en attente ?'))
-                  return;
-                session.discard();
-                location.reload();
-              }}
-            >
-              Recharger sans les modifications en attente
-            </button>
-            <button
-              className="chip"
-              onClick={() => {
-                const url = URL.createObjectURL(
-                  new Blob([JSON.stringify(session.pendingSnapshot(), null, 2)], {
-                    type: 'application/json',
-                  }),
-                );
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'goban-dojo-en-attente.json';
-                link.click();
-                window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-              }}
-            >
-              Exporter les modifications en attente
-            </button>
-          </>
-        )}
-        {configured && (
+  const controls = (
+    <aside className="account-indicator" aria-label="Compte et sauvegarde">
+      <span aria-live="polite">
+        {status === 'visitor'
+          ? 'Visiteur · aucune sauvegarde'
+          : status === 'pending'
+            ? 'Synchronisation…'
+            : status === 'error'
+              ? 'Synchronisation interrompue'
+              : 'Progression synchronisée'}
+      </span>
+      {status === 'error' && (
+        <>
+          <button className="chip" onClick={() => void session.flush()}>
+            Réessayer
+          </button>
           <button
             className="chip"
-            disabled={busy}
             onClick={() => {
-              setBusy(true);
-              void onLeave().finally(() => setBusy(false));
+              if (!window.confirm('Quitter sans enregistrer les modifications en attente ?'))
+                return;
+              session.discard();
+              location.reload();
             }}
           >
-            {account ? 'Se déconnecter' : 'Se connecter'}
+            Recharger sans les modifications en attente
           </button>
-        )}
-      </aside>
+          <button
+            className="chip"
+            onClick={() => {
+              const url = URL.createObjectURL(
+                new Blob([JSON.stringify(session.pendingSnapshot(), null, 2)], {
+                  type: 'application/json',
+                }),
+              );
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = 'goban-dojo-en-attente.json';
+              link.click();
+              window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }}
+          >
+            Exporter les modifications en attente
+          </button>
+        </>
+      )}
+      {configured && (
+        <button
+          className="chip"
+          disabled={busy}
+          onClick={() => {
+            setBusy(true);
+            void onLeave().finally(() => setBusy(false));
+          }}
+        >
+          {account ? 'Se déconnecter' : 'Se connecter'}
+        </button>
+      )}
+    </aside>
+  );
+  return (
+    <AccountControlsContext.Provider value={controls}>
       <App />
-    </>
+    </AccountControlsContext.Provider>
   );
 }
 

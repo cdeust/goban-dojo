@@ -1,3 +1,4 @@
+import { AccountControls } from './AccountControls.tsx';
 import { progressSession } from '../state/sessionProgress.ts';
 import { useEffect, useState } from 'react';
 import { PASS } from '../domain/board.ts';
@@ -67,6 +68,7 @@ export function PracticePanel() {
         <span lang="ja">稽古</span> · Entraînement
       </p>
       <h2 className="chapter__title">Carnet du dojo</h2>
+      <AccountControls />
       <p className="practice__lead">
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
@@ -76,7 +78,11 @@ export function PracticePanel() {
         <h3>Apprendre, pratiquer, progresser</h3>
         <p>
           Des fondations au yose : vie et mort, tesuji, stratégie et parties contre Leela Zero, à
-          partir de vrais kifus. Progression sauvegardée et révisions adaptées.
+          partir de vrais kifus.{' '}
+          {progressSession().status === 'visitor'
+            ? 'Progression pendant cette session'
+            : 'Progression sauvegardée'}{' '}
+          et révisions adaptées.
         </p>
         <button
           type="button"

@@ -2923,23 +2923,22 @@ progress {
   max-width: 28rem;
 }
 .account-indicator {
-  position: fixed;
-  z-index: 200;
-  right: 0.5rem;
-  bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #6b5747;
-  border-radius: 0.5rem;
-  background: #17110e;
-  font-size: 0.75rem;
-}
-
-.account-indicator {
-  max-width: calc(100vw - 1rem);
+  justify-content: center;
   flex-wrap: wrap;
+  gap: 0.35rem;
+  color: var(--paper-dim);
+  font-size: 0.75rem;
+  text-align: center;
+  max-width: 100%;
+}
+.school-account-actions {
+  display: grid;
+  justify-items: end;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.school-account-actions .account-indicator {
   justify-content: flex-end;
-  bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
