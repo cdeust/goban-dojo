@@ -7,7 +7,7 @@ const rise = {
   shown: { opacity: 1, y: 0, transition: { duration: 1.1, ease: [0.2, 0.7, 0.2, 1] as const } },
 };
 
-/** Écran d'ouverture : le titre, puis l'entrée dans le récit. */
+/** Écran d'ouverture : le titre, puis l’entrée dans le dojo. */
 export function Intro() {
   const entered = useStore((s) => s.entered);
   const status = useStore((s) => s.status);
@@ -35,8 +35,8 @@ export function Intro() {
             Goban Dojo
           </motion.h1>
           <motion.p className="intro__lede" variants={rise}>
-            Rejouez les parties de Shūsaku, de votre mentor ou les vôtres. Essayez vos propres coups
-            contre Leela Zero et comparez les variantes en points.
+            Apprenez un geste de go, testez vos coups contre Leela Zero et retrouvez les positions à
+            réviser dans votre carnet. Les parties de Shūsaku et vos propres kifus restent à portée.
           </motion.p>
           <motion.div variants={rise}>
             <button
@@ -49,7 +49,7 @@ export function Intro() {
               }}
             >
               {status === 'ready'
-                ? 'Entrer'
+                ? 'Entrer au dojo'
                 : status === 'error'
                   ? 'Indisponible'
                   : 'Préparation du goban…'}

@@ -10,7 +10,7 @@ export const SHORTCUTS: [string, string][] = [
   ['1 2 3', 'Vue du joueur · de trois-quarts · de dessus'],
   ['N', 'Numéros des coups'],
   ['M', 'Son'],
-  ['E', 'Effets de mise en scène'],
+  ['E', 'Halos tactiques'],
   ['Clic sur le goban', 'Modes « Deviner » et « Explorer » : proposer ou poser un coup'],
 ];
 
@@ -20,7 +20,6 @@ export function useKeyboard(): void {
     const onKey = (e: KeyboardEvent): void => {
       const s = useStore.getState();
       if (!s.entered || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
-      if (s.mode === 'reflechir' || s.mode === 'analyser' || s.mode === 'lire') return;
       const t = e.target;
       if (t instanceof HTMLElement) {
         if (
@@ -31,6 +30,13 @@ export function useKeyboard(): void {
           return;
         // Espace et Entrée gardent leur rôle sur un bouton qui a le focus.
         if ((e.key === ' ' || e.key === 'Enter') && t.closest('button, a, summary')) return;
+      }
+      if (s.mode === 'reflechir' || s.mode === 'analyser' || s.mode === 'lire') {
+        if (e.key.toLowerCase() === 'n') {
+          s.toggle('showNumbers');
+          e.preventDefault();
+        }
+        return;
       }
       const game = s.dataset?.games[s.gameIndex];
       if (!game) return;

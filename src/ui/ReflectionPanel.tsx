@@ -51,7 +51,7 @@ function ReflectionLine({
         {current ? (
           <>
             <h3>
-              {colorName(current.color)} {pointToHuman(current.point)}
+              Coup {scene.after + step} · {colorName(current.color)} {pointToHuman(current.point)}
             </h3>
             <p>{choice.notes[step - 1]}</p>
           </>
@@ -155,7 +155,7 @@ export function ReflectionPanel() {
           aria-pressed={effects}
           onClick={() => toggle('effects')}
         >
-          Effets
+          Halos
         </button>
         <button type="button" className="chip" onClick={() => setMode('lecture')}>
           Revenir à la partie

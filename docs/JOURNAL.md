@@ -149,3 +149,15 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
   fixe de 7,5 ; le comparateur en points KataGo utilise celui du kifu.
 - La règle s’explique avant le score. Aucun calcul IA ne bloque la leçon ni l’inscription au
   Carnet. Les moteurs tournent seulement sur demande.
+
+## Le dojo en premier, numéros pendant les variantes
+
+- L’entrée ouvre désormais le Carnet, avec deux choix explicites : une leçon et un
+  entraînement contre Leela Zero. Le Récit reste accessible par un onglet. Mesure de
+  parcours : un clic depuis le Carnet pour lancer l’une des deux activités,
+  sans devoir ouvrir une partie dans le récit.
+- La numérotation ne disparaît plus pendant une estimation. Une variante poursuit
+  l’index du kifu : après le coup 126, ses coups sont 127, 128, etc. Le contrôle
+  « Numéros » reste disponible lorsque le transport normal est masqué.
+- Les traits, cages et effets répétés cèdent la place à des halos stables après leur fondu.
+  Une légende explique les couleurs présentes, sans faire de la couleur le seul signal.

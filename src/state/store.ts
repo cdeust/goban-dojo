@@ -441,7 +441,7 @@ export const useStore = create<State>((set, get) => ({
     }
   },
 
-  enter: (panel = 'recit') => set({ entered: true, panel, view: 'joueur' }),
+  enter: (panel = 'carnet') => set({ entered: true, panel, view: 'joueur' }),
 
   importGame: (text, name) => {
     const s = get();

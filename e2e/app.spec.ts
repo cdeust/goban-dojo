@@ -32,7 +32,11 @@ function watch(page: Page): Watch {
 
 async function enter(page: Page): Promise<void> {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Entrer' }).click();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Récit', exact: true })
+    .click();
   await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
 }
 
@@ -60,15 +64,21 @@ async function openRedEarGame(page: Page): Promise<void> {
   await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('0');
 }
 
-test('ouverture : le titre, le décompte du corpus, puis l’entrée dans le récit', async ({
+test('ouverture : le carnet du dojo prime sur le récit et propose un entraînement contre Leela Zero', async ({
   page,
 }) => {
   const w = watch(page);
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1, name: 'Goban Dojo' })).toBeVisible();
   await expect(page.locator('.intro__count')).toContainText('469 parties');
-  await page.getByRole('button', { name: 'Entrer' }).click();
-  await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toBeVisible();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  const carnet = page.getByRole('complementary', { name: 'Carnet' });
+  await expect(carnet.getByRole('heading', { name: 'Carnet du dojo' })).toBeVisible();
+  await expect(carnet.getByRole('button', { name: 'Commencer la leçon' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'L’enfant d’Innoshima' })).toHaveCount(0);
+  await carnet.getByRole('button', { name: 'Démarrer un entraînement IA' }).click();
+  const atelier = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await expect(atelier.getByLabel('Adversaire')).toHaveValue('engine');
   await expect(page.locator('canvas')).toBeVisible();
   // WebGL a bien dessiné la scène : le moteur marque le canvas après sa première image non vide.
   // (Une capture d'écran du canvas est trop lente en rendu logiciel sur les machines de CI.)
@@ -179,13 +189,14 @@ test('vues, numéros et boîte d’aide', async ({ page }) => {
   await top.click();
   await expect(top).toHaveAttribute('aria-pressed', 'true');
   // Les effets de mise en scène sont actifs par défaut et se coupent d'un clic.
-  const effects = page.getByRole('button', { name: 'Effets' });
+  const effects = page.getByRole('button', { name: 'Halos' });
   await expect(effects).toHaveAttribute('aria-pressed', 'true');
   await effects.click();
   await expect(effects).toHaveAttribute('aria-pressed', 'false');
   const numbers = page.getByRole('button', { name: 'Numéros' });
-  await numbers.click();
   await expect(numbers).toHaveAttribute('aria-pressed', 'true');
+  await numbers.click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
   await page.getByRole('button', { name: 'Aide & sources' }).click();
   const dialog = page.getByRole('dialog', { name: 'Aide & sources' });
   await expect(dialog).toBeVisible();
@@ -494,13 +505,12 @@ test('réflexion : interruption documentée, variante, puis retour au kifu', asy
   await expect(reflection).toContainText('Le temps pris pour le jouer est inconnu');
   await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
   await expect(reflection).toContainText('Noir K11');
-  await expect(page.locator('.impact__arcs')).toHaveCount(0);
   await reflection.getByLabel('Suite à examiner').selectOption('1');
   await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
   await expect(reflection).toContainText('Variante pédagogique');
-  await expect(reflection).toContainText('Noir G4');
+  await expect(reflection).toContainText('Coup 127 · Noir G4');
   await reflection.getByRole('button', { name: 'Coup suivant' }).click();
-  await expect(reflection).toContainText('Blanc E18');
+  await expect(reflection).toContainText('Coup 128 · Blanc E18');
   await reflection.getByRole('button', { name: 'Reculer' }).click();
   await expect(reflection).toContainText('Noir G4');
   await reflection.getByRole('button', { name: 'Voir les simulations' }).click();
@@ -511,26 +521,28 @@ test('réflexion : interruption documentée, variante, puis retour au kifu', asy
   await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('127');
 });
 
-test('réflexion : le coup historique K11 déclenche les éclairs bleus', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
+test('réflexion : le halo de K11 est expliqué, et la numérotation reste réglable', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await enter(page);
   await openRedEarGame(page);
   await page.getByRole('slider', { name: 'Coup', exact: true }).fill('126');
   await page.getByRole('button', { name: 'Réflexion', exact: true }).click();
   const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
-  await expect(reflection.getByLabel('Moment de la partie')).toHaveValue('126');
-  await page.locator('canvas[data-rendered="true"]').waitFor();
-  await page.evaluate(() => {
-    const observer = new MutationObserver(() => {
-      const path = document.querySelector('.impact--initiative .impact__arcs path');
-      if (path?.getAttribute('d')?.match(/M/g)?.length !== 4) return;
-      document.body.dataset.sawInitiative = 'true';
-      observer.disconnect();
-    });
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-  });
+  await reflection.getByLabel('Suite à examiner').selectOption('0');
   await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
-  await expect(page.locator('body')).toHaveAttribute('data-saw-initiative', 'true');
+  await expect(reflection).toContainText('Coup 127 · Noir K11');
+  const legend = page.getByLabel('Repères tactiques du goban');
+  await expect(legend).toContainText('Coup remarquable');
+  await reflection.getByRole('button', { name: 'Halos', exact: true }).click();
+  await expect(legend).toHaveCount(0);
+  const numbers = page.getByRole('button', { name: 'Numéros', exact: true });
+  await expect(numbers).toHaveAttribute('aria-pressed', 'true');
+  await numbers.click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
+  await numbers.click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('KataGo : 144 suites, comparaison au kifu et retour depuis une réponse', async ({ page }) => {
@@ -637,6 +649,11 @@ test('la réduction des animations conserve les estimations au pas à pas pour l
     await expect(view).toHaveAttribute('data-step', '0');
     await simulation.getByRole('button', { name: 'Coup simulé suivant' }).click();
     await expect(view).toHaveAttribute('data-step', '1');
+    await expect(view).toContainText('Coup simulé ' + coup);
+    await expect(page.getByRole('button', { name: 'Numéros', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await expect(view.getByText('Variation pour ' + color)).toBeVisible({ timeout: 60_000 });
     await expect(slider).toHaveValue(anchor);
     await simulation.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
@@ -1077,8 +1094,7 @@ test('le carnet conserve une position révélée et la rouvre au bon coup le len
 
   await page.clock.setFixedTime(new Date(2026, 10, 26, 12));
   await page.reload();
-  await page.getByRole('button', { name: 'Entrer' }).click();
-  await nav.getByRole('button', { name: 'Carnet' }).click();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
   notebook = page.getByRole('complementary', { name: 'Carnet' });
   await expect(notebook).toContainText('1 position à reprendre');
   await expect(notebook).toContainText('Coup 1');
@@ -1105,7 +1121,7 @@ test('le carnet conserve une position révélée et la rouvre au bon coup le len
   expect(w.foreign).toEqual([]);
 });
 
-test('les numéros choisis restent activés après rechargement, y compris sur un kifu importé de 721 coups', async ({
+test('les numéros sont actifs sur un kifu de 721 coups et leur désactivation survit au rechargement', async ({
   page,
 }, testInfo) => {
   const w = watch(page);
@@ -1124,8 +1140,6 @@ test('les numéros choisis restent activés après rechargement, y compris sur u
   await slider.fill('721');
   await page.getByRole('button', { name: 'Dessus', exact: true }).click();
   const numbers = page.getByRole('button', { name: 'Numéros', exact: true });
-  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
-  await numbers.click();
   await expect(numbers).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('live')).toContainText('Coup 721 sur 721 : Noir K10');
   const canvas = page.locator('canvas[data-rendered="true"]');
@@ -1133,9 +1147,11 @@ test('les numéros choisis restent activés après rechargement, y compris sur u
   if (process.env.GOBAN_VISUAL_PROOF) {
     await canvas.screenshot({ path: testInfo.outputPath('coup-721.png') });
   }
+  await numbers.click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
   await page.reload();
-  await page.getByRole('button', { name: 'Entrer' }).click();
-  await expect(numbers).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
   expect(w.problems).toEqual([]);
   expect(w.foreign).toEqual([]);
 });

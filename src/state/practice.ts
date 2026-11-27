@@ -65,9 +65,9 @@ export function savePractice(profile: Practice): boolean {
 
 export function loadNumbers(): boolean {
   try {
-    return window.localStorage.getItem(NUMBERS) === '1';
+    return window.localStorage.getItem(NUMBERS) !== '0';
   } catch {
-    return false;
+    return true;
   }
 }
 

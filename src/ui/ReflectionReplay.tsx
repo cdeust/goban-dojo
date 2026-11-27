@@ -372,7 +372,12 @@ function Replay({ game, anchor, onClose }: ReplayProps) {
           >
             <p className="simulation__current">
               {current
-                ? 'Coup simulé · ' + colorName(current.color) + ' ' + pointToHuman(current.point)
+                ? 'Coup simulé ' +
+                  (anchor + visibleStep) +
+                  ' · ' +
+                  colorName(current.color) +
+                  ' ' +
+                  pointToHuman(current.point)
                 : branch
                   ? 'Position initiale · coups du kifu'
                   : unavailable

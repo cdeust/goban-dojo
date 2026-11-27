@@ -1,4 +1,4 @@
-import { useCurrentGame, useStore } from '../state/store.ts';
+import { isEstimating, useCurrentGame, useStore } from '../state/store.ts';
 import { reflectionsOf } from '../state/reflections.ts';
 
 export function TopBar() {
@@ -6,6 +6,11 @@ export function TopBar() {
   const setPanel = useStore((s) => s.setPanel);
   const game = useCurrentGame();
   const reflecting = useStore((s) => s.mode === 'reflechir');
+  const readOnlyTransport = useStore(
+    (s) => isEstimating(s) || s.mode === 'reflechir' || s.mode === 'analyser' || s.mode === 'lire',
+  );
+  const showNumbers = useStore((s) => s.showNumbers);
+  const toggle = useStore((s) => s.toggle);
   const scenes = game ? reflectionsOf(game) : [];
   return (
     <header className="topbar">
@@ -43,6 +48,16 @@ export function TopBar() {
         >
           Carnet
         </button>
+        {readOnlyTransport && (
+          <button
+            type="button"
+            className="chip"
+            aria-pressed={showNumbers}
+            onClick={() => toggle('showNumbers')}
+          >
+            Numéros
+          </button>
+        )}
         {!reflecting && scenes.length > 0 && (
           <button
             type="button"

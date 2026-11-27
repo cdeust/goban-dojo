@@ -69,6 +69,28 @@ export function PracticePanel() {
       </section>
 
       <section className="practice__card">
+        <p className="chapter__index">Atelier libre · Adversaire IA</p>
+        <h3>Jouer contre Leela Zero</h3>
+        <p>
+          Essayez une suite à partir de la position affichée. Leela Zero joue les réponses ; KataGo
+          peut ensuite estimer vos coups.
+        </p>
+        <button
+          type="button"
+          className="chip"
+          onClick={() => {
+            const state = useStore.getState();
+            state.setMode('explorer');
+            state.setExploreOpponent(true);
+            state.setView('dessus');
+            state.setPanel(null);
+          }}
+        >
+          Démarrer un entraînement IA
+        </button>
+      </section>
+
+      <section className="practice__card">
         <p className="chapter__index">
           Votre parcours · Palier {level + 1} / {PRACTICE_LEVELS.length}
         </p>
