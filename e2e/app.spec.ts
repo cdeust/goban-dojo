@@ -1190,3 +1190,61 @@ test('leçon : trouver la dernière liberté au clavier, puis comparer avec le v
   expect(w.problems).toEqual([]);
   expect(w.foreign).toEqual([]);
 });
+
+test.describe('leçon sur téléphone tactile', () => {
+  test.use({ viewport: { width: 393, height: 690 }, isMobile: true, hasTouch: true });
+
+  test('le goban reste jouable et les commandes ne recouvrent pas la leçon', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Commencer la leçon' }).click();
+    const lesson = page.getByRole('region', { name: 'La dernière liberté' });
+    const canvas = page.locator('canvas[data-rendered="true"]');
+    await expect(canvas).toBeVisible({ timeout: 45_000 });
+    await expect(lesson).toBeVisible();
+    await expect
+      .poll(async () =>
+        page.evaluate(() => {
+          const board = document.querySelector('.stage__canvas')!;
+          const r = board.getBoundingClientRect();
+          const header = document.querySelector('.topbar')!.getBoundingClientRect();
+          const prompt = document.querySelector('.mode')!.getBoundingClientRect();
+          const dock = document.querySelector('.dock')!.getBoundingClientRect();
+          const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          return {
+            navAboveBoard: header.bottom <= r.top + 1,
+            boardHeight: r.height >= window.innerHeight * 0.35,
+            boardTappable: hit?.tagName === 'CANVAS',
+            lessonBelowBoard: prompt.top >= r.bottom - 1,
+            dockBelowLesson: dock.top >= prompt.bottom - 1,
+            noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth,
+          };
+        }),
+      )
+      .toEqual({
+        navAboveBoard: true,
+        boardHeight: true,
+        boardTappable: true,
+        lessonBelowBoard: true,
+        dockBelowLesson: true,
+        noHorizontalOverflow: true,
+      });
+    await expect(lesson.getByRole('heading', { name: 'La dernière liberté' })).toBeInViewport();
+    // Toucher O13 dans la vue de dessus cadrée pour ce téléphone, sans saisie textuelle.
+    // Attendre la mise à jour du tampon WebGL après le changement de taille de la scène.
+    await expect
+      .poll(() =>
+        canvas.evaluate((element: HTMLCanvasElement) => {
+          const rect = element.getBoundingClientRect();
+          return Math.abs(element.height / element.width - rect.height / rect.width) < 0.01;
+        }),
+      )
+      .toBe(true);
+    const board = await canvas.boundingBox();
+    if (!board) throw new Error('Goban hors affichage');
+    await canvas.tap({ position: { x: board.width * 0.644, y: board.height * 0.36 } });
+    await expect(lesson).toContainText('la pierre noire est retirée');
+    await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('84');
+  });
+});

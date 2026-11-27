@@ -25,7 +25,9 @@ export function CameraRig() {
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const view = useStore((s) => s.view);
   const entered = useStore((s) => s.entered);
-  const studying = useStore((s) => s.mode === 'etudier' || s.studyOrigin !== null);
+  const studying = useStore(
+    (s) => s.mode === 'etudier' || s.mode === 'deviner' || s.studyOrigin !== null,
+  );
   const compactStudy =
     studying && entered && view === 'dessus' && window.matchMedia('(width < 60rem)').matches;
   const first = useRef(true);

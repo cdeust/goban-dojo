@@ -30,6 +30,7 @@ export function App() {
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
   const showReplay = useStore(isEstimating);
+  const guessing = useStore((s) => s.mode === 'deviner');
   const exploring = useStore((s) => s.mode === 'explorer');
   const studying = useStore((s) => s.mode === 'etudier');
   const reflecting = useStore((s) => s.mode === 'reflechir');
@@ -52,6 +53,7 @@ export function App() {
         className="app"
         data-panel={entered && panel ? 'open' : 'closed'}
         data-study={studying || hasReadingPanel || exploring}
+        data-guess={guessing}
         data-reflection={hasReadingPanel}
       >
         {entered && <Panel />}

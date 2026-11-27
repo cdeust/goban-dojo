@@ -14,3 +14,11 @@
   apparaît sur les pierres ajoutées et disparaît à la position initiale.
 - Pour un halo discret, comparer la diffusion et l’intensité autour de la pierre
   avec le rendu précédent, à la taille réelle du goban mobile.
+- Un test mobile du mode Regarder ne garantit pas la jouabilité de Deviner :
+  le volet de leçon couvrait le centre du canvas et la barre de navigation
+  chevauchait son titre. Reproduit à 393 × 690 : trois invariants de disposition
+  échouaient. La navigation, le goban (46 % de la hauteur utile), la leçon et le
+  dock ont chacun leur rangée ; la page défile sans fenêtre de texte superposée.
+  Le test vérifie ces invariants et résout la leçon en touchant O13 directement.
+  Trois passages Chromium tactiles sans réessai, plus contrôle visuel local ;
+  Safari iOS sur appareil physique reste à vérifier.
