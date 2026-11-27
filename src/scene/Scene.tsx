@@ -12,7 +12,6 @@ import { ReadingOwnership } from './ReadingOwnership.tsx';
 import { Room } from './Room.tsx';
 import { Stones } from './Stones.tsx';
 import { SimulationMarks } from './SimulationMarks.tsx';
-import { StudyMarks } from './StudyMarks.tsx';
 
 /**
  * Marque le canvas dès qu'une image contenant de la géométrie a été dessinée (repère pour les
@@ -63,7 +62,6 @@ export function Scene() {
       </Bowls>
       <Marks />
       <ReadingOwnership />
-      <StudyMarks />
       <BoardInput />
       <AnalysisMarks />
       <SimulationMarks />

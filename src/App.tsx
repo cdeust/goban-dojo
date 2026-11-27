@@ -7,7 +7,6 @@ import { Dock } from './ui/Dock.tsx';
 import { AnalysisPanel } from './ui/AnalysisPanel.tsx';
 import { GameCard } from './ui/GameCard.tsx';
 import { HelpDialog } from './ui/HelpDialog.tsx';
-import { ImpactLines } from './ui/ImpactLines.tsx';
 import { Intro } from './ui/Intro.tsx';
 import { LiveRegion } from './ui/LiveRegion.tsx';
 import { ModePanel } from './ui/ModePanel.tsx';
@@ -17,6 +16,7 @@ import { ReflectionReplay } from './ui/ReflectionReplay.tsx';
 import { ReflectionPanel } from './ui/ReflectionPanel.tsx';
 import { ReadingPanel } from './ui/ReadingPanel.tsx';
 import { StudyPanel } from './ui/StudyPanel.tsx';
+import { TacticalLegend } from './ui/TacticalLegend.tsx';
 import { TopBar } from './ui/TopBar.tsx';
 import { useKeyboard } from './ui/useKeyboard.ts';
 
@@ -29,7 +29,6 @@ export function App() {
   const entered = useStore((s) => s.entered);
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
-  const effects = useStore((s) => s.effects);
   const showReplay = useStore(isEstimating);
   const exploring = useStore((s) => s.mode === 'explorer');
   const studying = useStore((s) => s.mode === 'etudier');
@@ -56,9 +55,10 @@ export function App() {
         data-reflection={hasReadingPanel}
       >
         {entered && <Panel />}
-        <main className="stage" data-effects={effects} data-simulation={showReplay}>
+        <main className="stage" data-simulation={showReplay}>
           <div className="stage__canvas">
             <Suspense fallback={null}>{status === 'ready' && <Scene />}</Suspense>
+            {entered && sceneReady && <TacticalLegend />}
           </div>
           {status === 'ready' && !sceneReady && (
             <p className="stage__loading" role="status">
@@ -74,7 +74,6 @@ export function App() {
             <>
               <TopBar />
               <GameCard />
-              <ImpactLines />
               <MomentCaption />
               <ReflectionReplay />
               {reading ? (
