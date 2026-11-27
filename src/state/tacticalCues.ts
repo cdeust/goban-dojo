@@ -29,6 +29,11 @@ export const TACTICAL_CUES = {
     label: 'Coup étudié',
     detail: 'Le dernier coup de la position étudiée.',
   },
+  variation: {
+    color: '#a2eaff',
+    label: 'Coup de variante',
+    detail: 'Ce coup prolonge la position dans la suite affichée.',
+  },
   landmark: {
     color: '#6aabff',
     label: 'Coup remarquable',
@@ -40,11 +45,22 @@ export type Cue = keyof typeof TACTICAL_CUES;
 type State = ReturnType<typeof useStore.getState>;
 
 export function tacticalCueKey(state: State): string {
-  if (!state.effects || isEstimating(state)) return '';
+  if (!state.effects) return '';
   const game = state.dataset?.games[state.gameIndex];
   const shown = displayOf(state);
   if (!game || !shown) return '';
   const { timeline, move } = shown;
+  const estimating = isEstimating(state);
+  const variant =
+    (estimating || state.mode === 'etudier') && state.variation.length
+      ? timeline.stones
+          .filter(
+            ({ placedAt, capturedAt }) =>
+              placedAt > state.move && placedAt <= move && capturedAt > move,
+          )
+          .map(({ point }) => point)
+      : [];
+  if (estimating) return variant.map((point) => `${point}:variation`).join(',');
   const mark = marksOf(state);
   const scenes = reflectionsOf(game);
   const anchor =
@@ -56,6 +72,7 @@ export function tacticalCueKey(state: State): string {
   function put(kind: Cue, points: readonly number[]): void {
     for (const p of points) if (p >= 0 && p < POINTS) cues.set(p, kind);
   }
+  put('variation', variant);
   if (mark.threat.connects.length) put('connection', [mark.last, ...mark.threat.connects]);
   put('atari', mark.atari);
   put('trap', mark.trapped);

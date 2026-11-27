@@ -37,3 +37,18 @@ it('signale K11 quand la suite reflète le kifu, pas dans une variante distincte
   expect(parseTacticalCueKey(tacticalCueKey(other))).not.toContainEqual(mark);
   expect(tacticalCueKey({ ...state, effects: false })).toBe('');
 });
+
+it('identifie la seule pierre hypothétique visible pendant une simulation', () => {
+  const gameIndex = dataset.games.findIndex(({ id }) => id === 's126');
+  const point = pointFromHuman('G4')!;
+  const state = {
+    ...snapshot,
+    dataset,
+    gameIndex,
+    move: 126,
+    reflectionReplay: 'manual' as const,
+    variation: [{ color: 'B' as const, point }],
+  };
+  expect(parseTacticalCueKey(tacticalCueKey(state))).toEqual([{ point, kind: 'variation' }]);
+  expect(tacticalCueKey({ ...state, effects: false })).toBe('');
+});

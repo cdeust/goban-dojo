@@ -17,7 +17,6 @@ import { practiceDay, recordRecall, type Practice, type Recall } from '../domain
 import { trappedStones, type EnginePosition } from '../engine/features.ts';
 import { isLegalZeroMove } from '../engine/zeroSearch.ts';
 import { FIRST_LESSON, type Lesson } from '../story/lessons.ts';
-import { momentFor } from '../story/chapters.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 import { localGames, saveGame } from './localGames.ts';
 import { loadNumbers, loadPractice, saveNumbers, savePractice } from './practice.ts';
@@ -47,21 +46,6 @@ export interface Zone {
   y0: number;
   x1: number;
   y1: number;
-}
-
-/**
- * Ce qu'un coup qui vient de frapper le goban a de remarquable, du plus fort au plus faible :
- * « moment » (instant du récit), « piege » (il enferme des pierres dans un shicho qui fonctionne),
- * « menace » (il met en atari ou capture), « connexion » (il relie deux groupes), « coup ».
- */
-export type ImpactKind = 'coup' | 'connexion' | 'menace' | 'piege' | 'moment' | 'initiative';
-
-export interface Impact {
-  /** Numéro d'ordre : deux impacts au même point restent distincts. */
-  seq: number;
-  point: number;
-  kind: ImpactKind;
-  tactical?: true;
 }
 
 export type GuessResult =
@@ -147,10 +131,8 @@ interface State {
   view: ViewName;
   showNumbers: boolean;
   sound: boolean;
-  /** Effets de mise en scène : marques d'atari, de piège et de connexion, lignes de force. */
+  /** Repères visuels du goban : halos tactiques et leur légende. */
   effects: boolean;
-  /** Dernière pierre à avoir frappé le goban (renseigné par la scène). */
-  impact: Impact | null;
   /** L'écran d'ouverture a été franchi. */
   entered: boolean;
   /** Le salon (modèle et physique) est chargé. */
@@ -192,8 +174,6 @@ interface State {
   setSpeed: (speed: number) => void;
   setView: (view: ViewName) => void;
   toggle: (key: 'showNumbers' | 'sound' | 'continuous' | 'effects' | 'tacticalPauses') => void;
-  /** La scène signale que la pierre du coup affiché vient de toucher le goban. */
-  notifyImpact: (point: number) => void;
   setPanel: (panel: PanelName) => void;
   setChapter: (index: number) => void;
   setMode: (mode: Mode) => void;
@@ -406,7 +386,6 @@ export const useStore = create<State>((set, get) => ({
   effects: true,
   tacticalPauses: true,
   reflectionReplay: null,
-  impact: null,
   entered: false,
   sceneReady: false,
   panel: null,
@@ -464,7 +443,7 @@ export const useStore = create<State>((set, get) => ({
     if (s.reflectionReplay !== 'auto' && s.reflectionReplay !== 'manual') return;
     if (s.variation.length === moves.length && s.variation.every((move, i) => move === moves[i]))
       return;
-    set({ variation: moves, impact: null });
+    set({ variation: moves });
   },
   setSceneReady: () => set({ sceneReady: true }),
 
@@ -507,7 +486,7 @@ export const useStore = create<State>((set, get) => ({
       move: next,
       lesson: null,
       reflectionReplay: replay ?? null,
-      ...(pause || replay ? { playing: false, impact: null } : {}),
+      ...(pause || replay ? { playing: false } : {}),
       studyOrigin: null,
       studyMove: target !== null && (next === target || next === target - 1) ? target : null,
       // Changer de position abandonne l'exploration et l'essai en cours, pas le bilan.
@@ -526,7 +505,6 @@ export const useStore = create<State>((set, get) => ({
       reflectionReplay: 'manual',
       playing: false,
       variation: [],
-      impact: null,
     });
   },
 
@@ -574,49 +552,11 @@ export const useStore = create<State>((set, get) => ({
   setPanel: (panel) => set({ panel }),
   setChapter: (index) => set({ chapterIndex: index }),
 
-  notifyImpact: (point) => {
-    const s = get();
-    if (isEstimating(s)) return;
-    if (s.mode === 'lire' && s.readingPace !== null && s.readingPace > 3) return;
-    const game = s.dataset?.games[s.gameIndex];
-    const d = displayOf(s);
-    if (!game || !d) return;
-    const marks = marksOf(s);
-    if (point !== marks.last) return;
-    // Seul compte ce que CE coup accomplit : un piège ou un atari déjà en place ailleurs sur le
-    // goban ne donne aucun relief au coup suivant.
-    const caught = new Set(marks.trapped);
-    const traps = marks.threat.atari.some((p) => caught.has(p));
-    const initiative = showsEarRedMove(game, s.move, s.variation);
-    const tactical =
-      s.variation.length === 0 &&
-      reflectionsOf(game).some((scene) => scene.tactical?.number === s.move);
-    const kind: ImpactKind = initiative
-      ? 'initiative'
-      : s.variation.length === 0 && momentFor(game, s.move)
-        ? 'moment'
-        : traps
-          ? 'piege'
-          : marks.threat.atari.length > 0 || marks.threat.captured > 0
-            ? 'menace'
-            : marks.threat.connects.length > 0
-              ? 'connexion'
-              : 'coup';
-    set({
-      impact: {
-        seq: (s.impact?.seq ?? 0) + 1,
-        point,
-        kind,
-        ...(tactical ? { tactical: true } : {}),
-      },
-    });
-  },
-
   compareResignation: (open) => {
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
     if (s.mode !== 'lire' || !game?.result.resign || s.move !== moveCount(game)) return;
-    set({ reflectionReplay: open ? 'resignation' : null, impact: null });
+    set({ reflectionReplay: open ? 'resignation' : null });
   },
 
   readResignation: () => {
@@ -647,7 +587,6 @@ export const useStore = create<State>((set, get) => ({
         analysisMarks: [],
         readingPace: null,
         readingOwnership: null,
-        impact: null,
         notice: null,
         guess:
           mode === 'deviner'
@@ -670,7 +609,6 @@ export const useStore = create<State>((set, get) => ({
       panel: null,
       variation: [],
       studyMove: null,
-      impact: null,
       notice: null,
     });
   },
@@ -682,7 +620,7 @@ export const useStore = create<State>((set, get) => ({
     const scene = reflectionsOf(game).find((scene) => scene.after === s.move);
     const choice = scene && reflectionLines(game, scene)[line];
     if (!choice) return;
-    set({ variation: reflectionMoves(game, s.move, choice).slice(0, step), impact: null });
+    set({ variation: reflectionMoves(game, s.move, choice).slice(0, step) });
   },
 
   markAnalysis: (marks) => {
@@ -692,7 +630,7 @@ export const useStore = create<State>((set, get) => ({
   trimAnalysis: (length) => {
     const s = get();
     if (s.mode !== 'analyser') return;
-    set({ variation: s.variation.slice(0, length), analysisMarks: [], notice: null, impact: null });
+    set({ variation: s.variation.slice(0, length), analysisMarks: [], notice: null });
   },
 
   showReading: (moves, pace, ownership) => {
@@ -704,8 +642,7 @@ export const useStore = create<State>((set, get) => ({
         const shown = s.variation[i];
         return shown?.point === move.point && shown.color === move.color;
       });
-    if (!same)
-      set({ variation: moves, readingPace: pace, readingOwnership: ownership, impact: null });
+    if (!same) set({ variation: moves, readingPace: pace, readingOwnership: ownership });
     else if (s.readingPace !== pace || s.readingOwnership !== ownership) {
       set({ readingPace: pace, readingOwnership: ownership });
     }
@@ -721,7 +658,7 @@ export const useStore = create<State>((set, get) => ({
         ))
     )
       return;
-    set({ variation: moves, impact: null });
+    set({ variation: moves });
   },
 
   showStudyMove: (number, after = false) => {
@@ -737,7 +674,6 @@ export const useStore = create<State>((set, get) => ({
       studyMove: number,
       move: after ? number : number - 1,
       variation: [],
-      impact: null,
       playing: false,
     });
   },
