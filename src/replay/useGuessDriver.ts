@@ -13,10 +13,11 @@ export function useGuessDriver(): void {
   const mode = useStore((s) => s.mode);
   const gameIndex = useStore((s) => s.gameIndex);
   const move = useStore((s) => s.move);
+  const lesson = useStore((s) => s.lesson);
   const color = useStore((s) => s.guessColor);
 
   useEffect(() => {
-    if (mode !== 'deviner') return;
+    if (mode !== 'deviner' || lesson) return;
     const s = useStore.getState();
     const game = s.dataset?.games[gameIndex];
     if (!game) return;
@@ -27,5 +28,5 @@ export function useGuessDriver(): void {
       useStore.setState({ move: move + 1 });
     }, REPLY_DELAY);
     return () => window.clearTimeout(id);
-  }, [mode, gameIndex, move, color]);
+  }, [mode, gameIndex, move, color, lesson]);
 }

@@ -135,3 +135,17 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
   comme numéros visibles. Les passes restent incluses dans la numérotation réelle du kifu.
 - Persistance locale, sans dépendance, compte ou appel réseau supplémentaire. Les données de
   progression ne sont pas synchronisées entre navigateurs.
+
+## Première leçon : la dernière liberté
+
+- Mesure : passer de zéro leçon guidée à une boucle qui va d’une position sans réponse visible
+  au coup du joueur, puis à une capture vérifiable et à une comparaison réelle de suites.
+- Kifu `s001` du 14 décembre 1839, avant le coup 84 : O13 est la dernière liberté de la
+  pierre de Noir en P13. Le moteur de règles retire exactement P13 quand Blanc joue O13.
+- Depuis la racine du dépôt : `pnpm exec vitest run tests/firstLesson.test.ts`. Leela Zero nº 116,
+  ONNX Runtime WebAssembly sur un fil, 32 visites : les 32 passent par O13, et la branche
+  publiée commence O13, R13, S10, trois coups conformes au kifu. Ce n’est ni une comparaison de
+  force avec AlphaGo Zero ni un résultat généralisable. La recherche Leela utilise un komi
+  fixe de 7,5 ; le comparateur en points KataGo utilise celui du kifu.
+- La règle s’explique avant le score. Aucun calcul IA ne bloque la leçon ni l’inscription au
+  Carnet. Les moteurs tournent seulement sur demande.

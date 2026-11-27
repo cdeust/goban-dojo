@@ -1139,3 +1139,38 @@ test('les numéros choisis restent activés après rechargement, y compris sur u
   expect(w.problems).toEqual([]);
   expect(w.foreign).toEqual([]);
 });
+
+test('leçon : trouver la dernière liberté au clavier, puis comparer avec le vrai modèle KataGo', async ({
+  page,
+}) => {
+  test.slow();
+  const w = watch(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Carnet' })
+    .click();
+  await page.getByRole('button', { name: 'Commencer la leçon' }).click();
+  const lesson = page.getByRole('region', { name: 'La dernière liberté' });
+  const slider = page.getByRole('slider', { name: 'Coup', exact: true });
+  await expect(slider).toHaveValue('83');
+  await expect(lesson).toContainText('pierre noire en P13');
+  await expect(lesson.getByText(/O13/)).toHaveCount(0);
+  await lesson.getByText('Saisir une coordonnée', { exact: true }).click();
+  const point = lesson.getByLabel('Intersection (par ex. D4)');
+  await point.fill('O13');
+  await point.press('Enter');
+  await expect(slider).toHaveValue('84');
+  await expect(lesson).toContainText('la pierre noire est retirée');
+  await lesson.getByRole('button', { name: 'Comparer les suites avec KataGo' }).click();
+  const study = page.getByRole('region', { name: 'Étude du kifu' });
+  await expect(slider).toHaveValue('83');
+  await expect(study.getByRole('button', { name: 'Explorer avec Leela Zero' })).toBeVisible();
+  const ranking = study.getByRole('table', { name: 'Premiers coups évalués', exact: true });
+  await expect(ranking).toBeVisible({ timeout: 90_000 });
+  await expect(study).toContainText('Coup du kifu');
+  await expect(study.getByText(/KataGo estime le score pour Blanc/)).toBeVisible();
+  expect(w.problems).toEqual([]);
+  expect(w.foreign).toEqual([]);
+});
