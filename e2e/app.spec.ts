@@ -1291,3 +1291,101 @@ test('parcours individualisé : la prochaine leçon et les compétences suivent 
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
   await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
 });
+
+test.describe('école de go sur mobile', () => {
+  test.use({
+    viewport: { width: 393, height: 690 },
+    isMobile: true,
+    hasTouch: true,
+    acceptDownloads: true,
+  });
+  test('264 exercices réels, capture en trois coups et progression portable', async ({
+    page,
+    browser,
+  }) => {
+    test.slow();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await expect(page.getByRole('heading', { name: 'École de go', exact: true })).toBeVisible();
+    await expect(page.getByText(/264 exercices tirés de 61 parties/)).toBeVisible();
+    await page.getByRole('button', { name: 'Commencer ma séance' }).click();
+    await expect(
+      page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+    ).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const question = document
+            .querySelector('#school-exercise-title')!
+            .getBoundingClientRect();
+          const board = document.querySelector('.school-board')!.getBoundingClientRect();
+          return (
+            question.bottom <= board.top &&
+            question.top >= 0 &&
+            board.bottom <= innerHeight &&
+            document.documentElement.scrollWidth <= innerWidth
+          );
+        }),
+      )
+      .toBe(true);
+    await page.getByRole('button', { name: '4', exact: true }).click();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await expect(page.getByText('1 / 264', { exact: false }).first()).toBeVisible();
+    await page
+      .getByRole('button', { name: 'Travailler : Lire une capture en trois coups' })
+      .click();
+    await expect(
+      page.getByRole('heading', { name: /Forcez la capture du groupe en K5/ }),
+    ).toBeVisible();
+    // Position historique s042 après 152, L5–K6–H6 est une défense prouvée.
+    const grid = page.getByRole('group', { name: 'Position du kifu, goban interactif' });
+    await grid.getByRole('button', { name: 'L5, vide', exact: true }).tap();
+    await expect(
+      page.getByRole('heading', { name: 'Terminez la capture du groupe.' }),
+    ).toBeVisible();
+    await expect(grid.getByRole('button', { name: /K6, blanc, coup 154/ })).toBeVisible();
+    await grid.getByRole('button', { name: 'H6, vide', exact: true }).tap();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await expect(grid.getByRole('button', { name: /H6, noir, coup 155/ })).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await expect(page.getByText('2 / 264', { exact: false }).first()).toBeVisible();
+    await page.reload();
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await expect(page.getByText('2 / 264', { exact: false }).first()).toBeVisible();
+    const downloaded = page.waitForEvent('download');
+    await page.getByRole('button', { name: 'Exporter la progression' }).click();
+    const backup = await downloaded;
+    const file = await backup.path();
+    if (!file) throw new Error('Sauvegarde absente');
+    const fresh = await browser.newContext({
+      baseURL: 'http://127.0.0.1:4173',
+      viewport: { width: 393, height: 690 },
+      isMobile: true,
+      hasTouch: true,
+    });
+    try {
+      const other = await fresh.newPage();
+      await other.emulateMedia({ reducedMotion: 'reduce' });
+      await other.goto('/');
+      await other.getByRole('button', { name: 'Entrer au dojo' }).click();
+      await other.getByRole('button', { name: 'Entrer dans l’école' }).click();
+      await expect(other.getByText('0 / 264', { exact: false }).first()).toBeVisible();
+      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles(file);
+      await other.getByRole('button', { name: 'Remplacer la progression' }).click();
+      await expect(other.getByText('2 / 264', { exact: false }).first()).toBeVisible();
+      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles({
+        name: 'invalide.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from('{"version":2}'),
+      });
+      await expect(other.getByRole('status')).toContainText('Votre progression n’a pas changé');
+      await expect(other.getByText('2 / 264', { exact: false }).first()).toBeVisible();
+    } finally {
+      await fresh.close();
+    }
+  });
+});

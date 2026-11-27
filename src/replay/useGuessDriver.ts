@@ -11,13 +11,14 @@ const REPLY_DELAY = 750;
  */
 export function useGuessDriver(): void {
   const mode = useStore((s) => s.mode);
+  const schoolOpen = useStore((s) => s.schoolOpen);
   const gameIndex = useStore((s) => s.gameIndex);
   const move = useStore((s) => s.move);
   const lesson = useStore((s) => s.lesson);
   const color = useStore((s) => s.guessColor);
 
   useEffect(() => {
-    if (mode !== 'deviner' || lesson) return;
+    if (mode !== 'deviner' || lesson || schoolOpen) return;
     const s = useStore.getState();
     const game = s.dataset?.games[gameIndex];
     if (!game) return;
@@ -28,5 +29,5 @@ export function useGuessDriver(): void {
       useStore.setState({ move: move + 1 });
     }, REPLY_DELAY);
     return () => window.clearTimeout(id);
-  }, [mode, gameIndex, move, color, lesson]);
+  }, [mode, gameIndex, move, color, lesson, schoolOpen]);
 }

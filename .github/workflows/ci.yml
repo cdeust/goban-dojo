@@ -33,7 +33,7 @@ jobs:
       - name: Reconstruire les données et vérifier qu'elles sont identiques à celles du dépôt
         run: |
           pnpm data:build
-          git diff --exit-code -- public/data data/report.json
+          git diff --exit-code -- public/data data/report.json src/story/schoolCatalog.json
       - run: pnpm typecheck
       - name: Lint et analyse statique de sécurité (SAST)
         run: pnpm lint --max-warnings 0

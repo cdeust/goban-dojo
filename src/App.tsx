@@ -18,6 +18,7 @@ import { ReadingPanel } from './ui/ReadingPanel.tsx';
 import { StudyPanel } from './ui/StudyPanel.tsx';
 import { TacticalLegend } from './ui/TacticalLegend.tsx';
 import { TopBar } from './ui/TopBar.tsx';
+import { School } from './ui/School.tsx';
 import { useKeyboard } from './ui/useKeyboard.ts';
 
 // three.js est lourd : la scène est chargée à part, le texte s'affiche d'abord.
@@ -29,6 +30,7 @@ export function App() {
   const entered = useStore((s) => s.entered);
   const sceneReady = useStore((s) => s.sceneReady);
   const panel = useStore((s) => s.panel);
+  const schoolOpen = useStore((s) => s.schoolOpen);
   const showReplay = useStore(isEstimating);
   const guessing = useStore((s) => s.mode === 'deviner');
   const exploring = useStore((s) => s.mode === 'explorer');
@@ -45,6 +47,8 @@ export function App() {
   usePlayback();
   useGuessDriver();
   useKeyboard();
+
+  if (schoolOpen && entered && status === 'ready') return <School />;
 
   return (
     // « user » : Motion respecte de lui-même la préférence système de réduction des animations.

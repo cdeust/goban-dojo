@@ -147,6 +147,7 @@ interface State {
   practice: Practice;
   lesson: Lesson | null;
   practiceSaved: boolean;
+  schoolOpen: boolean;
   guessColor: Color;
   exploreOpponent: boolean;
   /** Suite jouée sur le goban depuis le coup `move` du kifu. */
@@ -160,6 +161,7 @@ interface State {
 
   load: () => Promise<void>;
   enter: (panel?: PanelName) => void;
+  setSchoolOpen: (open: boolean) => void;
   importGame: (text: string, name: string) => void;
   chooseGuessColor: (color: Color) => void;
   showSimulation: (moves: Move[]) => void;
@@ -382,6 +384,7 @@ export const useStore = create<State>((set, get) => ({
   practice: loadPractice(),
   lesson: null,
   practiceSaved: true,
+  schoolOpen: false,
   sound: true,
   effects: true,
   tacticalPauses: true,
@@ -421,6 +424,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   enter: (panel = 'carnet') => set({ entered: true, panel, view: 'joueur' }),
+  setSchoolOpen: (open) => set({ schoolOpen: open, playing: false }),
 
   importGame: (text, name) => {
     const s = get();

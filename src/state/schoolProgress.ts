@@ -1,0 +1,54 @@
+import {
+  emptySchoolProgress,
+  type SchoolProgress,
+  type SchoolRecord,
+} from '../domain/schoolProgress.ts';
+import { MASTERY } from '../domain/practice.ts';
+const KEY = 'goban-dojo:school:v1';
+const int = (value: unknown, min: number, max: number): value is number =>
+  typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max;
+export function decodeSchoolProgress(raw: string): SchoolProgress | null {
+  if (raw.length > 1_000_000) return null;
+  try {
+    const parsed = JSON.parse(raw) as SchoolProgress;
+    if (parsed?.version !== 1 || !Array.isArray(parsed.records) || parsed.records.length > 10_000)
+      return null;
+    const seen = new Set<string>();
+    const records: SchoolRecord[] = [];
+    for (const r of parsed.records) {
+      if (
+        !r ||
+        typeof r.id !== 'string' ||
+        r.id.length > 100 ||
+        !/^[-a-z]+:s\d+:\d+$/.test(r.id) ||
+        seen.has(r.id) ||
+        typeof r.firstTry !== 'boolean' ||
+        !['exact', 'assisted', 'shown', 'incomplete'].includes(r.last) ||
+        !int(r.stage, 0, MASTERY) ||
+        !int(r.due, 0, 100_000)
+      )
+        return null;
+      seen.add(r.id);
+      records.push({ id: r.id, firstTry: r.firstTry, last: r.last, stage: r.stage, due: r.due });
+    }
+    return { version: 1, records };
+  } catch {
+    return null;
+  }
+}
+export function loadSchoolProgress(): SchoolProgress {
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    return raw ? (decodeSchoolProgress(raw) ?? emptySchoolProgress()) : emptySchoolProgress();
+  } catch {
+    return emptySchoolProgress();
+  }
+}
+export function saveSchoolProgress(progress: SchoolProgress): boolean {
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(progress));
+    return true;
+  } catch {
+    return false;
+  }
+}

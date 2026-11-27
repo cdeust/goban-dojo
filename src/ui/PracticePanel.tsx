@@ -70,6 +70,21 @@ export function PracticePanel() {
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
 
+      <section className="practice__card practice__school">
+        <p className="chapter__index">École de go · Cycle 1</p>
+        <h3>Apprendre, pratiquer, progresser</h3>
+        <p>
+          Un programme de règles et tactique construit à partir des positions de parties réelles,
+          avec des exercices par thème et une progression sauvegardée.
+        </p>
+        <button
+          type="button"
+          className="chip chip--accent"
+          onClick={() => useStore.getState().setSchoolOpen(true)}
+        >
+          Entrer dans l’école
+        </button>
+      </section>
       <section className="practice__card">
         <p className="chapter__index">Leçon guidée · Libertés et capture</p>
         <h3>{FIRST_LESSON.title}</h3>
