@@ -2539,3 +2539,28 @@ progress {
     height: min(65dvh, 34rem);
   }
 }
+
+.practice__theme {
+  display: grid;
+  gap: 0.45rem;
+  margin-block: 0.65rem;
+  padding-block-start: 0.65rem;
+  border-block-start: 1px solid var(--hairline);
+}
+
+.practice__theme h4 {
+  margin: 0;
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.practice__exercise {
+  display: grid;
+  gap: 0.2rem;
+  align-items: center;
+}
+
+.practice__exercise .chip {
+  justify-self: start;
+  text-align: start;
+}

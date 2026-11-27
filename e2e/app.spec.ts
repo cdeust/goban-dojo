@@ -1253,3 +1253,41 @@ test.describe('leçon sur téléphone tactile', () => {
     await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('84');
   });
 });
+
+test('parcours individualisé : la prochaine leçon et les compétences suivent le carnet sauvegardé', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.setFixedTime(new Date(2026, 10, 27, 12));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  let curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  await expect(curriculum).toContainText('0 / 4 exercices');
+  await expect(curriculum).toContainText('Niveau 1');
+  await expect(curriculum).toContainText('Niveau 2');
+  await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
+  await curriculum.getByRole('button', { name: 'Ouvrir l’exercice recommandé' }).click();
+  const first = page.getByRole('region', { name: 'La dernière liberté' });
+  await first.getByText('Saisir une coordonnée', { exact: true }).click();
+  const answer = first.getByLabel('Intersection (par ex. D4)');
+  await answer.fill('O13');
+  await answer.press('Enter');
+  await expect(first).toContainText('Exact, du premier coup.');
+  await first.getByRole('button', { name: 'Terminer la leçon' }).click();
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  await expect(curriculum).toContainText('1 / 4 exercices');
+  await expect(curriculum).toContainText('Libertés et capture · 1 / 2');
+  await expect(curriculum).toContainText('Connexion et sauvetage · 0 / 2');
+  await expect(curriculum).toContainText('À travailler maintenant : Relier pour sauver');
+  await curriculum.getByRole('button', { name: 'Ouvrir l’exercice recommandé' }).click();
+  await expect(page.getByRole('region', { name: 'Relier pour sauver' })).toContainText(
+    'Q14 et Q15',
+  );
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('80');
+  await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
+});
