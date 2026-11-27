@@ -34,6 +34,15 @@ export function TopBar() {
         >
           Parties
         </button>
+        <button
+          type="button"
+          className="chip"
+          aria-expanded={panel === 'carnet'}
+          aria-controls="panel"
+          onClick={() => setPanel(panel === 'carnet' ? null : 'carnet')}
+        >
+          Carnet
+        </button>
         {!reflecting && scenes.length > 0 && (
           <button
             type="button"

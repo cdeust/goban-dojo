@@ -13,16 +13,18 @@ import {
   type Threat,
   type Timeline,
 } from '../domain/game.ts';
+import { practiceDay, recordRecall, type Practice, type Recall } from '../domain/practice.ts';
 import { trappedStones, type EnginePosition } from '../engine/features.ts';
 import { isLegalZeroMove } from '../engine/zeroSearch.ts';
 import { momentFor } from '../story/chapters.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 import { localGames, saveGame } from './localGames.ts';
+import { loadNumbers, loadPractice, saveNumbers, savePractice } from './practice.ts';
 import { reflectionLines, reflectionsOf } from './reflections.ts';
 
 export type ViewName = 'joueur' | 'trois-quarts' | 'dessus';
 type ReflectionReplay = 'auto' | 'manual' | 'resignation' | 'return';
-export type PanelName = 'recit' | 'parties' | null;
+export type PanelName = 'recit' | 'parties' | 'carnet' | null;
 /**
  * lecture  : la partie se déroule seule ;
  * deviner  : on cherche soi-même le prochain coup de Shūsaku ;
@@ -159,6 +161,8 @@ interface State {
   /** Préfixe étudié à restaurer après un essai ou une lecture longue. */
   studyOrigin: ExploreMove[] | null;
   guess: GuessState;
+  practice: Practice;
+  practiceSaved: boolean;
   guessColor: Color;
   exploreOpponent: boolean;
   /** Suite jouée sur le goban depuis le coup `move` du kifu. */
@@ -204,6 +208,7 @@ interface State {
   clickPoint: (point: number) => void;
   /** Mode « deviner » : demander un indice (compte comme un essai manqué). */
   hint: () => void;
+  startPractice: (gameId: string, before: number) => void;
   /** Mode « deviner » : montrer le coup et passer au suivant. */
   reveal: () => void;
   setExploreOpponent: (enabled: boolean) => void;
@@ -375,6 +380,11 @@ function isDataset(value: unknown): value is Dataset {
   );
 }
 
+function practiceUpdate(s: State, game: GameRecord, recall: Recall): Partial<State> {
+  const practice = recordRecall(s.practice, game.id, s.move, recall, practiceDay());
+  return practice === s.practice ? {} : { practice, practiceSaved: savePractice(practice) };
+}
+
 export const useStore = create<State>((set, get) => ({
   status: 'loading',
   dataset: null,
@@ -384,7 +394,9 @@ export const useStore = create<State>((set, get) => ({
   speed: 1,
   continuous: true,
   view: 'trois-quarts',
-  showNumbers: false,
+  showNumbers: loadNumbers(),
+  practice: loadPractice(),
+  practiceSaved: true,
   sound: true,
   effects: true,
   tacticalPauses: true,
@@ -547,7 +559,11 @@ export const useStore = create<State>((set, get) => ({
 
   setSpeed: (speed) => set({ speed }),
   setView: (view) => set({ view }),
-  toggle: (key) => set((s) => ({ [key]: !s[key] }) as Partial<State>),
+  toggle: (key) => {
+    const value = !get()[key];
+    if (key === 'showNumbers') saveNumbers(value);
+    set({ [key]: value } as Partial<State>);
+  },
   setPanel: (panel) => set({ panel }),
   setChapter: (index) => set({ chapterIndex: index }),
 
@@ -764,6 +780,7 @@ export const useStore = create<State>((set, get) => ({
     if (point === target.point) {
       const points = GUESS_POINTS[g.tries] ?? 0;
       set({
+        ...practiceUpdate(s, game, g.tries === 0 ? 'exact' : 'assisted'),
         guess: {
           tries: 0,
           wrong: [],
@@ -796,6 +813,17 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
+  startPractice: (gameId, before) => {
+    const s = get();
+    const index = s.dataset?.games.findIndex((game) => game.id === gameId) ?? -1;
+    const game = s.dataset?.games[index];
+    const target = game && timelineOf(game).moves[before];
+    if (!target || target.point === PASS) return;
+    s.setMode('deviner');
+    s.selectGame(index, { move: before });
+    set({ guessColor: target.color, view: 'dessus', panel: null });
+  },
+
   hint: () => {
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
@@ -814,8 +842,16 @@ export const useStore = create<State>((set, get) => ({
     const s = get();
     const game = s.dataset?.games[s.gameIndex];
     const target = game ? timelineOf(game).moves[s.move] : undefined;
-    if (s.mode !== 'deviner' || !game || !target || target.color !== s.guessColor) return;
+    if (
+      s.mode !== 'deviner' ||
+      !game ||
+      !target ||
+      target.color !== s.guessColor ||
+      target.point === PASS
+    )
+      return;
     set({
+      ...practiceUpdate(s, game, 'shown'),
       guess: {
         ...s.guess,
         tries: 0,

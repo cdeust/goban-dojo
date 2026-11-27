@@ -6,6 +6,7 @@ import { CHAPTERS, chapterIndexOf, gamesOfChapter } from '../story/chapters.ts';
 import { formatDate, outcomeFor, prettyName } from '../story/format.ts';
 import { moveCount, useStore } from '../state/store.ts';
 import { mentorsOf, type Mentor } from '../story/mentors.ts';
+import { PracticePanel } from './PracticePanel.tsx';
 import { MentorStory } from './MentorStory.tsx';
 import { IconClose, IconPlay } from './icons.tsx';
 
@@ -25,7 +26,7 @@ export function Panel() {
         <motion.aside
           id="panel"
           className="panel"
-          aria-label={panel === 'recit' ? 'Récit' : 'Parties'}
+          aria-label={{ recit: 'Récit', parties: 'Parties', carnet: 'Carnet' }[panel]}
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -24 }}
@@ -48,7 +49,15 @@ export function Panel() {
             >
               Parties
             </button>
-            {!studying && (
+            <button
+              type="button"
+              className="tab"
+              aria-pressed={panel === 'carnet'}
+              onClick={() => setPanel('carnet')}
+            >
+              Carnet
+            </button>
+            {!studying && panel !== 'carnet' && (
               <button
                 type="button"
                 className="tab tab--study"
@@ -68,6 +77,8 @@ export function Panel() {
           </div>
           {panel === 'recit' ? (
             <Story mentors={mentors} choice={storyChoice} onChoose={setStoryChoice} />
+          ) : panel === 'carnet' ? (
+            <PracticePanel />
           ) : (
             <Library
               hasMentors={mentors.length > 0}

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { Board, PASS, pointFromSgf, pointToHuman, pointToSgf } from '../src/domain/board.ts';
+import {
+  Board,
+  PASS,
+  pointFromHuman,
+  pointFromSgf,
+  pointToHuman,
+  pointToSgf,
+} from '../src/domain/board.ts';
 import {
   NEVER,
   buildTimeline,
@@ -28,6 +35,13 @@ describe('coordonnées', () => {
     expect(pointToHuman(P('ss'))).toBe('T1');
     // Le coup de l'oreille rouge, « ji » dans le SGF.
     expect(pointToHuman(P('ji'))).toBe('K11');
+  });
+
+  it('accepte les 361 coordonnées affichées au clavier et refuse les autres', () => {
+    for (let p = 0; p < 361; p++) expect(pointFromHuman(pointToHuman(p))).toBe(p);
+    expect(pointFromHuman(' k10 ')).toBe(P('jj'));
+    for (const input of ['I16', 'K20', 'A0', 'U1', 'passe', ''])
+      expect(pointFromHuman(input)).toBeNull();
   });
 
   it('refuse les coordonnées hors du goban', () => {

@@ -1056,3 +1056,86 @@ test('le récit du mentor suit les parties importées et ne consulte une biograp
   await expect(page.getByRole('region', { name: 'Partie en cours' })).toContainText('Élève');
   expect(requested).toEqual(['Go Seigen']);
 });
+
+test('le carnet conserve une position révélée et la rouvre au bon coup le lendemain', async ({
+  page,
+}) => {
+  const w = watch(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.setFixedTime(new Date(2026, 10, 25, 12));
+  await enter(page);
+  const nav = page.getByRole('navigation', { name: 'Volets' });
+  await nav.getByRole('button', { name: 'Carnet' }).click();
+  let notebook = page.getByRole('complementary', { name: 'Carnet' });
+  await expect(notebook.getByRole('heading', { name: 'Carnet du dojo' })).toBeVisible();
+  await notebook.getByRole('button', { name: 'Deviner depuis la position affichée' }).click();
+  await page.getByRole('button', { name: 'Montrer le coup' }).click();
+  await nav.getByRole('button', { name: 'Carnet' }).click();
+  await expect(notebook).toContainText('0 XP');
+  await expect(notebook).toContainText('1 / 7 jours d’entraînement');
+  await expect(notebook).toContainText('Aucune révision due');
+
+  await page.clock.setFixedTime(new Date(2026, 10, 26, 12));
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer' }).click();
+  await nav.getByRole('button', { name: 'Carnet' }).click();
+  notebook = page.getByRole('complementary', { name: 'Carnet' });
+  await expect(notebook).toContainText('1 position à reprendre');
+  await expect(notebook).toContainText('Coup 1');
+  await notebook.getByRole('button', { name: 'Réviser le prochain coup' }).click();
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('0');
+  await expect(page.getByRole('region', { name: 'Jouer comme Shūsaku' })).toContainText(
+    'joue-t-il le coup 1',
+  );
+  await page.getByText('Saisir une coordonnée', { exact: true }).click();
+  const coord = page.getByLabel('Intersection (par ex. D4)');
+  await coord.fill('I16');
+  await coord.press('Enter');
+  await expect(page.getByRole('alert')).toContainText('sans colonne I');
+  await coord.fill('R16');
+  await coord.press('Enter');
+  await expect(page.getByRole('region', { name: 'Jouer comme Shūsaku' })).toContainText(
+    'Exact, du premier coup.',
+  );
+  await nav.getByRole('button', { name: 'Carnet' }).click();
+  await expect(notebook).toContainText('3 XP');
+  await expect(notebook).toContainText('2 / 7 jours d’entraînement');
+  await expect(notebook).toContainText('Aucune révision due');
+  expect(w.problems).toEqual([]);
+  expect(w.foreign).toEqual([]);
+});
+
+test('les numéros choisis restent activés après rechargement, y compris sur un kifu importé de 721 coups', async ({
+  page,
+}, testInfo) => {
+  const w = watch(page);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  await page.getByLabel('Importer un fichier SGF').setInputFiles({
+    name: 'kifu-long.sgf',
+    mimeType: 'application/x-go-sgf',
+    buffer: Buffer.from(
+      '(;FF[4]GM[1]SZ[19]PB[Numéro long]PW[Blanc]' + ';B[];W[]'.repeat(360) + ';B[jj])',
+    ),
+  });
+  const slider = page.getByRole('slider', { name: 'Coup', exact: true });
+  await expect(slider).toHaveAttribute('max', '721');
+  await slider.fill('721');
+  await page.getByRole('button', { name: 'Dessus', exact: true }).click();
+  const numbers = page.getByRole('button', { name: 'Numéros', exact: true });
+  await expect(numbers).toHaveAttribute('aria-pressed', 'false');
+  await numbers.click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('live')).toContainText('Coup 721 sur 721 : Noir K10');
+  const canvas = page.locator('canvas[data-rendered="true"]');
+  await expect(canvas).toBeVisible({ timeout: 45_000 });
+  if (process.env.GOBAN_VISUAL_PROOF) {
+    await canvas.screenshot({ path: testInfo.outputPath('coup-721.png') });
+  }
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer' }).click();
+  await expect(numbers).toHaveAttribute('aria-pressed', 'true');
+  expect(w.problems).toEqual([]);
+  expect(w.foreign).toEqual([]);
+});

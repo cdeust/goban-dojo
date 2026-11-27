@@ -20,7 +20,7 @@ import { stoneAssets } from './materials.ts';
 import { poseAt, type Fall, type Rigid } from './physics.ts';
 import { useStage } from './stage.ts';
 import { hashString, mulberry32 } from './random.ts';
-import { ATLAS_COLUMNS, ATLAS_ROWS, numberAtlas } from './textures.ts';
+import { numberAtlas } from './textures.ts';
 
 type Controls = { stop: () => void };
 
@@ -88,14 +88,17 @@ const UNDO_DURATION = 0.3;
 const TRAVEL = 0.74;
 
 const NUMBER_VERTEX = /* glsl */ `
-  attribute float cell;
+  attribute float moveNumber;
   attribute vec3 tint;
   varying vec2 vUv;
   varying vec3 vTint;
+  varying float vNumber;
+  varying float vDigits;
   void main() {
-    float col = mod(cell, ${ATLAS_COLUMNS}.0);
-    float row = floor(cell / ${ATLAS_COLUMNS}.0);
-    vUv = (vec2(col, ${ATLAS_ROWS}.0 - 1.0 - row) + uv) / vec2(${ATLAS_COLUMNS}.0, ${ATLAS_ROWS}.0);
+    vNumber = moveNumber;
+    vDigits = moveNumber < 10.0 ? 1.0 : moveNumber < 100.0 ? 2.0 :
+      moveNumber < 1000.0 ? 3.0 : moveNumber < 10000.0 ? 4.0 : moveNumber < 100000.0 ? 5.0 : 6.0;
+    vUv = uv;
     vTint = tint;
     gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
   }
@@ -104,8 +107,20 @@ const NUMBER_FRAGMENT = /* glsl */ `
   uniform sampler2D atlas;
   varying vec2 vUv;
   varying vec3 vTint;
+  varying float vNumber;
+  varying float vDigits;
   void main() {
-    float a = texture2D(atlas, vUv).a;
+    float digits = floor(vDigits + 0.5);
+    float number = floor(vNumber + 0.5);
+    float width = min(0.29, 0.88 / digits);
+    float x = (vUv.x - 0.5) / width + digits * 0.5;
+    if (x < 0.0 || x >= digits) discard;
+    float column = floor(x);
+    float power = digits - column - 1.0;
+    float divisor = power == 0.0 ? 1.0 : power == 1.0 ? 10.0 : power == 2.0 ? 100.0 :
+      power == 3.0 ? 1000.0 : power == 4.0 ? 10000.0 : 100000.0;
+    float digit = mod(floor(number / divisor), 10.0);
+    float a = texture2D(atlas, vec2((digit + fract(x)) / 10.0, vUv.y)).a;
     if (a < 0.03) discard;
     gl_FragColor = vec4(vTint, a);
     #include <colorspace_fragment>
@@ -171,9 +186,12 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
     [],
   );
   const numberGeometry = useMemo(() => {
-    const g = new THREE.PlaneGeometry(1.5, 1.5);
+    const g = new THREE.PlaneGeometry(1.8, 1.8);
     g.rotateX(-Math.PI / 2);
-    g.setAttribute('cell', new THREE.InstancedBufferAttribute(new Float32Array(capacity * 2), 1));
+    g.setAttribute(
+      'moveNumber',
+      new THREE.InstancedBufferAttribute(new Float32Array(capacity * 2), 1),
+    );
     g.setAttribute('tint', new THREE.InstancedBufferAttribute(new Float32Array(capacity * 6), 3));
     return g;
   }, [capacity]);
@@ -250,7 +268,9 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
           L.lidRank[i] = rank[s.color]++;
         });
 
-      const cell = numberGeometry.getAttribute('cell') as THREE.InstancedBufferAttribute;
+      const moveNumber = numberGeometry.getAttribute(
+        'moveNumber',
+      ) as THREE.InstancedBufferAttribute;
       const tint = numberGeometry.getAttribute('tint') as THREE.InstancedBufferAttribute;
       list.forEach((s, i) => {
         // Aléa propre à chaque pierre : stable quand la position s'allonge.
@@ -268,12 +288,12 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
         L.pose[i] ??= { ...bowlOf(i), s: 0, rigid: null };
         L.phase[i] ??= HIDDEN;
         if (i < capacity * 2) {
-          cell.setX(i, Math.max(0, s.placedAt - 1));
+          moveNumber.setX(i, s.placedAt);
           const v = s.color === 'B' ? 0.93 : 0.07;
           tint.setXYZ(i, v, v * 0.98, v * 0.94);
         }
       });
-      cell.needsUpdate = true;
+      moveNumber.needsUpdate = true;
       tint.needsUpdate = true;
     };
 
