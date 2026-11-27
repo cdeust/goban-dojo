@@ -1,0 +1,1346 @@
+[
+  {
+    "id": "two-eyes:s016:210",
+    "module": "two-eyes",
+    "gameId": "s016",
+    "before": 210,
+    "color": "W",
+    "anchors": [6]
+  },
+  {
+    "id": "two-eyes:s035:245",
+    "module": "two-eyes",
+    "gameId": "s035",
+    "before": 245,
+    "color": "B",
+    "anchors": [216]
+  },
+  {
+    "id": "two-eyes:s121:275",
+    "module": "two-eyes",
+    "gameId": "s121",
+    "before": 275,
+    "color": "W",
+    "anchors": [301]
+  },
+  {
+    "id": "two-eyes:s138:235",
+    "module": "two-eyes",
+    "gameId": "s138",
+    "before": 235,
+    "color": "W",
+    "anchors": [5]
+  },
+  {
+    "id": "two-eyes:s207:240",
+    "module": "two-eyes",
+    "gameId": "s207",
+    "before": 240,
+    "color": "B",
+    "anchors": [278]
+  },
+  {
+    "id": "two-eyes:s240:230",
+    "module": "two-eyes",
+    "gameId": "s240",
+    "before": 230,
+    "color": "B",
+    "anchors": [17]
+  },
+  {
+    "id": "two-eyes:s293:145",
+    "module": "two-eyes",
+    "gameId": "s293",
+    "before": 145,
+    "color": "W",
+    "anchors": [97]
+  },
+  {
+    "id": "two-eyes:s293:160",
+    "module": "two-eyes",
+    "gameId": "s293",
+    "before": 160,
+    "color": "B",
+    "anchors": [97]
+  },
+  {
+    "id": "two-eyes:s330:245",
+    "module": "two-eyes",
+    "gameId": "s330",
+    "before": 245,
+    "color": "W",
+    "anchors": [92]
+  },
+  {
+    "id": "two-eyes:s466:85",
+    "module": "two-eyes",
+    "gameId": "s466",
+    "before": 85,
+    "color": "W",
+    "anchors": [35]
+  },
+  {
+    "id": "two-eyes:s088:230",
+    "module": "two-eyes",
+    "gameId": "s088",
+    "before": 230,
+    "color": "B",
+    "anchors": [167]
+  },
+  {
+    "id": "two-eyes:s105:245",
+    "module": "two-eyes",
+    "gameId": "s105",
+    "before": 245,
+    "color": "W",
+    "anchors": [45]
+  },
+  {
+    "id": "two-eyes:s122:60",
+    "module": "two-eyes",
+    "gameId": "s122",
+    "before": 60,
+    "color": "B",
+    "anchors": [231]
+  },
+  {
+    "id": "two-eyes:s241:190",
+    "module": "two-eyes",
+    "gameId": "s241",
+    "before": 190,
+    "color": "B",
+    "anchors": [269]
+  },
+  {
+    "id": "two-eyes:s089:225",
+    "module": "two-eyes",
+    "gameId": "s089",
+    "before": 225,
+    "color": "W",
+    "anchors": [27]
+  },
+  {
+    "id": "two-eyes:s259:215",
+    "module": "two-eyes",
+    "gameId": "s259",
+    "before": 215,
+    "color": "W",
+    "anchors": [157]
+  },
+  {
+    "id": "two-eyes:s005:270",
+    "module": "two-eyes",
+    "gameId": "s005",
+    "before": 270,
+    "color": "W",
+    "anchors": [90]
+  },
+  {
+    "id": "two-eyes:s143:285",
+    "module": "two-eyes",
+    "gameId": "s143",
+    "before": 285,
+    "color": "W",
+    "anchors": [233]
+  },
+  {
+    "id": "two-eyes:s245:265",
+    "module": "two-eyes",
+    "gameId": "s245",
+    "before": 265,
+    "color": "W",
+    "anchors": [244]
+  },
+  {
+    "id": "two-eyes:s133:245",
+    "module": "two-eyes",
+    "gameId": "s133",
+    "before": 245,
+    "color": "W",
+    "anchors": [112]
+  },
+  {
+    "id": "two-eyes:s254:225",
+    "module": "two-eyes",
+    "gameId": "s254",
+    "before": 225,
+    "color": "W",
+    "anchors": [278]
+  },
+  {
+    "id": "two-eyes:s360:195",
+    "module": "two-eyes",
+    "gameId": "s360",
+    "before": 195,
+    "color": "B",
+    "anchors": [234]
+  },
+  {
+    "id": "two-eyes:s462:260",
+    "module": "two-eyes",
+    "gameId": "s462",
+    "before": 260,
+    "color": "B",
+    "anchors": [158]
+  },
+  {
+    "id": "two-eyes:s306:225",
+    "module": "two-eyes",
+    "gameId": "s306",
+    "before": 225,
+    "color": "W",
+    "anchors": [1]
+  },
+  {
+    "id": "make-life:s293:157",
+    "module": "make-life",
+    "gameId": "s293",
+    "before": 157,
+    "color": "W",
+    "anchors": [160],
+    "candidate": 159
+  },
+  {
+    "id": "make-life:s294:233",
+    "module": "make-life",
+    "gameId": "s294",
+    "before": 233,
+    "color": "W",
+    "anchors": [184],
+    "candidate": 185
+  },
+  {
+    "id": "make-life:s072:232",
+    "module": "make-life",
+    "gameId": "s072",
+    "before": 232,
+    "color": "B",
+    "anchors": [33],
+    "candidate": 32
+  },
+  {
+    "id": "make-life:s089:222",
+    "module": "make-life",
+    "gameId": "s089",
+    "before": 222,
+    "color": "B",
+    "anchors": [100],
+    "candidate": 101
+  },
+  {
+    "id": "make-life:s174:291",
+    "module": "make-life",
+    "gameId": "s174",
+    "before": 291,
+    "color": "W",
+    "anchors": [191],
+    "candidate": 190
+  },
+  {
+    "id": "make-life:s259:214",
+    "module": "make-life",
+    "gameId": "s259",
+    "before": 214,
+    "color": "B",
+    "anchors": [196],
+    "candidate": 197
+  },
+  {
+    "id": "make-life:s468:204",
+    "module": "make-life",
+    "gameId": "s468",
+    "before": 204,
+    "color": "B",
+    "anchors": [220],
+    "candidate": 221
+  },
+  {
+    "id": "make-life:s124:259",
+    "module": "make-life",
+    "gameId": "s124",
+    "before": 259,
+    "color": "W",
+    "anchors": [233],
+    "candidate": 234
+  },
+  {
+    "id": "make-life:s141:226",
+    "module": "make-life",
+    "gameId": "s141",
+    "before": 226,
+    "color": "B",
+    "anchors": [324],
+    "candidate": 325
+  },
+  {
+    "id": "make-life:s333:272",
+    "module": "make-life",
+    "gameId": "s333",
+    "before": 272,
+    "color": "B",
+    "anchors": [21],
+    "candidate": 22
+  },
+  {
+    "id": "make-life:s005:260",
+    "module": "make-life",
+    "gameId": "s005",
+    "before": 260,
+    "color": "W",
+    "anchors": [186],
+    "candidate": 187
+  },
+  {
+    "id": "make-life:s334:149",
+    "module": "make-life",
+    "gameId": "s334",
+    "before": 149,
+    "color": "W",
+    "anchors": [345],
+    "candidate": 344
+  },
+  {
+    "id": "make-life:s143:271",
+    "module": "make-life",
+    "gameId": "s143",
+    "before": 271,
+    "color": "W",
+    "anchors": [116],
+    "candidate": 117
+  },
+  {
+    "id": "make-life:s245:251",
+    "module": "make-life",
+    "gameId": "s245",
+    "before": 251,
+    "color": "W",
+    "anchors": [301],
+    "candidate": 302
+  },
+  {
+    "id": "make-life:s318:207",
+    "module": "make-life",
+    "gameId": "s318",
+    "before": 207,
+    "color": "W",
+    "anchors": [101],
+    "candidate": 102
+  },
+  {
+    "id": "make-life:s386:200",
+    "module": "make-life",
+    "gameId": "s386",
+    "before": 200,
+    "color": "B",
+    "anchors": [286],
+    "candidate": 285
+  },
+  {
+    "id": "make-life:s336:223",
+    "module": "make-life",
+    "gameId": "s336",
+    "before": 223,
+    "color": "W",
+    "anchors": [125],
+    "candidate": 126
+  },
+  {
+    "id": "make-life:s422:253",
+    "module": "make-life",
+    "gameId": "s422",
+    "before": 253,
+    "color": "W",
+    "anchors": [308],
+    "candidate": 309
+  },
+  {
+    "id": "make-life:s010:114",
+    "module": "make-life",
+    "gameId": "s010",
+    "before": 114,
+    "color": "W",
+    "anchors": [138],
+    "candidate": 137
+  },
+  {
+    "id": "make-life:s095:223",
+    "module": "make-life",
+    "gameId": "s095",
+    "before": 223,
+    "color": "W",
+    "anchors": [41],
+    "candidate": 42
+  },
+  {
+    "id": "make-life:s181:289",
+    "module": "make-life",
+    "gameId": "s181",
+    "before": 289,
+    "color": "W",
+    "anchors": [275],
+    "candidate": 274
+  },
+  {
+    "id": "make-life:s356:264",
+    "module": "make-life",
+    "gameId": "s356",
+    "before": 264,
+    "color": "B",
+    "anchors": [315],
+    "candidate": 314
+  },
+  {
+    "id": "make-life:s441:275",
+    "module": "make-life",
+    "gameId": "s441",
+    "before": 275,
+    "color": "B",
+    "anchors": [242],
+    "candidate": 241
+  },
+  {
+    "id": "make-life:s269:217",
+    "module": "make-life",
+    "gameId": "s269",
+    "before": 217,
+    "color": "W",
+    "anchors": [156],
+    "candidate": 175
+  },
+  {
+    "id": "snapback:s087:174",
+    "module": "snapback",
+    "gameId": "s087",
+    "before": 174,
+    "color": "B",
+    "anchors": [314],
+    "candidate": 315,
+    "reply": 296,
+    "finish": 315
+  },
+  {
+    "id": "snapback:s121:154",
+    "module": "snapback",
+    "gameId": "s121",
+    "before": 154,
+    "color": "B",
+    "anchors": [348],
+    "candidate": 349,
+    "reply": 350,
+    "finish": 349
+  },
+  {
+    "id": "snapback:s138:194",
+    "module": "snapback",
+    "gameId": "s138",
+    "before": 194,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 66,
+    "reply": 65,
+    "finish": 66
+  },
+  {
+    "id": "snapback:s241:238",
+    "module": "snapback",
+    "gameId": "s241",
+    "before": 238,
+    "color": "B",
+    "anchors": [351],
+    "candidate": 350,
+    "reply": 349,
+    "finish": 350
+  },
+  {
+    "id": "snapback:s021:183",
+    "module": "snapback",
+    "gameId": "s021",
+    "before": 183,
+    "color": "W",
+    "anchors": [357],
+    "candidate": 356,
+    "reply": 355,
+    "finish": 356
+  },
+  {
+    "id": "snapback:s210:95",
+    "module": "snapback",
+    "gameId": "s210",
+    "before": 95,
+    "color": "B",
+    "anchors": [218],
+    "candidate": 217,
+    "reply": 216,
+    "finish": 217
+  },
+  {
+    "id": "snapback:s297:154",
+    "module": "snapback",
+    "gameId": "s297",
+    "before": 154,
+    "color": "B",
+    "anchors": [270],
+    "candidate": 271,
+    "reply": 252,
+    "finish": 271
+  },
+  {
+    "id": "snapback:s006:179",
+    "module": "snapback",
+    "gameId": "s006",
+    "before": 179,
+    "color": "B",
+    "anchors": [359],
+    "candidate": 360,
+    "reply": 341,
+    "finish": 360
+  },
+  {
+    "id": "snapback:s195:113",
+    "module": "snapback",
+    "gameId": "s195",
+    "before": 113,
+    "color": "W",
+    "anchors": [299],
+    "candidate": 298,
+    "reply": 297,
+    "finish": 298
+  },
+  {
+    "id": "snapback:s437:53",
+    "module": "snapback",
+    "gameId": "s437",
+    "before": 53,
+    "color": "B",
+    "anchors": [134],
+    "candidate": 135,
+    "reply": 136,
+    "finish": 135
+  },
+  {
+    "id": "snapback:s229:227",
+    "module": "snapback",
+    "gameId": "s229",
+    "before": 227,
+    "color": "W",
+    "anchors": [20],
+    "candidate": 21,
+    "reply": 2,
+    "finish": 21
+  },
+  {
+    "id": "snapback:s438:164",
+    "module": "snapback",
+    "gameId": "s438",
+    "before": 164,
+    "color": "W",
+    "anchors": [326],
+    "candidate": 327,
+    "reply": 346,
+    "finish": 327
+  },
+  {
+    "id": "snapback:s337:185",
+    "module": "snapback",
+    "gameId": "s337",
+    "before": 185,
+    "color": "W",
+    "anchors": [69],
+    "candidate": 68,
+    "reply": 67,
+    "finish": 68
+  },
+  {
+    "id": "snapback:s457:127",
+    "module": "snapback",
+    "gameId": "s457",
+    "before": 127,
+    "color": "W",
+    "anchors": [269],
+    "candidate": 270,
+    "reply": 271,
+    "finish": 270
+  },
+  {
+    "id": "snapback:s010:99",
+    "module": "snapback",
+    "gameId": "s010",
+    "before": 99,
+    "color": "B",
+    "anchors": [118],
+    "candidate": 119,
+    "reply": 100,
+    "finish": 119
+  },
+  {
+    "id": "snapback:s079:61",
+    "module": "snapback",
+    "gameId": "s079",
+    "before": 61,
+    "color": "W",
+    "anchors": [188],
+    "candidate": 187,
+    "reply": 186,
+    "finish": 187
+  },
+  {
+    "id": "snapback:s182:180",
+    "module": "snapback",
+    "gameId": "s182",
+    "before": 180,
+    "color": "B",
+    "anchors": [136],
+    "candidate": 137,
+    "reply": 118,
+    "finish": 137
+  },
+  {
+    "id": "snapback:s419:167",
+    "module": "snapback",
+    "gameId": "s419",
+    "before": 167,
+    "color": "B",
+    "anchors": [156],
+    "candidate": 155,
+    "reply": 154,
+    "finish": 155
+  },
+  {
+    "id": "snapback:s459:145",
+    "module": "snapback",
+    "gameId": "s459",
+    "before": 145,
+    "color": "W",
+    "anchors": [153],
+    "candidate": 154,
+    "reply": 173,
+    "finish": 154
+  },
+  {
+    "id": "snapback:s031:36",
+    "module": "snapback",
+    "gameId": "s031",
+    "before": 36,
+    "color": "W",
+    "anchors": [290],
+    "candidate": 291,
+    "reply": 292,
+    "finish": 291
+  },
+  {
+    "id": "snapback:s066:209",
+    "module": "snapback",
+    "gameId": "s066",
+    "before": 209,
+    "color": "W",
+    "anchors": [249],
+    "candidate": 250,
+    "reply": 269,
+    "finish": 250
+  },
+  {
+    "id": "snapback:s360:213",
+    "module": "snapback",
+    "gameId": "s360",
+    "before": 213,
+    "color": "B",
+    "anchors": [8],
+    "candidate": 9,
+    "reply": 10,
+    "finish": 9
+  },
+  {
+    "id": "snapback:s462:226",
+    "module": "snapback",
+    "gameId": "s462",
+    "before": 226,
+    "color": "B",
+    "anchors": [241],
+    "candidate": 242,
+    "reply": 223,
+    "finish": 242
+  },
+  {
+    "id": "snapback:s067:121",
+    "module": "snapback",
+    "gameId": "s067",
+    "before": 121,
+    "color": "W",
+    "anchors": [302],
+    "candidate": 303,
+    "reply": 322,
+    "finish": 303
+  },
+  {
+    "id": "capture-race:s001:83",
+    "module": "capture-race",
+    "gameId": "s001",
+    "before": 83,
+    "color": "W",
+    "anchors": [129, 128],
+    "candidate": 127
+  },
+  {
+    "id": "capture-race:s016:83",
+    "module": "capture-race",
+    "gameId": "s016",
+    "before": 83,
+    "color": "B",
+    "anchors": [173, 172],
+    "candidate": 171
+  },
+  {
+    "id": "capture-race:s035:84",
+    "module": "capture-race",
+    "gameId": "s035",
+    "before": 84,
+    "color": "W",
+    "anchors": [46, 65],
+    "candidate": 66
+  },
+  {
+    "id": "capture-race:s053:24",
+    "module": "capture-race",
+    "gameId": "s053",
+    "before": 24,
+    "color": "B",
+    "anchors": [24, 23],
+    "candidate": 4
+  },
+  {
+    "id": "capture-race:s070:105",
+    "module": "capture-race",
+    "gameId": "s070",
+    "before": 105,
+    "color": "W",
+    "anchors": [326, 325],
+    "candidate": 344
+  },
+  {
+    "id": "capture-race:s087:41",
+    "module": "capture-race",
+    "gameId": "s087",
+    "before": 41,
+    "color": "W",
+    "anchors": [307, 306],
+    "candidate": 287
+  },
+  {
+    "id": "capture-race:s104:123",
+    "module": "capture-race",
+    "gameId": "s104",
+    "before": 123,
+    "color": "W",
+    "anchors": [313, 312],
+    "candidate": 293
+  },
+  {
+    "id": "capture-race:s121:131",
+    "module": "capture-race",
+    "gameId": "s121",
+    "before": 131,
+    "color": "W",
+    "anchors": [226, 245],
+    "candidate": 246
+  },
+  {
+    "id": "capture-race:s138:114",
+    "module": "capture-race",
+    "gameId": "s138",
+    "before": 114,
+    "color": "B",
+    "anchors": [158, 159],
+    "candidate": 140
+  },
+  {
+    "id": "capture-race:s172:44",
+    "module": "capture-race",
+    "gameId": "s172",
+    "before": 44,
+    "color": "B",
+    "anchors": [269, 268],
+    "candidate": 267
+  },
+  {
+    "id": "capture-race:s189:45",
+    "module": "capture-race",
+    "gameId": "s189",
+    "before": 45,
+    "color": "W",
+    "anchors": [298, 317],
+    "candidate": 336
+  },
+  {
+    "id": "capture-race:s207:81",
+    "module": "capture-race",
+    "gameId": "s207",
+    "before": 81,
+    "color": "W",
+    "anchors": [203, 204],
+    "candidate": 205
+  },
+  {
+    "id": "capture-race:s240:17",
+    "module": "capture-race",
+    "gameId": "s240",
+    "before": 17,
+    "color": "W",
+    "anchors": [80, 79],
+    "candidate": 98
+  },
+  {
+    "id": "capture-race:s257:64",
+    "module": "capture-race",
+    "gameId": "s257",
+    "before": 64,
+    "color": "B",
+    "anchors": [28, 47],
+    "candidate": 46
+  },
+  {
+    "id": "capture-race:s293:47",
+    "module": "capture-race",
+    "gameId": "s293",
+    "before": 47,
+    "color": "W",
+    "anchors": [21, 20],
+    "candidate": 19
+  },
+  {
+    "id": "capture-race:s310:19",
+    "module": "capture-race",
+    "gameId": "s310",
+    "before": 19,
+    "color": "W",
+    "anchors": [280, 281],
+    "candidate": 262
+  },
+  {
+    "id": "capture-race:s330:27",
+    "module": "capture-race",
+    "gameId": "s330",
+    "before": 27,
+    "color": "W",
+    "anchors": [77, 58],
+    "candidate": 57
+  },
+  {
+    "id": "capture-race:s364:19",
+    "module": "capture-race",
+    "gameId": "s364",
+    "before": 19,
+    "color": "W",
+    "anchors": [326, 325],
+    "candidate": 344
+  },
+  {
+    "id": "capture-race:s381:163",
+    "module": "capture-race",
+    "gameId": "s381",
+    "before": 163,
+    "color": "W",
+    "anchors": [234, 253],
+    "candidate": 272
+  },
+  {
+    "id": "capture-race:s395:100",
+    "module": "capture-race",
+    "gameId": "s395",
+    "before": 100,
+    "color": "W",
+    "anchors": [172, 171],
+    "candidate": 190
+  },
+  {
+    "id": "capture-race:s412:108",
+    "module": "capture-race",
+    "gameId": "s412",
+    "before": 108,
+    "color": "B",
+    "anchors": [185, 166],
+    "candidate": 165
+  },
+  {
+    "id": "capture-race:s432:134",
+    "module": "capture-race",
+    "gameId": "s432",
+    "before": 134,
+    "color": "B",
+    "anchors": [185, 166],
+    "candidate": 167
+  },
+  {
+    "id": "capture-race:s449:123",
+    "module": "capture-race",
+    "gameId": "s449",
+    "before": 123,
+    "color": "W",
+    "anchors": [292, 273],
+    "candidate": 274
+  },
+  {
+    "id": "capture-race:s466:61",
+    "module": "capture-race",
+    "gameId": "s466",
+    "before": 61,
+    "color": "W",
+    "anchors": [69, 50],
+    "candidate": 49
+  },
+  {
+    "id": "false-eye:s001:86",
+    "module": "false-eye",
+    "gameId": "s001",
+    "before": 86,
+    "color": "B",
+    "anchors": [129],
+    "candidate": 128
+  },
+  {
+    "id": "false-eye:s053:139",
+    "module": "false-eye",
+    "gameId": "s053",
+    "before": 139,
+    "color": "W",
+    "anchors": [110],
+    "candidate": 91
+  },
+  {
+    "id": "false-eye:s070:162",
+    "module": "false-eye",
+    "gameId": "s070",
+    "before": 162,
+    "color": "B",
+    "anchors": [116],
+    "candidate": 97
+  },
+  {
+    "id": "false-eye:s087:172",
+    "module": "false-eye",
+    "gameId": "s087",
+    "before": 172,
+    "color": "B",
+    "anchors": [332],
+    "candidate": 333
+  },
+  {
+    "id": "false-eye:s104:170",
+    "module": "false-eye",
+    "gameId": "s104",
+    "before": 170,
+    "color": "B",
+    "anchors": [235],
+    "candidate": 216
+  },
+  {
+    "id": "false-eye:s121:155",
+    "module": "false-eye",
+    "gameId": "s121",
+    "before": 155,
+    "color": "W",
+    "anchors": [347],
+    "candidate": 346
+  },
+  {
+    "id": "false-eye:s138:139",
+    "module": "false-eye",
+    "gameId": "s138",
+    "before": 139,
+    "color": "W",
+    "anchors": [86],
+    "candidate": 105
+  },
+  {
+    "id": "false-eye:s189:56",
+    "module": "false-eye",
+    "gameId": "s189",
+    "before": 56,
+    "color": "B",
+    "anchors": [298],
+    "candidate": 317
+  },
+  {
+    "id": "false-eye:s240:141",
+    "module": "false-eye",
+    "gameId": "s240",
+    "before": 141,
+    "color": "W",
+    "anchors": [121],
+    "candidate": 120
+  },
+  {
+    "id": "false-eye:s293:55",
+    "module": "false-eye",
+    "gameId": "s293",
+    "before": 55,
+    "color": "W",
+    "anchors": [22],
+    "candidate": 41
+  },
+  {
+    "id": "false-eye:s310:201",
+    "module": "false-eye",
+    "gameId": "s310",
+    "before": 201,
+    "color": "W",
+    "anchors": [281],
+    "candidate": 280
+  },
+  {
+    "id": "false-eye:s330:60",
+    "module": "false-eye",
+    "gameId": "s330",
+    "before": 60,
+    "color": "B",
+    "anchors": [225],
+    "candidate": 244
+  },
+  {
+    "id": "false-eye:s381:263",
+    "module": "false-eye",
+    "gameId": "s381",
+    "before": 263,
+    "color": "W",
+    "anchors": [203],
+    "candidate": 204
+  },
+  {
+    "id": "false-eye:s432:184",
+    "module": "false-eye",
+    "gameId": "s432",
+    "before": 184,
+    "color": "B",
+    "anchors": [204],
+    "candidate": 205
+  },
+  {
+    "id": "false-eye:s466:61",
+    "module": "false-eye",
+    "gameId": "s466",
+    "before": 61,
+    "color": "W",
+    "anchors": [50],
+    "candidate": 49
+  },
+  {
+    "id": "false-eye:s002:44",
+    "module": "false-eye",
+    "gameId": "s002",
+    "before": 44,
+    "color": "B",
+    "anchors": [43],
+    "candidate": 42
+  },
+  {
+    "id": "false-eye:s017:81",
+    "module": "false-eye",
+    "gameId": "s017",
+    "before": 81,
+    "color": "W",
+    "anchors": [17],
+    "candidate": 16
+  },
+  {
+    "id": "false-eye:s054:121",
+    "module": "false-eye",
+    "gameId": "s054",
+    "before": 121,
+    "color": "W",
+    "anchors": [249],
+    "candidate": 248
+  },
+  {
+    "id": "false-eye:s071:126",
+    "module": "false-eye",
+    "gameId": "s071",
+    "before": 126,
+    "color": "B",
+    "anchors": [40],
+    "candidate": 41
+  },
+  {
+    "id": "false-eye:s088:162",
+    "module": "false-eye",
+    "gameId": "s088",
+    "before": 162,
+    "color": "B",
+    "anchors": [309],
+    "candidate": 308
+  },
+  {
+    "id": "false-eye:s105:212",
+    "module": "false-eye",
+    "gameId": "s105",
+    "before": 212,
+    "color": "B",
+    "anchors": [302],
+    "candidate": 283
+  },
+  {
+    "id": "false-eye:s122:45",
+    "module": "false-eye",
+    "gameId": "s122",
+    "before": 45,
+    "color": "W",
+    "anchors": [305],
+    "candidate": 304
+  },
+  {
+    "id": "false-eye:s139:60",
+    "module": "false-eye",
+    "gameId": "s139",
+    "before": 60,
+    "color": "B",
+    "anchors": [150],
+    "candidate": 169
+  },
+  {
+    "id": "false-eye:s173:106",
+    "module": "false-eye",
+    "gameId": "s173",
+    "before": 106,
+    "color": "B",
+    "anchors": [41],
+    "candidate": 42
+  },
+  {
+    "id": "ladder:s001:104",
+    "module": "ladder",
+    "gameId": "s001",
+    "before": 104,
+    "color": "B",
+    "anchors": [31],
+    "candidate": 30,
+    "line": [30, 12, 11, 13, 14]
+  },
+  {
+    "id": "ladder:s016:69",
+    "module": "ladder",
+    "gameId": "s016",
+    "before": 69,
+    "color": "B",
+    "anchors": [172],
+    "candidate": 191,
+    "line": [191, 171, 152, 190, 209]
+  },
+  {
+    "id": "ladder:s053:22",
+    "module": "ladder",
+    "gameId": "s053",
+    "before": 22,
+    "color": "B",
+    "anchors": [23],
+    "candidate": 24,
+    "line": [24, 4, 3, 5, 6]
+  },
+  {
+    "id": "ladder:s070:103",
+    "module": "ladder",
+    "gameId": "s070",
+    "before": 103,
+    "color": "W",
+    "anchors": [325],
+    "candidate": 326,
+    "line": [326, 344, 343, 345, 346]
+  },
+  {
+    "id": "ladder:s087:70",
+    "module": "ladder",
+    "gameId": "s087",
+    "before": 70,
+    "color": "B",
+    "anchors": [31],
+    "candidate": 30,
+    "line": [30, 12, 11, 13, 14]
+  },
+  {
+    "id": "ladder:s104:76",
+    "module": "ladder",
+    "gameId": "s104",
+    "before": 76,
+    "color": "B",
+    "anchors": [85],
+    "candidate": 104,
+    "line": [104, 66, 47, 67, 68]
+  },
+  {
+    "id": "ladder:s121:129",
+    "module": "ladder",
+    "gameId": "s121",
+    "before": 129,
+    "color": "W",
+    "anchors": [245],
+    "candidate": 264,
+    "line": [264, 246, 227, 265, 284]
+  },
+  {
+    "id": "ladder:s138:55",
+    "module": "ladder",
+    "gameId": "s138",
+    "before": 55,
+    "color": "W",
+    "anchors": [305],
+    "candidate": 324,
+    "line": [324, 304, 285, 323, 342]
+  },
+  {
+    "id": "ladder:s189:109",
+    "module": "ladder",
+    "gameId": "s189",
+    "before": 109,
+    "color": "W",
+    "anchors": [327],
+    "candidate": 328,
+    "line": [328, 346, 345, 347, 348]
+  },
+  {
+    "id": "ladder:s240:176",
+    "module": "ladder",
+    "gameId": "s240",
+    "before": 176,
+    "color": "B",
+    "anchors": [140],
+    "candidate": 141,
+    "line": [141, 159, 178, 158, 177]
+  },
+  {
+    "id": "ladder:s257:60",
+    "module": "ladder",
+    "gameId": "s257",
+    "before": 60,
+    "color": "B",
+    "anchors": [29],
+    "candidate": 30,
+    "line": [30, 10, 9, 11, 12]
+  },
+  {
+    "id": "ladder:s293:68",
+    "module": "ladder",
+    "gameId": "s293",
+    "before": 68,
+    "color": "B",
+    "anchors": [29],
+    "candidate": 30,
+    "line": [30, 10, 9, 11, 12]
+  },
+  {
+    "id": "ladder:s310:69",
+    "module": "ladder",
+    "gameId": "s310",
+    "before": 69,
+    "color": "W",
+    "anchors": [115],
+    "candidate": 96,
+    "line": [96, 114, 95, 133, 152]
+  },
+  {
+    "id": "ladder:s330:25",
+    "module": "ladder",
+    "gameId": "s330",
+    "before": 25,
+    "color": "W",
+    "anchors": [58],
+    "candidate": 59,
+    "line": [59, 57, 38, 76, 95]
+  },
+  {
+    "id": "ladder:s347:90",
+    "module": "ladder",
+    "gameId": "s347",
+    "before": 90,
+    "color": "W",
+    "anchors": [29],
+    "candidate": 28,
+    "line": [28, 10, 9, 11, 12]
+  },
+  {
+    "id": "ladder:s364:15",
+    "module": "ladder",
+    "gameId": "s364",
+    "before": 15,
+    "color": "W",
+    "anchors": [325],
+    "candidate": 324,
+    "line": [324, 344, 343, 345, 346]
+  },
+  {
+    "id": "ladder:s381:45",
+    "module": "ladder",
+    "gameId": "s381",
+    "before": 45,
+    "color": "W",
+    "anchors": [302],
+    "candidate": 321,
+    "line": [321, 303, 284, 322, 341]
+  },
+  {
+    "id": "ladder:s432:200",
+    "module": "ladder",
+    "gameId": "s432",
+    "before": 200,
+    "color": "B",
+    "anchors": [58],
+    "candidate": 39,
+    "line": [39, 57, 38, 76, 95]
+  },
+  {
+    "id": "ladder:s449:95",
+    "module": "ladder",
+    "gameId": "s449",
+    "before": 95,
+    "color": "W",
+    "anchors": [332],
+    "candidate": 331,
+    "line": [331, 351, 350, 352, 353]
+  },
+  {
+    "id": "ladder:s466:128",
+    "module": "ladder",
+    "gameId": "s466",
+    "before": 128,
+    "color": "B",
+    "anchors": [21],
+    "candidate": 22,
+    "line": [22, 2, 3, 0, 19]
+  },
+  {
+    "id": "ladder:s002:99",
+    "module": "ladder",
+    "gameId": "s002",
+    "before": 99,
+    "color": "W",
+    "anchors": [335],
+    "candidate": 334,
+    "line": [334, 354, 353, 355, 356]
+  },
+  {
+    "id": "ladder:s017:39",
+    "module": "ladder",
+    "gameId": "s017",
+    "before": 39,
+    "color": "W",
+    "anchors": [25],
+    "candidate": 26,
+    "line": [26, 6, 5, 7, 8]
+  },
+  {
+    "id": "ladder:s054:47",
+    "module": "ladder",
+    "gameId": "s054",
+    "before": 47,
+    "color": "W",
+    "anchors": [30],
+    "candidate": 31,
+    "line": [31, 11, 10, 12, 13]
+  },
+  {
+    "id": "ladder:s071:29",
+    "module": "ladder",
+    "gameId": "s071",
+    "before": 29,
+    "color": "W",
+    "anchors": [309],
+    "candidate": 328,
+    "line": [328, 308, 327, 289, 270]
+  }
+]

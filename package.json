@@ -13,7 +13,7 @@
     "build": "pnpm data:build && vite build",
     "preview": "vite preview",
     "data:fetch": "node scripts/fetch-sources.ts",
-    "data:build": "node scripts/build-data.ts",
+    "data:build": "node scripts/build-data.ts && node scripts/build-school.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",

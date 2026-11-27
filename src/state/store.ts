@@ -16,7 +16,7 @@ import {
 import { practiceDay, recordRecall, type Practice, type Recall } from '../domain/practice.ts';
 import { trappedStones, type EnginePosition } from '../engine/features.ts';
 import { isLegalZeroMove } from '../engine/zeroSearch.ts';
-import { FIRST_LESSON, type Lesson } from '../story/lessons.ts';
+import { FIRST_LESSON, LESSONS, type Lesson } from '../story/lessons.ts';
 import { reflectionMoves } from '../story/reflections.ts';
 import { localGames, saveGame } from './localGames.ts';
 import { loadNumbers, loadPractice, saveNumbers, savePractice } from './practice.ts';
@@ -147,6 +147,7 @@ interface State {
   practice: Practice;
   lesson: Lesson | null;
   practiceSaved: boolean;
+  schoolOpen: boolean;
   guessColor: Color;
   exploreOpponent: boolean;
   /** Suite jouée sur le goban depuis le coup `move` du kifu. */
@@ -160,6 +161,7 @@ interface State {
 
   load: () => Promise<void>;
   enter: (panel?: PanelName) => void;
+  setSchoolOpen: (open: boolean) => void;
   importGame: (text: string, name: string) => void;
   chooseGuessColor: (color: Color) => void;
   showSimulation: (moves: Move[]) => void;
@@ -190,7 +192,7 @@ interface State {
   clickPoint: (point: number) => void;
   /** Mode « deviner » : demander un indice (compte comme un essai manqué). */
   hint: () => void;
-  startLesson: () => void;
+  startLesson: (id?: string) => void;
   compareLesson: () => void;
   startPractice: (gameId: string, before: number) => void;
   /** Mode « deviner » : montrer le coup et passer au suivant. */
@@ -382,6 +384,7 @@ export const useStore = create<State>((set, get) => ({
   practice: loadPractice(),
   lesson: null,
   practiceSaved: true,
+  schoolOpen: false,
   sound: true,
   effects: true,
   tacticalPauses: true,
@@ -421,6 +424,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   enter: (panel = 'carnet') => set({ entered: true, panel, view: 'joueur' }),
+  setSchoolOpen: (open) => set({ schoolOpen: open, playing: false }),
 
   importGame: (text, name) => {
     const s = get();
@@ -757,12 +761,14 @@ export const useStore = create<State>((set, get) => ({
     });
   },
 
-  startLesson: () => {
-    const { gameId, before } = FIRST_LESSON;
+  startLesson: (id = FIRST_LESSON.id) => {
+    const lesson = LESSONS.find((item) => item.id === id);
+    if (!lesson) return;
+    const { gameId, before } = lesson;
     const s = get();
     if (!s.dataset?.games.some((game) => game.id === gameId)) return;
     s.startPractice(gameId, before);
-    set({ lesson: FIRST_LESSON });
+    set({ lesson });
   },
 
   compareLesson: () => {

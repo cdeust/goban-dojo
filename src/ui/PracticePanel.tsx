@@ -7,7 +7,13 @@ import {
   practiceDay,
   recentDays,
 } from '../domain/practice.ts';
-import { FIRST_LESSON } from '../story/lessons.ts';
+import {
+  FIRST_LESSON,
+  LESSONS,
+  LESSON_THEMES,
+  lessonCard,
+  recommendedLesson,
+} from '../story/lessons.ts';
 import { prettyName } from '../story/format.ts';
 import { timelineOf, useStore } from '../state/store.ts';
 
@@ -48,6 +54,11 @@ export function PracticePanel() {
   const milestone = PRACTICE_LEVELS[level]!;
   const goal = PRACTICE_LEVELS[level + 1];
   const retained = practice.cards.filter(({ stage }) => stage === MASTERY).length;
+  const recommended = recommendedLesson(practice, today);
+  const learned = LESSONS.filter((lesson) => (lessonCard(lesson, practice)?.stage ?? 0) > 0).length;
+  const dueLesson =
+    card &&
+    LESSONS.find((lesson) => lesson.gameId === card.gameId && lesson.before === card.before);
 
   return (
     <div className="panel__body practice">
@@ -59,13 +70,90 @@ export function PracticePanel() {
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
 
+      <section className="practice__card practice__school">
+        <p className="chapter__index">École de go · 9 niveaux</p>
+        <h3>Apprendre, pratiquer, progresser</h3>
+        <p>
+          Des fondations au yose : vie et mort, tesuji, stratégie et parties contre Leela Zero, à
+          partir de vrais kifus. Progression sauvegardée et révisions adaptées.
+        </p>
+        <button
+          type="button"
+          className="chip chip--accent"
+          onClick={() => useStore.getState().setSchoolOpen(true)}
+        >
+          Entrer dans l’école
+        </button>
+      </section>
       <section className="practice__card">
         <p className="chapter__index">Leçon guidée · Libertés et capture</p>
         <h3>{FIRST_LESSON.title}</h3>
         <p>Un kifu de 1839, un coup à jouer. La règle d’abord, les suites du moteur ensuite.</p>
-        <button type="button" className="chip chip--accent" onClick={startLesson}>
+        <button
+          type="button"
+          className="chip chip--accent"
+          onClick={() => startLesson(FIRST_LESSON.id)}
+        >
           Commencer la leçon
         </button>
+      </section>
+
+      <section className="practice__card" aria-labelledby="curriculum-title">
+        <h3 id="curriculum-title">Parcours personnalisé</h3>
+        <p>
+          {learned} / {LESSONS.length} exercices réussis sans indice au dernier rappel enregistré.
+        </p>
+        {recommended && (
+          <div>
+            <p>À travailler maintenant : {recommended.title}</p>
+            <button
+              className="chip chip--accent"
+              type="button"
+              onClick={() => startLesson(recommended.id)}
+            >
+              Ouvrir l’exercice recommandé
+            </button>
+          </div>
+        )}
+        {Object.entries(LESSON_THEMES).map(([theme, label]) => {
+          const group = LESSONS.filter((lesson) => lesson.theme === theme);
+          const validated = group.filter(
+            (lesson) => (lessonCard(lesson, practice)?.stage ?? 0) > 0,
+          ).length;
+          return (
+            <div key={theme} className="practice__theme">
+              <h4>
+                {label} · {validated} / {group.length}
+              </h4>
+              {group.map((lesson) => {
+                const record = lessonCard(lesson, practice);
+                const status = !record
+                  ? 'Nouveau'
+                  : record.stage === MASTERY
+                    ? 'Palier mémoire'
+                    : record.due <= today
+                      ? 'À réviser'
+                      : record.stage > 0
+                        ? 'Réussi sans indice'
+                        : 'À consolider';
+                return (
+                  <div key={lesson.id} className="practice__exercise">
+                    <p>
+                      Niveau {lesson.difficulty} · {status}
+                    </p>
+                    <button type="button" className="chip" onClick={() => startLesson(lesson.id)}>
+                      {lesson.title}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+        <p>
+          Les niveaux désignent la difficulté des exercices, pas un rang officiel. Les rappels sont
+          choisis selon votre historique.
+        </p>
       </section>
 
       <section className="practice__card">
@@ -128,7 +216,9 @@ export function PracticePanel() {
             <button
               type="button"
               className="chip chip--accent"
-              onClick={() => start(card.gameId, card.before)}
+              onClick={() =>
+                dueLesson ? startLesson(dueLesson.id) : start(card.gameId, card.before)
+              }
             >
               Réviser le prochain coup
             </button>

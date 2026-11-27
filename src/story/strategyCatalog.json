@@ -1,0 +1,2315 @@
+[
+  {
+    "id": "fuseki:s001:3",
+    "module": "fuseki",
+    "gameId": "s001",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 301,
+    "alternatives": [289, 309],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue R4 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 289, "before": 7 },
+        { "point": 309, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 301 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 289 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s041:3",
+    "module": "fuseki",
+    "gameId": "s041",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 41,
+    "alternatives": [71, 282],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue D17 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 71, "before": 5 },
+        { "point": 282, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 53 },
+        { "color": "W", "point": 71 },
+        { "color": "B", "point": 110 },
+        { "color": "W", "point": 87 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s080:2",
+    "module": "fuseki",
+    "gameId": "s080",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 41,
+    "alternatives": [73, 110],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue D17 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 73, "before": 4 },
+        { "point": 110, "before": 8 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 41 },
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 73 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 79 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s119:2",
+    "module": "fuseki",
+    "gameId": "s119",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 73,
+    "alternatives": [269, 307],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue R16 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 269, "before": 10 },
+        { "point": 307, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 73 },
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 263 },
+        { "color": "B", "point": 312 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s158:2",
+    "module": "fuseki",
+    "gameId": "s158",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 319,
+    "alternatives": [52],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue Q3 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [{ "point": 52, "before": 4 }],
+      "historicalLine": [
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 298 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s198:2",
+    "module": "fuseki",
+    "gameId": "s198",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 287,
+    "alternatives": [319, 91],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue C4 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 319, "before": 4 },
+        { "point": 91, "before": 6 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 91 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s276:3",
+    "module": "fuseki",
+    "gameId": "s276",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 282,
+    "alternatives": [40, 59],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue R5 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 40, "before": 5 },
+        { "point": 59, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 41 },
+        { "color": "W", "point": 40 },
+        { "color": "B", "point": 21 },
+        { "color": "W", "point": 59 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s319:3",
+    "module": "fuseki",
+    "gameId": "s319",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 318,
+    "alternatives": [307, 59],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue P3 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 307, "before": 5 },
+        { "point": 59, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 318 },
+        { "color": "B", "point": 268 },
+        { "color": "W", "point": 307 },
+        { "color": "B", "point": 79 },
+        { "color": "W", "point": 59 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s358:3",
+    "module": "fuseki",
+    "gameId": "s358",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 78,
+    "alternatives": [287, 319],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue C15 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 287, "before": 5 },
+        { "point": 319, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 78 },
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 287 },
+        { "color": "B", "point": 299 },
+        { "color": "W", "point": 319 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s002:2",
+    "module": "fuseki",
+    "gameId": "s002",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 287,
+    "alternatives": [78, 98],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue C4 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:002"],
+      "alternativeSources": [
+        { "point": 78, "before": 4 },
+        { "point": 98, "before": 10 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 308 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s042:2",
+    "module": "fuseki",
+    "gameId": "s042",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 287,
+    "alternatives": [78, 318],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue C4 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": [
+        "cwi:042",
+        "pgd:All/1843-01-09_None_Yasuda Shusaku_3p_Yamamoto Kinnosuke_3p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 78, "before": 4 },
+        { "point": 318, "before": 6 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 318 }
+      ]
+    }
+  },
+  {
+    "id": "fuseki:s081:3",
+    "module": "fuseki",
+    "gameId": "s081",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 301,
+    "alternatives": [307, 41],
+    "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins.",
+    "observation": "Le kifu joue R4 dans un coin sans pierre dans son secteur de 6 × 6. Cela établit un nouveau point d’appui, sans garantir de territoire.",
+    "rubric": "Identifier les coins encore libres, puis comparer le développement et le coût de laisser les autres secteurs ouverts.",
+    "evidence": {
+      "sources": ["cwi:081"],
+      "alternativeSources": [
+        { "point": 307, "before": 5 },
+        { "point": 41, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 301 },
+        { "color": "B", "point": 268 },
+        { "color": "W", "point": 307 },
+        { "color": "B", "point": 154 },
+        { "color": "W", "point": 41 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s001:4",
+    "module": "approach",
+    "gameId": "s001",
+    "before": 4,
+    "color": "B",
+    "anchors": [41],
+    "historical": 78,
+    "alternatives": [287, 308],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique C15 est à un saut de cavalier de la pierre adverse en D17. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 287, "before": 6 },
+        { "point": 308, "before": 8 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 289 },
+        { "color": "B", "point": 308 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s041:6",
+    "module": "approach",
+    "gameId": "s041",
+    "before": 6,
+    "color": "B",
+    "anchors": [71],
+    "historical": 110,
+    "alternatives": [45, 307],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique Q14 est à un saut de cavalier de la pierre adverse en P16. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 45, "before": 8 },
+        { "point": 307, "before": 10 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 110 },
+        { "color": "W", "point": 87 },
+        { "color": "B", "point": 45 },
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 307 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s080:3",
+    "module": "approach",
+    "gameId": "s080",
+    "before": 3,
+    "color": "W",
+    "anchors": [287],
+    "historical": 308,
+    "alternatives": [52, 111],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique E3 est à un saut de cavalier de la pierre adverse en C4. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 52, "before": 5 },
+        { "point": 111, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 73 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 79 },
+        { "color": "W", "point": 111 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s119:3",
+    "module": "approach",
+    "gameId": "s119",
+    "before": 3,
+    "color": "W",
+    "anchors": [287],
+    "historical": 308,
+    "alternatives": [263, 314],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique E3 est à un saut de cavalier de la pierre adverse en C4. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 263, "before": 5 },
+        { "point": 314, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 263 },
+        { "color": "B", "point": 312 },
+        { "color": "W", "point": 314 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s158:3",
+    "module": "approach",
+    "gameId": "s158",
+    "before": 3,
+    "color": "W",
+    "anchors": [319],
+    "historical": 282,
+    "alternatives": [168, 268],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique R5 est à un saut de cavalier de la pierre adverse en Q3. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 168, "before": 5 },
+        { "point": 268, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 298 },
+        { "color": "W", "point": 268 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s198:4",
+    "module": "approach",
+    "gameId": "s198",
+    "before": 4,
+    "color": "B",
+    "anchors": [282],
+    "historical": 319,
+    "alternatives": [91, 318],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique Q3 est à un saut de cavalier de la pierre adverse en R5. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 91, "before": 6 },
+        { "point": 318, "before": 8 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 299 },
+        { "color": "B", "point": 318 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s237:3",
+    "module": "approach",
+    "gameId": "s237",
+    "before": 3,
+    "color": "W",
+    "anchors": [319],
+    "historical": 282,
+    "alternatives": [308, 281],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique R5 est à un saut de cavalier de la pierre adverse en Q3. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 308, "before": 5 },
+        { "point": 281, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 206 },
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 301 },
+        { "color": "W", "point": 281 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s276:8",
+    "module": "approach",
+    "gameId": "s276",
+    "before": 8,
+    "color": "B",
+    "anchors": [40],
+    "historical": 23,
+    "alternatives": [319, 206],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique E18 est à un saut de cavalier de la pierre adverse en C17. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 319, "before": 10 },
+        { "point": 206, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 23 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 288 },
+        { "color": "B", "point": 206 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s319:5",
+    "module": "approach",
+    "gameId": "s319",
+    "before": 5,
+    "color": "W",
+    "anchors": [268],
+    "historical": 307,
+    "alternatives": [59, 58],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique D3 est à un saut de cavalier de la pierre adverse en C5. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 59, "before": 7 },
+        { "point": 58, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 307 },
+        { "color": "B", "point": 79 },
+        { "color": "W", "point": 59 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 58 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s358:5",
+    "module": "approach",
+    "gameId": "s358",
+    "before": 5,
+    "color": "W",
+    "anchors": [308],
+    "historical": 287,
+    "alternatives": [319, 338],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique C4 est à un saut de cavalier de la pierre adverse en E3. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 319, "before": 7 },
+        { "point": 338, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 287 },
+        { "color": "B", "point": 299 },
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 338 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s397:2",
+    "module": "approach",
+    "gameId": "s397",
+    "before": 2,
+    "color": "W",
+    "anchors": [59],
+    "historical": 42,
+    "alternatives": [46, 315],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique E17 est à un saut de cavalier de la pierre adverse en C16. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 46, "before": 4 },
+        { "point": 315, "before": 6 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 42 },
+        { "color": "B", "point": 79 },
+        { "color": "W", "point": 46 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 315 }
+      ]
+    }
+  },
+  {
+    "id": "approach:s436:8",
+    "module": "approach",
+    "gameId": "s436",
+    "before": 8,
+    "color": "W",
+    "anchors": [40],
+    "historical": 23,
+    "alternatives": [315, 281],
+    "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban.",
+    "observation": "Le coup historique E18 est à un saut de cavalier de la pierre adverse en C17. C’est une relation géométrique observable, pas une prescription de joseki.",
+    "rubric": "Identifier l’espace laissé autour de la pierre adverse, les réponses possibles et les soutiens de chaque couleur.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 315, "before": 10 },
+        { "point": 281, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 23 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 315 },
+        { "color": "B", "point": 244 },
+        { "color": "W", "point": 281 }
+      ]
+    }
+  },
+  {
+    "id": "corner-response:s001:8",
+    "module": "corner-response",
+    "gameId": "s001",
+    "before": 8,
+    "color": "B",
+    "anchors": [289, 287],
+    "historical": 308,
+    "alternatives": [307, 269],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique E3 suit E4 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en C4. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 307, "before": 10 },
+        { "point": 269, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 309 },
+        { "color": "B", "point": 307 },
+        { "color": "W", "point": 290 },
+        { "color": "B", "point": 269 }
+      ],
+      "previous": 289
+    }
+  },
+  {
+    "id": "corner-response:s041:5",
+    "module": "corner-response",
+    "gameId": "s041",
+    "before": 5,
+    "color": "W",
+    "anchors": [53, 52],
+    "historical": 71,
+    "alternatives": [87, 282],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique P16 suit Q17 dans le même coin, à 2 intersections orthogonales de distance, près d’une pierre amie en P17. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 87, "before": 7 },
+        { "point": 282, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 71 },
+        { "color": "B", "point": 110 },
+        { "color": "W", "point": 87 },
+        { "color": "B", "point": 45 },
+        { "color": "W", "point": 282 }
+      ],
+      "previous": 53
+    }
+  },
+  {
+    "id": "corner-response:s080:8",
+    "module": "corner-response",
+    "gameId": "s080",
+    "before": 8,
+    "color": "B",
+    "anchors": [111, 73],
+    "historical": 110,
+    "alternatives": [109, 71],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique Q14 suit R14 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en R16. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 109, "before": 10 },
+        { "point": 71, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 110 },
+        { "color": "W", "point": 129 },
+        { "color": "B", "point": 109 },
+        { "color": "W", "point": 128 },
+        { "color": "B", "point": 71 }
+      ],
+      "previous": 111
+    }
+  },
+  {
+    "id": "corner-response:s119:15",
+    "module": "corner-response",
+    "gameId": "s119",
+    "before": 15,
+    "color": "W",
+    "anchors": [43, 60],
+    "historical": 62,
+    "alternatives": [42, 61],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique F16 suit F17 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en D16. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 42, "before": 17 },
+        { "point": 61, "before": 19 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 62 },
+        { "color": "B", "point": 63 },
+        { "color": "W", "point": 42 },
+        { "color": "B", "point": 81 },
+        { "color": "W", "point": 61 }
+      ],
+      "previous": 43
+    }
+  },
+  {
+    "id": "corner-response:s158:10",
+    "module": "corner-response",
+    "gameId": "s158",
+    "before": 10,
+    "color": "B",
+    "anchors": [320, 319],
+    "historical": 339,
+    "alternatives": [318, 340],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique R2 suit R3 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en Q3. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 318, "before": 12 },
+        { "point": 340, "before": 14 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 339 },
+        { "color": "W", "point": 300 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 321 },
+        { "color": "B", "point": 340 }
+      ],
+      "previous": 320
+    }
+  },
+  {
+    "id": "corner-response:s198:6",
+    "module": "corner-response",
+    "gameId": "s198",
+    "before": 6,
+    "color": "B",
+    "anchors": [52, 73],
+    "historical": 91,
+    "alternatives": [318, 316],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique Q15 suit P17 dans le même coin, à 3 intersections orthogonales de distance, près d’une pierre amie en R16. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 318, "before": 8 },
+        { "point": 316, "before": 10 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 299 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 298 },
+        { "color": "B", "point": 316 }
+      ],
+      "previous": 52
+    }
+  },
+  {
+    "id": "corner-response:s237:7",
+    "module": "corner-response",
+    "gameId": "s237",
+    "before": 7,
+    "color": "W",
+    "anchors": [301, 282],
+    "historical": 281,
+    "alternatives": [204, 130],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique Q5 suit R4 dans le même coin, à 2 intersections orthogonales de distance, près d’une pierre amie en R5. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 204, "before": 9 },
+        { "point": 130, "before": 11 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 281 },
+        { "color": "B", "point": 298 },
+        { "color": "W", "point": 204 },
+        { "color": "B", "point": 167 },
+        { "color": "W", "point": 130 }
+      ],
+      "previous": 301
+    }
+  },
+  {
+    "id": "corner-response:s276:5",
+    "module": "corner-response",
+    "gameId": "s276",
+    "before": 5,
+    "color": "W",
+    "anchors": [41, 79],
+    "historical": 40,
+    "alternatives": [59, 154],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique C17 suit D17 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en D15. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 59, "before": 7 },
+        { "point": 154, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 40 },
+        { "color": "B", "point": 21 },
+        { "color": "W", "point": 59 },
+        { "color": "B", "point": 23 },
+        { "color": "W", "point": 154 }
+      ],
+      "previous": 41
+    }
+  },
+  {
+    "id": "corner-response:s319:7",
+    "module": "corner-response",
+    "gameId": "s319",
+    "before": 7,
+    "color": "W",
+    "anchors": [79, 42],
+    "historical": 59,
+    "alternatives": [58, 301],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique C16 suit D15 dans le même coin, à 2 intersections orthogonales de distance, près d’une pierre amie en E17. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 58, "before": 9 },
+        { "point": 301, "before": 11 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 59 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 58 },
+        { "color": "B", "point": 154 },
+        { "color": "W", "point": 301 }
+      ],
+      "previous": 79
+    }
+  },
+  {
+    "id": "corner-response:s358:7",
+    "module": "corner-response",
+    "gameId": "s358",
+    "before": 7,
+    "color": "W",
+    "anchors": [299, 282],
+    "historical": 319,
+    "alternatives": [338, 41],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique Q3 suit P4 dans le même coin, à 2 intersections orthogonales de distance, près d’une pierre amie en R5. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 338, "before": 9 },
+        { "point": 41, "before": 11 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 338 },
+        { "color": "B", "point": 61 },
+        { "color": "W", "point": 41 }
+      ],
+      "previous": 299
+    }
+  },
+  {
+    "id": "corner-response:s397:3",
+    "module": "corner-response",
+    "gameId": "s397",
+    "before": 3,
+    "color": "B",
+    "anchors": [42, 59],
+    "historical": 79,
+    "alternatives": [318, 296],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique D15 suit E17 dans le même coin, à 3 intersections orthogonales de distance, près d’une pierre amie en C16. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 318, "before": 5 },
+        { "point": 296, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 79 },
+        { "color": "W", "point": 46 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 315 },
+        { "color": "B", "point": 296 }
+      ],
+      "previous": 42
+    }
+  },
+  {
+    "id": "corner-response:s436:3",
+    "module": "corner-response",
+    "gameId": "s436",
+    "before": 3,
+    "color": "B",
+    "anchors": [41, 79],
+    "historical": 40,
+    "alternatives": [230, 59],
+    "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre.",
+    "observation": "La réponse historique C17 suit D17 dans le même coin, à 1 intersections orthogonales de distance, près d’une pierre amie en D15. La suite du kifu peut être rejouée, sans lui attribuer le statut de joseki universel.",
+    "rubric": "Examiner à qui profitent l’espace extérieur, le coin et la connexion après les réponses possibles ; tenir compte des autres secteurs.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 230, "before": 5 },
+        { "point": 59, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 40 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 230 },
+        { "color": "W", "point": 21 },
+        { "color": "B", "point": 59 }
+      ],
+      "previous": 41
+    }
+  },
+  {
+    "id": "direction:s001:16",
+    "module": "direction",
+    "gameId": "s001",
+    "before": 16,
+    "color": "B",
+    "anchors": [313],
+    "historical": 311,
+    "alternatives": [211, 295],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit H3, à 2 intersections de K3, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 211, "before": 18 },
+        { "point": 295, "before": 20 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 311 },
+        { "color": "W", "point": 252 },
+        { "color": "B", "point": 211 },
+        { "color": "W", "point": 275 },
+        { "color": "B", "point": 295 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s041:12",
+    "module": "direction",
+    "gameId": "s041",
+    "before": 12,
+    "color": "B",
+    "anchors": [48],
+    "historical": 50,
+    "alternatives": [148, 230],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit N17, à 2 intersections de L17, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 148, "before": 14 },
+        { "point": 230, "before": 16 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 50 },
+        { "color": "W", "point": 89 },
+        { "color": "B", "point": 148 },
+        { "color": "W", "point": 79 },
+        { "color": "B", "point": 230 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s080:23",
+    "module": "direction",
+    "gameId": "s080",
+    "before": 23,
+    "color": "W",
+    "anchors": [52],
+    "historical": 49,
+    "alternatives": [127, 36],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit M17, à 3 intersections de P17, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 127, "before": 25 },
+        { "point": 36, "before": 27 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 49 },
+        { "color": "B", "point": 282 },
+        { "color": "W", "point": 127 },
+        { "color": "B", "point": 55 },
+        { "color": "W", "point": 36 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s119:11",
+    "module": "direction",
+    "gameId": "s119",
+    "before": 11,
+    "color": "W",
+    "anchors": [230],
+    "historical": 173,
+    "alternatives": [60, 62],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit C10, à 3 intersections de C7, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 60, "before": 13 },
+        { "point": 62, "before": 15 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 173 },
+        { "color": "B", "point": 307 },
+        { "color": "W", "point": 60 },
+        { "color": "B", "point": 43 },
+        { "color": "W", "point": 62 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s158:17",
+    "module": "direction",
+    "gameId": "s158",
+    "before": 17,
+    "color": "W",
+    "anchors": [300],
+    "historical": 224,
+    "alternatives": [166, 278],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit Q8, à 4 intersections de Q4, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 166, "before": 19 },
+        { "point": 278, "before": 21 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 224 },
+        { "color": "B", "point": 205 },
+        { "color": "W", "point": 166 },
+        { "color": "B", "point": 202 },
+        { "color": "W", "point": 278 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s198:10",
+    "module": "direction",
+    "gameId": "s198",
+    "before": 10,
+    "color": "B",
+    "anchors": [318],
+    "historical": 316,
+    "alternatives": [289, 224],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit N3, à 2 intersections de P3, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 289, "before": 12 },
+        { "point": 224, "before": 14 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 316 },
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 289 },
+        { "color": "W", "point": 97 },
+        { "color": "B", "point": 224 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s237:21",
+    "module": "direction",
+    "gameId": "s237",
+    "before": 21,
+    "color": "W",
+    "anchors": [297],
+    "historical": 295,
+    "alternatives": [313, 332],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit L4, à 2 intersections de N4, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 313, "before": 23 },
+        { "point": 332, "before": 25 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 295 },
+        { "color": "B", "point": 314 },
+        { "color": "W", "point": 313 },
+        { "color": "B", "point": 312 },
+        { "color": "W", "point": 332 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s276:15",
+    "module": "direction",
+    "gameId": "s276",
+    "before": 15,
+    "color": "W",
+    "anchors": [316],
+    "historical": 313,
+    "alternatives": [43, 63],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit K3, à 3 intersections de N3, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 43, "before": 17 },
+        { "point": 63, "before": 19 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 313 },
+        { "color": "B", "point": 301 },
+        { "color": "W", "point": 43 },
+        { "color": "B", "point": 61 },
+        { "color": "W", "point": 63 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s319:10",
+    "module": "direction",
+    "gameId": "s319",
+    "before": 10,
+    "color": "B",
+    "anchors": [78],
+    "historical": 154,
+    "alternatives": [290, 289],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit C11, à 4 intersections de C15, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 290, "before": 12 },
+        { "point": 289, "before": 14 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 154 },
+        { "color": "W", "point": 301 },
+        { "color": "B", "point": 290 },
+        { "color": "W", "point": 309 },
+        { "color": "B", "point": 289 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s358:19",
+    "module": "direction",
+    "gameId": "s358",
+    "before": 19,
+    "color": "W",
+    "anchors": [287],
+    "historical": 230,
+    "alternatives": [262, 168],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit C7, à 3 intersections de C4, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 262, "before": 21 },
+        { "point": 168, "before": 23 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 230 },
+        { "color": "B", "point": 294 },
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 47 },
+        { "color": "W", "point": 168 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s397:20",
+    "module": "direction",
+    "gameId": "s397",
+    "before": 20,
+    "color": "W",
+    "anchors": [244],
+    "historical": 282,
+    "alternatives": [340, 168],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit R5, à 2 intersections de R7, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 340, "before": 22 },
+        { "point": 168, "before": 24 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 339 },
+        { "color": "W", "point": 340 },
+        { "color": "B", "point": 335 },
+        { "color": "W", "point": 168 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s436:13",
+    "module": "direction",
+    "gameId": "s436",
+    "before": 13,
+    "color": "B",
+    "anchors": [244],
+    "historical": 187,
+    "alternatives": [311, 99],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit R10, à 3 intersections de R7, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 311, "before": 15 },
+        { "point": 99, "before": 17 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 187 },
+        { "color": "W", "point": 298 },
+        { "color": "B", "point": 311 },
+        { "color": "W", "point": 116 },
+        { "color": "B", "point": 99 }
+      ]
+    }
+  },
+  {
+    "id": "influence:s001:27",
+    "module": "influence",
+    "gameId": "s001",
+    "before": 27,
+    "color": "W",
+    "anchors": [289],
+    "historical": 213,
+    "alternatives": [254, 298],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup E8, la chaîne repérée en E4 contient 3 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 254, "before": 29 },
+        { "point": 298, "before": 31 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 213 },
+        { "color": "B", "point": 194 },
+        { "color": "W", "point": 254 },
+        { "color": "B", "point": 297 },
+        { "color": "W", "point": 298 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s041:31",
+    "module": "influence",
+    "gameId": "s041",
+    "before": 31,
+    "color": "W",
+    "anchors": [272],
+    "historical": 255,
+    "alternatives": [65, 30],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup J6, la chaîne repérée en G5 contient 3 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 65, "before": 33 },
+        { "point": 30, "before": 35 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 255 },
+        { "color": "B", "point": 85 },
+        { "color": "W", "point": 65 },
+        { "color": "B", "point": 46 },
+        { "color": "W", "point": 30 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s080:21",
+    "module": "influence",
+    "gameId": "s080",
+    "before": 21,
+    "color": "W",
+    "anchors": [52],
+    "historical": 72,
+    "alternatives": [49, 127],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup Q16, la chaîne repérée en P17 contient 3 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 49, "before": 23 },
+        { "point": 127, "before": 25 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 72 },
+        { "color": "B", "point": 92 },
+        { "color": "W", "point": 49 },
+        { "color": "B", "point": 282 },
+        { "color": "W", "point": 127 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s119:53",
+    "module": "influence",
+    "gameId": "s119",
+    "before": 53,
+    "color": "W",
+    "anchors": [111],
+    "historical": 71,
+    "alternatives": [91, 53],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup P16, la chaîne repérée en R14 contient 4 pierres et 8 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 91, "before": 55 },
+        { "point": 53, "before": 57 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 71 },
+        { "color": "B", "point": 70 },
+        { "color": "W", "point": 91 },
+        { "color": "B", "point": 51 },
+        { "color": "W", "point": 53 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 8
+    }
+  },
+  {
+    "id": "influence:s158:20",
+    "module": "influence",
+    "gameId": "s158",
+    "before": 20,
+    "color": "B",
+    "anchors": [204],
+    "historical": 202,
+    "alternatives": [296, 165],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup N9, la chaîne repérée en P9 contient 3 pierres et 7 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 296, "before": 22 },
+        { "point": 165, "before": 24 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 202 },
+        { "color": "W", "point": 278 },
+        { "color": "B", "point": 296 },
+        { "color": "W", "point": 240 },
+        { "color": "B", "point": 165 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 7
+    }
+  },
+  {
+    "id": "influence:s198:23",
+    "module": "influence",
+    "gameId": "s198",
+    "before": 23,
+    "color": "W",
+    "anchors": [297],
+    "historical": 259,
+    "alternatives": [226, 47],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup N6, la chaîne repérée en N4 contient 4 pierres et 7 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 226, "before": 25 },
+        { "point": 47, "before": 27 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 259 },
+        { "color": "B", "point": 203 },
+        { "color": "W", "point": 226 },
+        { "color": "B", "point": 53 },
+        { "color": "W", "point": 47 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 7
+    }
+  },
+  {
+    "id": "influence:s237:26",
+    "module": "influence",
+    "gameId": "s237",
+    "before": 26,
+    "color": "B",
+    "anchors": [314],
+    "historical": 294,
+    "alternatives": [331, 275],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup K4, la chaîne repérée en L3 contient 3 pierres et 4 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 331, "before": 28 },
+        { "point": 275, "before": 30 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 294 },
+        { "color": "W", "point": 311 },
+        { "color": "B", "point": 331 },
+        { "color": "W", "point": 293 },
+        { "color": "B", "point": 275 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 4
+    }
+  },
+  {
+    "id": "influence:s319:26",
+    "module": "influence",
+    "gameId": "s319",
+    "before": 26,
+    "color": "B",
+    "anchors": [175],
+    "historical": 214,
+    "alternatives": [211, 274],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup F8, la chaîne repérée en E10 contient 4 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 211, "before": 28 },
+        { "point": 274, "before": 30 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 214 },
+        { "color": "W", "point": 195 },
+        { "color": "B", "point": 211 },
+        { "color": "W", "point": 198 },
+        { "color": "B", "point": 274 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s358:29",
+    "module": "influence",
+    "gameId": "s358",
+    "before": 29,
+    "color": "W",
+    "anchors": [287],
+    "historical": 290,
+    "alternatives": [98, 192],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup F4, la chaîne repérée en C4 contient 5 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 98, "before": 31 },
+        { "point": 192, "before": 33 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 290 },
+        { "color": "B", "point": 289 },
+        { "color": "W", "point": 98 },
+        { "color": "B", "point": 212 },
+        { "color": "W", "point": 192 }
+      ],
+      "anchorSize": 5,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s397:27",
+    "module": "influence",
+    "gameId": "s397",
+    "before": 27,
+    "color": "B",
+    "anchors": [223],
+    "historical": 202,
+    "alternatives": [92, 200],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup N9, la chaîne repérée en P8 contient 3 pierres et 5 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 92, "before": 29 },
+        { "point": 200, "before": 31 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 202 },
+        { "color": "W", "point": 128 },
+        { "color": "B", "point": 92 },
+        { "color": "W", "point": 164 },
+        { "color": "B", "point": 200 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 5
+    }
+  },
+  {
+    "id": "influence:s436:31",
+    "module": "influence",
+    "gameId": "s436",
+    "before": 31,
+    "color": "B",
+    "anchors": [157],
+    "historical": 159,
+    "alternatives": [52, 110],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup H11, la chaîne repérée en F11 contient 3 pierres et 4 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 52, "before": 33 },
+        { "point": 110, "before": 35 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 159 },
+        { "color": "W", "point": 51 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 70 },
+        { "color": "B", "point": 110 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 4
+    }
+  },
+  {
+    "id": "influence:s002:26",
+    "module": "influence",
+    "gameId": "s002",
+    "before": 26,
+    "color": "B",
+    "anchors": [136],
+    "historical": 194,
+    "alternatives": [100, 81],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup E9, la chaîne repérée en D12 contient 7 pierres et 7 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:002"],
+      "alternativeSources": [
+        { "point": 100, "before": 28 },
+        { "point": 81, "before": 30 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 194 },
+        { "color": "W", "point": 119 },
+        { "color": "B", "point": 100 },
+        { "color": "W", "point": 101 },
+        { "color": "B", "point": 81 }
+      ],
+      "anchorSize": 7,
+      "anchorLiberties": 7
+    }
+  },
+  {
+    "id": "reduction:s001:25",
+    "module": "reduction",
+    "gameId": "s001",
+    "before": 25,
+    "color": "W",
+    "anchors": [211, 269, 287],
+    "historical": 231,
+    "alternatives": [213, 254],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique D7 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 213, "before": 27 },
+        { "point": 254, "before": 29 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 231 },
+        { "color": "B", "point": 212 },
+        { "color": "W", "point": 213 },
+        { "color": "B", "point": 194 },
+        { "color": "W", "point": 254 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s041:33",
+    "module": "reduction",
+    "gameId": "s041",
+    "before": 33,
+    "color": "W",
+    "anchors": [45, 85, 48],
+    "historical": 65,
+    "alternatives": [30, 31],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique J16 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 30, "before": 35 },
+        { "point": 31, "before": 37 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 65 },
+        { "color": "B", "point": 46 },
+        { "color": "W", "point": 30 },
+        { "color": "B", "point": 69 },
+        { "color": "W", "point": 31 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s080:63",
+    "module": "reduction",
+    "gameId": "s080",
+    "before": 63,
+    "color": "W",
+    "anchors": [312, 251, 289],
+    "historical": 273,
+    "alternatives": [202, 327],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique H5 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 202, "before": 65 },
+        { "point": 327, "before": 67 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 273 },
+        { "color": "B", "point": 135 },
+        { "color": "W", "point": 202 },
+        { "color": "B", "point": 275 },
+        { "color": "W", "point": 327 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s119:70",
+    "module": "reduction",
+    "gameId": "s119",
+    "before": 70,
+    "color": "B",
+    "anchors": [236, 238, 276],
+    "historical": 218,
+    "alternatives": [292, 272],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique K8 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 292, "before": 72 },
+        { "point": 272, "before": 74 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 218 },
+        { "color": "W", "point": 310 },
+        { "color": "B", "point": 292 },
+        { "color": "W", "point": 255 },
+        { "color": "B", "point": 272 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s158:37",
+    "module": "reduction",
+    "gameId": "s158",
+    "before": 37,
+    "color": "W",
+    "anchors": [164, 129, 165],
+    "historical": 125,
+    "alternatives": [143, 66],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique M13 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 143, "before": 39 },
+        { "point": 66, "before": 41 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 125 },
+        { "color": "B", "point": 68 },
+        { "color": "W", "point": 143 },
+        { "color": "B", "point": 200 },
+        { "color": "W", "point": 66 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s198:44",
+    "module": "reduction",
+    "gameId": "s198",
+    "before": 44,
+    "color": "B",
+    "anchors": [259, 297, 236],
+    "historical": 276,
+    "alternatives": [256, 237],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique L5 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 256, "before": 46 },
+        { "point": 237, "before": 48 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 276 },
+        { "color": "W", "point": 238 },
+        { "color": "B", "point": 256 },
+        { "color": "W", "point": 159 },
+        { "color": "B", "point": 237 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s237:89",
+    "module": "reduction",
+    "gameId": "s237",
+    "before": 89,
+    "color": "W",
+    "anchors": [164, 238, 239],
+    "historical": 181,
+    "alternatives": [200, 224],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique L10 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 200, "before": 91 },
+        { "point": 224, "before": 93 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 181 },
+        { "color": "B", "point": 199 },
+        { "color": "W", "point": 200 },
+        { "color": "B", "point": 203 },
+        { "color": "W", "point": 224 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s276:36",
+    "module": "reduction",
+    "gameId": "s276",
+    "before": 36,
+    "color": "B",
+    "anchors": [25, 43, 63],
+    "historical": 45,
+    "alternatives": [39, 38],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique H17 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 39, "before": 38 },
+        { "point": 38, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 45 },
+        { "color": "W", "point": 44 },
+        { "color": "B", "point": 39 },
+        { "color": "W", "point": 58 },
+        { "color": "B", "point": 38 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s319:28",
+    "module": "reduction",
+    "gameId": "s319",
+    "before": 28,
+    "color": "B",
+    "anchors": [174, 194, 195],
+    "historical": 211,
+    "alternatives": [274, 205],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique C8 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 274, "before": 30 },
+        { "point": 205, "before": 32 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 211 },
+        { "color": "W", "point": 198 },
+        { "color": "B", "point": 274 },
+        { "color": "W", "point": 186 },
+        { "color": "B", "point": 205 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s358:97",
+    "module": "reduction",
+    "gameId": "s358",
+    "before": 97,
+    "color": "W",
+    "anchors": [71, 52, 73],
+    "historical": 90,
+    "alternatives": [108, 91],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique P15 est à quatre intersections ou moins de 7 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 108, "before": 99 },
+        { "point": 91, "before": 101 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 90 },
+        { "color": "B", "point": 89 },
+        { "color": "W", "point": 108 },
+        { "color": "B", "point": 109 },
+        { "color": "W", "point": 91 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s397:35",
+    "module": "reduction",
+    "gameId": "s397",
+    "before": 35,
+    "color": "B",
+    "anchors": [128, 164, 166],
+    "historical": 146,
+    "alternatives": [203, 186],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique O12 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 203, "before": 37 },
+        { "point": 186, "before": 39 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 146 },
+        { "color": "W", "point": 222 },
+        { "color": "B", "point": 203 },
+        { "color": "W", "point": 334 },
+        { "color": "B", "point": 186 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s436:36",
+    "module": "reduction",
+    "gameId": "s436",
+    "before": 36,
+    "color": "W",
+    "anchors": [52, 72, 110],
+    "historical": 54,
+    "alternatives": [92, 111],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique R17 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 92, "before": 38 },
+        { "point": 111, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 54 },
+        { "color": "B", "point": 33 },
+        { "color": "W", "point": 92 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 111 }
+      ]
+    }
+  },
+  {
+    "id": "initiative:s001:19",
+    "module": "initiative",
+    "gameId": "s001",
+    "before": 19,
+    "color": "W",
+    "anchors": [211],
+    "historical": 275,
+    "alternatives": [231, 213],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de C8 à K5, à 10 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 231, "before": 25 },
+        { "point": 213, "before": 27 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 275 },
+        { "color": "B", "point": 295 },
+        { "color": "W", "point": 258 },
+        { "color": "B", "point": 296 },
+        { "color": "W", "point": 316 }
+      ],
+      "previous": 211
+    }
+  },
+  {
+    "id": "initiative:s041:23",
+    "module": "initiative",
+    "gameId": "s041",
+    "before": 23,
+    "color": "W",
+    "anchors": [292],
+    "historical": 154,
+    "alternatives": [288, 255],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de H4 à C11, à 12 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:041"],
+      "alternativeSources": [
+        { "point": 288, "before": 27 },
+        { "point": 255, "before": 31 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 286 },
+        { "color": "B", "point": 305 },
+        { "color": "W", "point": 288 }
+      ],
+      "previous": 292
+    }
+  },
+  {
+    "id": "initiative:s080:25",
+    "module": "initiative",
+    "gameId": "s080",
+    "before": 25,
+    "color": "W",
+    "anchors": [282],
+    "historical": 127,
+    "alternatives": [318, 281],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de R5 à O13, à 11 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:080"],
+      "alternativeSources": [
+        { "point": 318, "before": 41 },
+        { "point": 281, "before": 43 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 127 },
+        { "color": "B", "point": 55 },
+        { "color": "W", "point": 36 },
+        { "color": "B", "point": 75 },
+        { "color": "W", "point": 249 }
+      ],
+      "previous": 282
+    }
+  },
+  {
+    "id": "initiative:s119:38",
+    "module": "initiative",
+    "gameId": "s119",
+    "before": 38,
+    "color": "B",
+    "anchors": [168],
+    "historical": 251,
+    "alternatives": [129, 148],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de R11 à E6, à 17 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:119"],
+      "alternativeSources": [
+        { "point": 129, "before": 44 },
+        { "point": 148, "before": 50 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 251 },
+        { "color": "W", "point": 67 },
+        { "color": "B", "point": 43 },
+        { "color": "W", "point": 111 },
+        { "color": "B", "point": 90 }
+      ],
+      "previous": 168
+    }
+  },
+  {
+    "id": "initiative:s158:27",
+    "module": "initiative",
+    "gameId": "s158",
+    "before": 27,
+    "color": "W",
+    "anchors": [164],
+    "historical": 92,
+    "alternatives": [128, 125],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de N11 à R15, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:158"],
+      "alternativeSources": [
+        { "point": 128, "before": 35 },
+        { "point": 125, "before": 37 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 92 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 110 },
+        { "color": "B", "point": 111 },
+        { "color": "W", "point": 93 }
+      ],
+      "previous": 164
+    }
+  },
+  {
+    "id": "initiative:s198:15",
+    "module": "initiative",
+    "gameId": "s198",
+    "before": 15,
+    "color": "W",
+    "anchors": [224],
+    "historical": 89,
+    "alternatives": [262, 300],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de Q8 à O15, à 9 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 262, "before": 17 },
+        { "point": 300, "before": 19 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 89 },
+        { "color": "B", "point": 261 },
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 242 },
+        { "color": "W", "point": 300 }
+      ],
+      "previous": 224
+    }
+  },
+  {
+    "id": "initiative:s237:41",
+    "module": "initiative",
+    "gameId": "s237",
+    "before": 41,
+    "color": "W",
+    "anchors": [239],
+    "historical": 207,
+    "alternatives": [257, 261],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de M7 à S9, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:237", "pgd:All/1849-10-16_None_Honinbo Shusaku_6p_Ota Yuzo_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 257, "before": 57 },
+        { "point": 261, "before": 63 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 207 },
+        { "color": "B", "point": 225 },
+        { "color": "W", "point": 226 },
+        { "color": "B", "point": 243 },
+        { "color": "W", "point": 280 }
+      ],
+      "previous": 239
+    }
+  },
+  {
+    "id": "initiative:s276:16",
+    "module": "initiative",
+    "gameId": "s276",
+    "before": 16,
+    "color": "B",
+    "anchors": [313],
+    "historical": 301,
+    "alternatives": [293, 255],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de K3 à R4, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:276"],
+      "alternativeSources": [
+        { "point": 293, "before": 24 },
+        { "point": 255, "before": 26 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 301 },
+        { "color": "W", "point": 43 },
+        { "color": "B", "point": 61 },
+        { "color": "W", "point": 63 },
+        { "color": "B", "point": 80 }
+      ],
+      "previous": 313
+    }
+  },
+  {
+    "id": "initiative:s319:18",
+    "module": "initiative",
+    "gameId": "s319",
+    "before": 18,
+    "color": "B",
+    "anchors": [311],
+    "historical": 206,
+    "alternatives": [274],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de H3 à R9, à 15 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [{ "point": 274, "before": 30 }],
+      "historicalLine": [
+        { "color": "B", "point": 206 },
+        { "color": "W", "point": 174 },
+        { "color": "B", "point": 155 },
+        { "color": "W", "point": 176 },
+        { "color": "B", "point": 175 }
+      ],
+      "previous": 311
+    }
+  },
+  {
+    "id": "initiative:s358:20",
+    "module": "initiative",
+    "gameId": "s358",
+    "before": 20,
+    "color": "B",
+    "anchors": [230],
+    "historical": 294,
+    "alternatives": [306, 288],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de C7 à K4, à 10 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:358"],
+      "alternativeSources": [
+        { "point": 306, "before": 24 },
+        { "point": 288, "before": 26 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 294 },
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 47 },
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 306 }
+      ],
+      "previous": 230
+    }
+  },
+  {
+    "id": "initiative:s397:24",
+    "module": "initiative",
+    "gameId": "s397",
+    "before": 24,
+    "color": "W",
+    "anchors": [335],
+    "historical": 168,
+    "alternatives": [334, 316],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de N2 à R11, à 13 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:397"],
+      "alternativeSources": [
+        { "point": 334, "before": 38 },
+        { "point": 316, "before": 42 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 130 },
+        { "color": "W", "point": 166 },
+        { "color": "B", "point": 202 },
+        { "color": "W", "point": 128 }
+      ],
+      "previous": 335
+    }
+  },
+  {
+    "id": "initiative:s436:55",
+    "module": "initiative",
+    "gameId": "s436",
+    "before": 55,
+    "color": "B",
+    "anchors": [66],
+    "historical": 308,
+    "alternatives": [49, 67],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de K16 à E3, à 18 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:436", "pgd:All/1859-04-19_None_Ebisawa Kenzo_3p_Honinbo Shusaku_6p_B+3.sgf"],
+      "alternativeSources": [
+        { "point": 49, "before": 57 },
+        { "point": 67, "before": 59 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 283 },
+        { "color": "B", "point": 49 },
+        { "color": "W", "point": 68 },
+        { "color": "B", "point": 67 }
+      ],
+      "previous": 66
+    }
+  }
+]

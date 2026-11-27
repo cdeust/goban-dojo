@@ -19,7 +19,7 @@ export function useKeyboard(): void {
   useEffect(() => {
     const onKey = (e: KeyboardEvent): void => {
       const s = useStore.getState();
-      if (!s.entered || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
+      if (!s.entered || s.schoolOpen || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
       const t = e.target;
       if (t instanceof HTMLElement) {
         if (

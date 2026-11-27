@@ -1,0 +1,2186 @@
+[
+  {
+    "id": "liberties:s001:8",
+    "module": "liberties",
+    "gameId": "s001",
+    "before": 8,
+    "color": "B",
+    "anchors": [289]
+  },
+  {
+    "id": "liberties:s021:8",
+    "module": "liberties",
+    "gameId": "s021",
+    "before": 8,
+    "color": "B",
+    "anchors": [320]
+  },
+  {
+    "id": "liberties:s042:12",
+    "module": "liberties",
+    "gameId": "s042",
+    "before": 12,
+    "color": "B",
+    "anchors": [73]
+  },
+  {
+    "id": "liberties:s062:13",
+    "module": "liberties",
+    "gameId": "s062",
+    "before": 13,
+    "color": "W",
+    "anchors": [269]
+  },
+  {
+    "id": "liberties:s082:11",
+    "module": "liberties",
+    "gameId": "s082",
+    "before": 11,
+    "color": "W",
+    "anchors": [289]
+  },
+  {
+    "id": "liberties:s102:14",
+    "module": "liberties",
+    "gameId": "s102",
+    "before": 14,
+    "color": "B",
+    "anchors": [249]
+  },
+  {
+    "id": "liberties:s122:9",
+    "module": "liberties",
+    "gameId": "s122",
+    "before": 9,
+    "color": "W",
+    "anchors": [110]
+  },
+  {
+    "id": "liberties:s142:23",
+    "module": "liberties",
+    "gameId": "s142",
+    "before": 23,
+    "color": "W",
+    "anchors": [243]
+  },
+  {
+    "id": "liberties:s162:34",
+    "module": "liberties",
+    "gameId": "s162",
+    "before": 34,
+    "color": "B",
+    "anchors": [41]
+  },
+  {
+    "id": "liberties:s182:23",
+    "module": "liberties",
+    "gameId": "s182",
+    "before": 23,
+    "color": "W",
+    "anchors": [73]
+  },
+  {
+    "id": "liberties:s203:9",
+    "module": "liberties",
+    "gameId": "s203",
+    "before": 9,
+    "color": "B",
+    "anchors": [97]
+  },
+  {
+    "id": "liberties:s223:11",
+    "module": "liberties",
+    "gameId": "s223",
+    "before": 11,
+    "color": "W",
+    "anchors": [53]
+  },
+  {
+    "id": "liberties:s242:14",
+    "module": "liberties",
+    "gameId": "s242",
+    "before": 14,
+    "color": "B",
+    "anchors": [282]
+  },
+  {
+    "id": "liberties:s262:20",
+    "module": "liberties",
+    "gameId": "s262",
+    "before": 20,
+    "color": "W",
+    "anchors": [97]
+  },
+  {
+    "id": "liberties:s284:20",
+    "module": "liberties",
+    "gameId": "s284",
+    "before": 20,
+    "color": "B",
+    "anchors": [222]
+  },
+  {
+    "id": "liberties:s304:19",
+    "module": "liberties",
+    "gameId": "s304",
+    "before": 19,
+    "color": "B",
+    "anchors": [72]
+  },
+  {
+    "id": "liberties:s327:22",
+    "module": "liberties",
+    "gameId": "s327",
+    "before": 22,
+    "color": "B",
+    "anchors": [268]
+  },
+  {
+    "id": "liberties:s347:34",
+    "module": "liberties",
+    "gameId": "s347",
+    "before": 34,
+    "color": "W",
+    "anchors": [290]
+  },
+  {
+    "id": "liberties:s367:17",
+    "module": "liberties",
+    "gameId": "s367",
+    "before": 17,
+    "color": "B",
+    "anchors": [116]
+  },
+  {
+    "id": "liberties:s387:19",
+    "module": "liberties",
+    "gameId": "s387",
+    "before": 19,
+    "color": "W",
+    "anchors": [307]
+  },
+  {
+    "id": "liberties:s407:31",
+    "module": "liberties",
+    "gameId": "s407",
+    "before": 31,
+    "color": "B",
+    "anchors": [53]
+  },
+  {
+    "id": "liberties:s427:28",
+    "module": "liberties",
+    "gameId": "s427",
+    "before": 28,
+    "color": "B",
+    "anchors": [300]
+  },
+  {
+    "id": "liberties:s447:10",
+    "module": "liberties",
+    "gameId": "s447",
+    "before": 10,
+    "color": "W",
+    "anchors": [300]
+  },
+  {
+    "id": "liberties:s467:59",
+    "module": "liberties",
+    "gameId": "s467",
+    "before": 59,
+    "color": "W",
+    "anchors": [111]
+  },
+  {
+    "id": "capture-one:s001:83",
+    "module": "capture-one",
+    "gameId": "s001",
+    "before": 83,
+    "color": "W",
+    "anchors": [128]
+  },
+  {
+    "id": "capture-one:s021:52",
+    "module": "capture-one",
+    "gameId": "s021",
+    "before": 52,
+    "color": "B",
+    "anchors": [67]
+  },
+  {
+    "id": "capture-one:s042:44",
+    "module": "capture-one",
+    "gameId": "s042",
+    "before": 44,
+    "color": "B",
+    "anchors": [205]
+  },
+  {
+    "id": "capture-one:s062:121",
+    "module": "capture-one",
+    "gameId": "s062",
+    "before": 121,
+    "color": "W",
+    "anchors": [173]
+  },
+  {
+    "id": "capture-one:s082:78",
+    "module": "capture-one",
+    "gameId": "s082",
+    "before": 78,
+    "color": "B",
+    "anchors": [66]
+  },
+  {
+    "id": "capture-one:s102:102",
+    "module": "capture-one",
+    "gameId": "s102",
+    "before": 102,
+    "color": "B",
+    "anchors": [214]
+  },
+  {
+    "id": "capture-one:s122:45",
+    "module": "capture-one",
+    "gameId": "s122",
+    "before": 45,
+    "color": "W",
+    "anchors": [305]
+  },
+  {
+    "id": "capture-one:s142:113",
+    "module": "capture-one",
+    "gameId": "s142",
+    "before": 113,
+    "color": "W",
+    "anchors": [122]
+  },
+  {
+    "id": "capture-one:s182:44",
+    "module": "capture-one",
+    "gameId": "s182",
+    "before": 44,
+    "color": "B",
+    "anchors": [290]
+  },
+  {
+    "id": "capture-one:s203:86",
+    "module": "capture-one",
+    "gameId": "s203",
+    "before": 86,
+    "color": "W",
+    "anchors": [347]
+  },
+  {
+    "id": "capture-one:s223:76",
+    "module": "capture-one",
+    "gameId": "s223",
+    "before": 76,
+    "color": "B",
+    "anchors": [23]
+  },
+  {
+    "id": "capture-one:s242:125",
+    "module": "capture-one",
+    "gameId": "s242",
+    "before": 125,
+    "color": "W",
+    "anchors": [263]
+  },
+  {
+    "id": "capture-one:s262:40",
+    "module": "capture-one",
+    "gameId": "s262",
+    "before": 40,
+    "color": "W",
+    "anchors": [135]
+  },
+  {
+    "id": "capture-one:s284:45",
+    "module": "capture-one",
+    "gameId": "s284",
+    "before": 45,
+    "color": "W",
+    "anchors": [149]
+  },
+  {
+    "id": "capture-one:s304:111",
+    "module": "capture-one",
+    "gameId": "s304",
+    "before": 111,
+    "color": "B",
+    "anchors": [215]
+  },
+  {
+    "id": "capture-one:s327:123",
+    "module": "capture-one",
+    "gameId": "s327",
+    "before": 123,
+    "color": "W",
+    "anchors": [277]
+  },
+  {
+    "id": "capture-one:s347:72",
+    "module": "capture-one",
+    "gameId": "s347",
+    "before": 72,
+    "color": "W",
+    "anchors": [218]
+  },
+  {
+    "id": "capture-one:s367:21",
+    "module": "capture-one",
+    "gameId": "s367",
+    "before": 21,
+    "color": "B",
+    "anchors": [115]
+  },
+  {
+    "id": "capture-one:s387:30",
+    "module": "capture-one",
+    "gameId": "s387",
+    "before": 30,
+    "color": "B",
+    "anchors": [289]
+  },
+  {
+    "id": "capture-one:s407:49",
+    "module": "capture-one",
+    "gameId": "s407",
+    "before": 49,
+    "color": "B",
+    "anchors": [207]
+  },
+  {
+    "id": "capture-one:s427:39",
+    "module": "capture-one",
+    "gameId": "s427",
+    "before": 39,
+    "color": "W",
+    "anchors": [317]
+  },
+  {
+    "id": "capture-one:s447:23",
+    "module": "capture-one",
+    "gameId": "s447",
+    "before": 23,
+    "color": "B",
+    "anchors": [61]
+  },
+  {
+    "id": "capture-one:s467:81",
+    "module": "capture-one",
+    "gameId": "s467",
+    "before": 81,
+    "color": "W",
+    "anchors": [67]
+  },
+  {
+    "id": "capture-one:s002:44",
+    "module": "capture-one",
+    "gameId": "s002",
+    "before": 44,
+    "color": "B",
+    "anchors": [43]
+  },
+  {
+    "id": "capture-chain:s122:109",
+    "module": "capture-chain",
+    "gameId": "s122",
+    "before": 109,
+    "color": "W",
+    "anchors": [278]
+  },
+  {
+    "id": "capture-chain:s142:168",
+    "module": "capture-chain",
+    "gameId": "s142",
+    "before": 168,
+    "color": "B",
+    "anchors": [272]
+  },
+  {
+    "id": "capture-chain:s223:169",
+    "module": "capture-chain",
+    "gameId": "s223",
+    "before": 169,
+    "color": "W",
+    "anchors": [300]
+  },
+  {
+    "id": "capture-chain:s242:166",
+    "module": "capture-chain",
+    "gameId": "s242",
+    "before": 166,
+    "color": "B",
+    "anchors": [110]
+  },
+  {
+    "id": "capture-chain:s284:146",
+    "module": "capture-chain",
+    "gameId": "s284",
+    "before": 146,
+    "color": "B",
+    "anchors": [161]
+  },
+  {
+    "id": "capture-chain:s304:121",
+    "module": "capture-chain",
+    "gameId": "s304",
+    "before": 121,
+    "color": "B",
+    "anchors": [233]
+  },
+  {
+    "id": "capture-chain:s367:105",
+    "module": "capture-chain",
+    "gameId": "s367",
+    "before": 105,
+    "color": "B",
+    "anchors": [307]
+  },
+  {
+    "id": "capture-chain:s427:138",
+    "module": "capture-chain",
+    "gameId": "s427",
+    "before": 138,
+    "color": "B",
+    "anchors": [224]
+  },
+  {
+    "id": "capture-chain:s022:109",
+    "module": "capture-chain",
+    "gameId": "s022",
+    "before": 109,
+    "color": "B",
+    "anchors": [218]
+  },
+  {
+    "id": "capture-chain:s083:70",
+    "module": "capture-chain",
+    "gameId": "s083",
+    "before": 70,
+    "color": "B",
+    "anchors": [12]
+  },
+  {
+    "id": "capture-chain:s123:105",
+    "module": "capture-chain",
+    "gameId": "s123",
+    "before": 105,
+    "color": "W",
+    "anchors": [83]
+  },
+  {
+    "id": "capture-chain:s143:171",
+    "module": "capture-chain",
+    "gameId": "s143",
+    "before": 171,
+    "color": "W",
+    "anchors": [140]
+  },
+  {
+    "id": "capture-chain:s163:143",
+    "module": "capture-chain",
+    "gameId": "s163",
+    "before": 143,
+    "color": "W",
+    "anchors": [129]
+  },
+  {
+    "id": "capture-chain:s224:137",
+    "module": "capture-chain",
+    "gameId": "s224",
+    "before": 137,
+    "color": "W",
+    "anchors": [123]
+  },
+  {
+    "id": "capture-chain:s243:130",
+    "module": "capture-chain",
+    "gameId": "s243",
+    "before": 130,
+    "color": "B",
+    "anchors": [62]
+  },
+  {
+    "id": "capture-chain:s285:168",
+    "module": "capture-chain",
+    "gameId": "s285",
+    "before": 168,
+    "color": "B",
+    "anchors": [68]
+  },
+  {
+    "id": "capture-chain:s305:113",
+    "module": "capture-chain",
+    "gameId": "s305",
+    "before": 113,
+    "color": "W",
+    "anchors": [42]
+  },
+  {
+    "id": "capture-chain:s428:70",
+    "module": "capture-chain",
+    "gameId": "s428",
+    "before": 70,
+    "color": "W",
+    "anchors": [130]
+  },
+  {
+    "id": "capture-chain:s124:145",
+    "module": "capture-chain",
+    "gameId": "s124",
+    "before": 145,
+    "color": "W",
+    "anchors": [31]
+  },
+  {
+    "id": "capture-chain:s244:133",
+    "module": "capture-chain",
+    "gameId": "s244",
+    "before": 133,
+    "color": "W",
+    "anchors": [21]
+  },
+  {
+    "id": "capture-chain:s265:157",
+    "module": "capture-chain",
+    "gameId": "s265",
+    "before": 157,
+    "color": "W",
+    "anchors": [144]
+  },
+  {
+    "id": "capture-chain:s329:137",
+    "module": "capture-chain",
+    "gameId": "s329",
+    "before": 137,
+    "color": "W",
+    "anchors": [310]
+  },
+  {
+    "id": "capture-chain:s369:92",
+    "module": "capture-chain",
+    "gameId": "s369",
+    "before": 92,
+    "color": "B",
+    "anchors": [135]
+  },
+  {
+    "id": "capture-chain:s389:127",
+    "module": "capture-chain",
+    "gameId": "s389",
+    "before": 127,
+    "color": "B",
+    "anchors": [23]
+  },
+  {
+    "id": "escape:s001:80",
+    "module": "escape",
+    "gameId": "s001",
+    "before": 80,
+    "color": "B",
+    "anchors": [91]
+  },
+  {
+    "id": "escape:s021:92",
+    "module": "escape",
+    "gameId": "s021",
+    "before": 92,
+    "color": "B",
+    "anchors": [204]
+  },
+  {
+    "id": "escape:s042:46",
+    "module": "escape",
+    "gameId": "s042",
+    "before": 46,
+    "color": "B",
+    "anchors": [224]
+  },
+  {
+    "id": "escape:s062:17",
+    "module": "escape",
+    "gameId": "s062",
+    "before": 17,
+    "color": "W",
+    "anchors": [268]
+  },
+  {
+    "id": "escape:s082:74",
+    "module": "escape",
+    "gameId": "s082",
+    "before": 74,
+    "color": "B",
+    "anchors": [87]
+  },
+  {
+    "id": "escape:s102:55",
+    "module": "escape",
+    "gameId": "s102",
+    "before": 55,
+    "color": "W",
+    "anchors": [67]
+  },
+  {
+    "id": "escape:s122:14",
+    "module": "escape",
+    "gameId": "s122",
+    "before": 14,
+    "color": "B",
+    "anchors": [130]
+  },
+  {
+    "id": "escape:s142:40",
+    "module": "escape",
+    "gameId": "s142",
+    "before": 40,
+    "color": "B",
+    "anchors": [73]
+  },
+  {
+    "id": "escape:s162:62",
+    "module": "escape",
+    "gameId": "s162",
+    "before": 62,
+    "color": "B",
+    "anchors": [73]
+  },
+  {
+    "id": "escape:s182:50",
+    "module": "escape",
+    "gameId": "s182",
+    "before": 50,
+    "color": "B",
+    "anchors": [271]
+  },
+  {
+    "id": "escape:s203:54",
+    "module": "escape",
+    "gameId": "s203",
+    "before": 54,
+    "color": "W",
+    "anchors": [307]
+  },
+  {
+    "id": "escape:s223:49",
+    "module": "escape",
+    "gameId": "s223",
+    "before": 49,
+    "color": "W",
+    "anchors": [100]
+  },
+  {
+    "id": "escape:s242:20",
+    "module": "escape",
+    "gameId": "s242",
+    "before": 20,
+    "color": "B",
+    "anchors": [316]
+  },
+  {
+    "id": "escape:s262:42",
+    "module": "escape",
+    "gameId": "s262",
+    "before": 42,
+    "color": "W",
+    "anchors": [116]
+  },
+  {
+    "id": "escape:s284:91",
+    "module": "escape",
+    "gameId": "s284",
+    "before": 91,
+    "color": "W",
+    "anchors": [168]
+  },
+  {
+    "id": "escape:s304:70",
+    "module": "escape",
+    "gameId": "s304",
+    "before": 70,
+    "color": "W",
+    "anchors": [103]
+  },
+  {
+    "id": "escape:s327:28",
+    "module": "escape",
+    "gameId": "s327",
+    "before": 28,
+    "color": "B",
+    "anchors": [252]
+  },
+  {
+    "id": "escape:s347:52",
+    "module": "escape",
+    "gameId": "s347",
+    "before": 52,
+    "color": "W",
+    "anchors": [237]
+  },
+  {
+    "id": "escape:s367:17",
+    "module": "escape",
+    "gameId": "s367",
+    "before": 17,
+    "color": "B",
+    "anchors": [116]
+  },
+  {
+    "id": "escape:s387:19",
+    "module": "escape",
+    "gameId": "s387",
+    "before": 19,
+    "color": "W",
+    "anchors": [307]
+  },
+  {
+    "id": "escape:s407:43",
+    "module": "escape",
+    "gameId": "s407",
+    "before": 43,
+    "color": "B",
+    "anchors": [187]
+  },
+  {
+    "id": "escape:s427:28",
+    "module": "escape",
+    "gameId": "s427",
+    "before": 28,
+    "color": "B",
+    "anchors": [300]
+  },
+  {
+    "id": "escape:s447:10",
+    "module": "escape",
+    "gameId": "s447",
+    "before": 10,
+    "color": "W",
+    "anchors": [300]
+  },
+  {
+    "id": "escape:s467:15",
+    "module": "escape",
+    "gameId": "s467",
+    "before": 15,
+    "color": "W",
+    "anchors": [62]
+  },
+  {
+    "id": "connect:s001:11",
+    "module": "connect",
+    "gameId": "s001",
+    "before": 11,
+    "color": "W",
+    "anchors": [289, 309]
+  },
+  {
+    "id": "connect:s021:20",
+    "module": "connect",
+    "gameId": "s021",
+    "before": 20,
+    "color": "B",
+    "anchors": [73, 130]
+  },
+  {
+    "id": "connect:s042:22",
+    "module": "connect",
+    "gameId": "s042",
+    "before": 22,
+    "color": "B",
+    "anchors": [40, 78]
+  },
+  {
+    "id": "connect:s062:18",
+    "module": "connect",
+    "gameId": "s062",
+    "before": 18,
+    "color": "B",
+    "anchors": [287, 269]
+  },
+  {
+    "id": "connect:s082:42",
+    "module": "connect",
+    "gameId": "s082",
+    "before": 42,
+    "color": "B",
+    "anchors": [120, 122]
+  },
+  {
+    "id": "connect:s102:45",
+    "module": "connect",
+    "gameId": "s102",
+    "before": 45,
+    "color": "W",
+    "anchors": [52, 54]
+  },
+  {
+    "id": "connect:s122:15",
+    "module": "connect",
+    "gameId": "s122",
+    "before": 15,
+    "color": "W",
+    "anchors": [149, 129]
+  },
+  {
+    "id": "connect:s142:25",
+    "module": "connect",
+    "gameId": "s142",
+    "before": 25,
+    "color": "W",
+    "anchors": [224, 242]
+  },
+  {
+    "id": "connect:s162:62",
+    "module": "connect",
+    "gameId": "s162",
+    "before": 62,
+    "color": "B",
+    "anchors": [73, 52]
+  },
+  {
+    "id": "connect:s182:50",
+    "module": "connect",
+    "gameId": "s182",
+    "before": 50,
+    "color": "B",
+    "anchors": [271, 289]
+  },
+  {
+    "id": "connect:s203:16",
+    "module": "connect",
+    "gameId": "s203",
+    "before": 16,
+    "color": "W",
+    "anchors": [116, 98]
+  },
+  {
+    "id": "connect:s223:42",
+    "module": "connect",
+    "gameId": "s223",
+    "before": 42,
+    "color": "B",
+    "anchors": [61, 81]
+  },
+  {
+    "id": "connect:s242:14",
+    "module": "connect",
+    "gameId": "s242",
+    "before": 14,
+    "color": "B",
+    "anchors": [281, 319]
+  },
+  {
+    "id": "connect:s262:19",
+    "module": "connect",
+    "gameId": "s262",
+    "before": 19,
+    "color": "B",
+    "anchors": [40, 42]
+  },
+  {
+    "id": "connect:s284:28",
+    "module": "connect",
+    "gameId": "s284",
+    "before": 28,
+    "color": "B",
+    "anchors": [51, 53]
+  },
+  {
+    "id": "connect:s304:8",
+    "module": "connect",
+    "gameId": "s304",
+    "before": 8,
+    "color": "W",
+    "anchors": [224, 244]
+  },
+  {
+    "id": "connect:s327:28",
+    "module": "connect",
+    "gameId": "s327",
+    "before": 28,
+    "color": "B",
+    "anchors": [270, 252, 290]
+  },
+  {
+    "id": "connect:s347:28",
+    "module": "connect",
+    "gameId": "s347",
+    "before": 28,
+    "color": "W",
+    "anchors": [174, 192]
+  },
+  {
+    "id": "connect:s367:17",
+    "module": "connect",
+    "gameId": "s367",
+    "before": 17,
+    "color": "B",
+    "anchors": [134, 116]
+  },
+  {
+    "id": "connect:s387:19",
+    "module": "connect",
+    "gameId": "s387",
+    "before": 19,
+    "color": "W",
+    "anchors": [307, 287, 325]
+  },
+  {
+    "id": "connect:s407:28",
+    "module": "connect",
+    "gameId": "s407",
+    "before": 28,
+    "color": "W",
+    "anchors": [51, 89]
+  },
+  {
+    "id": "connect:s427:29",
+    "module": "connect",
+    "gameId": "s427",
+    "before": 29,
+    "color": "W",
+    "anchors": [319, 299]
+  },
+  {
+    "id": "connect:s447:10",
+    "module": "connect",
+    "gameId": "s447",
+    "before": 10,
+    "color": "W",
+    "anchors": [318, 300]
+  },
+  {
+    "id": "connect:s467:15",
+    "module": "connect",
+    "gameId": "s467",
+    "before": 15,
+    "color": "W",
+    "anchors": [60, 62, 42]
+  },
+  {
+    "id": "atari:s001:58",
+    "module": "atari",
+    "gameId": "s001",
+    "before": 58,
+    "color": "B",
+    "anchors": [154]
+  },
+  {
+    "id": "atari:s021:44",
+    "module": "atari",
+    "gameId": "s021",
+    "before": 44,
+    "color": "B",
+    "anchors": [67]
+  },
+  {
+    "id": "atari:s042:42",
+    "module": "atari",
+    "gameId": "s042",
+    "before": 42,
+    "color": "B",
+    "anchors": [205]
+  },
+  {
+    "id": "atari:s062:16",
+    "module": "atari",
+    "gameId": "s062",
+    "before": 16,
+    "color": "B",
+    "anchors": [268]
+  },
+  {
+    "id": "atari:s082:73",
+    "module": "atari",
+    "gameId": "s082",
+    "before": 73,
+    "color": "W",
+    "anchors": [87]
+  },
+  {
+    "id": "atari:s102:54",
+    "module": "atari",
+    "gameId": "s102",
+    "before": 54,
+    "color": "B",
+    "anchors": [67]
+  },
+  {
+    "id": "atari:s122:13",
+    "module": "atari",
+    "gameId": "s122",
+    "before": 13,
+    "color": "W",
+    "anchors": [130]
+  },
+  {
+    "id": "atari:s142:39",
+    "module": "atari",
+    "gameId": "s142",
+    "before": 39,
+    "color": "W",
+    "anchors": [73]
+  },
+  {
+    "id": "atari:s162:60",
+    "module": "atari",
+    "gameId": "s162",
+    "before": 60,
+    "color": "B",
+    "anchors": [54]
+  },
+  {
+    "id": "atari:s182:33",
+    "module": "atari",
+    "gameId": "s182",
+    "before": 33,
+    "color": "W",
+    "anchors": [54]
+  },
+  {
+    "id": "atari:s203:53",
+    "module": "atari",
+    "gameId": "s203",
+    "before": 53,
+    "color": "B",
+    "anchors": [307]
+  },
+  {
+    "id": "atari:s223:48",
+    "module": "atari",
+    "gameId": "s223",
+    "before": 48,
+    "color": "B",
+    "anchors": [100]
+  },
+  {
+    "id": "atari:s242:19",
+    "module": "atari",
+    "gameId": "s242",
+    "before": 19,
+    "color": "W",
+    "anchors": [316]
+  },
+  {
+    "id": "atari:s262:38",
+    "module": "atari",
+    "gameId": "s262",
+    "before": 38,
+    "color": "W",
+    "anchors": [135]
+  },
+  {
+    "id": "atari:s284:43",
+    "module": "atari",
+    "gameId": "s284",
+    "before": 43,
+    "color": "W",
+    "anchors": [149]
+  },
+  {
+    "id": "atari:s304:55",
+    "module": "atari",
+    "gameId": "s304",
+    "before": 55,
+    "color": "B",
+    "anchors": [298]
+  },
+  {
+    "id": "atari:s327:24",
+    "module": "atari",
+    "gameId": "s327",
+    "before": 24,
+    "color": "B",
+    "anchors": [289]
+  },
+  {
+    "id": "atari:s347:51",
+    "module": "atari",
+    "gameId": "s347",
+    "before": 51,
+    "color": "B",
+    "anchors": [237]
+  },
+  {
+    "id": "atari:s367:15",
+    "module": "atari",
+    "gameId": "s367",
+    "before": 15,
+    "color": "B",
+    "anchors": [115]
+  },
+  {
+    "id": "atari:s387:18",
+    "module": "atari",
+    "gameId": "s387",
+    "before": 18,
+    "color": "B",
+    "anchors": [307]
+  },
+  {
+    "id": "atari:s407:42",
+    "module": "atari",
+    "gameId": "s407",
+    "before": 42,
+    "color": "W",
+    "anchors": [187]
+  },
+  {
+    "id": "atari:s427:27",
+    "module": "atari",
+    "gameId": "s427",
+    "before": 27,
+    "color": "W",
+    "anchors": [300]
+  },
+  {
+    "id": "atari:s447:9",
+    "module": "atari",
+    "gameId": "s447",
+    "before": 9,
+    "color": "B",
+    "anchors": [300]
+  },
+  {
+    "id": "atari:s467:14",
+    "module": "atari",
+    "gameId": "s467",
+    "before": 14,
+    "color": "B",
+    "anchors": [62]
+  },
+  {
+    "id": "double-atari:s042:149",
+    "module": "double-atari",
+    "gameId": "s042",
+    "before": 149,
+    "color": "W",
+    "anchors": [274, 292]
+  },
+  {
+    "id": "double-atari:s122:45",
+    "module": "double-atari",
+    "gameId": "s122",
+    "before": 45,
+    "color": "W",
+    "anchors": [285, 323]
+  },
+  {
+    "id": "double-atari:s182:180",
+    "module": "double-atari",
+    "gameId": "s182",
+    "before": 180,
+    "color": "B",
+    "anchors": [117, 138]
+  },
+  {
+    "id": "double-atari:s203:78",
+    "module": "double-atari",
+    "gameId": "s203",
+    "before": 78,
+    "color": "W",
+    "anchors": [268, 288]
+  },
+  {
+    "id": "double-atari:s223:76",
+    "module": "double-atari",
+    "gameId": "s223",
+    "before": 76,
+    "color": "B",
+    "anchors": [21, 3]
+  },
+  {
+    "id": "double-atari:s242:164",
+    "module": "double-atari",
+    "gameId": "s242",
+    "before": 164,
+    "color": "B",
+    "anchors": [170, 150]
+  },
+  {
+    "id": "double-atari:s284:101",
+    "module": "double-atari",
+    "gameId": "s284",
+    "before": 101,
+    "color": "W",
+    "anchors": [147, 129]
+  },
+  {
+    "id": "double-atari:s367:76",
+    "module": "double-atari",
+    "gameId": "s367",
+    "before": 76,
+    "color": "W",
+    "anchors": [191, 211]
+  },
+  {
+    "id": "double-atari:s427:56",
+    "module": "double-atari",
+    "gameId": "s427",
+    "before": 56,
+    "color": "B",
+    "anchors": [243, 263]
+  },
+  {
+    "id": "double-atari:s447:164",
+    "module": "double-atari",
+    "gameId": "s447",
+    "before": 164,
+    "color": "W",
+    "anchors": [275, 255]
+  },
+  {
+    "id": "double-atari:s467:84",
+    "module": "double-atari",
+    "gameId": "s467",
+    "before": 84,
+    "color": "B",
+    "anchors": [27, 45]
+  },
+  {
+    "id": "double-atari:s002:111",
+    "module": "double-atari",
+    "gameId": "s002",
+    "before": 111,
+    "color": "W",
+    "anchors": [287, 267]
+  },
+  {
+    "id": "double-atari:s022:173",
+    "module": "double-atari",
+    "gameId": "s022",
+    "before": 173,
+    "color": "B",
+    "anchors": [240, 185]
+  },
+  {
+    "id": "double-atari:s123:64",
+    "module": "double-atari",
+    "gameId": "s123",
+    "before": 64,
+    "color": "B",
+    "anchors": [221, 241]
+  },
+  {
+    "id": "double-atari:s143:160",
+    "module": "double-atari",
+    "gameId": "s143",
+    "before": 160,
+    "color": "B",
+    "anchors": [233, 271]
+  },
+  {
+    "id": "double-atari:s163:115",
+    "module": "double-atari",
+    "gameId": "s163",
+    "before": 115,
+    "color": "W",
+    "anchors": [284, 264]
+  },
+  {
+    "id": "double-atari:s204:35",
+    "module": "double-atari",
+    "gameId": "s204",
+    "before": 35,
+    "color": "B",
+    "anchors": [168, 148]
+  },
+  {
+    "id": "double-atari:s243:93",
+    "module": "double-atari",
+    "gameId": "s243",
+    "before": 93,
+    "color": "W",
+    "anchors": [102, 65]
+  },
+  {
+    "id": "double-atari:s264:68",
+    "module": "double-atari",
+    "gameId": "s264",
+    "before": 68,
+    "color": "W",
+    "anchors": [325, 343]
+  },
+  {
+    "id": "double-atari:s305:163",
+    "module": "double-atari",
+    "gameId": "s305",
+    "before": 163,
+    "color": "W",
+    "anchors": [255, 235]
+  },
+  {
+    "id": "double-atari:s448:72",
+    "module": "double-atari",
+    "gameId": "s448",
+    "before": 72,
+    "color": "W",
+    "anchors": [319, 301]
+  },
+  {
+    "id": "double-atari:s044:90",
+    "module": "double-atari",
+    "gameId": "s044",
+    "before": 90,
+    "color": "W",
+    "anchors": [250, 270]
+  },
+  {
+    "id": "double-atari:s084:149",
+    "module": "double-atari",
+    "gameId": "s084",
+    "before": 149,
+    "color": "W",
+    "anchors": [143, 163]
+  },
+  {
+    "id": "double-atari:s104:76",
+    "module": "double-atari",
+    "gameId": "s104",
+    "before": 76,
+    "color": "B",
+    "anchors": [103, 85]
+  },
+  {
+    "id": "capture-sequence:s042:152",
+    "module": "capture-sequence",
+    "gameId": "s042",
+    "before": 152,
+    "color": "B",
+    "anchors": [275]
+  },
+  {
+    "id": "capture-sequence:s102:81",
+    "module": "capture-sequence",
+    "gameId": "s102",
+    "before": 81,
+    "color": "W",
+    "anchors": [155]
+  },
+  {
+    "id": "capture-sequence:s122:16",
+    "module": "capture-sequence",
+    "gameId": "s122",
+    "before": 16,
+    "color": "B",
+    "anchors": [111]
+  },
+  {
+    "id": "capture-sequence:s142:97",
+    "module": "capture-sequence",
+    "gameId": "s142",
+    "before": 97,
+    "color": "W",
+    "anchors": [273]
+  },
+  {
+    "id": "capture-sequence:s182:169",
+    "module": "capture-sequence",
+    "gameId": "s182",
+    "before": 169,
+    "color": "W",
+    "anchors": [175]
+  },
+  {
+    "id": "capture-sequence:s223:76",
+    "module": "capture-sequence",
+    "gameId": "s223",
+    "before": 76,
+    "color": "B",
+    "anchors": [21]
+  },
+  {
+    "id": "capture-sequence:s242:103",
+    "module": "capture-sequence",
+    "gameId": "s242",
+    "before": 103,
+    "color": "W",
+    "anchors": [161]
+  },
+  {
+    "id": "capture-sequence:s284:101",
+    "module": "capture-sequence",
+    "gameId": "s284",
+    "before": 101,
+    "color": "W",
+    "anchors": [129]
+  },
+  {
+    "id": "capture-sequence:s304:77",
+    "module": "capture-sequence",
+    "gameId": "s304",
+    "before": 77,
+    "color": "B",
+    "anchors": [43]
+  },
+  {
+    "id": "capture-sequence:s347:72",
+    "module": "capture-sequence",
+    "gameId": "s347",
+    "before": 72,
+    "color": "W",
+    "anchors": [236]
+  },
+  {
+    "id": "capture-sequence:s367:99",
+    "module": "capture-sequence",
+    "gameId": "s367",
+    "before": 99,
+    "color": "B",
+    "anchors": [307]
+  },
+  {
+    "id": "capture-sequence:s427:94",
+    "module": "capture-sequence",
+    "gameId": "s427",
+    "before": 94,
+    "color": "B",
+    "anchors": [224]
+  },
+  {
+    "id": "capture-sequence:s447:124",
+    "module": "capture-sequence",
+    "gameId": "s447",
+    "before": 124,
+    "color": "W",
+    "anchors": [98]
+  },
+  {
+    "id": "capture-sequence:s467:84",
+    "module": "capture-sequence",
+    "gameId": "s467",
+    "before": 84,
+    "color": "B",
+    "anchors": [45]
+  },
+  {
+    "id": "capture-sequence:s002:86",
+    "module": "capture-sequence",
+    "gameId": "s002",
+    "before": 86,
+    "color": "B",
+    "anchors": [213]
+  },
+  {
+    "id": "capture-sequence:s043:44",
+    "module": "capture-sequence",
+    "gameId": "s043",
+    "before": 44,
+    "color": "B",
+    "anchors": [98]
+  },
+  {
+    "id": "capture-sequence:s063:53",
+    "module": "capture-sequence",
+    "gameId": "s063",
+    "before": 53,
+    "color": "W",
+    "anchors": [278]
+  },
+  {
+    "id": "capture-sequence:s083:68",
+    "module": "capture-sequence",
+    "gameId": "s083",
+    "before": 68,
+    "color": "B",
+    "anchors": [12]
+  },
+  {
+    "id": "capture-sequence:s123:103",
+    "module": "capture-sequence",
+    "gameId": "s123",
+    "before": 103,
+    "color": "W",
+    "anchors": [83]
+  },
+  {
+    "id": "capture-sequence:s143:151",
+    "module": "capture-sequence",
+    "gameId": "s143",
+    "before": 151,
+    "color": "W",
+    "anchors": [178]
+  },
+  {
+    "id": "capture-sequence:s163:111",
+    "module": "capture-sequence",
+    "gameId": "s163",
+    "before": 111,
+    "color": "W",
+    "anchors": [264]
+  },
+  {
+    "id": "capture-sequence:s183:138",
+    "module": "capture-sequence",
+    "gameId": "s183",
+    "before": 138,
+    "color": "W",
+    "anchors": [196]
+  },
+  {
+    "id": "capture-sequence:s224:79",
+    "module": "capture-sequence",
+    "gameId": "s224",
+    "before": 79,
+    "color": "W",
+    "anchors": [32]
+  },
+  {
+    "id": "capture-sequence:s243:94",
+    "module": "capture-sequence",
+    "gameId": "s243",
+    "before": 94,
+    "color": "B",
+    "anchors": [64]
+  },
+  {
+    "id": "legality:s001:39",
+    "module": "legality",
+    "gameId": "s001",
+    "before": 39,
+    "color": "W",
+    "anchors": [272],
+    "candidate": 271
+  },
+  {
+    "id": "legality:s021:34",
+    "module": "legality",
+    "gameId": "s021",
+    "before": 34,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 66
+  },
+  {
+    "id": "legality:s042:23",
+    "module": "legality",
+    "gameId": "s042",
+    "before": 23,
+    "color": "W",
+    "anchors": [59],
+    "candidate": 60
+  },
+  {
+    "id": "legality:s062:26",
+    "module": "legality",
+    "gameId": "s062",
+    "before": 26,
+    "color": "B",
+    "anchors": [97],
+    "candidate": 78
+  },
+  {
+    "id": "legality:s082:17",
+    "module": "legality",
+    "gameId": "s082",
+    "before": 17,
+    "color": "W",
+    "anchors": [309],
+    "candidate": 290
+  },
+  {
+    "id": "legality:s102:15",
+    "module": "legality",
+    "gameId": "s102",
+    "before": 15,
+    "color": "W",
+    "anchors": [250],
+    "candidate": 269
+  },
+  {
+    "id": "legality:s122:45",
+    "module": "legality",
+    "gameId": "s122",
+    "before": 45,
+    "color": "W",
+    "anchors": [285],
+    "candidate": 304
+  },
+  {
+    "id": "legality:s142:24",
+    "module": "legality",
+    "gameId": "s142",
+    "before": 24,
+    "color": "B",
+    "anchors": [224],
+    "candidate": 205
+  },
+  {
+    "id": "legality:s162:52",
+    "module": "legality",
+    "gameId": "s162",
+    "before": 52,
+    "color": "B",
+    "anchors": [243],
+    "candidate": 242
+  },
+  {
+    "id": "legality:s182:30",
+    "module": "legality",
+    "gameId": "s182",
+    "before": 30,
+    "color": "B",
+    "anchors": [281],
+    "candidate": 280
+  },
+  {
+    "id": "legality:s203:21",
+    "module": "legality",
+    "gameId": "s203",
+    "before": 21,
+    "color": "B",
+    "anchors": [262],
+    "candidate": 281
+  },
+  {
+    "id": "legality:s223:47",
+    "module": "legality",
+    "gameId": "s223",
+    "before": 47,
+    "color": "W",
+    "anchors": [97],
+    "candidate": 78
+  },
+  {
+    "id": "legality:s242:14",
+    "module": "legality",
+    "gameId": "s242",
+    "before": 14,
+    "color": "B",
+    "anchors": [301],
+    "candidate": 300
+  },
+  {
+    "id": "legality:s262:41",
+    "module": "legality",
+    "gameId": "s262",
+    "before": 41,
+    "color": "B",
+    "anchors": [116],
+    "candidate": 135
+  },
+  {
+    "id": "legality:s284:46",
+    "module": "legality",
+    "gameId": "s284",
+    "before": 46,
+    "color": "B",
+    "anchors": [148],
+    "candidate": 149
+  },
+  {
+    "id": "legality:s304:77",
+    "module": "legality",
+    "gameId": "s304",
+    "before": 77,
+    "color": "B",
+    "anchors": [64],
+    "candidate": 65
+  },
+  {
+    "id": "legality:s327:124",
+    "module": "legality",
+    "gameId": "s327",
+    "before": 124,
+    "color": "B",
+    "anchors": [276],
+    "candidate": 277
+  },
+  {
+    "id": "legality:s347:73",
+    "module": "legality",
+    "gameId": "s347",
+    "before": 73,
+    "color": "B",
+    "anchors": [217],
+    "candidate": 218
+  },
+  {
+    "id": "legality:s367:22",
+    "module": "legality",
+    "gameId": "s367",
+    "before": 22,
+    "color": "W",
+    "anchors": [114],
+    "candidate": 115
+  },
+  {
+    "id": "legality:s387:138",
+    "module": "legality",
+    "gameId": "s387",
+    "before": 138,
+    "color": "B",
+    "anchors": [150],
+    "candidate": 149
+  },
+  {
+    "id": "legality:s407:124",
+    "module": "legality",
+    "gameId": "s407",
+    "before": 124,
+    "color": "W",
+    "anchors": [48],
+    "candidate": 67
+  },
+  {
+    "id": "legality:s427:137",
+    "module": "legality",
+    "gameId": "s427",
+    "before": 137,
+    "color": "W",
+    "anchors": [161],
+    "candidate": 162
+  },
+  {
+    "id": "legality:s447:27",
+    "module": "legality",
+    "gameId": "s447",
+    "before": 27,
+    "color": "B",
+    "anchors": [61],
+    "candidate": 80
+  },
+  {
+    "id": "legality:s002:45",
+    "module": "legality",
+    "gameId": "s002",
+    "before": 45,
+    "color": "W",
+    "anchors": [42],
+    "candidate": 43
+  },
+  {
+    "id": "region-border:s001:100",
+    "module": "region-border",
+    "gameId": "s001",
+    "before": 100,
+    "color": "B",
+    "anchors": [50],
+    "candidate": 50
+  },
+  {
+    "id": "region-border:s021:108",
+    "module": "region-border",
+    "gameId": "s021",
+    "before": 108,
+    "color": "B",
+    "anchors": [260, 259, 241, 222],
+    "candidate": 260
+  },
+  {
+    "id": "region-border:s042:150",
+    "module": "region-border",
+    "gameId": "s042",
+    "before": 150,
+    "color": "B",
+    "anchors": [293],
+    "candidate": 293
+  },
+  {
+    "id": "region-border:s062:121",
+    "module": "region-border",
+    "gameId": "s062",
+    "before": 121,
+    "color": "W",
+    "anchors": [174],
+    "candidate": 174
+  },
+  {
+    "id": "region-border:s102:102",
+    "module": "region-border",
+    "gameId": "s102",
+    "before": 102,
+    "color": "B",
+    "anchors": [195],
+    "candidate": 195
+  },
+  {
+    "id": "region-border:s122:151",
+    "module": "region-border",
+    "gameId": "s122",
+    "before": 151,
+    "color": "W",
+    "anchors": [161, 142, 123, 124],
+    "candidate": 161
+  },
+  {
+    "id": "region-border:s142:123",
+    "module": "region-border",
+    "gameId": "s142",
+    "before": 123,
+    "color": "W",
+    "anchors": [183, 202, 221, 222, 241],
+    "candidate": 183
+  },
+  {
+    "id": "region-border:s182:102",
+    "module": "region-border",
+    "gameId": "s182",
+    "before": 102,
+    "color": "B",
+    "anchors": [63],
+    "candidate": 63
+  },
+  {
+    "id": "region-border:s203:110",
+    "module": "region-border",
+    "gameId": "s203",
+    "before": 110,
+    "color": "W",
+    "anchors": [244],
+    "candidate": 244
+  },
+  {
+    "id": "region-border:s223:109",
+    "module": "region-border",
+    "gameId": "s223",
+    "before": 109,
+    "color": "W",
+    "anchors": [65],
+    "candidate": 65
+  },
+  {
+    "id": "region-border:s242:103",
+    "module": "region-border",
+    "gameId": "s242",
+    "before": 103,
+    "color": "W",
+    "anchors": [160],
+    "candidate": 160
+  },
+  {
+    "id": "region-border:s284:101",
+    "module": "region-border",
+    "gameId": "s284",
+    "before": 101,
+    "color": "W",
+    "anchors": [148],
+    "candidate": 148
+  },
+  {
+    "id": "region-border:s304:122",
+    "module": "region-border",
+    "gameId": "s304",
+    "before": 122,
+    "color": "W",
+    "anchors": [308],
+    "candidate": 308
+  },
+  {
+    "id": "region-border:s327:189",
+    "module": "region-border",
+    "gameId": "s327",
+    "before": 189,
+    "color": "W",
+    "anchors": [280],
+    "candidate": 280
+  },
+  {
+    "id": "region-border:s367:100",
+    "module": "region-border",
+    "gameId": "s367",
+    "before": 100,
+    "color": "W",
+    "anchors": [190],
+    "candidate": 190
+  },
+  {
+    "id": "region-border:s387:137",
+    "module": "region-border",
+    "gameId": "s387",
+    "before": 137,
+    "color": "W",
+    "anchors": [150],
+    "candidate": 150
+  },
+  {
+    "id": "region-border:s407:123",
+    "module": "region-border",
+    "gameId": "s407",
+    "before": 123,
+    "color": "B",
+    "anchors": [48],
+    "candidate": 48
+  },
+  {
+    "id": "region-border:s427:136",
+    "module": "region-border",
+    "gameId": "s427",
+    "before": 136,
+    "color": "B",
+    "anchors": [161],
+    "candidate": 161
+  },
+  {
+    "id": "region-border:s447:120",
+    "module": "region-border",
+    "gameId": "s447",
+    "before": 120,
+    "color": "W",
+    "anchors": [245],
+    "candidate": 245
+  },
+  {
+    "id": "region-border:s002:155",
+    "module": "region-border",
+    "gameId": "s002",
+    "before": 155,
+    "color": "W",
+    "anchors": [304],
+    "candidate": 304
+  },
+  {
+    "id": "region-border:s022:117",
+    "module": "region-border",
+    "gameId": "s022",
+    "before": 117,
+    "color": "B",
+    "anchors": [282],
+    "candidate": 282
+  },
+  {
+    "id": "region-border:s083:195",
+    "module": "region-border",
+    "gameId": "s083",
+    "before": 195,
+    "color": "W",
+    "anchors": [328],
+    "candidate": 328
+  },
+  {
+    "id": "region-border:s143:160",
+    "module": "region-border",
+    "gameId": "s143",
+    "before": 160,
+    "color": "B",
+    "anchors": [252],
+    "candidate": 252
+  },
+  {
+    "id": "region-border:s183:197",
+    "module": "region-border",
+    "gameId": "s183",
+    "before": 197,
+    "color": "B",
+    "anchors": [227],
+    "candidate": 227
+  },
+  {
+    "id": "region-size:s001:100",
+    "module": "region-size",
+    "gameId": "s001",
+    "before": 100,
+    "color": "B",
+    "anchors": [50],
+    "candidate": 50
+  },
+  {
+    "id": "region-size:s021:190",
+    "module": "region-size",
+    "gameId": "s021",
+    "before": 190,
+    "color": "B",
+    "anchors": [281],
+    "candidate": 281
+  },
+  {
+    "id": "region-size:s042:150",
+    "module": "region-size",
+    "gameId": "s042",
+    "before": 150,
+    "color": "B",
+    "anchors": [293],
+    "candidate": 293
+  },
+  {
+    "id": "region-size:s062:121",
+    "module": "region-size",
+    "gameId": "s062",
+    "before": 121,
+    "color": "W",
+    "anchors": [174],
+    "candidate": 174
+  },
+  {
+    "id": "region-size:s142:177",
+    "module": "region-size",
+    "gameId": "s142",
+    "before": 177,
+    "color": "W",
+    "anchors": [291, 272],
+    "candidate": 291
+  },
+  {
+    "id": "region-size:s182:220",
+    "module": "region-size",
+    "gameId": "s182",
+    "before": 220,
+    "color": "B",
+    "anchors": [76, 95, 114, 133],
+    "candidate": 76
+  },
+  {
+    "id": "region-size:s223:170",
+    "module": "region-size",
+    "gameId": "s223",
+    "before": 170,
+    "color": "B",
+    "anchors": [300, 301],
+    "candidate": 300
+  },
+  {
+    "id": "region-size:s242:168",
+    "module": "region-size",
+    "gameId": "s242",
+    "before": 168,
+    "color": "B",
+    "anchors": [111, 110, 112],
+    "candidate": 111
+  },
+  {
+    "id": "region-size:s284:229",
+    "module": "region-size",
+    "gameId": "s284",
+    "before": 229,
+    "color": "W",
+    "anchors": [341, 340, 322, 360, 359],
+    "candidate": 341
+  },
+  {
+    "id": "region-size:s327:217",
+    "module": "region-size",
+    "gameId": "s327",
+    "before": 217,
+    "color": "W",
+    "anchors": [343, 342],
+    "candidate": 343
+  },
+  {
+    "id": "region-size:s447:157",
+    "module": "region-size",
+    "gameId": "s447",
+    "before": 157,
+    "color": "B",
+    "anchors": [282, 263],
+    "candidate": 282
+  },
+  {
+    "id": "region-size:s224:212",
+    "module": "region-size",
+    "gameId": "s224",
+    "before": 212,
+    "color": "B",
+    "anchors": [206, 207, 226],
+    "candidate": 206
+  },
+  {
+    "id": "region-size:s243:131",
+    "module": "region-size",
+    "gameId": "s243",
+    "before": 131,
+    "color": "W",
+    "anchors": [63, 62, 64],
+    "candidate": 63
+  },
+  {
+    "id": "region-size:s328:131",
+    "module": "region-size",
+    "gameId": "s328",
+    "before": 131,
+    "color": "W",
+    "anchors": [323, 304, 342, 305],
+    "candidate": 323
+  },
+  {
+    "id": "region-size:s368:238",
+    "module": "region-size",
+    "gameId": "s368",
+    "before": 238,
+    "color": "B",
+    "anchors": [239, 220, 221],
+    "candidate": 239
+  },
+  {
+    "id": "region-size:s164:181",
+    "module": "region-size",
+    "gameId": "s164",
+    "before": 181,
+    "color": "W",
+    "anchors": [19, 20, 0, 1, 39],
+    "candidate": 19
+  },
+  {
+    "id": "region-size:s286:263",
+    "module": "region-size",
+    "gameId": "s286",
+    "before": 263,
+    "color": "W",
+    "anchors": [3, 2, 1, 21, 0, 40],
+    "candidate": 3
+  },
+  {
+    "id": "region-size:s349:168",
+    "module": "region-size",
+    "gameId": "s349",
+    "before": 168,
+    "color": "B",
+    "anchors": [322, 341, 360, 359, 358],
+    "candidate": 322
+  },
+  {
+    "id": "region-size:s065:231",
+    "module": "region-size",
+    "gameId": "s065",
+    "before": 231,
+    "color": "W",
+    "anchors": [209, 228, 229, 230, 248],
+    "candidate": 209
+  },
+  {
+    "id": "region-size:s085:197",
+    "module": "region-size",
+    "gameId": "s085",
+    "before": 197,
+    "color": "W",
+    "anchors": [4, 5, 24, 25, 43, 62],
+    "candidate": 4
+  },
+  {
+    "id": "region-size:s306:150",
+    "module": "region-size",
+    "gameId": "s306",
+    "before": 150,
+    "color": "B",
+    "anchors": [209, 190, 191, 172],
+    "candidate": 209
+  },
+  {
+    "id": "region-size:s350:217",
+    "module": "region-size",
+    "gameId": "s350",
+    "before": 217,
+    "color": "B",
+    "anchors": [350, 351, 352, 332],
+    "candidate": 350
+  },
+  {
+    "id": "region-size:s126:258",
+    "module": "region-size",
+    "gameId": "s126",
+    "before": 258,
+    "color": "B",
+    "anchors": [283, 284, 302, 265, 303, 246],
+    "candidate": 283
+  },
+  {
+    "id": "region-size:s166:255",
+    "module": "region-size",
+    "gameId": "s166",
+    "before": 255,
+    "color": "W",
+    "anchors": [101, 102, 103, 83, 121, 122],
+    "candidate": 101
+  }
+]

@@ -913,8 +913,21 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await expect(reflection).toBeVisible({ timeout: 30_000 });
   const cursor = page.locator('input[aria-label="Coup"]');
   await expect(cursor).toHaveValue('1');
+  // La lecture automatique reprend après le clic. Observer le coup réellement annoncé,
+  // même si le navigateur a déjà avancé au moment de l'assertion.
+  await page.evaluate(() => {
+    const live = document.querySelector('[data-testid="live"]')!;
+    const observer = new MutationObserver(() => {
+      if (live.textContent.includes('Coup 2 sur 9 : Blanc D16')) {
+        document.body.dataset.playedKifuMove = 'true';
+        observer.disconnect();
+      }
+    });
+    observer.observe(live, { childList: true, characterData: true, subtree: true });
+  });
   await reflection.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
-  await expect(cursor).toHaveValue('2');
+  await expect(page.locator('body')).toHaveAttribute('data-played-kifu-move', 'true');
+  await expect(reflection).toBeHidden();
 });
 
 test('Leela Zero lit une partie importée, projette ses coups et rend la main au kifu', async ({
@@ -1251,5 +1264,250 @@ test.describe('leçon sur téléphone tactile', () => {
     await canvas.tap({ position: { x: board.width * 0.644, y: board.height * 0.36 } });
     await expect(lesson).toContainText('la pierre noire est retirée');
     await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('84');
+  });
+});
+
+test('parcours individualisé : la prochaine leçon et les compétences suivent le carnet sauvegardé', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.setFixedTime(new Date(2026, 10, 27, 12));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  let curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  await expect(curriculum).toContainText('0 / 4 exercices');
+  await expect(curriculum).toContainText('Niveau 1');
+  await expect(curriculum).toContainText('Niveau 2');
+  await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
+  await curriculum.getByRole('button', { name: 'Ouvrir l’exercice recommandé' }).click();
+  const first = page.getByRole('region', { name: 'La dernière liberté' });
+  await first.getByText('Saisir une coordonnée', { exact: true }).click();
+  const answer = first.getByLabel('Intersection (par ex. D4)');
+  await answer.fill('O13');
+  await answer.press('Enter');
+  await expect(first).toContainText('Exact, du premier coup.');
+  await first.getByRole('button', { name: 'Terminer la leçon' }).click();
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  await expect(curriculum).toContainText('1 / 4 exercices');
+  await expect(curriculum).toContainText('Libertés et capture · 1 / 2');
+  await expect(curriculum).toContainText('Connexion et sauvetage · 0 / 2');
+  await expect(curriculum).toContainText('À travailler maintenant : Relier pour sauver');
+  await curriculum.getByRole('button', { name: 'Ouvrir l’exercice recommandé' }).click();
+  await expect(page.getByRole('region', { name: 'Relier pour sauver' })).toContainText(
+    'Q14 et Q15',
+  );
+  await expect(page.getByRole('slider', { name: 'Coup', exact: true })).toHaveValue('80');
+  await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
+});
+
+test.describe('école de go sur mobile', () => {
+  test.use({
+    viewport: { width: 393, height: 690 },
+    isMobile: true,
+    hasTouch: true,
+    acceptDownloads: true,
+  });
+  test('652 exercices réels, capture en trois coups et progression portable', async ({
+    page,
+    browser,
+  }) => {
+    test.slow();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await expect(page.getByRole('heading', { name: 'École de go', exact: true })).toBeVisible();
+    await expect(page.getByText(/652 exercices tirés de 161 parties/)).toBeVisible();
+    await page.getByRole('button', { name: 'Commencer ma séance' }).click();
+    await expect(
+      page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+    ).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const question = document
+            .querySelector('#school-exercise-title')!
+            .getBoundingClientRect();
+          const board = document.querySelector('.school-board')!.getBoundingClientRect();
+          return (
+            question.bottom <= board.top &&
+            question.top >= 0 &&
+            board.bottom <= innerHeight &&
+            document.documentElement.scrollWidth <= innerWidth
+          );
+        }),
+      )
+      .toBe(true);
+    await page.getByRole('button', { name: '4', exact: true }).click();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await expect(page.getByText('1 / 652', { exact: false }).first()).toBeVisible();
+    await page
+      .getByRole('button', { name: 'Travailler : Lire une capture en trois coups' })
+      .click();
+    await expect(
+      page.getByRole('heading', { name: /Forcez la capture du groupe en K5/ }),
+    ).toBeVisible();
+    // Position historique s042 après 152, L5–K6–H6 est une défense prouvée.
+    const grid = page.getByRole('group', { name: 'Position du kifu, goban interactif' });
+    await grid.getByRole('button', { name: 'L5, vide', exact: true }).tap();
+    await expect(
+      page.getByRole('heading', { name: 'Terminez la capture du groupe.' }),
+    ).toBeVisible();
+    await expect(grid.getByRole('button', { name: /K6, blanc, coup 154/ })).toBeVisible();
+    await grid.getByRole('button', { name: 'H6, vide', exact: true }).tap();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await expect(grid.getByRole('button', { name: /H6, noir, coup 155/ })).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await expect(page.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+    await page.reload();
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await expect(page.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+    const downloaded = page.waitForEvent('download');
+    await page.getByRole('button', { name: 'Exporter la progression' }).click();
+    const backup = await downloaded;
+    const file = await backup.path();
+    if (!file) throw new Error('Sauvegarde absente');
+    const fresh = await browser.newContext({
+      baseURL: 'http://127.0.0.1:4173',
+      viewport: { width: 393, height: 690 },
+      isMobile: true,
+      hasTouch: true,
+    });
+    try {
+      const other = await fresh.newPage();
+      await other.emulateMedia({ reducedMotion: 'reduce' });
+      await other.goto('/');
+      await other.getByRole('button', { name: 'Entrer au dojo' }).click();
+      await other.getByRole('button', { name: 'Entrer dans l’école' }).click();
+      await expect(other.getByText('0 / 652', { exact: false }).first()).toBeVisible();
+      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles(file);
+      await other.getByRole('button', { name: 'Remplacer la progression' }).click();
+      await expect(other.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles({
+        name: 'invalide.json',
+        mimeType: 'application/json',
+        buffer: Buffer.from('{"version":2}'),
+      });
+      await expect(other.getByRole('status')).toContainText('Votre progression n’a pas changé');
+      await expect(other.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+    } finally {
+      await fresh.close();
+    }
+  });
+});
+
+test.describe('cursus avancé et application', () => {
+  test.use({ viewport: { width: 393, height: 690 }, isMobile: true, hasTouch: true });
+  test('vie et mort, preuve shichō numérotée, stratégie KataGo et yose', async ({ page }) => {
+    test.slow();
+    const w = watch(page);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await expect(page.getByText(/652 exercices tirés de 161 parties/)).toBeVisible();
+    await page.getByRole('button', { name: 'Travailler : Reconnaître deux yeux' }).click();
+    await page.getByRole('button', { name: 'Non démontré' }).tap();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await expect(page.getByText(/Cela ne démontre pas sa mort/)).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await page
+      .getByRole('button', { name: 'Travailler : Le sacrifice et la reprise (uttegaeshi)' })
+      .click();
+    const grid = page.getByRole('group', { name: 'Position du kifu, goban interactif' });
+    await grid.getByRole('button', { name: 'M3, vide', exact: true }).tap();
+    await expect(
+      page.getByRole('heading', { name: 'Reprenez les pierres adverses.' }),
+    ).toBeVisible();
+    await grid.getByRole('button', { name: 'M3, vide', exact: true }).tap();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await expect(grid.getByRole('button', { name: /M3, noir, coup 177/ })).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await page.getByRole('button', { name: 'Travailler : Lire un escalier (shichō)' }).click();
+    await page.getByLabel('Jouez sur le goban ou saisissez une coordonnée').fill('M18');
+    await page.getByRole('button', { name: 'Proposer' }).click();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    const proof = page.getByLabel('Lire la preuve numérotée');
+    await expect(proof).toContainText('1 / 5 coups');
+    for (let i = 0; i < 4; i++) await proof.getByRole('button', { name: 'Coup suivant' }).tap();
+    await expect(proof).toContainText('5 / 5 coups');
+    await expect(grid.getByRole('button', { name: /P19, noir, coup 109/ })).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await page
+      .getByRole('button', { name: 'Travailler : Distribuer ses forces au fuseki' })
+      .click();
+    await page.getByLabel('Autre coup à comparer').fill('R4');
+    await page.getByRole('button', { name: 'Comparer avec KataGo' }).click();
+    const comparison = page.getByRole('table', { name: 'Comparaison stratégique KataGo' });
+    await expect(comparison).toBeVisible({ timeout: 90_000 });
+    await expect(comparison.getByRole('row', { name: /R4 · Vous · Kifu/ })).toBeVisible();
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await page.getByRole('button', { name: 'Travailler : Captures en fin de partie' }).click();
+    await page.getByRole('button', { name: '1', exact: true }).tap();
+    await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await page.getByRole('button', { name: 'Atelier de comptage japonais' }).click();
+    await page.getByRole('button', { name: 'Calculer sous ces hypothèses' }).click();
+    await expect(page.getByRole('alert')).toContainText('Indiquez un komi');
+    await page.getByRole('spinbutton').fill('0');
+    await page.getByRole('checkbox', { name: /Je confirme cette hypothèse/ }).check();
+    await page.getByRole('button', { name: 'Calculer sous ces hypothèses' }).click();
+    await expect(page.getByRole('status')).toContainText('Décompte conditionnel');
+    await page.getByRole('button', { name: '← Programme' }).click();
+    await expect(page.getByText('5 / 652', { exact: false }).first()).toBeVisible();
+    expect(w.problems).toEqual([]);
+    expect(w.foreign).toEqual([]);
+  });
+  test('partie complète Leela Zero, reprise locale et véritable revue KataGo', async ({ page }) => {
+    test.slow();
+    const w = watch(page);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await page.getByRole('button', { name: 'Jouer une partie complète' }).click();
+    const training = page.getByRole('region', { name: 'Partie d’entraînement' });
+    await training.getByLabel(/Budget de recherche de la prochaine partie/).selectOption('8');
+    await training.getByRole('button', { name: 'Jouer Noir' }).click();
+    await training
+      .getByRole('group', { name: 'Goban interactif' })
+      .getByRole('button', { name: 'D4, vide', exact: true })
+      .tap();
+    await expect(training.getByRole('status')).toContainText('2 coups', { timeout: 90_000 });
+    await page.reload();
+    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await page.getByRole('button', { name: 'Jouer une partie complète' }).click();
+    await expect(training.getByRole('status')).toContainText('2 coups');
+    await expect(
+      training
+        .getByRole('group', { name: 'Goban interactif' })
+        .getByRole('button', { name: 'D4, Noir, coup 1', exact: true }),
+    ).toBeVisible();
+    page.once('dialog', (d) => d.accept());
+    await training.getByRole('button', { name: 'Abandonner', exact: true }).click();
+    await expect(training.getByText('Blanc gagnant par abandon')).toBeVisible();
+    await training.getByRole('button', { name: 'Charger KataGo' }).click();
+    await expect(training.getByRole('button', { name: 'Analyser le prochain coup' })).toBeEnabled({
+      timeout: 90_000,
+    });
+    await training.getByRole('button', { name: 'Analyser le prochain coup' }).click();
+    await expect(training.getByText('1 / 1 de tes coups analysés.')).toBeVisible({
+      timeout: 90_000,
+    });
+    await expect(training.getByText(/perte estimée .* pts/)).toBeVisible();
+    await training.getByRole('button', { name: 'Travailler ce thème' }).click();
+    await expect(
+      page.getByRole('heading', { name: /Quel secteur peu occupé développer maintenant/ }),
+    ).toBeVisible();
+    expect(w.problems).toEqual([]);
+    expect(w.foreign).toEqual([]);
   });
 });

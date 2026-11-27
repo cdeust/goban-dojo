@@ -1,0 +1,3138 @@
+[
+  {
+    "id": "yose-captures:s001:143",
+    "module": "yose-captures",
+    "gameId": "s001",
+    "before": 143,
+    "color": "W",
+    "anchors": [],
+    "candidate": 343,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 144 en B1 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : C1. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s001:143",
+    "module": "yose-prisoners",
+    "gameId": "s001",
+    "before": 143,
+    "color": "W",
+    "anchors": [],
+    "candidate": 343,
+    "input": "choice",
+    "question": "Blanc possède déjà 5 prisonnier(s). Quel est son total après Blanc 144 en B1 ?",
+    "answer": 6,
+    "explanation": "Le coup retire 1 pierre(s). Total : 5 + 1 = 6 prisonniers.",
+    "choices": [
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s001:146",
+    "module": "yose-boundary",
+    "gameId": "s001",
+    "before": 146,
+    "color": "B",
+    "anchors": [129],
+    "candidate": 129,
+    "input": "choice",
+    "question": "Avant Noir 147 en Q13, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s001:146",
+    "module": "yose-value",
+    "gameId": "s001",
+    "before": 146,
+    "color": "B",
+    "anchors": [129],
+    "candidate": 129,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 147 en Q13 ?",
+    "answer": -1,
+    "explanation": "Avant : N 2 / B 3 points vides unicolores ; après : N 1 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-count:s001:190",
+    "module": "yose-count",
+    "gameId": "s001",
+    "before": 190,
+    "color": "B",
+    "anchors": [162],
+    "candidate": 162,
+    "input": "choice",
+    "question": "À ce stade : Noir 1 points vides unicolores + 7 prisonniers ; Blanc 6 + 7. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -5,
+    "explanation": "(1 + 7) − (6 + 7) = -5. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+2 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s016:152",
+    "module": "yose-boundary",
+    "gameId": "s016",
+    "before": 152,
+    "color": "W",
+    "anchors": [8, 9, 10, 29],
+    "candidate": 8,
+    "input": "choice",
+    "question": "Avant Blanc 153 en J19, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s016:159",
+    "module": "yose-value",
+    "gameId": "s016",
+    "before": 159,
+    "color": "B",
+    "anchors": [266, 285],
+    "candidate": 266,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 160 en A5 ?",
+    "answer": 0,
+    "explanation": "Avant : N 9 / B 0 points vides unicolores ; après : N 9 / B 0. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s016:217",
+    "module": "yose-count",
+    "gameId": "s016",
+    "before": 217,
+    "color": "B",
+    "anchors": [295, 296, 297, 315, 316],
+    "candidate": 295,
+    "input": "choice",
+    "question": "À ce stade : Noir 5 points vides unicolores + 2 prisonniers ; Blanc 2 + 2. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 3,
+    "explanation": "(5 + 2) − (2 + 2) = 3. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+8 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-captures:s016:186",
+    "module": "yose-captures",
+    "gameId": "s016",
+    "before": 186,
+    "color": "W",
+    "anchors": [],
+    "candidate": 277,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 187 en M5 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : M6, N6. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s016:186",
+    "module": "yose-prisoners",
+    "gameId": "s016",
+    "before": 186,
+    "color": "W",
+    "anchors": [],
+    "candidate": 277,
+    "input": "choice",
+    "question": "Blanc possède déjà 0 prisonnier(s). Quel est son total après Blanc 187 en M5 ?",
+    "answer": 2,
+    "explanation": "Le coup retire 2 pierre(s). Total : 0 + 2 = 2 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s032:125",
+    "module": "yose-boundary",
+    "gameId": "s032",
+    "before": 125,
+    "color": "W",
+    "anchors": [128, 109],
+    "candidate": 128,
+    "input": "choice",
+    "question": "Avant Blanc 126 en P13, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 2 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s032:125",
+    "module": "yose-value",
+    "gameId": "s032",
+    "before": 125,
+    "color": "W",
+    "anchors": [128, 109],
+    "candidate": 128,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 126 en P13 ?",
+    "answer": 1,
+    "explanation": "Avant : N 1 / B 7 points vides unicolores ; après : N 1 / B 8. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s032:132",
+    "module": "yose-count",
+    "gameId": "s032",
+    "before": 132,
+    "color": "B",
+    "anchors": [148],
+    "candidate": 148,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 3 prisonniers ; Blanc 8 + 1. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -4,
+    "explanation": "(2 + 3) − (8 + 1) = -4. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-captures:s032:128",
+    "module": "yose-captures",
+    "gameId": "s032",
+    "before": 128,
+    "color": "B",
+    "anchors": [],
+    "candidate": 62,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 129 en F16 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : F15. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s032:128",
+    "module": "yose-prisoners",
+    "gameId": "s032",
+    "before": 128,
+    "color": "B",
+    "anchors": [],
+    "candidate": 62,
+    "input": "choice",
+    "question": "Noir possède déjà 2 prisonnier(s). Quel est son total après Noir 129 en F16 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 1 pierre(s). Total : 2 + 1 = 3 prisonniers.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s047:123",
+    "module": "yose-boundary",
+    "gameId": "s047",
+    "before": 123,
+    "color": "B",
+    "anchors": [239],
+    "candidate": 239,
+    "input": "choice",
+    "question": "Avant Noir 124 en M7, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s047:123",
+    "module": "yose-value",
+    "gameId": "s047",
+    "before": 123,
+    "color": "B",
+    "anchors": [239],
+    "candidate": 239,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 124 en M7 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 1 points vides unicolores ; après : N 0 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s047:132",
+    "module": "yose-count",
+    "gameId": "s047",
+    "before": 132,
+    "color": "W",
+    "anchors": [300],
+    "candidate": 300,
+    "input": "choice",
+    "question": "À ce stade : Noir 0 points vides unicolores + 1 prisonniers ; Blanc 1 + 2. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -2,
+    "explanation": "(0 + 1) − (1 + 2) = -2. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-captures:s062:121",
+    "module": "yose-captures",
+    "gameId": "s062",
+    "before": 121,
+    "color": "W",
+    "anchors": [],
+    "candidate": 174,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 122 en D10 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : C10. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s062:121",
+    "module": "yose-prisoners",
+    "gameId": "s062",
+    "before": 121,
+    "color": "W",
+    "anchors": [],
+    "candidate": 174,
+    "input": "choice",
+    "question": "Blanc possède déjà 0 prisonnier(s). Quel est son total après Blanc 122 en D10 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s062:124",
+    "module": "yose-boundary",
+    "gameId": "s062",
+    "before": 124,
+    "color": "B",
+    "anchors": [173],
+    "candidate": 173,
+    "input": "choice",
+    "question": "Avant Noir 125 en C10, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 2,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par blanche seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s062:128",
+    "module": "yose-value",
+    "gameId": "s062",
+    "before": 128,
+    "color": "B",
+    "anchors": [60],
+    "candidate": 60,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 129 en D16 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 1 points vides unicolores ; après : N 0 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-count:s062:157",
+    "module": "yose-count",
+    "gameId": "s062",
+    "before": 157,
+    "color": "W",
+    "anchors": [161],
+    "candidate": 161,
+    "input": "choice",
+    "question": "À ce stade : Noir 0 points vides unicolores + 3 prisonniers ; Blanc 1 + 4. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -2,
+    "explanation": "(0 + 3) − (1 + 4) = -2. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" }
+    ]
+  },
+  {
+    "id": "yose-captures:s077:125",
+    "module": "yose-captures",
+    "gameId": "s077",
+    "before": 125,
+    "color": "W",
+    "anchors": [],
+    "candidate": 48,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 126 en L17 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : L18, L19. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s077:125",
+    "module": "yose-prisoners",
+    "gameId": "s077",
+    "before": 125,
+    "color": "W",
+    "anchors": [],
+    "candidate": 48,
+    "input": "choice",
+    "question": "Blanc possède déjà 2 prisonnier(s). Quel est son total après Blanc 126 en L17 ?",
+    "answer": 4,
+    "explanation": "Le coup retire 2 pierre(s). Total : 2 + 2 = 4 prisonniers.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s077:122",
+    "module": "yose-boundary",
+    "gameId": "s077",
+    "before": 122,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 67,
+    "input": "choice",
+    "question": "Avant Noir 123 en L16, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s077:122",
+    "module": "yose-value",
+    "gameId": "s077",
+    "before": 122,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 67,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 123 en L16 ?",
+    "answer": 2,
+    "explanation": "Avant : N 2 / B 3 points vides unicolores ; après : N 3 / B 3. Le coup ajoute aussi 1 prisonnier(s) à Noir. Son bilan change de 2 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s077:128",
+    "module": "yose-count",
+    "gameId": "s077",
+    "before": 128,
+    "color": "B",
+    "anchors": [29, 10],
+    "candidate": 29,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 3 prisonniers ; Blanc 5 + 4. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -4,
+    "explanation": "(2 + 3) − (5 + 4) = -4. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s092:124",
+    "module": "yose-boundary",
+    "gameId": "s092",
+    "before": 124,
+    "color": "B",
+    "anchors": [221, 220, 219, 201],
+    "candidate": 221,
+    "input": "choice",
+    "question": "Avant Noir 125 en N8, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s092:124",
+    "module": "yose-value",
+    "gameId": "s092",
+    "before": 124,
+    "color": "B",
+    "anchors": [221, 220, 219, 201],
+    "candidate": 221,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 125 en N8 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 4 points vides unicolores ; après : N 0 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s092:149",
+    "module": "yose-count",
+    "gameId": "s092",
+    "before": 149,
+    "color": "W",
+    "anchors": [124, 143, 142, 141],
+    "candidate": 124,
+    "input": "choice",
+    "question": "À ce stade : Noir 1 points vides unicolores + 1 prisonniers ; Blanc 5 + 1. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -4,
+    "explanation": "(1 + 1) − (5 + 1) = -4. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" }
+    ]
+  },
+  {
+    "id": "yose-captures:s092:146",
+    "module": "yose-captures",
+    "gameId": "s092",
+    "before": 146,
+    "color": "B",
+    "anchors": [],
+    "candidate": 105,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 147 en L14 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : M14. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s092:146",
+    "module": "yose-prisoners",
+    "gameId": "s092",
+    "before": 146,
+    "color": "B",
+    "anchors": [],
+    "candidate": 105,
+    "input": "choice",
+    "question": "Noir possède déjà 0 prisonnier(s). Quel est son total après Noir 147 en L14 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-captures:s107:121",
+    "module": "yose-captures",
+    "gameId": "s107",
+    "before": 121,
+    "color": "W",
+    "anchors": [],
+    "candidate": 181,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 122 en L10 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : K10. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s107:121",
+    "module": "yose-prisoners",
+    "gameId": "s107",
+    "before": 121,
+    "color": "W",
+    "anchors": [],
+    "candidate": 181,
+    "input": "choice",
+    "question": "Blanc possède déjà 6 prisonnier(s). Quel est son total après Blanc 122 en L10 ?",
+    "answer": 7,
+    "explanation": "Le coup retire 1 pierre(s). Total : 6 + 1 = 7 prisonniers.",
+    "choices": [
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s107:138",
+    "module": "yose-boundary",
+    "gameId": "s107",
+    "before": 138,
+    "color": "B",
+    "anchors": [92],
+    "candidate": 92,
+    "input": "choice",
+    "question": "Avant Noir 139 en R15, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s107:138",
+    "module": "yose-value",
+    "gameId": "s107",
+    "before": 138,
+    "color": "B",
+    "anchors": [92],
+    "candidate": 92,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 139 en R15 ?",
+    "answer": 0,
+    "explanation": "Avant : N 2 / B 3 points vides unicolores ; après : N 2 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s107:138",
+    "module": "yose-count",
+    "gameId": "s107",
+    "before": 138,
+    "color": "B",
+    "anchors": [92],
+    "candidate": 92,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 5 prisonniers ; Blanc 3 + 7. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -3,
+    "explanation": "(2 + 5) − (3 + 7) = -3. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s122:151",
+    "module": "yose-boundary",
+    "gameId": "s122",
+    "before": 151,
+    "color": "W",
+    "anchors": [161, 142, 123, 124],
+    "candidate": 161,
+    "input": "choice",
+    "question": "Avant Blanc 152 en K11, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s122:151",
+    "module": "yose-value",
+    "gameId": "s122",
+    "before": 151,
+    "color": "W",
+    "anchors": [161, 142, 123, 124],
+    "candidate": 161,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 152 en K11 ?",
+    "answer": 0,
+    "explanation": "Avant : N 3 / B 6 points vides unicolores ; après : N 3 / B 6. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s122:185",
+    "module": "yose-count",
+    "gameId": "s122",
+    "before": 185,
+    "color": "W",
+    "anchors": [42],
+    "candidate": 42,
+    "input": "choice",
+    "question": "À ce stade : Noir 4 points vides unicolores + 4 prisonniers ; Blanc 7 + 8. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -7,
+    "explanation": "(4 + 4) − (7 + 8) = -7. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -9, "label": "-9" },
+      { "value": -8, "label": "-8" },
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" }
+    ]
+  },
+  {
+    "id": "yose-captures:s122:157",
+    "module": "yose-captures",
+    "gameId": "s122",
+    "before": 157,
+    "color": "W",
+    "anchors": [],
+    "candidate": 219,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 158 en L8 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : L9. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s122:157",
+    "module": "yose-prisoners",
+    "gameId": "s122",
+    "before": 157,
+    "color": "W",
+    "anchors": [],
+    "candidate": 219,
+    "input": "choice",
+    "question": "Blanc possède déjà 7 prisonnier(s). Quel est son total après Blanc 158 en L8 ?",
+    "answer": 8,
+    "explanation": "Le coup retire 1 pierre(s). Total : 7 + 1 = 8 prisonniers.",
+    "choices": [
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s167:153",
+    "module": "yose-boundary",
+    "gameId": "s167",
+    "before": 153,
+    "color": "W",
+    "anchors": [18],
+    "candidate": 18,
+    "input": "choice",
+    "question": "Avant Blanc 154 en T19, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s167:148",
+    "module": "yose-value",
+    "gameId": "s167",
+    "before": 148,
+    "color": "B",
+    "anchors": [17, 16, 18, 37, 56],
+    "candidate": 17,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 149 en S19 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 4 points vides unicolores ; après : N 0 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s167:197",
+    "module": "yose-count",
+    "gameId": "s167",
+    "before": 197,
+    "color": "W",
+    "anchors": [317],
+    "candidate": 317,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 4 prisonniers ; Blanc 6 + 7. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -7,
+    "explanation": "(2 + 4) − (6 + 7) = -7. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -11, "label": "-11" },
+      { "value": -10, "label": "-10" },
+      { "value": -9, "label": "-9" },
+      { "value": -8, "label": "-8" },
+      { "value": -7, "label": "-7" }
+    ]
+  },
+  {
+    "id": "yose-captures:s167:153",
+    "module": "yose-captures",
+    "gameId": "s167",
+    "before": 153,
+    "color": "W",
+    "anchors": [],
+    "candidate": 18,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 154 en T19 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : T18. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s167:153",
+    "module": "yose-prisoners",
+    "gameId": "s167",
+    "before": 153,
+    "color": "W",
+    "anchors": [],
+    "candidate": 18,
+    "input": "choice",
+    "question": "Blanc possède déjà 2 prisonnier(s). Quel est son total après Blanc 154 en T19 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 1 pierre(s). Total : 2 + 1 = 3 prisonniers.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s182:202",
+    "module": "yose-boundary",
+    "gameId": "s182",
+    "before": 202,
+    "color": "B",
+    "anchors": [291],
+    "candidate": 291,
+    "input": "choice",
+    "question": "Avant Noir 203 en G4, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 2,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par blanche seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s182:176",
+    "module": "yose-value",
+    "gameId": "s182",
+    "before": 176,
+    "color": "B",
+    "anchors": [278],
+    "candidate": 278,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 177 en N5 ?",
+    "answer": 0,
+    "explanation": "Avant : N 3 / B 4 points vides unicolores ; après : N 3 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-count:s182:250",
+    "module": "yose-count",
+    "gameId": "s182",
+    "before": 250,
+    "color": "B",
+    "anchors": [294, 275],
+    "candidate": 294,
+    "input": "choice",
+    "question": "À ce stade : Noir 8 points vides unicolores + 8 prisonniers ; Blanc 15 + 11. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -10,
+    "explanation": "(8 + 8) − (15 + 11) = -10. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+10 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -14, "label": "-14" },
+      { "value": -13, "label": "-13" },
+      { "value": -12, "label": "-12" },
+      { "value": -11, "label": "-11" },
+      { "value": -10, "label": "-10" }
+    ]
+  },
+  {
+    "id": "yose-captures:s182:181",
+    "module": "yose-captures",
+    "gameId": "s182",
+    "before": 181,
+    "color": "W",
+    "anchors": [],
+    "candidate": 141,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 182 en J12 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : J11, H11. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s182:181",
+    "module": "yose-prisoners",
+    "gameId": "s182",
+    "before": 181,
+    "color": "W",
+    "anchors": [],
+    "candidate": 141,
+    "input": "choice",
+    "question": "Blanc possède déjà 7 prisonnier(s). Quel est son total après Blanc 182 en J12 ?",
+    "answer": 9,
+    "explanation": "Le coup retire 2 pierre(s). Total : 7 + 2 = 9 prisonniers.",
+    "choices": [
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s242:148",
+    "module": "yose-boundary",
+    "gameId": "s242",
+    "before": 148,
+    "color": "B",
+    "anchors": [54],
+    "candidate": 54,
+    "input": "choice",
+    "question": "Avant Noir 149 en R17, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s242:166",
+    "module": "yose-value",
+    "gameId": "s242",
+    "before": 166,
+    "color": "B",
+    "anchors": [92],
+    "candidate": 92,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 167 en R15 ?",
+    "answer": 6,
+    "explanation": "Avant : N 2 / B 6 points vides unicolores ; après : N 5 / B 6. Le coup ajoute aussi 3 prisonnier(s) à Noir. Son bilan change de 6 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-count:s242:206",
+    "module": "yose-count",
+    "gameId": "s242",
+    "before": 206,
+    "color": "B",
+    "anchors": [356, 355, 354],
+    "candidate": 356,
+    "input": "choice",
+    "question": "À ce stade : Noir 5 points vides unicolores + 5 prisonniers ; Blanc 8 + 3. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -1,
+    "explanation": "(5 + 5) − (8 + 3) = -1. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+9 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-captures:s242:166",
+    "module": "yose-captures",
+    "gameId": "s242",
+    "before": 166,
+    "color": "B",
+    "anchors": [],
+    "candidate": 92,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 167 en R15 retire-t-il ?",
+    "answer": 3,
+    "explanation": "Le kifu confirme 3 pierre(s) retirée(s) : R14, Q14, S14. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s242:166",
+    "module": "yose-prisoners",
+    "gameId": "s242",
+    "before": 166,
+    "color": "B",
+    "anchors": [],
+    "candidate": 92,
+    "input": "choice",
+    "question": "Noir possède déjà 0 prisonnier(s). Quel est son total après Noir 167 en R15 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 3 pierre(s). Total : 0 + 3 = 3 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-captures:s289:277",
+    "module": "yose-captures",
+    "gameId": "s289",
+    "before": 277,
+    "color": "W",
+    "anchors": [],
+    "candidate": 204,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 278 en P9 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : Q9, Q10. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s289:277",
+    "module": "yose-prisoners",
+    "gameId": "s289",
+    "before": 277,
+    "color": "W",
+    "anchors": [],
+    "candidate": 204,
+    "input": "choice",
+    "question": "Blanc possède déjà 22 prisonnier(s). Quel est son total après Blanc 278 en P9 ?",
+    "answer": 24,
+    "explanation": "Le coup retire 2 pierre(s). Total : 22 + 2 = 24 prisonniers.",
+    "choices": [
+      { "value": 23, "label": "23" },
+      { "value": 24, "label": "24" },
+      { "value": 25, "label": "25" },
+      { "value": 26, "label": "26" },
+      { "value": 27, "label": "27" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s289:215",
+    "module": "yose-boundary",
+    "gameId": "s289",
+    "before": 215,
+    "color": "W",
+    "anchors": [24],
+    "candidate": 24,
+    "input": "choice",
+    "question": "Avant Blanc 216 en F18, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s289:220",
+    "module": "yose-value",
+    "gameId": "s289",
+    "before": 220,
+    "color": "B",
+    "anchors": [256, 255, 254, 253],
+    "candidate": 256,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 221 en K6 ?",
+    "answer": -1,
+    "explanation": "Avant : N 9 / B 0 points vides unicolores ; après : N 8 / B 0. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s289:299",
+    "module": "yose-count",
+    "gameId": "s289",
+    "before": 299,
+    "color": "W",
+    "anchors": [98],
+    "candidate": 98,
+    "input": "choice",
+    "question": "À ce stade : Noir 18 points vides unicolores + 25 prisonniers ; Blanc 16 + 26. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 1,
+    "explanation": "(18 + 25) − (16 + 26) = 1. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-captures:s304:121",
+    "module": "yose-captures",
+    "gameId": "s304",
+    "before": 121,
+    "color": "B",
+    "anchors": [],
+    "candidate": 255,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 122 en J6 retire-t-il ?",
+    "answer": 4,
+    "explanation": "Le kifu confirme 4 pierre(s) retirée(s) : H6, G6, F6, F7. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s304:121",
+    "module": "yose-prisoners",
+    "gameId": "s304",
+    "before": 121,
+    "color": "B",
+    "anchors": [],
+    "candidate": 255,
+    "input": "choice",
+    "question": "Noir possède déjà 1 prisonnier(s). Quel est son total après Noir 122 en J6 ?",
+    "answer": 5,
+    "explanation": "Le coup retire 4 pierre(s). Total : 1 + 4 = 5 prisonniers.",
+    "choices": [
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s304:122",
+    "module": "yose-boundary",
+    "gameId": "s304",
+    "before": 122,
+    "color": "W",
+    "anchors": [308],
+    "candidate": 308,
+    "input": "choice",
+    "question": "Avant Blanc 123 en E3, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s304:122",
+    "module": "yose-value",
+    "gameId": "s304",
+    "before": 122,
+    "color": "W",
+    "anchors": [308],
+    "candidate": 308,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 123 en E3 ?",
+    "answer": 0,
+    "explanation": "Avant : N 5 / B 1 points vides unicolores ; après : N 5 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s304:122",
+    "module": "yose-count",
+    "gameId": "s304",
+    "before": 122,
+    "color": "W",
+    "anchors": [308],
+    "candidate": 308,
+    "input": "choice",
+    "question": "À ce stade : Noir 5 points vides unicolores + 5 prisonniers ; Blanc 1 + 0. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 9,
+    "explanation": "(5 + 5) − (1 + 0) = 9. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+1 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" },
+      { "value": 12, "label": "12" },
+      { "value": 13, "label": "13" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s322:190",
+    "module": "yose-boundary",
+    "gameId": "s322",
+    "before": 190,
+    "color": "B",
+    "anchors": [343, 342, 324, 323],
+    "candidate": 343,
+    "input": "choice",
+    "question": "Avant Noir 191 en B1, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s322:190",
+    "module": "yose-value",
+    "gameId": "s322",
+    "before": 190,
+    "color": "B",
+    "anchors": [343, 342, 324, 323],
+    "candidate": 343,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 191 en B1 ?",
+    "answer": 3,
+    "explanation": "Avant : N 1 / B 4 points vides unicolores ; après : N 4 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 3 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s322:263",
+    "module": "yose-count",
+    "gameId": "s322",
+    "before": 263,
+    "color": "W",
+    "anchors": [349],
+    "candidate": 349,
+    "input": "choice",
+    "question": "À ce stade : Noir 29 points vides unicolores + 6 prisonniers ; Blanc 26 + 9. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 0,
+    "explanation": "(29 + 6) − (26 + 9) = 0. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+8 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-captures:s322:203",
+    "module": "yose-captures",
+    "gameId": "s322",
+    "before": 203,
+    "color": "W",
+    "anchors": [],
+    "candidate": 290,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 204 en F4 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : F3, G3. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s322:203",
+    "module": "yose-prisoners",
+    "gameId": "s322",
+    "before": 203,
+    "color": "W",
+    "anchors": [],
+    "candidate": 290,
+    "input": "choice",
+    "question": "Blanc possède déjà 4 prisonnier(s). Quel est son total après Blanc 204 en F4 ?",
+    "answer": 6,
+    "explanation": "Le coup retire 2 pierre(s). Total : 4 + 2 = 6 prisonniers.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s337:202",
+    "module": "yose-boundary",
+    "gameId": "s337",
+    "before": 202,
+    "color": "B",
+    "anchors": [349],
+    "candidate": 349,
+    "input": "choice",
+    "question": "Avant Noir 203 en H1, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s337:202",
+    "module": "yose-value",
+    "gameId": "s337",
+    "before": 202,
+    "color": "B",
+    "anchors": [349],
+    "candidate": 349,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 203 en H1 ?",
+    "answer": -1,
+    "explanation": "Avant : N 4 / B 7 points vides unicolores ; après : N 3 / B 7. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s337:269",
+    "module": "yose-count",
+    "gameId": "s337",
+    "before": 269,
+    "color": "W",
+    "anchors": [225, 224],
+    "candidate": 225,
+    "input": "choice",
+    "question": "À ce stade : Noir 42 points vides unicolores + 7 prisonniers ; Blanc 19 + 9. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 21,
+    "explanation": "(42 + 7) − (19 + 9) = 21. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+5 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 17, "label": "17" },
+      { "value": 18, "label": "18" },
+      { "value": 19, "label": "19" },
+      { "value": 20, "label": "20" },
+      { "value": 21, "label": "21" }
+    ]
+  },
+  {
+    "id": "yose-captures:s337:194",
+    "module": "yose-captures",
+    "gameId": "s337",
+    "before": 194,
+    "color": "B",
+    "anchors": [],
+    "candidate": 350,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 195 en J1 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : H1. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s337:194",
+    "module": "yose-prisoners",
+    "gameId": "s337",
+    "before": 194,
+    "color": "B",
+    "anchors": [],
+    "candidate": 350,
+    "input": "choice",
+    "question": "Noir possède déjà 5 prisonnier(s). Quel est son total après Noir 195 en J1 ?",
+    "answer": 6,
+    "explanation": "Le coup retire 1 pierre(s). Total : 5 + 1 = 6 prisonniers.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s352:156",
+    "module": "yose-boundary",
+    "gameId": "s352",
+    "before": 156,
+    "color": "B",
+    "anchors": [64, 83],
+    "candidate": 64,
+    "input": "choice",
+    "question": "Avant Noir 157 en H16, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 2 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s352:156",
+    "module": "yose-value",
+    "gameId": "s352",
+    "before": 156,
+    "color": "B",
+    "anchors": [64, 83],
+    "candidate": 64,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 157 en H16 ?",
+    "answer": 0,
+    "explanation": "Avant : N 3 / B 1 points vides unicolores ; après : N 3 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s352:166",
+    "module": "yose-count",
+    "gameId": "s352",
+    "before": 166,
+    "color": "B",
+    "anchors": [77],
+    "candidate": 77,
+    "input": "choice",
+    "question": "À ce stade : Noir 3 points vides unicolores + 3 prisonniers ; Blanc 2 + 2. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 2,
+    "explanation": "(3 + 3) − (2 + 2) = 2. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+1 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-captures:s367:141",
+    "module": "yose-captures",
+    "gameId": "s367",
+    "before": 141,
+    "color": "B",
+    "anchors": [],
+    "candidate": 273,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 142 en H5 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : G5, G4. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s367:141",
+    "module": "yose-prisoners",
+    "gameId": "s367",
+    "before": 141,
+    "color": "B",
+    "anchors": [],
+    "candidate": 273,
+    "input": "choice",
+    "question": "Noir possède déjà 12 prisonnier(s). Quel est son total après Noir 142 en H5 ?",
+    "answer": 14,
+    "explanation": "Le coup retire 2 pierre(s). Total : 12 + 2 = 14 prisonniers.",
+    "choices": [
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" },
+      { "value": 12, "label": "12" },
+      { "value": 13, "label": "13" },
+      { "value": 14, "label": "14" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s367:141",
+    "module": "yose-boundary",
+    "gameId": "s367",
+    "before": 141,
+    "color": "B",
+    "anchors": [273],
+    "candidate": 273,
+    "input": "choice",
+    "question": "Avant Noir 142 en H5, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s367:141",
+    "module": "yose-value",
+    "gameId": "s367",
+    "before": 141,
+    "color": "B",
+    "anchors": [273],
+    "candidate": 273,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 142 en H5 ?",
+    "answer": 4,
+    "explanation": "Avant : N 11 / B 2 points vides unicolores ; après : N 13 / B 2. Le coup ajoute aussi 2 prisonnier(s) à Noir. Son bilan change de 4 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s367:181",
+    "module": "yose-count",
+    "gameId": "s367",
+    "before": 181,
+    "color": "B",
+    "anchors": [88, 87],
+    "candidate": 88,
+    "input": "choice",
+    "question": "À ce stade : Noir 13 points vides unicolores + 17 prisonniers ; Blanc 2 + 7. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 21,
+    "explanation": "(13 + 17) − (2 + 7) = 21. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 17, "label": "17" },
+      { "value": 18, "label": "18" },
+      { "value": 19, "label": "19" },
+      { "value": 20, "label": "20" },
+      { "value": 21, "label": "21" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s397:120",
+    "module": "yose-boundary",
+    "gameId": "s397",
+    "before": 120,
+    "color": "W",
+    "anchors": [187, 206, 205, 204],
+    "candidate": 187,
+    "input": "choice",
+    "question": "Avant Blanc 121 en R10, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s397:120",
+    "module": "yose-value",
+    "gameId": "s397",
+    "before": 120,
+    "color": "W",
+    "anchors": [187, 206, 205, 204],
+    "candidate": 187,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 121 en R10 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 1 points vides unicolores ; après : N 0 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s397:121",
+    "module": "yose-count",
+    "gameId": "s397",
+    "before": 121,
+    "color": "B",
+    "anchors": [206, 205, 204],
+    "candidate": 206,
+    "input": "choice",
+    "question": "À ce stade : Noir 0 points vides unicolores + 0 prisonniers ; Blanc 1 + 0. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -1,
+    "explanation": "(0 + 0) − (1 + 0) = -1. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-captures:s397:160",
+    "module": "yose-captures",
+    "gameId": "s397",
+    "before": 160,
+    "color": "W",
+    "anchors": [],
+    "candidate": 43,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 161 en F17 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : F16. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s397:160",
+    "module": "yose-prisoners",
+    "gameId": "s397",
+    "before": 160,
+    "color": "W",
+    "anchors": [],
+    "candidate": 43,
+    "input": "choice",
+    "question": "Blanc possède déjà 0 prisonnier(s). Quel est son total après Blanc 161 en F17 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-captures:s427:138",
+    "module": "yose-captures",
+    "gameId": "s427",
+    "before": 138,
+    "color": "B",
+    "anchors": [],
+    "candidate": 223,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 139 en P8 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : Q8, Q7. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s427:138",
+    "module": "yose-prisoners",
+    "gameId": "s427",
+    "before": 138,
+    "color": "B",
+    "anchors": [],
+    "candidate": 223,
+    "input": "choice",
+    "question": "Noir possède déjà 1 prisonnier(s). Quel est son total après Noir 139 en P8 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 2 pierre(s). Total : 1 + 2 = 3 prisonniers.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s427:136",
+    "module": "yose-boundary",
+    "gameId": "s427",
+    "before": 136,
+    "color": "B",
+    "anchors": [161],
+    "candidate": 161,
+    "input": "choice",
+    "question": "Avant Noir 137 en K11, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 2,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par blanche seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s427:134",
+    "module": "yose-value",
+    "gameId": "s427",
+    "before": 134,
+    "color": "B",
+    "anchors": [203, 204, 223],
+    "candidate": 203,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 135 en O9 ?",
+    "answer": 0,
+    "explanation": "Avant : N 0 / B 2 points vides unicolores ; après : N 0 / B 2. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s427:173",
+    "module": "yose-count",
+    "gameId": "s427",
+    "before": 173,
+    "color": "W",
+    "anchors": [101],
+    "candidate": 101,
+    "input": "choice",
+    "question": "À ce stade : Noir 3 points vides unicolores + 4 prisonniers ; Blanc 3 + 4. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 0,
+    "explanation": "(3 + 4) − (3 + 4) = 0. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s442:204",
+    "module": "yose-boundary",
+    "gameId": "s442",
+    "before": 204,
+    "color": "B",
+    "anchors": [288],
+    "candidate": 288,
+    "input": "choice",
+    "question": "Avant Noir 205 en D4, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s442:216",
+    "module": "yose-value",
+    "gameId": "s442",
+    "before": 216,
+    "color": "B",
+    "anchors": [75, 94, 93, 113, 112],
+    "candidate": 75,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 217 en T16 ?",
+    "answer": 4,
+    "explanation": "Avant : N 8 / B 2 points vides unicolores ; après : N 12 / B 2. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 4 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-count:s442:258",
+    "module": "yose-count",
+    "gameId": "s442",
+    "before": 258,
+    "color": "B",
+    "anchors": [114, 95],
+    "candidate": 114,
+    "input": "choice",
+    "question": "À ce stade : Noir 19 points vides unicolores + 5 prisonniers ; Blanc 50 + 5. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -31,
+    "explanation": "(19 + 5) − (50 + 5) = -31. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+3 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -33, "label": "-33" },
+      { "value": -32, "label": "-32" },
+      { "value": -31, "label": "-31" },
+      { "value": -30, "label": "-30" },
+      { "value": -29, "label": "-29" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s457:205",
+    "module": "yose-boundary",
+    "gameId": "s457",
+    "before": 205,
+    "color": "W",
+    "anchors": [60],
+    "candidate": 60,
+    "input": "choice",
+    "question": "Avant Blanc 206 en D16, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s457:201",
+    "module": "yose-value",
+    "gameId": "s457",
+    "before": 201,
+    "color": "W",
+    "anchors": [344, 345, 325],
+    "candidate": 344,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 202 en C1 ?",
+    "answer": -1,
+    "explanation": "Avant : N 0 / B 4 points vides unicolores ; après : N 0 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-count:s457:275",
+    "module": "yose-count",
+    "gameId": "s457",
+    "before": 275,
+    "color": "W",
+    "anchors": [143],
+    "candidate": 143,
+    "input": "choice",
+    "question": "À ce stade : Noir 47 points vides unicolores + 19 prisonniers ; Blanc 15 + 8. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 43,
+    "explanation": "(47 + 19) − (15 + 8) = 43. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+4 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 40, "label": "40" },
+      { "value": 41, "label": "41" },
+      { "value": 42, "label": "42" },
+      { "value": 43, "label": "43" },
+      { "value": 44, "label": "44" }
+    ]
+  },
+  {
+    "id": "yose-captures:s457:236",
+    "module": "yose-captures",
+    "gameId": "s457",
+    "before": 236,
+    "color": "B",
+    "anchors": [],
+    "candidate": 100,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 237 en F14 retire-t-il ?",
+    "answer": 5,
+    "explanation": "Le kifu confirme 5 pierre(s) retirée(s) : F13, G13, F12, H13, E12. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s457:236",
+    "module": "yose-prisoners",
+    "gameId": "s457",
+    "before": 236,
+    "color": "B",
+    "anchors": [],
+    "candidate": 100,
+    "input": "choice",
+    "question": "Noir possède déjà 10 prisonnier(s). Quel est son total après Noir 237 en F14 ?",
+    "answer": 15,
+    "explanation": "Le coup retire 5 pierre(s). Total : 10 + 5 = 15 prisonniers.",
+    "choices": [
+      { "value": 14, "label": "14" },
+      { "value": 15, "label": "15" },
+      { "value": 16, "label": "16" },
+      { "value": 17, "label": "17" },
+      { "value": 18, "label": "18" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s002:158",
+    "module": "yose-boundary",
+    "gameId": "s002",
+    "before": 158,
+    "color": "B",
+    "anchors": [305],
+    "candidate": 305,
+    "input": "choice",
+    "question": "Avant Noir 159 en B3, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 2,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par blanche seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s002:180",
+    "module": "yose-value",
+    "gameId": "s002",
+    "before": 180,
+    "color": "B",
+    "anchors": [328, 309],
+    "candidate": 328,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 181 en F2 ?",
+    "answer": 0,
+    "explanation": "Avant : N 3 / B 4 points vides unicolores ; après : N 3 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-count:s002:207",
+    "module": "yose-count",
+    "gameId": "s002",
+    "before": 207,
+    "color": "W",
+    "anchors": [275],
+    "candidate": 275,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 8 prisonniers ; Blanc 6 + 11. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -7,
+    "explanation": "(2 + 8) − (6 + 11) = -7. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+9 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -9, "label": "-9" },
+      { "value": -8, "label": "-8" },
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" }
+    ]
+  },
+  {
+    "id": "yose-captures:s002:207",
+    "module": "yose-captures",
+    "gameId": "s002",
+    "before": 207,
+    "color": "W",
+    "anchors": [],
+    "candidate": 275,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 208 en K5 retire-t-il ?",
+    "answer": 4,
+    "explanation": "Le kifu confirme 4 pierre(s) retirée(s) : K6, J6, J7, H7. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s002:207",
+    "module": "yose-prisoners",
+    "gameId": "s002",
+    "before": 207,
+    "color": "W",
+    "anchors": [],
+    "candidate": 275,
+    "input": "choice",
+    "question": "Blanc possède déjà 11 prisonnier(s). Quel est son total après Blanc 208 en K5 ?",
+    "answer": 15,
+    "explanation": "Le coup retire 4 pierre(s). Total : 11 + 4 = 15 prisonniers.",
+    "choices": [
+      { "value": 13, "label": "13" },
+      { "value": 14, "label": "14" },
+      { "value": 15, "label": "15" },
+      { "value": 16, "label": "16" },
+      { "value": 17, "label": "17" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s019:124",
+    "module": "yose-boundary",
+    "gameId": "s019",
+    "before": 124,
+    "color": "W",
+    "anchors": [234],
+    "candidate": 234,
+    "input": "choice",
+    "question": "Avant Blanc 125 en G7, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s019:164",
+    "module": "yose-value",
+    "gameId": "s019",
+    "before": 164,
+    "color": "W",
+    "anchors": [240, 221, 259, 258],
+    "candidate": 240,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 165 en N7 ?",
+    "answer": 2,
+    "explanation": "Avant : N 1 / B 4 points vides unicolores ; après : N 1 / B 6. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 2 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" }
+    ]
+  },
+  {
+    "id": "yose-count:s019:164",
+    "module": "yose-count",
+    "gameId": "s019",
+    "before": 164,
+    "color": "W",
+    "anchors": [240, 221, 259, 258],
+    "candidate": 240,
+    "input": "choice",
+    "question": "À ce stade : Noir 1 points vides unicolores + 1 prisonniers ; Blanc 4 + 2. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -4,
+    "explanation": "(1 + 1) − (4 + 2) = -4. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+12 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -8, "label": "-8" },
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" }
+    ]
+  },
+  {
+    "id": "yose-captures:s033:144",
+    "module": "yose-captures",
+    "gameId": "s033",
+    "before": 144,
+    "color": "W",
+    "anchors": [],
+    "candidate": 156,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 145 en E11 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : E12. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s033:144",
+    "module": "yose-prisoners",
+    "gameId": "s033",
+    "before": 144,
+    "color": "W",
+    "anchors": [],
+    "candidate": 156,
+    "input": "choice",
+    "question": "Blanc possède déjà 2 prisonnier(s). Quel est son total après Blanc 145 en E11 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 1 pierre(s). Total : 2 + 1 = 3 prisonniers.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s033:145",
+    "module": "yose-boundary",
+    "gameId": "s033",
+    "before": 145,
+    "color": "B",
+    "anchors": [99],
+    "candidate": 99,
+    "input": "choice",
+    "question": "Avant Noir 146 en E14, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s033:146",
+    "module": "yose-value",
+    "gameId": "s033",
+    "before": 146,
+    "color": "W",
+    "anchors": [137],
+    "candidate": 137,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 147 en E12 ?",
+    "answer": -1,
+    "explanation": "Avant : N 3 / B 4 points vides unicolores ; après : N 3 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-count:s033:202",
+    "module": "yose-count",
+    "gameId": "s033",
+    "before": 202,
+    "color": "W",
+    "anchors": [272],
+    "candidate": 272,
+    "input": "choice",
+    "question": "À ce stade : Noir 4 points vides unicolores + 3 prisonniers ; Blanc 4 + 4. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -1,
+    "explanation": "(4 + 3) − (4 + 4) = -1. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s048:131",
+    "module": "yose-boundary",
+    "gameId": "s048",
+    "before": 131,
+    "color": "W",
+    "anchors": [322, 303, 341, 360, 359],
+    "candidate": 322,
+    "input": "choice",
+    "question": "Avant Blanc 132 en T3, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 5 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s048:131",
+    "module": "yose-value",
+    "gameId": "s048",
+    "before": 131,
+    "color": "W",
+    "anchors": [322, 303, 341, 360, 359],
+    "candidate": 322,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 132 en T3 ?",
+    "answer": 0,
+    "explanation": "Avant : N 2 / B 2 points vides unicolores ; après : N 2 / B 2. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-count:s048:150",
+    "module": "yose-count",
+    "gameId": "s048",
+    "before": 150,
+    "color": "B",
+    "anchors": [269],
+    "candidate": 269,
+    "input": "choice",
+    "question": "À ce stade : Noir 2 points vides unicolores + 0 prisonniers ; Blanc 2 + 3. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -3,
+    "explanation": "(2 + 0) − (2 + 3) = -3. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+8 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -7, "label": "-7" },
+      { "value": -6, "label": "-6" },
+      { "value": -5, "label": "-5" },
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" }
+    ]
+  },
+  {
+    "id": "yose-captures:s048:174",
+    "module": "yose-captures",
+    "gameId": "s048",
+    "before": 174,
+    "color": "B",
+    "anchors": [],
+    "candidate": 313,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 175 en K3 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : K2. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s048:174",
+    "module": "yose-prisoners",
+    "gameId": "s048",
+    "before": 174,
+    "color": "B",
+    "anchors": [],
+    "candidate": 313,
+    "input": "choice",
+    "question": "Noir possède déjà 0 prisonnier(s). Quel est son total après Noir 175 en K3 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s078:180",
+    "module": "yose-boundary",
+    "gameId": "s078",
+    "before": 180,
+    "color": "B",
+    "anchors": [278],
+    "candidate": 278,
+    "input": "choice",
+    "question": "Avant Noir 181 en N5, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s078:206",
+    "module": "yose-value",
+    "gameId": "s078",
+    "before": 206,
+    "color": "B",
+    "anchors": [68, 69, 49, 87],
+    "candidate": 68,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 207 en M16 ?",
+    "answer": 1,
+    "explanation": "Avant : N 30 / B 7 points vides unicolores ; après : N 31 / B 7. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-count:s078:253",
+    "module": "yose-count",
+    "gameId": "s078",
+    "before": 253,
+    "color": "W",
+    "anchors": [119],
+    "candidate": 119,
+    "input": "choice",
+    "question": "À ce stade : Noir 44 points vides unicolores + 5 prisonniers ; Blanc 19 + 3. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 27,
+    "explanation": "(44 + 5) − (19 + 3) = 27. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+4 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 25, "label": "25" },
+      { "value": 26, "label": "26" },
+      { "value": 27, "label": "27" },
+      { "value": 28, "label": "28" },
+      { "value": 29, "label": "29" }
+    ]
+  },
+  {
+    "id": "yose-captures:s078:216",
+    "module": "yose-captures",
+    "gameId": "s078",
+    "before": 216,
+    "color": "B",
+    "anchors": [],
+    "candidate": 254,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 217 en H6 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : H5. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s078:216",
+    "module": "yose-prisoners",
+    "gameId": "s078",
+    "before": 216,
+    "color": "B",
+    "anchors": [],
+    "candidate": 254,
+    "input": "choice",
+    "question": "Noir possède déjà 4 prisonnier(s). Quel est son total après Noir 217 en H6 ?",
+    "answer": 5,
+    "explanation": "Le coup retire 1 pierre(s). Total : 4 + 1 = 5 prisonniers.",
+    "choices": [
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s093:244",
+    "module": "yose-boundary",
+    "gameId": "s093",
+    "before": 244,
+    "color": "B",
+    "anchors": [189, 170, 151, 132],
+    "candidate": 189,
+    "input": "choice",
+    "question": "Avant Noir 245 en T10, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 4 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s093:215",
+    "module": "yose-value",
+    "gameId": "s093",
+    "before": 215,
+    "color": "W",
+    "anchors": [303],
+    "candidate": 303,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 216 en T4 ?",
+    "answer": -1,
+    "explanation": "Avant : N 20 / B 2 points vides unicolores ; après : N 20 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -4, "label": "-4" },
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" }
+    ]
+  },
+  {
+    "id": "yose-count:s093:246",
+    "module": "yose-count",
+    "gameId": "s093",
+    "before": 246,
+    "color": "B",
+    "anchors": [288, 269],
+    "candidate": 288,
+    "input": "choice",
+    "question": "À ce stade : Noir 36 points vides unicolores + 9 prisonniers ; Blanc 25 + 2. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 18,
+    "explanation": "(36 + 9) − (25 + 2) = 18. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+2 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 14, "label": "14" },
+      { "value": 15, "label": "15" },
+      { "value": 16, "label": "16" },
+      { "value": 17, "label": "17" },
+      { "value": 18, "label": "18" }
+    ]
+  },
+  {
+    "id": "yose-captures:s093:202",
+    "module": "yose-captures",
+    "gameId": "s093",
+    "before": 202,
+    "color": "B",
+    "anchors": [],
+    "candidate": 18,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 203 en T19 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : T18, S18. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s093:202",
+    "module": "yose-prisoners",
+    "gameId": "s093",
+    "before": 202,
+    "color": "B",
+    "anchors": [],
+    "candidate": 18,
+    "input": "choice",
+    "question": "Noir possède déjà 6 prisonnier(s). Quel est son total après Noir 203 en T19 ?",
+    "answer": 8,
+    "explanation": "Le coup retire 2 pierre(s). Total : 6 + 2 = 8 prisonniers.",
+    "choices": [
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" },
+      { "value": 12, "label": "12" }
+    ]
+  },
+  {
+    "id": "yose-captures:s108:131",
+    "module": "yose-captures",
+    "gameId": "s108",
+    "before": 131,
+    "color": "W",
+    "anchors": [],
+    "candidate": 310,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 132 en G3 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : F3. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s108:131",
+    "module": "yose-prisoners",
+    "gameId": "s108",
+    "before": 131,
+    "color": "W",
+    "anchors": [],
+    "candidate": 310,
+    "input": "choice",
+    "question": "Blanc possède déjà 0 prisonnier(s). Quel est son total après Blanc 132 en G3 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s108:131",
+    "module": "yose-boundary",
+    "gameId": "s108",
+    "before": 131,
+    "color": "W",
+    "anchors": [310],
+    "candidate": 310,
+    "input": "choice",
+    "question": "Avant Blanc 132 en G3, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s108:134",
+    "module": "yose-value",
+    "gameId": "s108",
+    "before": 134,
+    "color": "B",
+    "anchors": [224],
+    "candidate": 224,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 135 en Q8 ?",
+    "answer": 0,
+    "explanation": "Avant : N 2 / B 3 points vides unicolores ; après : N 2 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -3, "label": "-3" },
+      { "value": -2, "label": "-2" },
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" }
+    ]
+  },
+  {
+    "id": "yose-count:s108:181",
+    "module": "yose-count",
+    "gameId": "s108",
+    "before": 181,
+    "color": "W",
+    "anchors": [275, 294, 313, 312],
+    "candidate": 275,
+    "input": "choice",
+    "question": "À ce stade : Noir 18 points vides unicolores + 2 prisonniers ; Blanc 11 + 5. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 4,
+    "explanation": "(18 + 2) − (11 + 5) = 4. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+6 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s123:133",
+    "module": "yose-boundary",
+    "gameId": "s123",
+    "before": 133,
+    "color": "W",
+    "anchors": [257, 238],
+    "candidate": 257,
+    "input": "choice",
+    "question": "Avant Blanc 134 en L6, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 3,
+    "explanation": "Cette zone contient 2 intersection(s), bordée(s) par les deux couleurs (neutre). Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s123:133",
+    "module": "yose-value",
+    "gameId": "s123",
+    "before": 133,
+    "color": "W",
+    "anchors": [257, 238],
+    "candidate": 257,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 134 en L6 ?",
+    "answer": 0,
+    "explanation": "Avant : N 1 / B 4 points vides unicolores ; après : N 1 / B 4. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-count:s123:170",
+    "module": "yose-count",
+    "gameId": "s123",
+    "before": 170,
+    "color": "B",
+    "anchors": [192],
+    "candidate": 192,
+    "input": "choice",
+    "question": "À ce stade : Noir 1 points vides unicolores + 0 prisonniers ; Blanc 9 + 6. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -14,
+    "explanation": "(1 + 0) − (9 + 6) = -14. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -16, "label": "-16" },
+      { "value": -15, "label": "-15" },
+      { "value": -14, "label": "-14" },
+      { "value": -13, "label": "-13" },
+      { "value": -12, "label": "-12" }
+    ]
+  },
+  {
+    "id": "yose-captures:s123:137",
+    "module": "yose-captures",
+    "gameId": "s123",
+    "before": 137,
+    "color": "W",
+    "anchors": [],
+    "candidate": 290,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 138 en F4 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : G4. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s123:137",
+    "module": "yose-prisoners",
+    "gameId": "s123",
+    "before": 137,
+    "color": "W",
+    "anchors": [],
+    "candidate": 290,
+    "input": "choice",
+    "question": "Blanc possède déjà 5 prisonnier(s). Quel est son total après Blanc 138 en F4 ?",
+    "answer": 6,
+    "explanation": "Le coup retire 1 pierre(s). Total : 5 + 1 = 6 prisonniers.",
+    "choices": [
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s138:183",
+    "module": "yose-boundary",
+    "gameId": "s138",
+    "before": 183,
+    "color": "W",
+    "anchors": [105],
+    "candidate": 105,
+    "input": "choice",
+    "question": "Avant Blanc 184 en L14, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 1,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par noire seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s138:246",
+    "module": "yose-value",
+    "gameId": "s138",
+    "before": 246,
+    "color": "B",
+    "anchors": [159],
+    "candidate": 159,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 247 en H11 ?",
+    "answer": -1,
+    "explanation": "Avant : N 14 / B 20 points vides unicolores ; après : N 13 / B 20. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de -1 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-count:s138:247",
+    "module": "yose-count",
+    "gameId": "s138",
+    "before": 247,
+    "color": "W",
+    "anchors": [253],
+    "candidate": 253,
+    "input": "choice",
+    "question": "À ce stade : Noir 13 points vides unicolores + 21 prisonniers ; Blanc 20 + 25. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": -11,
+    "explanation": "(13 + 21) − (20 + 25) = -11. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+8 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": -11, "label": "-11" },
+      { "value": -10, "label": "-10" },
+      { "value": -9, "label": "-9" },
+      { "value": -8, "label": "-8" },
+      { "value": -7, "label": "-7" }
+    ]
+  },
+  {
+    "id": "yose-captures:s138:241",
+    "module": "yose-captures",
+    "gameId": "s138",
+    "before": 241,
+    "color": "W",
+    "anchors": [],
+    "candidate": 257,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 242 en L6 retire-t-il ?",
+    "answer": 12,
+    "explanation": "Le kifu confirme 12 pierre(s) retirée(s) : L7, K7, M7, J7, L5, K5, M5, N5, N6, O6, P6, Q6. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" },
+      { "value": 12, "label": "12" },
+      { "value": 13, "label": "13" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s138:241",
+    "module": "yose-prisoners",
+    "gameId": "s138",
+    "before": 241,
+    "color": "W",
+    "anchors": [],
+    "candidate": 257,
+    "input": "choice",
+    "question": "Blanc possède déjà 13 prisonnier(s). Quel est son total après Blanc 242 en L6 ?",
+    "answer": 25,
+    "explanation": "Le coup retire 12 pierre(s). Total : 13 + 12 = 25 prisonniers.",
+    "choices": [
+      { "value": 22, "label": "22" },
+      { "value": 23, "label": "23" },
+      { "value": 24, "label": "24" },
+      { "value": 25, "label": "25" },
+      { "value": 26, "label": "26" }
+    ]
+  },
+  {
+    "id": "yose-captures:s168:163",
+    "module": "yose-captures",
+    "gameId": "s168",
+    "before": 163,
+    "color": "W",
+    "anchors": [],
+    "candidate": 168,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 164 en R11 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : R10. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s168:163",
+    "module": "yose-prisoners",
+    "gameId": "s168",
+    "before": 163,
+    "color": "W",
+    "anchors": [],
+    "candidate": 168,
+    "input": "choice",
+    "question": "Blanc possède déjà 0 prisonnier(s). Quel est son total après Blanc 164 en R11 ?",
+    "answer": 1,
+    "explanation": "Le coup retire 1 pierre(s). Total : 0 + 1 = 1 prisonniers.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-boundary:s168:174",
+    "module": "yose-boundary",
+    "gameId": "s168",
+    "before": 174,
+    "color": "B",
+    "anchors": [342],
+    "candidate": 342,
+    "input": "choice",
+    "question": "Avant Noir 175 en A1, quelle couleur borde la petite zone vide indiquée ?",
+    "answer": 2,
+    "explanation": "Cette zone contient 1 intersection(s), bordée(s) par blanche seulement. Une frontière mixte est géométriquement neutre et une frontière unicolore ne prouve pas la vie des chaînes.",
+    "choices": [
+      { "value": 1, "label": "Noire seulement" },
+      { "value": 2, "label": "Blanche seulement" },
+      { "value": 3, "label": "Les deux couleurs (neutre)" }
+    ]
+  },
+  {
+    "id": "yose-value:s168:172",
+    "module": "yose-value",
+    "gameId": "s168",
+    "before": 172,
+    "color": "B",
+    "anchors": [344, 345, 326],
+    "candidate": 344,
+    "input": "choice",
+    "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 173 en C1 ?",
+    "answer": 0,
+    "explanation": "Avant : N 5 / B 3 points vides unicolores ; après : N 5 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+    "choices": [
+      { "value": -1, "label": "-1" },
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" }
+    ]
+  },
+  {
+    "id": "yose-count:s168:233",
+    "module": "yose-count",
+    "gameId": "s168",
+    "before": 233,
+    "color": "W",
+    "anchors": [269, 268, 267, 266],
+    "candidate": 269,
+    "input": "choice",
+    "question": "À ce stade : Noir 12 points vides unicolores + 11 prisonniers ; Blanc 3 + 6. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+    "answer": 14,
+    "explanation": "(12 + 11) − (3 + 6) = 14. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+    "choices": [
+      { "value": 12, "label": "12" },
+      { "value": 13, "label": "13" },
+      { "value": 14, "label": "14" },
+      { "value": 15, "label": "15" },
+      { "value": 16, "label": "16" }
+    ]
+  },
+  {
+    "id": "yose-captures:s183:184",
+    "module": "yose-captures",
+    "gameId": "s183",
+    "before": 184,
+    "color": "W",
+    "anchors": [],
+    "candidate": 176,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 185 en F10 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : F9, G9. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s183:184",
+    "module": "yose-prisoners",
+    "gameId": "s183",
+    "before": 184,
+    "color": "W",
+    "anchors": [],
+    "candidate": 176,
+    "input": "choice",
+    "question": "Blanc possède déjà 1 prisonnier(s). Quel est son total après Blanc 185 en F10 ?",
+    "answer": 3,
+    "explanation": "Le coup retire 2 pierre(s). Total : 1 + 2 = 3 prisonniers.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-captures:s214:146",
+    "module": "yose-captures",
+    "gameId": "s214",
+    "before": 146,
+    "color": "B",
+    "anchors": [],
+    "candidate": 149,
+    "input": "choice",
+    "question": "Combien de pierres adverses Noir 147 en R12 retire-t-il ?",
+    "answer": 1,
+    "explanation": "Le kifu confirme 1 pierre(s) retirée(s) : R11. Elles deviennent des prisonniers de Noir.",
+    "choices": [
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s214:146",
+    "module": "yose-prisoners",
+    "gameId": "s214",
+    "before": 146,
+    "color": "B",
+    "anchors": [],
+    "candidate": 149,
+    "input": "choice",
+    "question": "Noir possède déjà 6 prisonnier(s). Quel est son total après Noir 147 en R12 ?",
+    "answer": 7,
+    "explanation": "Le coup retire 1 pierre(s). Total : 6 + 1 = 7 prisonniers.",
+    "choices": [
+      { "value": 7, "label": "7" },
+      { "value": 8, "label": "8" },
+      { "value": 9, "label": "9" },
+      { "value": 10, "label": "10" },
+      { "value": 11, "label": "11" }
+    ]
+  },
+  {
+    "id": "yose-captures:s229:265",
+    "module": "yose-captures",
+    "gameId": "s229",
+    "before": 265,
+    "color": "W",
+    "anchors": [],
+    "candidate": 21,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 266 en C18 retire-t-il ?",
+    "answer": 4,
+    "explanation": "Le kifu confirme 4 pierre(s) retirée(s) : B18, B17, A17, C17. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s229:265",
+    "module": "yose-prisoners",
+    "gameId": "s229",
+    "before": 265,
+    "color": "W",
+    "anchors": [],
+    "candidate": 21,
+    "input": "choice",
+    "question": "Blanc possède déjà 25 prisonnier(s). Quel est son total après Blanc 266 en C18 ?",
+    "answer": 29,
+    "explanation": "Le coup retire 4 pierre(s). Total : 25 + 4 = 29 prisonniers.",
+    "choices": [
+      { "value": 28, "label": "28" },
+      { "value": 29, "label": "29" },
+      { "value": 30, "label": "30" },
+      { "value": 31, "label": "31" },
+      { "value": 32, "label": "32" }
+    ]
+  },
+  {
+    "id": "yose-captures:s243:193",
+    "module": "yose-captures",
+    "gameId": "s243",
+    "before": 193,
+    "color": "W",
+    "anchors": [],
+    "candidate": 4,
+    "input": "choice",
+    "question": "Combien de pierres adverses Blanc 194 en E19 retire-t-il ?",
+    "answer": 2,
+    "explanation": "Le kifu confirme 2 pierre(s) retirée(s) : D19, C19. Elles deviennent des prisonniers de Blanc.",
+    "choices": [
+      { "value": 0, "label": "0" },
+      { "value": 1, "label": "1" },
+      { "value": 2, "label": "2" },
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" }
+    ]
+  },
+  {
+    "id": "yose-prisoners:s243:193",
+    "module": "yose-prisoners",
+    "gameId": "s243",
+    "before": 193,
+    "color": "W",
+    "anchors": [],
+    "candidate": 4,
+    "input": "choice",
+    "question": "Blanc possède déjà 3 prisonnier(s). Quel est son total après Blanc 194 en E19 ?",
+    "answer": 5,
+    "explanation": "Le coup retire 2 pierre(s). Total : 3 + 2 = 5 prisonniers.",
+    "choices": [
+      { "value": 3, "label": "3" },
+      { "value": 4, "label": "4" },
+      { "value": 5, "label": "5" },
+      { "value": 6, "label": "6" },
+      { "value": 7, "label": "7" }
+    ]
+  }
+]
