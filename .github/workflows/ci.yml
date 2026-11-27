@@ -16,7 +16,9 @@ jobs:
   verify:
     name: Données, types, lint, tests, audit, build, e2e
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # Le runner logiciel peut dépasser 25 min avec la suite WebGL complète.
+    # Conserver les délais et assertions de chaque scénario Playwright.
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -22,3 +22,9 @@
   Le test vérifie ces invariants et résout la leçon en touchant O13 directement.
   Trois passages Chromium tactiles sans réessai, plus contrôle visuel local ;
   Safari iOS sur appareil physique reste à vérifier.
+
+- En CI Linux le temps de rendu logiciel varie : la PR #25 (89d811c) a
+  validé 22 scénarios sans assertion en échec avant l’annulation à 25 minutes
+  (run 46054808874). Les 28 passent localement sans réessai en 3,8 minutes.
+  Le budget global du job est porté à 40 minutes ; aucun délai individuel,
+  scénario, assertion, contrôle de sécurité ou permission n’est modifié.
