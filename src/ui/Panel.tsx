@@ -5,6 +5,7 @@ import type { GameRecord } from '../domain/game.ts';
 import { CHAPTERS, chapterIndexOf, gamesOfChapter } from '../story/chapters.ts';
 import { formatDate, outcomeFor, prettyName } from '../story/format.ts';
 import { moveCount, useStore } from '../state/store.ts';
+import { progressSession } from '../state/sessionProgress.ts';
 import { mentorsOf, type Mentor } from '../story/mentors.ts';
 import { PracticePanel } from './PracticePanel.tsx';
 import { MentorStory } from './MentorStory.tsx';
@@ -330,7 +331,12 @@ function ImportGame() {
           if (file) void read(file);
         }}
       />
-      <p id="import-detail">Goban 19 × 19. Les parties sont conservées dans ce navigateur.</p>
+      <p id="import-detail">
+        Goban 19 × 19.{' '}
+        {progressSession().status === 'visitor'
+          ? 'Les parties importées sont conservées uniquement pendant cette session.'
+          : 'Les parties importées sont associées à votre compte.'}
+      </p>
       {error && <p role="alert">{error}</p>}
     </div>
   );

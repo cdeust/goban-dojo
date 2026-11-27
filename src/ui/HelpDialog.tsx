@@ -37,8 +37,9 @@ export function HelpDialog() {
       <h3>Vos parties</h3>
       <p>
         Importez un kifu SGF 19 × 19 depuis Parties. Le lecteur suit la première branche du fichier.
-        Les imports restent dans ce navigateur. Le mode Deviner permet de choisir Noir ou Blanc. Les
-        estimations utilisent le komi du kifu et l’évaluation de KataGo en règles japonaises.
+        Les imports restent en mémoire pour les visiteurs ou sont sauvegardés dans le compte
+        connecté. Le mode Deviner permet de choisir Noir ou Blanc. Les estimations utilisent le komi
+        du kifu et l’évaluation de KataGo en règles japonaises.
       </p>
 
       <h3>Sources du corpus de Shūsaku</h3>

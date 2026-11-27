@@ -414,6 +414,7 @@ export const useStore = create<State>((set, get) => ({
       if (!isDataset(json)) throw new Error('format de données inattendu');
       set({
         dataset: { ...json, games: [...json.games, ...localGames()] },
+        practice: loadPractice(),
         status: 'ready',
         gameIndex: 0,
         guessColor: json.games[0]?.shusaku ?? 'B',

@@ -1,6 +1,6 @@
 import { emptyPractice, MASTERY, MAX_CARDS, MAX_DAYS, type Practice } from '../domain/practice.ts';
 
-const KEY = 'goban-dojo:practice';
+import { progressSession } from './sessionProgress.ts';
 const NUMBERS = 'goban-dojo:numbers';
 const MAX_BYTES = 2_000_000;
 
@@ -48,7 +48,7 @@ export function decodePractice(raw: string | null): Practice {
 
 export function loadPractice(): Practice {
   try {
-    return decodePractice(window.localStorage.getItem(KEY));
+    return decodePractice(progressSession().read('practice'));
   } catch {
     return emptyPractice();
   }
@@ -56,8 +56,7 @@ export function loadPractice(): Practice {
 
 export function savePractice(profile: Practice): boolean {
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(profile));
-    return true;
+    return progressSession().write('practice', JSON.stringify(profile));
   } catch {
     return false;
   }

@@ -868,7 +868,7 @@ test('le pupitre d’estimation suit le goban sur portable et mobile', async ({ 
   }
 });
 
-test('import SGF local, bibliothèque persistante et entraînement avec le camp choisi', async ({
+test('import SGF visiteur, entraînement avec le camp choisi et oubli après rechargement', async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -903,31 +903,27 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await page.getByRole('button', { name: 'Montrer le coup' }).click();
   await expect(page.getByRole('status').filter({ hasText: 'Émile a joué' })).toContainText('D16');
 
-  await page.reload();
-  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Parties' })
+    .click();
   await expect(page.getByRole('heading', { name: 'Mes parties' })).toBeVisible();
   await page.getByRole('searchbox').fill('Émile');
-  // Choisir la partie dans la bibliothèque lance directement sa lecture.
+  // La partie importée reste consultable pendant la session, tesuji compris.
   await page.getByRole('button', { name: /Alice — Émile/ }).click();
-  const reflection = page.getByRole('region', { name: 'Blanc · avant le coup 2' });
-  await expect(reflection).toBeVisible({ timeout: 30_000 });
-  const cursor = page.locator('input[aria-label="Coup"]');
-  await expect(cursor).toHaveValue('1');
-  // La lecture automatique reprend après le clic. Observer le coup réellement annoncé,
-  // même si le navigateur a déjà avancé au moment de l'assertion.
-  await page.evaluate(() => {
-    const live = document.querySelector('[data-testid="live"]')!;
-    const observer = new MutationObserver(() => {
-      if (live.textContent.includes('Coup 2 sur 9 : Blanc D16')) {
-        document.body.dataset.playedKifuMove = 'true';
-        observer.disconnect();
-      }
-    });
-    observer.observe(live, { childList: true, characterData: true, subtree: true });
-  });
-  await reflection.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
-  await expect(page.locator('body')).toHaveAttribute('data-played-kifu-move', 'true');
-  await expect(reflection).toBeHidden();
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Réflexion' })
+    .click();
+  const reflection = page.getByRole('region', { name: 'Temps de réflexion' });
+  await expect(reflection).toContainText('Très bon coup');
+  await expect(reflection).toContainText('Position après le coup 1');
+  await reflection.getByRole('button', { name: 'Jouer le premier coup' }).click();
+  await expect(reflection).toContainText('Coup 2 · Blanc D16');
+  await page.reload();
+  await page.getByRole('button', { name: 'Importer un SGF', exact: true }).click();
+  await page.getByRole('searchbox').fill('Émile');
+  await expect(page.getByRole('button', { name: /Alice — Émile/ })).toHaveCount(0);
 });
 
 test('Leela Zero lit une partie importée, projette ses coups et rend la main au kifu', async ({
@@ -1087,7 +1083,7 @@ test('le récit du mentor suit les parties importées et ne consulte une biograp
   expect(requested).toEqual(['Go Seigen']);
 });
 
-test('le carnet conserve une position révélée et la rouvre au bon coup le lendemain', async ({
+test('le carnet visiteur révise durant la session et ne conserve pas son activité après rechargement', async ({
   page,
 }) => {
   const w = watch(page);
@@ -1096,7 +1092,7 @@ test('le carnet conserve une position révélée et la rouvre au bon coup le len
   await enter(page);
   const nav = page.getByRole('navigation', { name: 'Volets' });
   await nav.getByRole('button', { name: 'Carnet' }).click();
-  let notebook = page.getByRole('complementary', { name: 'Carnet' });
+  const notebook = page.getByRole('complementary', { name: 'Carnet' });
   await expect(notebook.getByRole('heading', { name: 'Carnet du dojo' })).toBeVisible();
   await notebook.getByRole('button', { name: 'Deviner depuis la position affichée' }).click();
   await page.getByRole('button', { name: 'Montrer le coup' }).click();
@@ -1106,9 +1102,7 @@ test('le carnet conserve une position révélée et la rouvre au bon coup le len
   await expect(notebook).toContainText('Aucune révision due');
 
   await page.clock.setFixedTime(new Date(2026, 10, 26, 12));
-  await page.reload();
-  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
-  notebook = page.getByRole('complementary', { name: 'Carnet' });
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
   await expect(notebook).toContainText('1 position à reprendre');
   await expect(notebook).toContainText('Coup 1');
   await notebook.getByRole('button', { name: 'Réviser le prochain coup' }).click();
@@ -1130,6 +1124,9 @@ test('le carnet conserve une position révélée et la rouvre au bon coup le len
   await expect(notebook).toContainText('3 XP');
   await expect(notebook).toContainText('2 / 7 jours d’entraînement');
   await expect(notebook).toContainText('Aucune révision due');
+  await page.reload();
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await expect(notebook).toContainText('0 XP');
   expect(w.problems).toEqual([]);
   expect(w.foreign).toEqual([]);
 });
@@ -1267,14 +1264,14 @@ test.describe('leçon sur téléphone tactile', () => {
   });
 });
 
-test('parcours individualisé : la prochaine leçon et les compétences suivent le carnet sauvegardé', async ({
+test('parcours individualisé visiteur : compétences dans la session, oubli après actualisation', async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.clock.setFixedTime(new Date(2026, 10, 27, 12));
   await page.goto('/');
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
-  let curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  const curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
   await expect(curriculum).toContainText('0 / 4 exercices');
   await expect(curriculum).toContainText('Niveau 1');
   await expect(curriculum).toContainText('Niveau 2');
@@ -1287,9 +1284,10 @@ test('parcours individualisé : la prochaine leçon et les compétences suivent 
   await answer.press('Enter');
   await expect(first).toContainText('Exact, du premier coup.');
   await first.getByRole('button', { name: 'Terminer la leçon' }).click();
-  await page.reload();
-  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
-  curriculum = page.getByRole('region', { name: 'Parcours personnalisé' });
+  await page
+    .getByRole('navigation', { name: 'Volets' })
+    .getByRole('button', { name: 'Carnet' })
+    .click();
   await expect(curriculum).toContainText('1 / 4 exercices');
   await expect(curriculum).toContainText('Libertés et capture · 1 / 2');
   await expect(curriculum).toContainText('Connexion et sauvetage · 0 / 2');
@@ -1302,6 +1300,7 @@ test('parcours individualisé : la prochaine leçon et les compétences suivent 
   await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
   await page.reload();
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await expect(curriculum).toContainText('0 / 4 exercices');
   await expect(curriculum).toContainText('À travailler maintenant : La dernière liberté');
 });
 
@@ -1312,9 +1311,8 @@ test.describe('école de go sur mobile', () => {
     hasTouch: true,
     acceptDownloads: true,
   });
-  test('652 exercices réels, capture en trois coups et progression portable', async ({
+  test('652 exercices réels, capture en trois coups et progression visiteur éphémère', async ({
     page,
-    browser,
   }) => {
     test.slow();
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1365,41 +1363,12 @@ test.describe('école de go sur mobile', () => {
     await expect(grid.getByRole('button', { name: /H6, noir, coup 155/ })).toBeVisible();
     await page.getByRole('button', { name: '← Programme' }).click();
     await expect(page.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Exporter la progression' })).toBeDisabled();
+    await expect(page.getByLabel('Restaurer une sauvegarde de l’école')).toBeDisabled();
     await page.reload();
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText('2 / 652', { exact: false }).first()).toBeVisible();
-    const downloaded = page.waitForEvent('download');
-    await page.getByRole('button', { name: 'Exporter la progression' }).click();
-    const backup = await downloaded;
-    const file = await backup.path();
-    if (!file) throw new Error('Sauvegarde absente');
-    const fresh = await browser.newContext({
-      baseURL: 'http://127.0.0.1:4173',
-      viewport: { width: 393, height: 690 },
-      isMobile: true,
-      hasTouch: true,
-    });
-    try {
-      const other = await fresh.newPage();
-      await other.emulateMedia({ reducedMotion: 'reduce' });
-      await other.goto('/');
-      await other.getByRole('button', { name: 'Entrer au dojo' }).click();
-      await other.getByRole('button', { name: 'Entrer dans l’école' }).click();
-      await expect(other.getByText('0 / 652', { exact: false }).first()).toBeVisible();
-      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles(file);
-      await other.getByRole('button', { name: 'Remplacer la progression' }).click();
-      await expect(other.getByText('2 / 652', { exact: false }).first()).toBeVisible();
-      await other.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles({
-        name: 'invalide.json',
-        mimeType: 'application/json',
-        buffer: Buffer.from('{"version":2}'),
-      });
-      await expect(other.getByRole('status')).toContainText('Votre progression n’a pas changé');
-      await expect(other.getByText('2 / 652', { exact: false }).first()).toBeVisible();
-    } finally {
-      await fresh.close();
-    }
+    await expect(page.getByText('0 / 652', { exact: false }).first()).toBeVisible();
   });
 });
 
@@ -1465,7 +1434,9 @@ test.describe('cursus avancé et application', () => {
     expect(w.problems).toEqual([]);
     expect(w.foreign).toEqual([]);
   });
-  test('partie complète Leela Zero, reprise locale et véritable revue KataGo', async ({ page }) => {
+  test('partie visiteur Leela Zero, reprise de session et véritable revue KataGo', async ({
+    page,
+  }) => {
     test.slow();
     const w = watch(page);
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -1481,9 +1452,7 @@ test.describe('cursus avancé et application', () => {
       .getByRole('button', { name: 'D4, vide', exact: true })
       .tap();
     await expect(training.getByRole('status')).toContainText('2 coups', { timeout: 90_000 });
-    await page.reload();
-    await page.getByRole('button', { name: 'Entrer au dojo' }).click();
-    await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await training.getByRole('button', { name: 'Retour à l’école' }).click();
     await page.getByRole('button', { name: 'Jouer une partie complète' }).click();
     await expect(training.getByRole('status')).toContainText('2 coups');
     await expect(

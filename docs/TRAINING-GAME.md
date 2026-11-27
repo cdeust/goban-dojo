@@ -15,7 +15,7 @@ Leela Zero choisit un coup issu de sa recherche PUCT à 8, 32 ou 64 visites (32 
 
 ## Stockage
 
-Le kifu, le résultat et les jugements obtenus sont enregistrés localement et validés à la relecture. La sauvegarde après chaque coup et jugement permet de reprendre une partie ou une revue sans recommencer. L'historique local conserve les parties terminées. Pas de compte, backend, synchronisation multi-appareils ni classement déduit artificiellement.
+Le kifu, le résultat et les jugements obtenus sont validés à la relecture. Pour un compte Auth, les modifications sont transmises à Supabase après chaque coup et jugement ; une partie ou une revue peut ainsi être reprise sur un autre appareil. En mode visiteur, ces données restent en mémoire pendant la session et disparaissent au rechargement. Aucun classement n'est déduit artificiellement.
 
 ## Vérification
 

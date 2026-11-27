@@ -4,7 +4,7 @@ import {
   type SchoolRecord,
 } from '../domain/schoolProgress.ts';
 import { MASTERY } from '../domain/practice.ts';
-const KEY = 'goban-dojo:school:v1';
+import { progressSession } from './sessionProgress.ts';
 const int = (value: unknown, min: number, max: number): value is number =>
   typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max;
 export function decodeSchoolProgress(raw: string): SchoolProgress | null {
@@ -38,7 +38,7 @@ export function decodeSchoolProgress(raw: string): SchoolProgress | null {
 }
 export function loadSchoolProgress(): SchoolProgress {
   try {
-    const raw = window.localStorage.getItem(KEY);
+    const raw = progressSession().read('school');
     return raw ? (decodeSchoolProgress(raw) ?? emptySchoolProgress()) : emptySchoolProgress();
   } catch {
     return emptySchoolProgress();
@@ -46,8 +46,7 @@ export function loadSchoolProgress(): SchoolProgress {
 }
 export function saveSchoolProgress(progress: SchoolProgress): boolean {
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(progress));
-    return true;
+    return progressSession().write('school', JSON.stringify(progress));
   } catch {
     return false;
   }

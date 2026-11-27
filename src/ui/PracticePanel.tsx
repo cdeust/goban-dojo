@@ -1,3 +1,4 @@
+import { progressSession } from '../state/sessionProgress.ts';
 import { useEffect, useState } from 'react';
 import { PASS } from '../domain/board.ts';
 import {
@@ -255,14 +256,11 @@ export function PracticePanel() {
         </ul>
       </section>
       <p className="practice__lead">
-        Carnet enregistré dans ce navigateur, sans compte ni synchronisation.
+        {progressSession().status === 'visitor'
+          ? 'Mode visiteur : carnet conservé uniquement pendant cette session.'
+          : 'Carnet associé à votre compte.'}
       </p>
-      {!saved && (
-        <p role="alert">
-          Le navigateur n’a pas enregistré ce carnet. La progression reste visible jusqu’à la
-          fermeture de la page.
-        </p>
-      )}
+      {!saved && <p role="alert">Ce carnet n’a pas pu être enregistré dans la session.</p>}
     </div>
   );
 }

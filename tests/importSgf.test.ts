@@ -1,9 +1,11 @@
 import { dateToTime, formatDate } from '../src/story/format.ts';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { importSgf } from '../src/domain/importSgf.ts';
 import { decodeMoves, decodePoints } from '../src/domain/game.ts';
 import { pointToHuman } from '../src/domain/board.ts';
 import { localGames, saveGame } from '../src/state/localGames.ts';
+import { AccountPersistence } from '../src/state/accountPersistence.ts';
+import { setProgressSession } from '../src/state/sessionProgress.ts';
 import { reflectionsOf } from '../src/state/reflections.ts';
 import { reflectionMoves } from '../src/story/reflections.ts';
 
@@ -135,19 +137,15 @@ describe('import SGF', () => {
 });
 
 describe('réouverture des imports SGF', () => {
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => setProgressSession(AccountPersistence.visitor()));
 
   it('relit les anciens SGF et conserve le tesuji après enregistrement ou nouvel import', () => {
-    const storage = new Map([
-      [
-        'goban.imports.v1',
-        JSON.stringify([{ id: 'local-ancien', name: 'Simple.sgf', text: '(;B[dd])' }]),
-      ],
-    ]);
-    vi.stubGlobal('localStorage', {
-      getItem: (key: string) => storage.get(key) ?? null,
-      setItem: (key: string, value: string) => storage.set(key, value),
-    });
+    const session = AccountPersistence.visitor();
+    session.write(
+      'imports',
+      JSON.stringify([{ id: 'local-ancien', name: 'Simple.sgf', text: '(;B[dd])' }]),
+    );
+    setProgressSession(session);
 
     const text = '(;FF[4]GM[1]SZ[19];B[pd];W[dd];B[qp]TE[2])';
     const saved = saveGame(text, 'Trois coups.sgf');
