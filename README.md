@@ -5,7 +5,7 @@ Apprenez le go en rejouant une partie sur un goban en 3D. Importez vos kifu au f
 Leela Zero est une reproduction ouverte de la méthode d’AlphaGo Zero. Le réseau embarqué a été entraîné par le projet Leela Zero avec ses propres parties d’autojeu. [Origine et vérification des poids](docs/LEELA-ZERO.md)
 
 L’accueil ouvre le Carnet : leçon, entraînement assisté et révisions sont accessibles directement.
-Le mode « Récit » reste disponible dans le menu autour d’Hon’inbō Shūsaku (1829–1862) et ses **469 parties**, de celle du 14 décembre 1839, à l’âge de dix ans, à sa dernière partie, inachevée, du 19 juin 1862. Après un import, ce mode permet aussi de choisir un joueur des SGF pour retrouver ses parties dans l’ordre des dates. Vous pouvez y rechercher sa biographie sur Wikipédia en français ou en anglais, puis choisir l’article à conserver. Seul le nom saisi est transmis à Wikipédia quand vous lancez la recherche. Les SGF restent dans votre navigateur.
+Le mode « Récit » reste disponible dans le menu autour d’Hon’inbō Shūsaku (1829–1862) et ses **469 parties**, de celle du 14 décembre 1839, à l’âge de dix ans, à sa dernière partie, inachevée, du 19 juin 1862. Après un import, ce mode permet aussi de choisir un joueur des SGF pour retrouver ses parties dans l’ordre des dates. Vous pouvez y rechercher sa biographie sur Wikipédia en français ou en anglais, puis choisir l’article à conserver. Seul le nom saisi est transmis à Wikipédia quand vous lancez la recherche. Les SGF importés restent en mémoire en mode visiteur ; ils sont associés au compte Supabase connecté sinon.
 
 [Ouvrir Goban Dojo](https://cdeust.github.io/goban-dojo/)
 
@@ -53,7 +53,7 @@ Le mode « Récit » reste disponible dans le menu autour d’Hon’inbō Shūsa
   réponse révélée le ramène à un jour. Proposez un coup sur le goban ou au clavier (coordonnée
   comme D4). Le carnet suit les jours d’entraînement et les paliers
   d’XP sans récompenser la répétition immédiate d’un même coup. Ces paliers ne sont pas des grades
-  de go. Le carnet et le réglage des numéros restent dans ce navigateur.
+  de go. Le réglage des numéros reste dans ce navigateur ; le carnet est synchronisé avec le compte authentifié (ou reste en mémoire pendant une session visiteur).
 - **Explorer une autre suite** (mode « Explorer ») : à partir de n’importe quelle position, posez
   vos propres coups, captures et ko compris, puis revenez à la partie. Sur demande, un réseau de
   neurones de KataGo, exécuté dans le navigateur, juge chaque coup — bon, discutable ou erreur
@@ -157,3 +157,7 @@ l’Institut japonais de go et de Wikipédia (CC BY-SA 4.0), cités. Les kifus s
 de deux collections qui ne déclarent pas de licence — voir [docs/DONNEES.md](docs/DONNEES.md).
 La police Shippori Mincho est sous SIL OFL 1.1. Le moteur physique Rapier est sous Apache-2.0. Le réseau de neurones et le code porté de KataGo
 sont décrits dans [public/engine/LICENCE.txt](public/engine/LICENCE.txt).
+
+## Comptes et sauvegarde
+
+Voir [Comptes Supabase](docs/ACCOUNTS.md) pour la session visiteur, la migration des anciennes sauvegardes, les paramètres de configuration et les tests locaux.

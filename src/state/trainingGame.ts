@@ -16,7 +16,7 @@ import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { judgeMoves, type Judgement } from '../engine/judge.ts';
 import { analyzeZero } from '../engine/zeroClient.ts';
 
-const KEY = 'goban-dojo.training-game.v1';
+import { progressSession } from './sessionProgress.ts';
 export interface TrainingReview {
   number: number;
   judgement: Judgement;
@@ -105,25 +105,23 @@ export function decodeTrainingSession(raw: string): TrainingSession | null {
 }
 export function loadTrainingSession(): TrainingSession | null {
   try {
-    return decodeTrainingSession(localStorage.getItem(KEY) ?? '');
+    return decodeTrainingSession(progressSession().read('training') ?? '');
   } catch {
     return null;
   }
 }
 export function saveTrainingSession(session: TrainingSession): boolean {
   try {
-    localStorage.setItem(KEY, JSON.stringify(session));
-    return true;
+    return progressSession().write('training', JSON.stringify(session));
   } catch {
     return false;
   }
 }
-const ARCHIVE_KEY = 'goban-dojo.training-history.v1';
 
 /** Local archive preserving full kifu and accumulated model review across matches. */
 export function loadTrainingHistory(): TrainingSession[] {
   try {
-    const data: unknown = JSON.parse(localStorage.getItem(ARCHIVE_KEY) ?? '[]');
+    const data: unknown = JSON.parse(progressSession().read('history') ?? '[]');
     if (!Array.isArray(data)) return [];
     return data.flatMap((entry) => {
       const session = decodeTrainingSession(JSON.stringify(entry));
@@ -139,8 +137,7 @@ export function archiveTrainingSession(session: TrainingSession): boolean {
     const history = loadTrainingHistory().filter(
       (entry) => entry.game.createdAt !== session.game.createdAt,
     );
-    localStorage.setItem(ARCHIVE_KEY, JSON.stringify([session, ...history]));
-    return true;
+    return progressSession().write('history', JSON.stringify([session, ...history]));
   } catch {
     return false;
   }

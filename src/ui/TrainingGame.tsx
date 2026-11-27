@@ -198,7 +198,7 @@ export function TrainingGame({
               ? ` (chargement ${Math.round(zero.progress * 100)} %)`
               : ''}
           </p>
-          {!saved && <p role="alert">Impossible de sauvegarder localement cette partie.</p>}
+          {!saved && <p role="alert">Impossible d’enregistrer cette partie dans la session.</p>}
           <div
             className="school-board"
             role="group"

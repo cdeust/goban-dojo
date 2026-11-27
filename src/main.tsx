@@ -7,13 +7,13 @@ import '@fontsource/shippori-mincho/latin-600.css';
 import '@fontsource/shippori-mincho/latin-ext-600.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App.tsx';
+import { AccountGate } from './ui/AccountGate.tsx';
 import './styles.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('élément #root introuvable');
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <AccountGate />
   </StrictMode>,
 );

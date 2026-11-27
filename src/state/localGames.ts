@@ -1,7 +1,7 @@
 import { importSgf } from '../domain/importSgf.ts';
 import type { ImportedGameRecord } from '../domain/game.ts';
 
-const STORAGE_KEY = 'goban.imports.v1';
+import { progressSession } from './sessionProgress.ts';
 
 interface LocalKifu {
   id: string;
@@ -10,7 +10,7 @@ interface LocalKifu {
 }
 
 function savedKifus(): LocalKifu[] {
-  const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
+  const saved: unknown = JSON.parse(progressSession().read('imports') ?? '[]');
   if (!Array.isArray(saved)) return [];
   return saved.filter(
     (item: LocalKifu) =>
@@ -41,6 +41,7 @@ export function saveGame(text: string, name: string): ImportedGameRecord {
   if (duplicate) return importSgf(text, duplicate.id, duplicate.name);
   const id = 'local-' + crypto.randomUUID();
   const game = importSgf(text, id, name);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...saved, { id, name, text }]));
+  if (!progressSession().write('imports', JSON.stringify([...saved, { id, name, text }])))
+    throw new Error('Impossible d’ajouter le kifu.');
   return game;
 }

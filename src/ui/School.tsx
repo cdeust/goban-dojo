@@ -1,3 +1,5 @@
+import { AccountControls } from './AccountControls.tsx';
+import { progressSession } from '../state/sessionProgress.ts';
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
 import { decodeMoves, type GameRecord, type Move } from '../domain/game.ts';
@@ -370,6 +372,7 @@ export function School() {
     () => ALL_EXERCISES.filter((e) => games?.some((g) => g.id === e.gameId)),
     [games],
   );
+  const visitor = progressSession().status === 'visitor';
   const [progress, setProgress] = useState(loadSchoolProgress);
   const [active, setActive] = useState<string | null>(null);
   const [training, setTraining] = useState(false);
@@ -446,9 +449,12 @@ export function School() {
           </p>
           <h1>École de go</h1>
         </div>
-        <button className="chip" type="button" onClick={() => close(false)}>
-          Retour au dojo
-        </button>
+        <div className="school-account-actions">
+          <button className="chip" type="button" onClick={() => close(false)}>
+            Retour au dojo
+          </button>
+          <AccountControls />
+        </div>
       </header>
       {counting ? (
         <JapaneseCountWorkshop
@@ -640,17 +646,21 @@ export function School() {
           <section className="school-backup">
             <h2>Votre progression</h2>
             <p>
-              Enregistrée dans ce navigateur, indépendamment de l’XP du Carnet. Le fichier permet de
-              retrouver ce parcours sur un autre navigateur. Il n’inclut ni vos SGF importés, ni le
-              Carnet de kifu, ni vos parties d’entraînement (conservées localement dans leur
-              historique).
+              {visitor
+                ? 'Mode visiteur : vos résultats ne sont pas conservés après la fermeture de cette session. Connectez-vous pour sauvegarder votre progression.'
+                : 'Votre progression de l’école est synchronisée avec votre compte. Vous pouvez aussi télécharger une copie.'}
             </p>
-            <button type="button" className="chip" onClick={download}>
+            <button type="button" className="chip" disabled={visitor} onClick={download}>
               Exporter la progression
             </button>
             <label className="school-file">
               Restaurer une sauvegarde de l’école
-              <input type="file" accept="application/json,.json" onChange={importFile} />
+              <input
+                type="file"
+                accept="application/json,.json"
+                disabled={visitor}
+                onChange={importFile}
+              />
             </label>
             {restore && (
               <div role="group" aria-label="Confirmer la restauration">
@@ -680,7 +690,7 @@ export function School() {
       )}
       {!saved && (
         <p role="alert" className="school-save-error">
-          Le navigateur n’a pas pu enregistrer votre progression. Exportez-la avant de quitter.
+          La progression n’a pas pu être enregistrée dans cette session.
         </p>
       )}
     </main>

@@ -1,3 +1,5 @@
+import { AccountControls } from './AccountControls.tsx';
+import { progressSession } from '../state/sessionProgress.ts';
 import { useEffect, useState } from 'react';
 import { PASS } from '../domain/board.ts';
 import {
@@ -66,6 +68,7 @@ export function PracticePanel() {
         <span lang="ja">稽古</span> · Entraînement
       </p>
       <h2 className="chapter__title">Carnet du dojo</h2>
+      <AccountControls />
       <p className="practice__lead">
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
@@ -75,7 +78,11 @@ export function PracticePanel() {
         <h3>Apprendre, pratiquer, progresser</h3>
         <p>
           Des fondations au yose : vie et mort, tesuji, stratégie et parties contre Leela Zero, à
-          partir de vrais kifus. Progression sauvegardée et révisions adaptées.
+          partir de vrais kifus.{' '}
+          {progressSession().status === 'visitor'
+            ? 'Progression pendant cette session'
+            : 'Progression sauvegardée'}{' '}
+          et révisions adaptées.
         </p>
         <button
           type="button"
@@ -255,14 +262,11 @@ export function PracticePanel() {
         </ul>
       </section>
       <p className="practice__lead">
-        Carnet enregistré dans ce navigateur, sans compte ni synchronisation.
+        {progressSession().status === 'visitor'
+          ? 'Mode visiteur : carnet conservé uniquement pendant cette session.'
+          : 'Carnet associé à votre compte.'}
       </p>
-      {!saved && (
-        <p role="alert">
-          Le navigateur n’a pas enregistré ce carnet. La progression reste visible jusqu’à la
-          fermeture de la page.
-        </p>
-      )}
+      {!saved && <p role="alert">Ce carnet n’a pas pu être enregistré dans la session.</p>}
     </div>
   );
 }

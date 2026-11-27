@@ -13,7 +13,7 @@ L’XP est un indicateur d’activité, pas un rang kyu/dan. La difficulté des 
 | Libertés et capture | La dernière liberté (s001/84) | Capturer un groupe (s009/32)   |
 | Connexion           | Relier pour sauver (s001/81)  | Réunir trois groupes (s002/22) |
 
-L'ordre recommandé privilégie les rappels à échéance, puis les exercices non commencés du niveau le plus accessible. Tous restent librement accessibles. Les statuts reposent sur les cartes enregistrées et non sur un classement arbitraire, sans compte ni réseau. La première leçon historique reste accessible directement.
+L'ordre recommandé privilégie les rappels à échéance, puis les exercices non commencés du niveau le plus accessible. Tous restent librement accessibles. Les statuts reposent sur les cartes enregistrées et non sur un classement arbitraire, avec une progression de session visiteur ou synchronisée par compte. La première leçon historique reste accessible directement.
 
 **Critères de vérification :** positions vérifiées avec les règles du domaine ; deux niveaux visibles ; retour au lendemain déclenche le rappel dû ; rechargement d’un profil ayant réussi un exercice présente un progrès de 1/4 et une recommandation différente d’un profil vierge. Ne pas confondre cet indicateur avec la rétention d’une cohorte ou le rang officiel.
 
