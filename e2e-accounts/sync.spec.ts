@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 // These credentials belong only to the disposable local Supabase test stack.
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.SUPABASE_LOCAL_SECRET_KEY;
-if (!url || new URL(url).origin !== 'http://127.0.0.1:54321' || !key) {
+if (!url || new URL(url).origin !== 'http://127.0.0.1:55421' || !key) {
   throw new Error('Le serveur Auth local isolé est requis.');
 }
 const admin = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });

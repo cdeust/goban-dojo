@@ -10,7 +10,7 @@ const url = config.API_URL;
 const publicKey = config.PUBLISHABLE_KEY;
 const secret = config.SECRET_KEY;
 if (
-  url !== 'http://127.0.0.1:54321' ||
+  url !== 'http://127.0.0.1:55421' ||
   typeof publicKey !== 'string' ||
   !publicKey.startsWith('sb_publishable_') ||
   typeof secret !== 'string' ||
