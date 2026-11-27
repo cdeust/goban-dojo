@@ -72,6 +72,9 @@ function GuessCoordinate() {
 function Guess() {
   const game = useCurrentGame();
   const move = useStore((s) => s.move);
+  const lesson = useStore((s) => s.lesson);
+  const compareLesson = useStore((s) => s.compareLesson);
+  const endLesson = useStore((s) => s.setMode);
   const guess = useStore((s) => s.guess);
   const hint = useStore((s) => s.hint);
   const reveal = useStore((s) => s.reveal);
@@ -84,6 +87,7 @@ function Guess() {
   const player = (side: 'B' | 'W') => prettyName(side === 'B' ? game.black : game.white);
   const name = color === game.shusaku ? 'Shūsaku' : player(color);
   const mine = next?.color === color && next.point !== PASS;
+  const solved = !!lesson && move === lesson.before + 1;
   const max = guess.asked * GUESS_POINTS[0];
 
   let feedback: string | null = null;
@@ -102,29 +106,45 @@ function Guess() {
   return (
     <>
       <h2 className="mode__title" id="guess-title">
-        Jouer comme {name}
+        {lesson ? lesson.title : 'Jouer comme ' + name}
       </h2>
-      <label className="study__filter">
-        Camp à deviner
-        <select
-          value={color}
-          onChange={(event) => chooseColor(event.currentTarget.value === 'B' ? 'B' : 'W')}
-        >
-          <option value="B">Noir · {player('B')}</option>
-          <option value="W">Blanc · {player('W')}</option>
-        </select>
-      </label>
+      {!lesson && (
+        <label className="study__filter">
+          Camp à deviner
+          <select
+            value={color}
+            onChange={(event) => chooseColor(event.currentTarget.value === 'B' ? 'B' : 'W')}
+          >
+            <option value="B">Noir · {player('B')}</option>
+            <option value="W">Blanc · {player('W')}</option>
+          </select>
+        </label>
+      )}
       <p className="mode__lead">
-        {finished
-          ? 'La partie est terminée.'
-          : mine
-            ? `À vous : où ${name} (${colorName(color).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban ou saisissez une coordonnée.`
-            : `${player(opposite(color))} répond…`}
+        {lesson
+          ? solved
+            ? lesson.solution
+            : lesson.prompt
+          : finished
+            ? 'La partie est terminée.'
+            : mine
+              ? `À vous : où ${name} (${colorName(color).toLowerCase()}) joue-t-il le coup ${move + 1} ? Cliquez sur le goban ou saisissez une coordonnée.`
+              : `${player(opposite(color))} répond…`}
       </p>
       <p className="mode__feedback" role="status" aria-live="polite">
         {feedback}
       </p>
-      {mine && (
+      {solved && (
+        <div className="mode__actions">
+          <button type="button" className="chip chip--accent" onClick={compareLesson}>
+            Comparer les suites avec KataGo
+          </button>
+          <button type="button" className="chip" onClick={() => endLesson('lecture')}>
+            Terminer la leçon
+          </button>
+        </div>
+      )}
+      {mine && !solved && (
         <div className="mode__actions">
           <button type="button" className="chip" onClick={hint}>
             Un indice
@@ -134,7 +154,7 @@ function Guess() {
           </button>
         </div>
       )}
-      {mine && <GuessCoordinate key={game.id + ':' + move} />}
+      {mine && !solved && <GuessCoordinate key={game.id + ':' + move} />}
       <dl className="mode__score">
         <div>
           <dt>Trouvés</dt>

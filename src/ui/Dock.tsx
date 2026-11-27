@@ -296,10 +296,10 @@ function Transport() {
               type="button"
               className="seg"
               aria-pressed={effects}
-              title="Marques d’attaque, de piège et de connexion ; lignes de force à l’impact"
+              title="Halos d’atari, de capture, de connexion et de shicho"
               onClick={() => toggle('effects')}
             >
-              Effets
+              Halos
             </button>
             <button
               type="button"

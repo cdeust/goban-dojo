@@ -4,7 +4,8 @@ Apprenez le go en rejouant une partie sur un goban en 3D. Importez vos kifu au f
 
 Leela Zero est une reproduction ouverte de la méthode d’AlphaGo Zero. Le réseau embarqué a été entraîné par le projet Leela Zero avec ses propres parties d’autojeu. [Origine et vérification des poids](docs/LEELA-ZERO.md)
 
-Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **469 parties**, de celle du 14 décembre 1839, à l’âge de dix ans, à sa dernière partie, inachevée, du 19 juin 1862. Après un import, ce mode permet aussi de choisir un joueur des SGF pour retrouver ses parties dans l’ordre des dates. Vous pouvez y rechercher sa biographie sur Wikipédia en français ou en anglais, puis choisir l’article à conserver. Seul le nom saisi est transmis à Wikipédia quand vous lancez la recherche. Les SGF restent dans votre navigateur.
+L’accueil ouvre le Carnet : leçon, entraînement assisté et révisions sont accessibles directement.
+Le mode « Récit » reste disponible dans le menu autour d’Hon’inbō Shūsaku (1829–1862) et ses **469 parties**, de celle du 14 décembre 1839, à l’âge de dix ans, à sa dernière partie, inachevée, du 19 juin 1862. Après un import, ce mode permet aussi de choisir un joueur des SGF pour retrouver ses parties dans l’ordre des dates. Vous pouvez y rechercher sa biographie sur Wikipédia en français ou en anglais, puis choisir l’article à conserver. Seul le nom saisi est transmis à Wikipédia quand vous lancez la recherche. Les SGF restent dans votre navigateur.
 
 [Ouvrir Goban Dojo](https://cdeust.github.io/goban-dojo/)
 
@@ -43,6 +44,10 @@ Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **4
 - **Jouer comme Shūsaku** (mode « Deviner ») : la partie s’arrête à chacun de ses coups et vous
   demande où il joue. Un essai manqué donne la distance et une zone qui se resserre ; 3 points du
   premier coup, 2 après un indice, 1 après deux, puis le coup est montré.
+- **Première leçon guidée, « La dernière liberté »** : au coup 84 d’un kifu de 1839, repérez
+  la dernière liberté d’une pierre, jouez vous-même et voyez la capture. Comparez ensuite les
+  suites avec KataGo ou explorez avec Leela Zero. La règle de capture est certaine ; les
+  évaluations de la partie entière sont des estimations, pas des solutions imposées.
 - **Carnet du dojo** : les positions rencontrées dans « Deviner » reviennent à intervalles
   espacés. Un rappel exact allonge l’intervalle (1, 3, 7, 14 puis 30 jours), un indice ou une
   réponse révélée le ramène à un jour. Proposez un coup sur le goban ou au clavier (coordonnée
@@ -56,11 +61,9 @@ Le mode « Récit » s’ouvre sur Hon’inbō Shūsaku (1829–1862) et ses **4
   que vaut ce jugement.
 - **L’ouverture de Shūsaku, repérée dans les kifus** : les 68 parties où elle est jouée sont
   signalées, avec une légende aux coups 5 et du kosumi ; le récit en donne le bilan chiffré.
-- **Des marques qui disent ce que fait un coup** : halo rouge sous les pierres en atari
-  (attaque), cage tournante autour des pierres prises dans un shicho qui fonctionne (piège), halo
-  bleu sous le coup qui relie deux groupes (connexion). Le coup lui-même frappe avec un éclat et
-  des lignes de force ; au coup 127 de la partie de l’oreille rouge, la scène s’assombrit autour
-  de la pierre. Tout se coupe d’un bouton.
+- **Des halos tactiques** : une lumière colorée et sa légende indiquent l’atari, la capture,
+  la connexion, le shicho ou un coup remarquable, sans traits de force ni mouvement continu.
+  Le bouton « Halos » les désactive.
 - **Le son d’une pierre sur du bois massif**, par synthèse modale (choc bref, résonances fixes du
   plateau, acoustique d’une pièce calme) : aucun fichier audio. Les réglages sont une seule table,
   dans `src/replay/sound.ts`.

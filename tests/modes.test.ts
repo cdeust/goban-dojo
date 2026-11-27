@@ -15,6 +15,8 @@ import {
   useStore,
 } from '../src/state/store.ts';
 
+import { parseTacticalCueKey, tacticalCueKey } from '../src/state/tacticalCues.ts';
+
 const dataset = JSON.parse(
   readFileSync(join(import.meta.dirname, '../public/data/games.json'), 'utf8'),
 ) as Dataset;
@@ -199,21 +201,20 @@ describe('mode « explorer »', () => {
   });
 });
 
-describe('poids dramatique d’un coup', () => {
+describe('indications des halos tactiques', () => {
   it('distingue le coup ordinaire, la menace et la prise d’initiative historique', () => {
     // Coup 1 : une pierre posée sur un goban vide ne menace rien.
     s().setMove(1);
-    s().notifyImpact(P('qd'));
-    expect(s().impact).toMatchObject({ kind: 'coup', point: P('qd') });
+    expect(tacticalCueKey(s())).toBe('');
     // Coup 47 : Noir met trois pierres blanches en atari.
     s().setMove(47);
-    s().notifyImpact(marksOf(s()).last);
-    expect(s().impact?.kind).toBe('menace');
+    expect(parseTacticalCueKey(tacticalCueKey(s())).map(({ kind }) => kind)).toContain('atari');
     // Coup 127 : K11 prend l'initiative, avec un effet visuel distinct.
     s().setMove(127);
-    s().notifyImpact(P('ji'));
-    expect(s().impact?.kind).toBe('initiative');
-    expect(s().impact?.seq).toBe(3);
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).toContainEqual({
+      point: P('ji'),
+      kind: 'landmark',
+    });
   });
 
   it('recense les pierres en atari de la position affichée, exploration comprise', () => {
@@ -240,8 +241,10 @@ describe('poids dramatique d’un coup', () => {
     // Noir d4 et f4, Blanc ailleurs, puis Noir e4 relie.
     for (const c of ['dp', 'aa', 'fp', 'ab', 'ep']) s().clickPoint(P(c));
     expect(marksOf(s()).threat.connects).toEqual([P('dp'), P('fp')]);
-    s().notifyImpact(P('ep'));
-    expect(s().impact?.kind).toBe('connexion');
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).toContainEqual({
+      point: P('ep'),
+      kind: 'connection',
+    });
   });
 
   it('classe un shicho qui fonctionne comme un piège', () => {
@@ -250,8 +253,10 @@ describe('poids dramatique d’un coup', () => {
     // Blanc d4 cerné par c4, d3, puis e4 : il ne lui reste que d5, et la fuite ne mène nulle part.
     for (const c of ['cp', 'dp', 'dq', 'aa', 'co', 'ab', 'ep']) s().clickPoint(P(c));
     expect(marksOf(s()).trapped).toEqual([P('dp')]);
-    s().notifyImpact(P('ep'));
-    expect(s().impact?.kind).toBe('piege');
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).toContainEqual({
+      point: P('dp'),
+      kind: 'trap',
+    });
   });
 
   it('un coup joué ailleurs pendant qu’un piège ou un atari est en place reste un coup ordinaire', () => {
@@ -259,18 +264,24 @@ describe('poids dramatique d’un coup', () => {
     s().setMove(0);
     // Le shicho de d4 est en place…
     for (const c of ['cp', 'dp', 'dq', 'aa', 'co', 'ab', 'ep']) s().clickPoint(P(c));
-    s().notifyImpact(P('ep'));
-    expect(s().impact?.kind).toBe('piege');
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).toContainEqual({
+      point: P('dp'),
+      kind: 'trap',
+    });
     // … Blanc joue dans le coin opposé (hors de la diagonale de fuite, pour ne pas casser le
     // shicho), puis Noir aussi : aucun de ces deux coups n'y est pour rien.
     s().clickPoint(P('ss'));
-    s().notifyImpact(P('ss'));
-    expect(s().impact?.kind).toBe('coup');
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).not.toContainEqual({
+      point: P('ss'),
+      kind: 'trap',
+    });
     s().clickPoint(P('pp'));
     // Le piège est toujours là, et c'est de nouveau à Blanc de jouer.
     expect(marksOf(s()).trapped).toEqual([P('dp')]);
-    s().notifyImpact(P('pp'));
-    expect(s().impact?.kind).toBe('coup');
+    expect(parseTacticalCueKey(tacticalCueKey(s()))).not.toContainEqual({
+      point: P('pp'),
+      kind: 'trap',
+    });
     // La pierre de d4 est toujours marquée sur le goban : la menace, elle, demeure.
     const m = marksOf(s());
     expect([...m.atari, ...m.trapped]).toContain(P('dp'));

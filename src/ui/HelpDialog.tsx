@@ -1,3 +1,4 @@
+import { TacticalLegendHelp } from './TacticalLegend.tsx';
 import { useStore } from '../state/store.ts';
 import { SOURCES } from '../story/chapters.ts';
 import { IconClose } from './icons.tsx';
@@ -31,25 +32,7 @@ export function HelpDialog() {
       </p>
 
       <h3>Ce que montrent les marques</h3>
-      <ul className="legend">
-        <li>
-          <i className="legend__dot legend__dot--attack" aria-hidden="true" /> <b>Attaque</b> — un
-          halo rouge bat sous les pierres en atari : il ne leur reste qu’une liberté.
-        </li>
-        <li>
-          <i className="legend__dot legend__dot--trap" aria-hidden="true" /> <b>Piège</b> — une cage
-          ambrée entoure les pierres prises dans un shicho, une poursuite en escalier qui mène à
-          leur capture.
-        </li>
-        <li>
-          <i className="legend__dot legend__dot--connection" aria-hidden="true" /> <b>Connexion</b>{' '}
-          — un halo bleu sous le coup qui vient de relier deux groupes, et sous les pierres reliées.
-        </li>
-        <li>
-          <b>Éclairs</b> — ils soulignent le coup qui lance une menace ou prend l’initiative. Lors
-          du coup de l’oreille rouge, le point K11 reste marqué en bleu.
-        </li>
-      </ul>
+      <TacticalLegendHelp />
 
       <h3>Vos parties</h3>
       <p>

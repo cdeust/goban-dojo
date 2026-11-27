@@ -143,25 +143,6 @@ button:disabled {
   background: radial-gradient(ellipse at 50% 48%, transparent 45%, rgb(11 9 8 / 0.55) 100%);
 }
 
-.stage__canvas::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(ellipse at 50% 48%, rgb(32 151 255 / 0.14), rgb(2 9 24 / 0.9));
-  mix-blend-mode: hard-light;
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: opacity 0.6s ease;
-  }
-}
-
-.stage[data-effects='true']:has(.moment--tactical) .stage__canvas::before {
-  opacity: 1;
-}
-
 .stage:has(.moment--tactical) .card,
 .stage[data-simulation='true'] .card,
 .stage[data-simulation='true'] .dock {
@@ -1477,35 +1458,6 @@ progress {
   accent-color: var(--kaya);
 }
 
-/* ───────────────────────────── lignes de force ───────────────────────────── */
-
-.impact {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-
-.impact__arcs {
-  fill: none;
-  stroke: #cbecff;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 4px #329bff);
-}
-
-.impact--initiative .impact__arcs {
-  stroke-width: 2;
-}
-
-.impact--piege .impact__arcs {
-  stroke: #ffe6bd;
-  filter: drop-shadow(0 0 3px #ff934b);
-}
-
 .card__age {
   font-family: var(--sans);
   font-size: 0.78rem;
@@ -1521,23 +1473,40 @@ progress {
 
 .legend__dot {
   display: inline-block;
-  width: 0.8rem;
-  height: 0.8rem;
-  margin-right: 0.3rem;
+  flex: none;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-inline-end: 0.35rem;
   border-radius: 50%;
-  vertical-align: -0.08rem;
+  background: var(--cue-color);
+  vertical-align: 0.05em;
 }
 
-.legend__dot--attack {
-  background: #e0553a;
+.legend--board {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0.75rem;
+  inset-block-end: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  width: max-content;
+  max-width: calc(100% - 1.5rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  pointer-events: none;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  line-height: 1.3;
 }
 
-.legend__dot--connection {
-  background: #2f6fb3;
-}
-
-.legend__dot--trap {
-  border: 2px dashed #ff934b;
+.legend--board li {
+  border: 1px solid var(--hairline);
+  border-radius: 1rem;
+  padding: 0.22rem 0.5rem;
+  color: var(--paper);
+  background: rgb(11 9 8 / 0.88);
 }
 
 /* En étude, le texte et le goban ont chacun leur place. */

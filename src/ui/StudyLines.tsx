@@ -66,12 +66,20 @@ function Ranking({
   );
 }
 
-export function StudyLines({ game, base }: { game: GameRecord; base: number }) {
+export function StudyLines({
+  game,
+  base,
+  open = false,
+}: {
+  game: GameRecord;
+  base: number;
+  open?: boolean;
+}) {
   const prefix = useStore((s) => s.variation);
   const displayedColor = useStore(nextColor);
   const show = useStore((s) => s.showStudyLine);
   const setMode = useStore((s) => s.setMode);
-  const [comparing, setComparing] = useState(() => prefix.length > 0);
+  const [comparing, setComparing] = useState(() => open || prefix.length > 0);
   const [selected, setSelected] = useState<number | null>(() => prefix[0]?.point ?? null);
   const [restored] = useState(prefix);
   const reader = useRef<HTMLHeadingElement>(null);

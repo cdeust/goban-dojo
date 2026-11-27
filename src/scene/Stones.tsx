@@ -400,7 +400,6 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
         touch();
         // Un coup qui capture est frappé plus fort.
         if (sound) playStone('place', to.x / 21, emphatic ? 1.3 : 1);
-        useStore.getState().notifyImpact(stone.point);
         wobble(i);
       };
       L.running[i] = animate(0, 1, {
@@ -686,7 +685,7 @@ export function Stones({ seed, recorded }: { seed: string; recorded: number }) {
       <instancedMesh
         ref={numbersRef}
         args={[numberGeometry, numberMaterial, capacity * 2]}
-        visible={showNumbers && !estimating}
+        visible={showNumbers}
         renderOrder={2}
       />
       {/* Repère du dernier coup : un point de vermillon, comme l'encre des sceaux. */}
