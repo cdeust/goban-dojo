@@ -913,8 +913,21 @@ test('import SGF local, bibliothèque persistante et entraînement avec le camp 
   await expect(reflection).toBeVisible({ timeout: 30_000 });
   const cursor = page.locator('input[aria-label="Coup"]');
   await expect(cursor).toHaveValue('1');
+  // La lecture automatique reprend après le clic. Observer le coup réellement annoncé,
+  // même si le navigateur a déjà avancé au moment de l'assertion.
+  await page.evaluate(() => {
+    const live = document.querySelector('[data-testid="live"]')!;
+    const observer = new MutationObserver(() => {
+      if (live.textContent.includes('Coup 2 sur 9 : Blanc D16')) {
+        document.body.dataset.playedKifuMove = 'true';
+        observer.disconnect();
+      }
+    });
+    observer.observe(live, { childList: true, characterData: true, subtree: true });
+  });
   await reflection.getByRole('button', { name: 'Jouer le coup du kifu' }).click();
-  await expect(cursor).toHaveValue('2');
+  await expect(page.locator('body')).toHaveAttribute('data-played-kifu-move', 'true');
+  await expect(reflection).toBeHidden();
 });
 
 test('Leela Zero lit une partie importée, projette ses coups et rend la main au kifu', async ({
