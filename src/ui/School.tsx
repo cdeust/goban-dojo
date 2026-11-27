@@ -1,12 +1,6 @@
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
-import { opposite, pointFromHuman, pointToHuman, type Board } from '../domain/board.ts';
-import {
-  buildTimeline,
-  decodeMoves,
-  decodePoints,
-  type GameRecord,
-  type Move,
-} from '../domain/game.ts';
+import { opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
+import { decodeMoves, type GameRecord, type Move } from '../domain/game.ts';
 import { practiceDay } from '../domain/practice.ts';
 import {
   SCHOOL_MODULES,
@@ -17,14 +11,13 @@ import {
   schoolPosition,
   schoolQuestion,
   schoolSolution,
-  schoolWindow,
   type SchoolAnswer,
   type SchoolExercise,
 } from '../domain/school.ts';
 import {
   moduleProgress,
   markSchoolFailure,
-  recommendSchool,
+  recommendCourse,
   recordSchool,
   schoolRecord,
   type SchoolProgress,
@@ -38,117 +31,49 @@ import {
 import { useStore } from '../state/store.ts';
 import { prettyName } from '../story/format.ts';
 import schoolCatalog from '../story/schoolCatalog.json';
+import { KifuBoard } from './KifuBoard.tsx';
+import {
+  ADVANCED_TACTICS_MODULES,
+  type AdvancedTacticExercise,
+} from '../domain/advancedTactics.ts';
+import { ENDGAME_MODULES, type EndgameExercise } from '../domain/endgameCourse.ts';
+import { STRATEGY_MODULES, type StrategyLesson } from '../story/strategyCourse.ts';
+import advancedCatalog from '../story/advancedCatalog.json';
+import strategyCatalog from '../story/strategyCatalog.json';
+import endgameCatalog from '../story/endgameCatalog.json';
+import { StrategyExercise } from './StrategyExercise.tsx';
+import { RuleCourseExercise } from './RuleCourseExercise.tsx';
+import { TrainingGame } from './TrainingGame.tsx';
+import { JapaneseCountWorkshop } from './JapaneseCountWorkshop.tsx';
+
+type CourseExercise = SchoolExercise | AdvancedTacticExercise | StrategyLesson | EndgameExercise;
+const ALL_MODULES = [
+  ...SCHOOL_MODULES,
+  ...ADVANCED_TACTICS_MODULES,
+  ...STRATEGY_MODULES,
+  ...ENDGAME_MODULES,
+];
+const ALL_EXERCISES: CourseExercise[] = [
+  ...(schoolCatalog as SchoolExercise[]),
+  ...(advancedCatalog as AdvancedTacticExercise[]),
+  ...(strategyCatalog as StrategyLesson[]),
+  ...(endgameCatalog as EndgameExercise[]),
+];
+function foundation(ex: CourseExercise): ex is SchoolExercise {
+  return SCHOOL_MODULES.some((m) => m.id === ex.module);
+}
 
 const LEVEL_NAMES = [
   'Les fondations',
   'Le combat local',
   'La lecture tactique',
   'Territoire et comptage local',
+  'Vie et mort',
+  'Tesuji et courses de libertés',
+  'Fuseki et joseki',
+  'Stratégie du milieu de partie',
+  'Yose et décompte',
 ];
-
-function SchoolCell({ rowLabel, children }: { rowLabel?: string; children: React.ReactNode }) {
-  return (
-    <>
-      {rowLabel && (
-        <span className="school-axis" aria-hidden="true">
-          {rowLabel}
-        </span>
-      )}
-      {children}
-    </>
-  );
-}
-
-function SchoolBoard({
-  game,
-  ex,
-  board,
-  resultBoard,
-  played,
-  onPlay,
-  done,
-  full,
-}: {
-  game: GameRecord;
-  ex: SchoolExercise;
-  board: Board;
-  resultBoard: Board;
-  played: readonly Move[];
-  onPlay: (p: number) => void;
-  done: boolean;
-  full: boolean;
-}) {
-  const timeline = useMemo(
-    () => buildTimeline(decodePoints(game.setupBlack), decodeMoves(game.moves)),
-    [game],
-  );
-  const numbers = new Map(
-    timeline.stones
-      .filter((s) => s.placedAt <= ex.before && ex.before < s.capturedAt)
-      .map((s) => [s.point, s.placedAt]),
-  );
-  const view = full
-    ? { x: 0, y: 0, size: 19 }
-    : schoolWindow(board, {
-        ...ex,
-        anchors: [...ex.anchors, ...played.filter((m) => m.point >= 0).map((m) => m.point)],
-      });
-  for (const [index, move] of played.entries())
-    if (move.point >= 0) numbers.set(move.point, ex.before + index + 1);
-  const points = Array.from(
-    { length: view.size * view.size },
-    (_, i) => (view.y + Math.floor(i / view.size)) * 19 + view.x + (i % view.size),
-  );
-  const marked = new Set(ex.anchors);
-  return (
-    <div
-      className="school-board"
-      role="group"
-      aria-label="Position du kifu, goban interactif"
-      style={{ gridTemplateColumns: `1.1rem repeat(${view.size}, minmax(0, 1fr))` }}
-    >
-      <span className="school-axis" aria-hidden="true" />
-      {Array.from({ length: view.size }, (_, i) => (
-        <span className="school-axis" aria-hidden="true" key={`col-${i}`}>
-          {pointToHuman(view.x + i).charAt(0)}
-        </span>
-      ))}
-      {points.map((p) => {
-        const color = resultBoard.get(p);
-        const number = numbers.get(p);
-        const label = `${pointToHuman(p)}${color ? (color === 'B' ? ', noir' : ', blanc') : ', vide'}${number && color ? `, coup ${number}` : ''}${marked.has(p) ? ', groupe à examiner' : ''}`;
-        return (
-          <SchoolCell
-            key={p}
-            rowLabel={p % 19 === view.x ? String(19 - Math.floor(p / 19)) : undefined}
-          >
-            <button
-              className="school-point"
-              type="button"
-              aria-label={label}
-              aria-disabled={done || !isMoveModule(ex.module) || !!color}
-              tabIndex={-1}
-              onClick={() => {
-                if (!done && isMoveModule(ex.module) && !color) onPlay(p);
-              }}
-            >
-              {color && (
-                <span className={`school-stone school-stone--${color}`} data-marked={marked.has(p)}>
-                  {number || ''}
-                </span>
-              )}
-              {ex.candidate === p && !color && (
-                <span className="school-candidate" aria-hidden="true">
-                  ?
-                </span>
-              )}
-            </button>
-          </SchoolCell>
-        );
-      })}
-    </div>
-  );
-}
 
 function Exercise({
   ex,
@@ -289,13 +214,15 @@ function Exercise({
             {full ? 'Vue locale' : 'Voir le goban entier'}
           </button>
         </div>
-        <SchoolBoard
+        <KifuBoard
           game={game}
-          ex={ex}
+          before={ex.before}
+          anchors={ex.anchors}
+          candidate={ex.candidate}
           board={board}
           resultBoard={resultBoard}
           played={played}
-          onPlay={answer}
+          onPlay={isMoveModule(ex.module) ? answer : undefined}
           done={!!result}
           full={full}
         />
@@ -440,23 +367,25 @@ export function School() {
   const games = useStore((s) => s.dataset?.games);
   const close = useStore((s) => s.setSchoolOpen);
   const catalog = useMemo(
-    () => (schoolCatalog as SchoolExercise[]).filter((e) => games?.some((g) => g.id === e.gameId)),
+    () => ALL_EXERCISES.filter((e) => games?.some((g) => g.id === e.gameId)),
     [games],
   );
   const [progress, setProgress] = useState(loadSchoolProgress);
   const [active, setActive] = useState<string | null>(null);
+  const [training, setTraining] = useState(false);
+  const [counting, setCounting] = useState(false);
   const [session, setSession] = useState(0);
   const [saved, setSaved] = useState(true);
   const [restore, setRestore] = useState<SchoolProgress | null>(null);
   const [message, setMessage] = useState('');
   const scroller = useRef<HTMLElement>(null);
   const today = practiceDay();
-  const recommendation = recommendSchool(catalog, progress, today);
+  const recommendation = recommendCourse(catalog, progress, today, ALL_MODULES);
   const selected = catalog.find((e) => e.id === active);
   const source = selected && games?.find((g) => g.id === selected.gameId);
   const activeCount = catalog.filter((ex) => schoolRecord(progress, ex.id)).length;
   const firstTry = catalog.filter((ex) => schoolRecord(progress, ex.id)?.firstTry).length;
-  function open(ex: SchoolExercise) {
+  function open(ex: CourseExercise) {
     scroller.current?.scrollTo({ top: 0 });
     setActive(ex.id);
     setSession((s) => s + 1);
@@ -493,6 +422,21 @@ export function School() {
       setMessage('Impossible de lire le fichier. Votre progression n’a pas changé.');
     }
   }
+  function finish(result: SchoolGrade) {
+    if (selected) persist(recordSchool(progress, selected.id, result, today));
+  }
+  function failure() {
+    if (selected) persist(markSchoolFailure(progress, selected.id, today));
+  }
+  function back() {
+    setActive(null);
+    scroller.current?.scrollTo({ top: 0 });
+  }
+  function next() {
+    const activity = recommendCourse(catalog, progress, today, ALL_MODULES);
+    if (activity) open(activity);
+    else back();
+  }
   return (
     <main className="school" ref={scroller}>
       <header className="school-header">
@@ -506,32 +450,75 @@ export function School() {
           Retour au dojo
         </button>
       </header>
-      {selected && source ? (
-        <Exercise
-          key={`${selected.id}:${session}`}
-          game={source}
-          ex={selected}
-          onFinish={(result) => persist(recordSchool(progress, selected.id, result, today))}
-          onFailure={() => persist(markSchoolFailure(progress, selected.id, today))}
+      {counting ? (
+        <JapaneseCountWorkshop
+          games={games ?? []}
           onBack={() => {
-            setActive(null);
+            setCounting(false);
             scroller.current?.scrollTo({ top: 0 });
           }}
-          onNext={() => {
-            const next = recommendSchool(catalog, progress, today);
-            if (next) open(next);
-            else setActive(null);
+        />
+      ) : training ? (
+        <TrainingGame
+          onPractice={(module) => {
+            const activities = catalog.filter((e) => e.module === module);
+            const activity =
+              activities.find((e) => {
+                const r = schoolRecord(progress, e.id);
+                return r && r.due <= today;
+              }) ??
+              activities.find((e) => !schoolRecord(progress, e.id)) ??
+              activities[0];
+            if (activity) {
+              setTraining(false);
+              open(activity);
+            }
+          }}
+          onBack={() => {
+            setTraining(false);
+            scroller.current?.scrollTo({ top: 0 });
           }}
         />
+      ) : selected && source ? (
+        foundation(selected) ? (
+          <Exercise
+            key={`${selected.id}:${session}`}
+            game={source}
+            ex={selected}
+            onFinish={finish}
+            onFailure={failure}
+            onBack={back}
+            onNext={next}
+          />
+        ) : 'historical' in selected ? (
+          <StrategyExercise
+            key={`${selected.id}:${session}`}
+            game={source}
+            ex={selected}
+            onFinish={finish}
+            onBack={back}
+            onNext={next}
+          />
+        ) : (
+          <RuleCourseExercise
+            key={`${selected.id}:${session}`}
+            game={source}
+            ex={selected}
+            onFinish={finish}
+            onFailure={failure}
+            onBack={back}
+            onNext={next}
+          />
+        )
       ) : (
         <div className="school-home">
           <section className="school-welcome">
-            <p className="chapter__index">Cycles 1–2 · Règles, tactique et territoire</p>
+            <p className="chapter__index">Programme du dojo · 9 niveaux</p>
             <h2>Apprendre sur des parties réelles</h2>
             <p>
               {catalog.length} exercices tirés de {new Set(catalog.map((e) => e.gameId)).size}{' '}
-              parties historiques. Chaque position a été vérifiée par les règles du go. Aucun
-              problème inventé.
+              parties historiques. Règles, vie et mort, tesuji, stratégie, yose et décompte. Les
+              objectifs locaux sont prouvés ; les décisions stratégiques sont comparées avec KataGo.
             </p>
             <p>
               <strong>
@@ -548,7 +535,7 @@ export function School() {
               <>
                 <p>
                   Votre prochaine séance :{' '}
-                  {SCHOOL_MODULES.find((m) => m.id === recommendation.module)?.title}
+                  {ALL_MODULES.find((m) => m.id === recommendation.module)?.title}
                 </p>
                 <button
                   className="chip chip--accent"
@@ -561,16 +548,62 @@ export function School() {
             )}
             <p className="school-note">
               Les révisions dues passent en premier ; les positions inédites travaillent les
-              compétences encore fragiles. Les niveaux sont ceux du dojo, pas des grades kyu ou dan.
+              compétences encore fragiles. En stratégie, une réussite signifie un coup dans la marge
+              d’incertitude de KataGo, pas une solution unique. Les niveaux du dojo ne sont pas des
+              grades kyu ou dan.
             </p>
           </section>
+          <section className="school-welcome" aria-labelledby="training-heading">
+            <p className="chapter__index">Cycle d’application · Partie complète</p>
+            <h2 id="training-heading">Jouer, analyser, recommencer</h2>
+            <p>
+              Appliquez les acquis à une véritable partie 19×19 contre Leela Zero. Reprenez votre
+              partie, analysez vos décisions avec KataGo et retrouvez les coups à travailler.
+            </p>
+            <button
+              className="chip chip--accent"
+              type="button"
+              onClick={() => {
+                setTraining(true);
+                scroller.current?.scrollTo({ top: 0 });
+              }}
+            >
+              Jouer une partie complète
+            </button>
+          </section>
+          <nav className="school-level-nav" aria-label="Accès aux niveaux du cursus">
+            {LEVEL_NAMES.map((name, i) => (
+              <button
+                type="button"
+                className="chip"
+                key={name}
+                onClick={() =>
+                  document.getElementById(`niveau-${i + 1}`)?.scrollIntoView({ block: 'start' })
+                }
+              >
+                {i + 1} · {name}
+              </button>
+            ))}
+          </nav>
           {LEVEL_NAMES.map((name, i) => (
-            <section className="school-level" key={name}>
+            <section className="school-level" key={name} id={`niveau-${i + 1}`}>
               <h2>
                 <span className="school-level-marker">0{i + 1}</span> {name}
               </h2>
+              {i === 8 && (
+                <button
+                  className="chip chip--accent"
+                  type="button"
+                  onClick={() => {
+                    setCounting(true);
+                    scroller.current?.scrollTo({ top: 0 });
+                  }}
+                >
+                  Atelier de comptage japonais
+                </button>
+              )}
               <div className="school-module-grid">
-                {SCHOOL_MODULES.filter((m) => m.level === i + 1).map((m) => {
+                {ALL_MODULES.filter((m) => m.level === i + 1).map((m) => {
                   const stats = moduleProgress(catalog, progress, m.id, today);
                   const exercises = catalog.filter((e) => e.module === m.id);
                   const next =
@@ -608,8 +641,9 @@ export function School() {
             <h2>Votre progression</h2>
             <p>
               Enregistrée dans ce navigateur, indépendamment de l’XP du Carnet. Le fichier permet de
-              retrouver ce parcours sur un autre navigateur. Il n’inclut ni vos SGF importés ni le
-              Carnet de kifu.
+              retrouver ce parcours sur un autre navigateur. Il n’inclut ni vos SGF importés, ni le
+              Carnet de kifu, ni vos parties d’entraînement (conservées localement dans leur
+              historique).
             </p>
             <button type="button" className="chip" onClick={download}>
               Exporter la progression

@@ -71,11 +71,11 @@ export function PracticePanel() {
       </p>
 
       <section className="practice__card practice__school">
-        <p className="chapter__index">École de go · Cycle 1</p>
+        <p className="chapter__index">École de go · 9 niveaux</p>
         <h3>Apprendre, pratiquer, progresser</h3>
         <p>
-          Un programme de règles et tactique construit à partir des positions de parties réelles,
-          avec des exercices par thème et une progression sauvegardée.
+          Des fondations au yose : vie et mort, tesuji, stratégie et parties contre Leela Zero, à
+          partir de vrais kifus. Progression sauvegardée et révisions adaptées.
         </p>
         <button
           type="button"

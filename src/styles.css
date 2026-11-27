@@ -2854,3 +2854,36 @@ progress {
     padding-inline: 0.65rem;
   }
 }
+.school-stone[data-dead='true'] {
+  opacity: 0.38;
+}
+.school-stone[data-seki='true'] {
+  outline: 2px solid #156890;
+  outline-offset: 1px;
+}
+.school-score-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--hairline);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.55rem;
+  border-radius: 0.3rem;
+}
+.school-check {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+.school-level-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.school-level-nav .chip {
+  text-align: start;
+}
+.school-level {
+  scroll-margin-top: 1rem;
+}

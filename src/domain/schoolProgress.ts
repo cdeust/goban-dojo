@@ -1,5 +1,13 @@
 import { REVIEW_INTERVALS, MASTERY } from './practice.ts';
-import { SCHOOL_MODULES, type ModuleId, type SchoolExercise } from './school.ts';
+import { SCHOOL_MODULES, type SchoolExercise } from './school.ts';
+export interface CourseActivity {
+  id: string;
+  module: string;
+}
+export interface CourseModule {
+  id: string;
+  level: number;
+}
 
 export type SchoolGrade = 'exact' | 'assisted' | 'shown';
 export interface SchoolRecord {
@@ -55,9 +63,9 @@ export function markSchoolFailure(
 }
 
 export function moduleProgress(
-  exercises: readonly SchoolExercise[],
+  exercises: readonly CourseActivity[],
   progress: SchoolProgress,
-  module: ModuleId,
+  module: string,
   today: number,
 ) {
   const records = exercises
@@ -75,11 +83,12 @@ export function moduleProgress(
 }
 
 /** Rappels dus d'abord, puis une position encore inconnue de la compétence la moins consolidée au niveau courant. */
-export function recommendSchool(
-  exercises: readonly SchoolExercise[],
+export function recommendCourse<T extends CourseActivity>(
+  exercises: readonly T[],
   progress: SchoolProgress,
   today: number,
-): SchoolExercise | undefined {
+  modules: readonly CourseModule[],
+): T | undefined {
   const due = exercises
     .flatMap((exercise) => {
       const record = schoolRecord(progress, exercise.id);
@@ -87,12 +96,18 @@ export function recommendSchool(
     })
     .sort((a, b) => a.record.stage - b.record.stage || a.record.due - b.record.due);
   if (due[0]) return due[0].exercise;
-  const categories = SCHOOL_MODULES.map((module) => ({
-    module,
-    stats: moduleProgress(exercises, progress, module.id, today),
-    next: exercises.find((e) => e.module === module.id && !schoolRecord(progress, e.id)),
-  })).filter((m) => m.next);
-  const pending = categories.filter((m) => m.stats.exact < 12);
+  const categories = modules
+    .map((module) => ({
+      module,
+      stats: moduleProgress(exercises, progress, module.id, today),
+      next: exercises.find((e) => e.module === module.id && !schoolRecord(progress, e.id)),
+    }))
+    .filter((m) => m.next);
+  const pending = categories.filter(
+    (m) =>
+      m.stats.exact <
+      Math.min(12, Math.ceil(exercises.filter((e) => e.module === m.module.id).length / 2)),
+  );
   // Un niveau est un objectif pédagogique, pas une barrière : tous les exercices restent disponibles.
   const ranked = (pending.length ? pending : categories).sort(
     (a, b) =>
@@ -101,4 +116,12 @@ export function recommendSchool(
       b.stats.attempted - b.stats.firstTry - (a.stats.attempted - a.stats.firstTry),
   );
   return ranked[0]?.next;
+}
+
+export function recommendSchool(
+  exercises: readonly SchoolExercise[],
+  progress: SchoolProgress,
+  today: number,
+): SchoolExercise | undefined {
+  return recommendCourse(exercises, progress, today, SCHOOL_MODULES);
 }

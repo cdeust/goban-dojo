@@ -279,7 +279,7 @@ export function schoolSolution(
 /** Fenêtre locale de 9 à 19 lignes, toujours issue du vrai goban, avec une ligne de marge. */
 export function schoolWindow(
   board: Board,
-  ex: SchoolExercise,
+  ex: Pick<SchoolExercise, 'anchors' | 'candidate'>,
 ): { x: number; y: number; size: number } {
   const marked = [
     ...new Set(ex.anchors.flatMap((p) => (board.stonesOf(p).length ? board.stonesOf(p) : [p]))),

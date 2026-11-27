@@ -1,5 +1,7 @@
 # Parcours individualisé du dojo
 
+Ce document décrit le premier incrément. Le cursus actuel, élargi à 652 exercices et études, est décrit dans [ECOLE.md](ECOLE.md).
+
 Le but est qu’un joueur apprenne effectivement le go, sache où progresser et retrouve son travail, indépendamment du nombre de parties visionnées.
 
 ## Palier initial : un carnet qui guide la séance

@@ -18,11 +18,12 @@ import { ReadingPanel } from './ui/ReadingPanel.tsx';
 import { StudyPanel } from './ui/StudyPanel.tsx';
 import { TacticalLegend } from './ui/TacticalLegend.tsx';
 import { TopBar } from './ui/TopBar.tsx';
-import { School } from './ui/School.tsx';
 import { useKeyboard } from './ui/useKeyboard.ts';
 
 // three.js est lourd : la scène est chargée à part, le texte s'affiche d'abord.
 const Scene = lazy(() => import('./scene/Scene.tsx').then((m) => ({ default: m.Scene })));
+// Le cursus et ses catalogues restent hors du chargement initial du kifu.
+const School = lazy(() => import('./ui/School.tsx').then((m) => ({ default: m.School })));
 
 export function App() {
   const status = useStore((s) => s.status);
@@ -48,7 +49,18 @@ export function App() {
   useGuessDriver();
   useKeyboard();
 
-  if (schoolOpen && entered && status === 'ready') return <School />;
+  if (schoolOpen && entered && status === 'ready')
+    return (
+      <Suspense
+        fallback={
+          <p className="stage__loading" role="status">
+            Préparation de votre école…
+          </p>
+        }
+      >
+        <School />
+      </Suspense>
+    );
 
   return (
     // « user » : Motion respecte de lui-même la préférence système de réduction des animations.
