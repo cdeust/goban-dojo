@@ -50,6 +50,17 @@ export function StrategyExercise({
   const [attempt, setAttempt] = useState(0);
   const finalized = useRef(false);
   const [showKifu, setShowKifu] = useState(false);
+  const [historyStep, setHistoryStep] = useState(1);
+  const [revealed, setRevealed] = useState(false);
+  function revealHistory() {
+    if (finalized.current) return;
+    finalized.current = true;
+    setRevealed(true);
+    setShowKifu(true);
+    setHistoryStep(1);
+    setError('');
+    onFinish('shown');
+  }
   function choose(point: number) {
     if (chosen !== undefined || board.clone().play(ex.color, point).illegal) {
       if (chosen === undefined)
@@ -72,7 +83,7 @@ export function StrategyExercise({
     };
     void judgeMoves(evaluate, position, tested)
       .then((result) => {
-        if (cancelled) return;
+        if (cancelled || finalized.current) return;
         const comparison = tested.map((point, i) => ({ point, judgement: result[i]! }));
         const ours = comparison.find((r) => r.point === chosen)!;
         finalized.current = true;
@@ -83,15 +94,19 @@ export function StrategyExercise({
         onFinish(ours.judgement.verdict === 'bon' ? 'exact' : 'assisted');
       })
       .catch((e) => {
-        if (!cancelled) setError(e instanceof Error ? e.message : String(e));
+        if (!cancelled && !finalized.current) setError(e instanceof Error ? e.message : String(e));
       });
     return () => {
       cancelled = true;
     };
   }, [chosen, status, attempt, game, ex, candidates, onFinish]);
-  const shownMove = showKifu ? ex.historical : chosen;
+  const displayedMoves = showKifu
+    ? ex.evidence.historicalLine.slice(0, historyStep)
+    : rows && chosen !== undefined
+      ? [{ color: ex.color, point: chosen }]
+      : [];
   const nextBoard = board.clone();
-  if (rows && shownMove !== undefined) nextBoard.play(ex.color, shownMove);
+  for (const move of displayedMoves) nextBoard.play(move.color, move.point);
   const sourceNumber = game.sources.find((s) => /^cwi:\d{3}$/.test(s))?.slice(4);
   const selectedJudgement = rows?.find((r) => r.point === chosen)?.judgement;
   const kifuJudgement = rows?.find((r) => r.point === ex.historical)?.judgement;
@@ -130,18 +145,50 @@ export function StrategyExercise({
           game={game}
           before={ex.before}
           anchors={ex.anchors}
-          choices={!rows ? candidates : undefined}
+          choices={!rows && !revealed ? candidates : undefined}
           board={board}
           resultBoard={nextBoard}
-          played={rows && shownMove !== undefined ? [{ color: ex.color, point: shownMove }] : []}
+          played={displayedMoves}
           onPlay={choose}
-          done={chosen !== undefined}
+          done={chosen !== undefined || revealed}
           full={true}
         />
         <p className="school-caption">
-          Les numéros initiaux appartiennent au kifu. Les lettres désignent des hypothèses légales,
-          non une liste ordonnée de bonnes réponses.
+          {showKifu
+            ? 'Suite réellement jouée dans le kifu, numérotée dans son ordre original.'
+            : 'Les numéros initiaux appartiennent au kifu. Les lettres désignent des hypothèses légales, non une liste ordonnée de bonnes réponses.'}
         </p>
+        {showKifu && (
+          <section aria-label="Suite historique" className="school-history">
+            <p role="status" aria-live="polite">
+              {historyStep === 0
+                ? `Avant le coup ${ex.before + 1}.`
+                : `Coup ${ex.before + historyStep} : ${colorName(ex.evidence.historicalLine[historyStep - 1]!.color)} ${pointToHuman(ex.evidence.historicalLine[historyStep - 1]!.point)}.`}
+            </p>
+            <div className="school-answer-grid">
+              <button
+                className="chip"
+                type="button"
+                disabled={historyStep === 0}
+                onClick={() => setHistoryStep((n) => n - 1)}
+              >
+                Coup précédent
+              </button>
+              <button
+                className="chip"
+                type="button"
+                disabled={historyStep === ex.evidence.historicalLine.length}
+                onClick={() => setHistoryStep((n) => n + 1)}
+              >
+                Coup suivant du kifu
+              </button>
+            </div>
+            <p className="school-note">
+              Observez les réponses successives et les appuis de chaque couleur. Cette suite est
+              attestée, pas une réponse imposée à une autre variante.
+            </p>
+          </section>
+        )}
       </div>
       <div className="school-exercise__lesson">
         <p className="school-source">
@@ -163,7 +210,7 @@ export function StrategyExercise({
         <p>
           <strong>Votre démarche :</strong> {ex.rubric}
         </p>
-        {chosen === undefined && (
+        {chosen === undefined && !revealed && (
           <>
             <div className="school-answer-grid">
               {candidates.map((p, i) => (
@@ -188,14 +235,19 @@ export function StrategyExercise({
             </form>
           </>
         )}
-        {chosen !== undefined && !rows && status !== 'failed' && !error && (
+        {!rows && !revealed && (
+          <button type="button" className="chip" onClick={revealHistory}>
+            Étudier la suite sans évaluation
+          </button>
+        )}
+        {chosen !== undefined && !rows && !revealed && status !== 'failed' && !error && (
           <p role="status">
             {status === 'loading'
               ? `Chargement KataGo · ${Math.round(engineProgress * 100)} %`
               : 'Comparaison des positions à horizon identique…'}
           </p>
         )}
-        {(error || status === 'failed') && (
+        {!revealed && (error || status === 'failed') && (
           <div>
             <p role="alert">{error || engineError || 'Moteur indisponible.'}</p>
             {chosen !== undefined && (
@@ -212,6 +264,17 @@ export function StrategyExercise({
               </button>
             )}
           </div>
+        )}
+        {revealed && (
+          <>
+            <p className="school-feedback">
+              Suite historique consultée sans évaluation : cette séance sera à réviser.
+            </p>
+            <p>{ex.observation}</p>
+            <button type="button" className="chip chip--accent" onClick={onNext}>
+              Exercice suivant
+            </button>
+          </>
         )}
         {rows && selectedJudgement && kifuJudgement && (
           <>
@@ -256,7 +319,14 @@ export function StrategyExercise({
               l’ordre historique. Elles sont comparées légalement depuis la position initiale.
             </p>
             <div className="school-answer-grid">
-              <button type="button" className="chip" onClick={() => setShowKifu((v) => !v)}>
+              <button
+                type="button"
+                className="chip"
+                onClick={() => {
+                  setShowKifu((v) => !v);
+                  setHistoryStep(1);
+                }}
+              >
                 {showKifu ? 'Voir mon coup' : 'Voir le coup historique'}
               </button>
               <button className="chip" type="button" onClick={openStudy}>

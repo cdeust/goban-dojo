@@ -3,6 +3,7 @@ import {
   type SchoolProgress,
   type SchoolRecord,
 } from '../domain/schoolProgress.ts';
+import { decodeRankProgress } from '../domain/rankAssessment.ts';
 import { MASTERY } from '../domain/practice.ts';
 import { progressSession } from './sessionProgress.ts';
 const int = (value: unknown, min: number, max: number): value is number =>
@@ -31,7 +32,10 @@ export function decodeSchoolProgress(raw: string): SchoolProgress | null {
       seen.add(r.id);
       records.push({ id: r.id, firstTry: r.firstTry, last: r.last, stage: r.stage, due: r.due });
     }
-    return { version: 1, records };
+    const assessment =
+      parsed.assessment === undefined ? undefined : decodeRankProgress(parsed.assessment);
+    if (assessment === null) return null;
+    return { version: 1, records, ...(assessment === undefined ? {} : { assessment }) };
   } catch {
     return null;
   }

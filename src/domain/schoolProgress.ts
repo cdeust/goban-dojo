@@ -1,3 +1,4 @@
+import type { RankProgress } from './rankAssessment.ts';
 import { REVIEW_INTERVALS, MASTERY } from './practice.ts';
 import { SCHOOL_MODULES, type SchoolExercise } from './school.ts';
 export interface CourseActivity {
@@ -20,6 +21,7 @@ export interface SchoolRecord {
 export interface SchoolProgress {
   version: 1;
   records: SchoolRecord[];
+  assessment?: RankProgress;
 }
 export const emptySchoolProgress = (): SchoolProgress => ({ version: 1, records: [] });
 export const schoolRecord = (progress: SchoolProgress, id: string) =>
@@ -42,8 +44,8 @@ export function recordSchool(
     stage,
     due: today + REVIEW_INTERVALS[stage]!,
   };
-  if (old) return { version: 1, records: progress.records.map((r) => (r.id === id ? next : r)) };
-  return { version: 1, records: [...progress.records, next] };
+  if (old) return { ...progress, records: progress.records.map((r) => (r.id === id ? next : r)) };
+  return { ...progress, records: [...progress.records, next] };
 }
 
 /** Un premier échec ou indice reste enregistré même si le joueur abandonne la session. */
@@ -56,13 +58,13 @@ export function markSchoolFailure(
   if (old && (old.due > today || old.last === 'incomplete')) return progress;
   if (old)
     return {
-      version: 1,
+      ...progress,
       records: progress.records.map((record) =>
         record.id === id ? { ...record, last: 'incomplete', stage: 0, due: today } : record,
       ),
     };
   return {
-    version: 1,
+    ...progress,
     records: [
       ...progress.records,
       { id, firstTry: false, last: 'incomplete', stage: 0, due: today },

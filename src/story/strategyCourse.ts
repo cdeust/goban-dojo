@@ -1,7 +1,16 @@
-import { Board, PASS, POINTS, SIZE, opposite, pointToHuman, type Color } from '../domain/board.ts';
+import {
+  Board,
+  PASS,
+  POINTS,
+  SIZE,
+  neighbours,
+  opposite,
+  pointToHuman,
+  type Color,
+} from '../domain/board.ts';
 import { decodeMoves, decodePoints, type GameRecord, type Move } from '../domain/game.ts';
 
-export const STRATEGY_MODULES = [
+const EXISTING_STRATEGY_MODULES = [
   {
     id: 'fuseki',
     level: 7,
@@ -53,6 +62,68 @@ export const STRATEGY_MODULES = [
   },
 ] as const;
 
+/** Progression intermédiaire : des premiers points au combat du milieu de partie. */
+export const BRIDGE_MODULES = [
+  {
+    id: 'opening-lines',
+    level: 2,
+    title: 'Premiers coups : coins, côtés et centre',
+    lesson:
+      'Deux bords aident à délimiter de l’espace dans un coin. En début de partie, la troisième ligne privilégie généralement l’espace proche du bord, la quatrième un développement plus haut. Komoku (3–4), hoshi (4–4) et san-san (3–3) donnent des possibilités différentes ; aucun n’assure un territoire.',
+  },
+  {
+    id: 'corner-enclosure',
+    level: 3,
+    title: 'Construire un coin : le shimari',
+    lesson:
+      'Un shimari associe deux pierres du même camp dans un coin. Une forme en saut de cavalier peut dessiner un cadre économique, mais il reste des points d’invasion. Examinez les directions possibles plutôt que de considérer le coin fermé.',
+  },
+  {
+    id: 'side-base',
+    level: 4,
+    title: 'Étendre ses pierres et bâtir une base',
+    lesson:
+      'Une extension sur le côté peut laisser plusieurs intersections pour chercher de l’espace et des yeux. Plus elle est large, plus une invasion est envisageable ; plus elle est courte, moins elle exploite l’espace disponible. La proximité adverse et les soutiens déterminent le compromis.',
+  },
+  {
+    id: 'opening-approach',
+    level: 4,
+    title: 'Aborder un coin et anticiper la réponse',
+    lesson:
+      'Un kakari remet en question le développement adverse. Avant d’approcher, observez le côté de la pierre, les soutiens proches et l’espace pour une éventuelle base ou sortie. Après l’échange, la direction du prochain coup importe autant que la forme locale.',
+  },
+  {
+    id: 'shape-connection',
+    level: 5,
+    title: 'Consolider la forme et éviter les coupures',
+    lesson:
+      'Deux chaînes peuvent partager leurs libertés après une connexion solide. Une connexion réelle n’est pas la même chose qu’un saut de cavalier ou un saut simple : ces relations gardent des espaces qui pourraient être coupés. Comptez les libertés communes et cherchez les points faibles.',
+  },
+  {
+    id: 'central-exit',
+    level: 5,
+    title: 'Sortir du côté vers le centre',
+    lesson:
+      'Le saut d’une intersection vers le centre peut créer une voie de développement. Il ne connecte pas encore les pierres et n’établit pas la vie du groupe. Vérifiez où l’adversaire peut couper et où vos autres pierres pourraient servir d’appui.',
+  },
+  {
+    id: 'opening-transition',
+    level: 6,
+    title: 'Après un échange local : développer le reste du goban',
+    lesson:
+      'Une séquence locale ne fixe pas le plan global. Quand plusieurs coups se succèdent dans un coin, repérez les autres secteurs et les groupes issus de l’ouverture. Le prochain coup éloigné peut agrandir un cadre, menacer ou renforcer ; il ne prouve pas que l’échange soit terminé.',
+  },
+  {
+    id: 'weak-group',
+    level: 6,
+    title: 'Du fuseki au combat : renforcer un groupe vulnérable',
+    lesson:
+      'Le passage au milieu de partie met les structures à l’épreuve. Avant de construire davantage, comptez les libertés de vos chaînes et vérifiez les risques de séparation. Augmenter les libertés améliore une propriété locale, mais ne garantit ni deux yeux ni la survie.',
+  },
+] as const;
+
+export const STRATEGY_MODULES = [...BRIDGE_MODULES, ...EXISTING_STRATEGY_MODULES] as const;
+
 export type StrategyModule = (typeof STRATEGY_MODULES)[number]['id'];
 
 export interface StrategyLesson {
@@ -77,6 +148,8 @@ export interface StrategyLesson {
     previous?: number;
     anchorSize?: number;
     anchorLiberties?: number;
+    resultingSize?: number;
+    resultingLiberties?: number;
   };
 }
 
@@ -111,6 +184,8 @@ type Finding = Pick<StrategyLesson, 'module' | 'anchors' | 'prompt' | 'observati
   previous?: number;
   anchorSize?: number;
   anchorLiberties?: number;
+  resultingSize?: number;
+  resultingLiberties?: number;
   alternativeFilter?: (p: number) => boolean;
 };
 
@@ -258,10 +333,231 @@ function findings(board: Board, moves: Move[], before: number, handicap: number)
   return result;
 }
 
+function bridgeFindings(board: Board, moves: Move[], before: number, handicap: number): Finding[] {
+  const { color, point: p } = moves[before]!;
+  if (p === PASS || before > 100) return [];
+  const own: number[] = [],
+    other: number[] = [];
+  for (let q = 0; q < POINTS; q++) {
+    if (board.get(q) === color) own.push(q);
+    if (board.get(q) === opposite(color)) other.push(q);
+  }
+  const nearest = (points: number[]) => [...points].sort((a, b) => distance(p, a) - distance(p, b));
+  const [px, py] = xy(p);
+  const result: Finding[] = [];
+  if (
+    !handicap &&
+    before >= 1 &&
+    before <= 6 &&
+    corner(p) >= 0 &&
+    line(p) >= 3 &&
+    1 + Math.min(px, 18 - px) <= 4 &&
+    1 + Math.min(py, 18 - py) <= 4 &&
+    ![...own, ...other].some((q) => corner(q) === corner(p))
+  ) {
+    const edgeDistances = [1 + Math.min(px, 18 - px), 1 + Math.min(py, 18 - py)].sort(
+      (a, b) => a - b,
+    );
+    result.push({
+      module: 'opening-lines',
+      anchors: [],
+      prompt:
+        'Quel premier point choisir pour développer un coin libre ? Comparez son emplacement avec celui des autres hypothèses.',
+      observation: `Le coup ${label(p)} occupe un coin qui ne contenait aucune pierre (secteur 6 × 6). Il se trouve à ${edgeDistances[0]} et ${edgeDistances[1]} lignes des deux bords ; ce sont deux appuis géométriques, pas un territoire déjà conquis.`,
+      rubric:
+        'Identifier les coins libres et compter les lignes depuis le bord. Expliquer les possibilités de développement le long des deux côtés.',
+    });
+  }
+  if (!handicap && before >= 4 && before <= 28 && corner(p) >= 0 && line(p) >= 3) {
+    const sameCorner = own.filter((q) => corner(q) === corner(p));
+    const support = sameCorner[0];
+    if (
+      sameCorner.length === 1 &&
+      support !== undefined &&
+      line(support) >= 3 &&
+      line(support) <= 4 &&
+      knight(p, support) &&
+      !other.some((q) => corner(q) === corner(p))
+    ) {
+      result.push({
+        module: 'corner-enclosure',
+        anchors: [support],
+        prompt:
+          'Comment associer les deux pierres pour esquisser un cadre de coin ? Cherchez aussi les faiblesses que pourrait exploiter une invasion.',
+        observation: `Avant ${label(p)}, seule la pierre amie ${label(support)} occupe ce secteur de coin. Les deux pierres forment un saut de cavalier ; elles ne sont pas solidement connectées et le cadre reste ouvert.`,
+        rubric:
+          'Repérer le saut de cavalier et les espaces non fermés. Comparer une esquisse de coin aux autres développements possibles.',
+      });
+    }
+  }
+  if (
+    before >= 6 &&
+    before <= 65 &&
+    line(p) >= 3 &&
+    line(p) <= 4 &&
+    !other.some((q) => distance(q, p) <= 1)
+  ) {
+    const support = nearest(own).find((q) => {
+      const [x, y] = xy(q);
+      const d = distance(p, q);
+      if (
+        side(q) !== side(p) ||
+        line(q) !== line(p) ||
+        (x !== px && y !== py) ||
+        d < 3 ||
+        d > 5 ||
+        (corner(q) >= 0 && corner(p) >= 0)
+      )
+        return false;
+      const step = x === px ? Math.sign(py - y) * SIZE : Math.sign(px - x);
+      return Array.from({ length: d - 1 }, (_, i) => q + step * (i + 1)).every(
+        (i) => !board.get(i),
+      );
+    });
+    if (support !== undefined) {
+      result.push({
+        module: 'side-base',
+        anchors: [support],
+        prompt:
+          'Où étendre cette pierre pour garder de la place sur le côté ? Cherchez les espaces où l’adversaire pourrait s’interposer.',
+        observation: `Avec ${label(p)}, le kifu laisse ${distance(p, support) - 1} intersections vides entre ce point et ${label(support)}, sur la même ligne ${line(p)}. Ce vide offre de l’espace mais demeure contestable ; il ne prouve pas une base vivante.`,
+        rubric:
+          'Compter la largeur de l’extension, rechercher les coupures et comparer le volume d’espace avec le risque de séparation.',
+      });
+    }
+  }
+  if (!handicap && before >= 4 && before <= 30 && corner(p) >= 0) {
+    const approached = nearest(other).find(
+      (q) => corner(q) === corner(p) && knight(p, q) && line(q) >= 3 && line(q) <= 4,
+    );
+    if (approached !== undefined && !own.some((q) => corner(q) === corner(p))) {
+      result.push({
+        module: 'opening-approach',
+        anchors: [approached],
+        prompt:
+          'Comment approcher la pierre adverse de ce coin ? Anticipez une réponse et la direction dans laquelle vous pourriez vous développer.',
+        observation: `Le coup ${label(p)} est en saut de cavalier par rapport à ${label(approached)}, et aucune pierre amie ne se trouvait dans ce secteur avant le coup. L’approche conteste l’espace sans démontrer une menace forcée.`,
+        rubric:
+          'Rechercher des soutiens voisins, imaginer une réponse adverse et trouver une voie de sortie. Examiner ensuite les coups réellement joués.',
+      });
+    }
+  }
+  const after = board.clone();
+  if (after.play(color, p).illegal) return result;
+  const groups = new Map<number, number>();
+  for (const q of neighbours(p))
+    if (board.get(q) === color) {
+      const chain = board.stonesOf(q);
+      groups.set(Math.min(...chain), q);
+    }
+  if (before >= 12 && before <= 85 && groups.size >= 2) {
+    const anchors = [...groups.values()];
+    const size = after.stonesOf(p).length,
+      liberties = after.libertyCount(p);
+    result.push({
+      module: 'shape-connection',
+      anchors,
+      resultingSize: size,
+      resultingLiberties: liberties,
+      prompt:
+        'Quel coup réunit les chaînes repérées, et vaut-il mieux les relier maintenant que développer un autre secteur ?',
+      observation: `Le coup ${label(p)} connecte ${anchors.length} chaînes distinctes. La chaîne résultante compte ${size} pierres et ${liberties} libertés. Ni la vie ni l’efficacité stratégique ne sont déduites de cette seule connexion.`,
+      rubric:
+        'Identifier les chaînes distinctes, le point liant et leurs libertés après la pose. Comparer le bénéfice de ce renforcement à une autre décision.',
+    });
+  }
+  if (before >= 14 && before <= 85 && line(p) >= 5) {
+    const support = nearest(own).find((q) => {
+      const [x, y] = xy(q);
+      return (
+        line(q) >= 3 &&
+        line(p) - line(q) === 2 &&
+        distance(q, p) === 2 &&
+        (x === px || y === py) &&
+        !board.get((q + p) / 2) &&
+        !neighbours(p).some((r) => board.get(r) === color)
+      );
+    });
+    if (support !== undefined) {
+      result.push({
+        module: 'central-exit',
+        anchors: [support],
+        prompt:
+          'Comment développer la pierre repérée vers l’intérieur du goban sans négliger une coupure éventuelle ?',
+        observation: `${label(p)} est plus loin du bord de deux lignes que ${label(support)}, exactement à un saut rectiligne d’une intersection ; le point intermédiaire ${label((p + support) / 2)} est vide. Les pierres ne sont pas directement reliées.`,
+        rubric:
+          'Tracer le saut et repérer le point vulnérable. Chercher une autre pierre d’appui si l’adversaire coupe.',
+      });
+    }
+  }
+  if (before >= 12 && before <= 70) {
+    const prior = moves.slice(before - 3, before);
+    const last = prior[2]!.point;
+    if (
+      last !== PASS &&
+      corner(last) >= 0 &&
+      prior.every((m) => m.point !== PASS && corner(m.point) === corner(last)) &&
+      distance(p, last) >= 8 &&
+      nearest(own).some((q) => distance(p, q) <= 4)
+    ) {
+      result.push({
+        module: 'opening-transition',
+        anchors: [last],
+        prompt:
+          'Après ces trois échanges dans un coin, quelle nouvelle zone travailler ? Vérifiez ce qu’on laisse derrière soi avant de changer de secteur.',
+        observation: `Les coups ${before - 2}, ${before - 1} et ${before} appartiennent au même secteur de coin. Le coup suivant, ${label(p)}, se trouve à ${distance(p, last)} intersections orthogonales du dernier coup et à quatre ou moins d’une pierre amie. Il change de secteur ; l’échange local n’est pas déclaré résolu.`,
+        rubric:
+          'Observer les formes du coin, rechercher les menaces qui restent et les soutiens dans les autres secteurs. Rejouer la continuation plutôt que mémoriser un ordre universel.',
+      });
+    }
+  }
+  if (before >= 20 && before <= 100) {
+    const support = [...groups.values()].find(
+      (q) =>
+        board.stonesOf(q).length >= 2 &&
+        board.libertyCount(q) >= 2 &&
+        board.libertyCount(q) <= 3 &&
+        after.libertyCount(p) >= board.libertyCount(q) + 2,
+    );
+    if (support !== undefined) {
+      const size = board.stonesOf(support).length,
+        liberties = board.libertyCount(support);
+      const resultingSize = after.stonesOf(p).length,
+        resultingLiberties = after.libertyCount(p);
+      result.push({
+        module: 'weak-group',
+        anchors: [support],
+        anchorSize: size,
+        anchorLiberties: liberties,
+        resultingSize,
+        resultingLiberties,
+        prompt:
+          'Ce groupe a peu de libertés. Faut-il le consolider avant de développer ailleurs ? Comptez les libertés avant et après le coup envisagé.',
+        observation: `La chaîne de ${label(support)} contient ${size} pierres et ${liberties} libertés. Après ${label(p)}, la chaîne reliée contient ${resultingSize} pierres et ${resultingLiberties} libertés. L'amélioration est vérifiable, sans conclusion automatique sur sa vie.`,
+        rubric:
+          'Compter les libertés sans les compter deux fois, identifier le renforcement et rechercher la prochaine menace. Comparer la priorité avec une autre hypothèse.',
+      });
+    }
+  }
+  return result;
+}
+
 /** Build authentic case studies from exact legal kifu prefixes. No score or optimality is inferred. */
 export function extractStrategyCourse(games: readonly GameRecord[], quota = 12): StrategyLesson[] {
+  const historic = extractFindings(games, quota, EXISTING_STRATEGY_MODULES, findings, new Set());
+  const occupied = new Set(historic.map((l) => `${l.gameId}:${l.before}`));
+  return [...historic, ...extractFindings(games, quota, BRIDGE_MODULES, bridgeFindings, occupied)];
+}
+
+function extractFindings(
+  games: readonly GameRecord[],
+  quota: number,
+  modules: readonly { id: StrategyModule }[],
+  finder: typeof findings,
+  used: Set<string>,
+): StrategyLesson[] {
   const count = Math.max(0, Math.min(30, Math.floor(quota)));
-  const groups = new Map<StrategyModule, StrategyLesson[]>(STRATEGY_MODULES.map((m) => [m.id, []]));
+  const groups = new Map<StrategyModule, StrategyLesson[]>(modules.map((m) => [m.id, []]));
   const historical = games.filter((g) => !g.imported && !g.rengo && g.sources.length > 0);
   // Fixed permutation interleaves the corpus rather than concentrating on the earliest games.
   const ordered = [...historical].sort((a, b) => a.id.localeCompare(b.id));
@@ -269,7 +565,6 @@ export function extractStrategyCourse(games: readonly GameRecord[], quota = 12):
   const interleaved = Array.from({ length: stride }, (_, offset) =>
     ordered.filter((_, i) => i % stride === offset),
   ).flat();
-  const used = new Set<string>();
   for (const game of interleaved) {
     if ([...groups.values()].every((group) => group.length >= count)) break;
     const moves = decodeMoves(game.moves);
@@ -284,10 +579,11 @@ export function extractStrategyCourse(games: readonly GameRecord[], quota = 12):
       if (play.illegal || (move.point !== PASS && seen.has(key))) break;
       if (before > 0 && move.color === moves[before - 1]!.color) break;
       if (move.point !== PASS && !play.captures.length && played.libertyCount(move.point) >= 2) {
-        for (const finding of findings(board, moves, before, game.handicap)) {
+        for (const finding of finder(board, moves, before, game.handicap)) {
           const group = groups.get(finding.module)!;
           if (
             group.length >= count ||
+            (finding.module === 'opening-lines' && before !== 1 + (group.length % 3)) ||
             group.some((l) => l.gameId === game.id) ||
             used.has(`${game.id}:${before}`)
           )
@@ -329,6 +625,12 @@ export function extractStrategyCourse(games: readonly GameRecord[], quota = 12):
               ...(finding.previous !== undefined ? { previous: finding.previous } : {}),
               ...(finding.anchorSize !== undefined
                 ? { anchorSize: finding.anchorSize, anchorLiberties: finding.anchorLiberties! }
+                : {}),
+              ...(finding.resultingSize !== undefined
+                ? {
+                    resultingSize: finding.resultingSize,
+                    resultingLiberties: finding.resultingLiberties!,
+                  }
                 : {}),
             },
           });
