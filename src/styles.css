@@ -2942,3 +2942,25 @@ progress {
 .school-account-actions .account-indicator {
   justify-content: flex-end;
 }
+
+.opening-coach {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.7rem;
+  background: var(--ink);
+}
+.opening-coach h3,
+.opening-coach h4 {
+  color: var(--kaya);
+}
+.opening-coach .school-board {
+  padding: 0.25rem;
+}
+.opening-coach table {
+  table-layout: fixed;
+  width: 100%;
+  overflow-wrap: anywhere;
+}

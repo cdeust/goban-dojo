@@ -79,3 +79,74 @@ test('les nouvelles décisions de fuseki font une comparaison réelle KataGo et 
   await page.getByRole('button', { name: 'Voir mon coup' }).click();
   await expect(page.getByRole('region', { name: 'Suite historique' })).toHaveCount(0);
 });
+
+test('Sensei sur mobile : les deux suites sont réellement lues par Leela Zero et comparées par KataGo', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 393, height: 720 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+  await page.getByRole('button', { name: `Travailler : ${title}`, exact: true }).click();
+  const chosen = [...new Set([opening.historical, ...opening.alternatives])].sort(
+    (a, b) => a - b,
+  )[0]!;
+  await page.getByRole('button', { name: `A · ${pointToHuman(chosen)}`, exact: true }).click();
+  const coach = page.getByRole('region', { name: 'Que se passe-t-il après votre coup ?' });
+  await coach.getByRole('button', { name: 'Comparer les suites avec le Sensei' }).click();
+  await expect(
+    coach.getByRole('table', { name: 'Mesures de structure des deux variantes' }),
+  ).toBeVisible({ timeout: 60_000 });
+  await expect(coach.getByText('Estimation KataGo, séparée des faits')).toBeVisible();
+  await expect(coach.getByRole('status')).toContainText(`Coup ${opening.before + 1} :`);
+  const board = coach.getByRole('group', { name: 'Position du kifu, goban interactif' });
+  await expect(
+    board.getByRole('button', {
+      name: `${pointToHuman(chosen)}, ${opening.color === 'B' ? 'noir' : 'blanc'}, coup ${opening.before + 1}`,
+      exact: true,
+    }),
+  ).toBeVisible();
+  for (let i = 2; i <= 5; i++)
+    await coach.getByRole('button', { name: 'Coup suivant de la variante' }).click();
+  await expect(coach.getByRole('status')).toContainText('5/5');
+  await expect(coach.getByRole('button', { name: 'Coup suivant de la variante' })).toBeDisabled();
+  await coach.getByRole('button', { name: /^(Autre candidat|Coup du kifu) · / }).click();
+  await expect(coach.getByRole('status')).toContainText('5/5');
+  await coach.getByRole('button', { name: 'Coup précédent de la variante' }).click();
+  await expect(coach.getByRole('status')).toContainText('4/5');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('deux vrais kifus et le benchmark du Sensei sont lisibles depuis l’école', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+  const evidence = page.getByRole('region', { name: 'Comment le Sensei vérifie ses conseils' });
+  await evidence.getByText('Benchmark public : 152 décisions professionnelles').click();
+  await expect(evidence.getByText('77 coups identiques')).toBeVisible();
+  await expect(evidence).toContainText('9 meilleurs d’au moins 2 points');
+  await expect(evidence).toContainText('7 moins bons d’au moins 2 points');
+  await page.getByRole('button', { name: 'Étudier les deux ouvertures' }).click();
+  const study = page.getByRole('region', { name: 'Un même goban, deux plans d’ouverture' });
+  await expect(study.getByRole('status')).toContainText('Coup 7 : Noir P16');
+  await expect(
+    study
+      .getByRole('group', { name: 'Position du kifu, goban interactif' })
+      .getByRole('button', { name: 'P16, noir, coup 7', exact: true }),
+  ).toBeVisible();
+  await study.getByRole('button', { name: 'Coup suivant du kifu' }).click();
+  await expect(study.getByRole('status')).toContainText('Coup 8 : Blanc C6');
+  await study.getByRole('button', { name: /D5$/ }).click();
+  await expect(study.getByRole('status')).toContainText('Coup 8 : Blanc P17');
+  await study.getByRole('button', { name: 'Coup précédent du kifu' }).click();
+  await expect(study.getByRole('status')).toContainText('Coup 7 : Noir D5');
+  await expect(
+    study
+      .getByRole('group', { name: 'Position du kifu, goban interactif' })
+      .getByRole('button', { name: 'D5, noir, coup 7', exact: true }),
+  ).toBeVisible();
+});

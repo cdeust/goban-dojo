@@ -41,6 +41,8 @@ import { StrategyExercise } from './StrategyExercise.tsx';
 import { RuleCourseExercise } from './RuleCourseExercise.tsx';
 import { TrainingGame } from './TrainingGame.tsx';
 import { JapaneseCountWorkshop } from './JapaneseCountWorkshop.tsx';
+import { SenseiEvidence } from './SenseiEvidence.tsx';
+import { HistoricalOpening } from './HistoricalOpening.tsx';
 
 function foundation(ex: CourseExercise): ex is SchoolExercise {
   return SCHOOL_MODULES.some((m) => m.id === ex.module);
@@ -361,6 +363,7 @@ export function School() {
   const [training, setTraining] = useState(false);
   const [assessing, setAssessing] = useState(() => useStore.getState().schoolStartAssessment);
   const [counting, setCounting] = useState(false);
+  const [openingCase, setOpeningCase] = useState(false);
   const [session, setSession] = useState(0);
   const [saved, setSaved] = useState(true);
   const [restore, setRestore] = useState<SchoolProgress | null>(null);
@@ -467,6 +470,14 @@ export function School() {
               setAssessing(false);
               open(activity);
             }
+          }}
+        />
+      ) : openingCase ? (
+        <HistoricalOpening
+          games={games ?? []}
+          onBack={() => {
+            setOpeningCase(false);
+            scroller.current?.scrollTo({ top: 0 });
           }}
         />
       ) : counting ? (
@@ -581,6 +592,26 @@ export function School() {
               grades kyu ou dan.
             </p>
           </section>
+          <section className="school-welcome" aria-labelledby="historical-opening-case-title">
+            <p className="chapter__index">Développer son ouverture · Étude de kifu</p>
+            <h2 id="historical-opening-case-title">Un même goban, deux plans d’ouverture</h2>
+            <p>
+              Deux vrais kifus de 1843, mêmes pierres après six coups, mais deux décisions
+              différentes. Rejouez les réponses et comparez le développement des structures avec le
+              Sensei.
+            </p>
+            <button
+              className="chip chip--accent"
+              type="button"
+              onClick={() => {
+                setOpeningCase(true);
+                scroller.current?.scrollTo({ top: 0 });
+              }}
+            >
+              Étudier les deux ouvertures
+            </button>
+          </section>
+          <SenseiEvidence />
           <section className="school-welcome" aria-labelledby="rank-heading">
             <p className="chapter__index">Évaluation · Objectifs kyū et dan</p>
             <h2 id="rank-heading">Mes épreuves de progression</h2>

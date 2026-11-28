@@ -46,6 +46,6 @@ Le carnet réunit les recommandations de l’école et les rappels de kifu sans 
 
 ## Sources supplémentaires à évaluer
 
-L'[archive des championnats européens](https://eurogofed.org/archives/egc/en/stats/games/) expose des parties réelles récentes et historiques, dont les fichiers SGF ; les [parties AlphaGo de Google DeepMind](https://deepmind.google/blog/alphagos-next-move/) sont des pistes de comparaison pédagogique. Ne pas importer ni republier un nouveau fonds sans vérifier la provenance, les termes de réutilisation des fichiers et annotations, et les droits commerciaux. Le corpus CWI/PGD déjà dans le dépôt ne déclare pas de licence ; voir DONNEES.md. Le stade actuel est gratuit. Aucun contenu d'une école tierce n'est copié.
+L'[archive des championnats européens](https://eurogofed.org/archives/egc/en/stats/games/) expose des parties réelles récentes et historiques, dont les fichiers SGF ; les [parties AlphaGo de Google DeepMind](https://deepmind.google/blog/alphagos-next-move/) sont des pistes de comparaison pédagogique. Ne pas importer ni republier un nouveau fonds sans vérifier la provenance, les termes de réutilisation des fichiers et annotations, et les droits commerciaux. CWI déclare les parties dans le domaine public ; PGD ne déclare pas de licence, voir [DONNEES.md](DONNEES.md). Le stade actuel est gratuit. Aucun contenu d'une école tierce n'est copié.
 
 Le catalogue est chargé à la demande depuis le carnet ou l’école ; il reste séparé du chargement initial du kifu. Voir [la pédagogie et les mesures du dojo](PEDAGOGIE-DOJO.md).
