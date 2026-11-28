@@ -5,9 +5,9 @@ export const SCHOOL_MODULES = [
   {
     id: 'liberties',
     level: 1,
-    title: 'Lire les libertés',
+    title: 'Compter les libertés',
     lesson:
-      'Une chaîne est un ensemble de pierres de même couleur reliées par un côté. Ses libertés sont les intersections vides voisines de toute la chaîne, comptées une seule fois.',
+      'Partez de la pierre indiquée et suivez les lignes jusqu’aux pierres de même couleur qui lui sont reliées. Pour toute cette chaîne, comptez les intersections vides juste au-dessus, en dessous, à gauche ou à droite. Ne comptez pas les diagonales. Si deux pierres touchent le même point vide, comptez-le une seule fois.',
   },
   {
     id: 'capture-one',
@@ -68,16 +68,16 @@ export const SCHOOL_MODULES = [
   {
     id: 'region-border',
     level: 4,
-    title: 'Délimiter une zone',
+    title: 'Reconnaître la bordure d’une zone vide',
     lesson:
-      'Une région de points vides peut toucher des pierres noires, blanches ou les deux. Une frontière d’une seule couleur est une condition géométrique, mais le territoire définitif dépend aussi des groupes vivants, morts et du seki.',
+      'Partez du point marqué et suivez les lignes de point vide en point vide, sans traverser de pierre. La bordure est formée par les pierres qui touchent directement cette zone. Le bord du goban arrête la zone ; il n’a pas de couleur. Une bordure d’une seule couleur ne suffit pas à établir un territoire.',
   },
   {
     id: 'region-size',
     level: 4,
-    title: 'Compter une zone fermée',
+    title: 'Compter les points d’une zone vide',
     lesson:
-      'Comptez chaque intersection vide reliée à la zone, sans compter les pierres. Ce comptage local ne remplace pas le décompte japonais de la partie, qui inclut les prisonniers, les pierres mortes et le komi.',
+      'Comptez le point marqué, puis tous les points vides qu’on peut atteindre en suivant les lignes sans traverser de pierre. Chaque point compte une fois. Il s’agit de la taille de la zone dans la position affichée, pas de sa valeur au décompte final.',
   },
 ] as const;
 export type ModuleId = (typeof SCHOOL_MODULES)[number]['id'];
@@ -207,11 +207,11 @@ export function schoolQuestion(board: Board, ex: SchoolExercise): string {
   const player = ex.color === 'B' ? 'Noir' : 'Blanc';
   switch (ex.module) {
     case 'region-border':
-      return `Quelles couleurs de pierres bordent la zone vide contenant ${pointToHuman(ex.candidate!)} ?`;
+      return `Quelles pierres touchent la zone vide qui part de ${pointToHuman(ex.candidate!)} : des pierres noires, blanches ou des deux couleurs ?`;
     case 'region-size':
-      return `Combien d’intersections vides sont reliées à ${pointToHuman(ex.candidate!)} dans cette zone fermée ?`;
+      return `Combien de points vides compte la zone qui part de ${pointToHuman(ex.candidate!)} ? Comptez aussi ce point.`;
     case 'liberties':
-      return `Combien de libertés possède le groupe de ${pointToHuman(ex.anchors[0]!)} ?`;
+      return `Combien de libertés a la chaîne qui contient la pierre en ${pointToHuman(ex.anchors[0]!)} ?`;
     case 'capture-one':
       return `Capturez la pierre adverse en ${stones}. ${player} au trait.`;
     case 'capture-chain':
@@ -238,11 +238,24 @@ export function schoolSolution(
   chosen?: SchoolAnswer,
 ): string {
   if (ex.module === 'region-border' || ex.module === 'region-size') {
-    const region = emptyRegion(board, ex.candidate!);
-    return `La zone contient ${region.points.length} intersection(s) vide(s). ${region.border.size === 2 ? 'Elle touche les deux couleurs : ce n’est pas une zone géométriquement fermée par un seul camp.' : region.border.has('B') ? 'Elle ne touche que des pierres noires.' : 'Elle ne touche que des pierres blanches.'} Il faut encore valider les groupes vivants et morts avant de compter le score.`;
+    const { points, border } = emptyRegion(board, ex.candidate!);
+    const count = points.length === 1 ? '1 point vide' : `${points.length} points vides`;
+    const boundary =
+      border.size === 2
+        ? 'La zone touche des pierres des deux couleurs.'
+        : border.has('B')
+          ? 'La zone ne touche que des pierres noires.'
+          : border.has('W')
+            ? 'La zone ne touche que des pierres blanches.'
+            : 'La zone ne touche aucune pierre.';
+    return `La zone contient ${count} : ${pointsLabel([...points].sort((a, b) => a - b))}. ${boundary} Ce constat ne détermine pas le territoire final.`;
   }
-  if (ex.module === 'liberties')
-    return `${pointToHuman(ex.anchors[0]!)} appartient à une chaîne qui possède ${board.libertyCount(ex.anchors[0]!)} liberté(s) distincte(s).`;
+  if (ex.module === 'liberties') {
+    const group = board.stonesOf(ex.anchors[0]!);
+    const liberties = [...new Set(group.flatMap(neighbours).filter((p) => board.get(p) === null))];
+    const count = liberties.length === 1 ? '1 liberté' : `${liberties.length} libertés`;
+    return `La chaîne qui contient ${pointToHuman(ex.anchors[0]!)} a ${count} : ${pointsLabel(liberties.sort((a, b) => a - b))}.`;
+  }
   if (ex.module === 'capture-sequence')
     return `Le groupe en ${pointToHuman(ex.anchors[0]!)} est capturable en trois demi-coups. Toutes les réponses adverses légales ont été vérifiées après le premier coup ; cette preuve locale ne constitue pas un verdict général de vie et mort.`;
   if (ex.module === 'legality') {

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { POINTS, opposite } from '../src/domain/board.ts';
+import { Board, POINTS, opposite, pointFromHuman } from '../src/domain/board.ts';
 import { decodeMoves, type Dataset } from '../src/domain/game.ts';
 import {
   exerciseAnswer,
@@ -8,6 +8,8 @@ import {
   extractSchools,
   isMoveModule,
   schoolPosition,
+  schoolQuestion,
+  schoolSolution,
   schoolWindow,
   SCHOOL_MODULES,
   type SchoolExercise,
@@ -26,6 +28,54 @@ const data = JSON.parse(
   readFileSync(new URL('../public/data/games.json', import.meta.url), 'utf8'),
 ) as Dataset;
 const games = new Map(data.games.map((g) => [g.id, g]));
+
+describe('Consignes de comptage', () => {
+  const point = (label: string) => pointFromHuman(label)!;
+
+  it('indique chaque liberté de la chaîne une fois, sans ajouter le bord du goban', () => {
+    const board = new Board();
+    for (const label of ['A1', 'A2', 'B1']) board.setup(point(label), 'B');
+    const ex: SchoolExercise = {
+      id: 'test-liberties',
+      module: 'liberties',
+      gameId: 'test',
+      before: 0,
+      color: 'B',
+      anchors: [point('A1')],
+    };
+    expect(schoolQuestion(board, ex)).toContain('la pierre en A1');
+    expect(exerciseAnswer(board, ex, 3)).toBe(true);
+    expect(exerciseAnswer(board, ex, 4)).toBe(false);
+    expect(schoolSolution(board, ex, 0)).toBe(
+      'La chaîne qui contient A1 a 3 libertés : A3, B2, C1.',
+    );
+  });
+
+  it('compte le point marqué et distingue la zone de son éventuel territoire', () => {
+    const board = new Board();
+    board.setup(point('A18'), 'B');
+    board.setup(point('B18'), 'W');
+    board.setup(point('C19'), 'B');
+    const ex: SchoolExercise = {
+      id: 'test-region',
+      module: 'region-size',
+      gameId: 'test',
+      before: 0,
+      color: 'B',
+      anchors: [point('A19'), point('B19')],
+      candidate: point('A19'),
+    };
+    expect(schoolQuestion(board, ex)).toContain('Comptez aussi ce point.');
+    expect(exerciseAnswer(board, ex, 2)).toBe(true);
+    expect(schoolSolution(board, ex, 0)).toBe(
+      'La zone contient 2 points vides : A19, B19. La zone touche des pierres des deux couleurs. Ce constat ne détermine pas le territoire final.',
+    );
+    board.setup(point('B18'), 'B');
+    expect(schoolSolution(board, ex, 0)).toContain(
+      'La zone ne touche que des pierres noires. Ce constat ne détermine pas le territoire final.',
+    );
+  });
+});
 
 describe('École basée sur de vrais kifus', () => {
   it('reproduit exactement les 264 exercices, 24 par module, sur la carrière entière', () => {

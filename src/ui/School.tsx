@@ -140,7 +140,15 @@ function Exercise({
     }
     if (!attempted) onFailure();
     setAttempted(true);
-    setFeedback('Ce choix ne répond pas à l’objectif. Observez les libertés et essayez à nouveau.');
+    setFeedback(
+      ex.module === 'liberties'
+        ? 'Recomptez les points vides qui touchent toute la chaîne. Un point partagé ne compte qu’une fois.'
+        : ex.module === 'region-size'
+          ? 'Repartez du point marqué. Comptez-le, puis suivez les lignes sans traverser de pierre.'
+          : ex.module === 'region-border'
+            ? 'Suivez le contour de toute la zone. Regardez les pierres qui la touchent, pas seulement celles près du point marqué.'
+            : 'Ce choix ne répond pas à l’objectif. Observez la position et essayez à nouveau.',
+    );
   }
   function reveal() {
     if (result) return;
@@ -212,8 +220,10 @@ function Exercise({
           full={full}
         />
         <p className="school-caption">
-          Les pierres initiales portent les numéros du kifu. Les pierres signalées sont les groupes
-          à examiner.
+          Les numéros indiquent les coups du kifu.{' '}
+          {ex.module === 'region-size' || ex.module === 'region-border'
+            ? 'Le point « ? » est le point de départ de la zone vide.'
+            : 'Les pierres signalées indiquent les groupes à examiner.'}
           {played.length > 0 &&
             (recordedLine
               ? ' La suite affichée est celle du kifu.'
