@@ -1320,7 +1320,7 @@ test.describe('école de go sur mobile', () => {
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
     await expect(page.getByRole('heading', { name: 'École de go', exact: true })).toBeVisible();
-    await expect(page.getByText(/748 exercices tirés de 168 parties/)).toBeVisible();
+    await expect(page.getByText(/748 exercices tirés de 172 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Commencer ma séance' }).click();
     await expect(
       page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
@@ -1381,7 +1381,7 @@ test.describe('cursus avancé et application', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText(/748 exercices tirés de 168 parties/)).toBeVisible();
+    await expect(page.getByText(/748 exercices tirés de 172 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Travailler : Reconnaître deux yeux' }).click();
     await page.getByRole('button', { name: 'Non démontré' }).tap();
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');

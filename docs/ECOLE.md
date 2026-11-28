@@ -26,7 +26,7 @@ Le produit doit être une véritable école de go, et non un ensemble de quelque
 | 9 – Yose et décompte | Captures tardives, prisonniers, frontière, variation géométrique, points japonais    |            160 |
 | Cycle d’application  | Partie 19×19 contre Leela Zero, sauvegarde/historique, analyse KataGo des coups      | Pratique libre |
 
-**748 exercices et études, 37 chapitres, 168 parties historiques de 1839 à 1861.** L'ensemble initial de 264 est conservé ; 144 exercices tactiques avancés, 84 études stratégiques, 96 études intermédiaires d’ouverture et de transition, et 160 exercices de yose sont ajoutés. `pnpm data:build` régénère les quatre fichiers de catalogue. Aucune composition, transformation ou variation de la mise en place ne gonfle le catalogue. Une même position peut servir à deux compétences distinctes. Chaque activité est ancrée dans un préfixe exact de kifu et un identifiant stable. Les différences entre coup réel et variante sont affichées.
+**748 exercices et études, 37 chapitres, 172 parties historiques de 1839 à 1861.** L'ensemble initial de 264 est conservé ; 144 exercices tactiques avancés, 84 études stratégiques, 96 études intermédiaires d’ouverture et de transition, et 160 exercices de yose sont ajoutés. `pnpm data:build` régénère les quatre fichiers de catalogue. Aucune composition, transformation ou variation de la mise en place ne gonfle le catalogue. Une même position peut servir à deux compétences distinctes. Chaque activité est ancrée dans un préfixe exact de kifu et un identifiant stable. Les différences entre coup réel et variante sont affichées.
 
 ### Validité des objectifs
 
