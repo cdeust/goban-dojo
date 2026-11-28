@@ -1352,7 +1352,7 @@ test.describe('école de go sur mobile', () => {
     hasTouch: true,
     acceptDownloads: true,
   });
-  test('748 exercices réels, capture en trois coups et progression visiteur éphémère', async ({
+  test('804 exercices réels, capture en trois coups et progression visiteur éphémère', async ({
     page,
   }) => {
     test.slow();
@@ -1361,7 +1361,7 @@ test.describe('école de go sur mobile', () => {
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
     await expect(page.getByRole('heading', { name: 'École de go', exact: true })).toBeVisible();
-    await expect(page.getByText(/748 exercices tirés de 172 parties/)).toBeVisible();
+    await expect(page.getByText(/804 exercices tirés de 172 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Commencer ma séance' }).click();
     await expect(
       page.getByRole('heading', {
@@ -1384,10 +1384,12 @@ test.describe('école de go sur mobile', () => {
         }),
       )
       .toBe(true);
+    await expect(page.locator('.school-solution-point')).toHaveCount(0);
     await page.getByRole('button', { name: '4', exact: true }).click();
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+    await expect(page.locator('.school-solution-point')).toHaveCount(4);
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('1 / 804', { exact: false }).first()).toBeVisible();
     await page
       .getByRole('button', { name: 'Travailler : Lire une capture en trois coups' })
       .click();
@@ -1405,13 +1407,13 @@ test.describe('école de go sur mobile', () => {
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
     await expect(grid.getByRole('button', { name: /H6, noir, coup 155/ })).toBeVisible();
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('2 / 748', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('2 / 804', { exact: false }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Exporter la progression' })).toBeDisabled();
     await expect(page.getByLabel('Restaurer une sauvegarde de l’école')).toBeDisabled();
     await page.reload();
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText('0 / 748', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('0 / 804', { exact: false }).first()).toBeVisible();
   });
 });
 
@@ -1424,7 +1426,7 @@ test.describe('cursus avancé et application', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText(/748 exercices tirés de 172 parties/)).toBeVisible();
+    await expect(page.getByText(/804 exercices tirés de 172 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Travailler : Reconnaître deux yeux' }).click();
     await page.getByRole('button', { name: 'Non démontré' }).tap();
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
@@ -1473,7 +1475,7 @@ test.describe('cursus avancé et application', () => {
     await page.getByRole('button', { name: 'Calculer sous ces hypothèses' }).click();
     await expect(page.getByRole('status')).toContainText('Décompte conditionnel');
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('5 / 748', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('5 / 804', { exact: false }).first()).toBeVisible();
     expect(w.problems).toEqual([]);
     expect(w.foreign).toEqual([]);
   });
@@ -1542,7 +1544,7 @@ test('le carnet déclenche une séance réelle de l’école et reprend ses erre
   ).toBeVisible();
   await page.getByRole('button', { name: 'Voir l’explication' }).click();
   await page.getByRole('button', { name: 'Retour au dojo' }).click();
-  await expect(guided).toContainText('1 / 748 exercices travaillés');
+  await expect(guided).toContainText('1 / 804 exercices travaillés');
   await expect(guided).toContainText('0 révisions');
   await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
   await page.evaluate(() => window.dispatchEvent(new Event('focus')));
@@ -1572,7 +1574,36 @@ test('la correction d’une zone vide montre les points comptés, sans les décl
   await expect(
     page.getByText('Le point « ? » est le point de départ de la zone vide.', { exact: false }),
   ).toBeVisible();
+  await expect(page.locator('.school-solution-point')).toHaveCount(0);
   await page.getByRole('button', { name: 'Voir l’explication' }).click();
+  await expect(page.locator('.school-solution-point').first()).toBeVisible();
   await expect(page.getByText(/La zone contient \d+ points? vides? : [A-T]\d+/)).toBeVisible();
   await expect(page.getByText(/Ce constat ne détermine pas le territoire final/)).toBeVisible();
+});
+
+test('les libertés partagées sont proposées dès le deuxième exercice et révélées après la réponse', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+  const chapter = page.getByRole('button', { name: 'Travailler : Compter les libertés' });
+  await chapter.click();
+  await page.getByRole('button', { name: '4', exact: true }).click();
+  await page.getByRole('button', { name: '← Programme' }).click();
+  await chapter.click();
+  await expect(page.getByRole('heading', { name: /pierre en P14/ })).toBeVisible();
+  await expect(page.locator('.school-solution-point')).toHaveCount(0);
+  // O14 touches two stones: summing individual liberties would give five instead of four.
+  await page.getByRole('button', { name: '5', exact: true }).click();
+  await expect(page.getByRole('status')).not.toContainText('Réussi');
+  await expect(page.locator('.school-solution-point')).toHaveCount(0);
+  await page.getByRole('button', { name: '4', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Réussi après entraînement');
+  await expect(page.locator('.school-solution-point')).toHaveCount(4);
+  for (const point of ['P16', 'N15', 'O14', 'P13'])
+    await expect(
+      page.getByRole('button', { name: `${point}, vide, point de la correction` }),
+    ).toBeVisible();
 });

@@ -165,6 +165,26 @@ export function emptyRegion(board: Board, start: number): { points: number[]; bo
   return { points, border };
 }
 
+/** Distinct empty intersections adjacent to the complete connected chain. */
+export function chainLiberties(board: Board, anchor: number): number[] {
+  return [
+    ...new Set(
+      board
+        .stonesOf(anchor)
+        .flatMap(neighbours)
+        .filter((p) => board.get(p) === null),
+    ),
+  ].sort((a, b) => a - b);
+}
+
+/** Correction only: never reveal the answers before the learner completes the question. */
+export function countingSolutionPoints(board: Board, ex: SchoolExercise): number[] {
+  if (ex.module === 'liberties') return chainLiberties(board, ex.anchors[0]!);
+  if (ex.module === 'region-size' || ex.module === 'region-border')
+    return emptyRegion(board, ex.candidate!).points;
+  return [];
+}
+
 export function exerciseAnswer(board: Board, ex: SchoolExercise, answer: SchoolAnswer): boolean {
   if (ex.module === 'region-size')
     return typeof answer === 'number' && answer === emptyRegion(board, ex.candidate!).points.length;
@@ -251,10 +271,9 @@ export function schoolSolution(
     return `La zone contient ${count} : ${pointsLabel([...points].sort((a, b) => a - b))}. ${boundary} Ce constat ne détermine pas le territoire final.`;
   }
   if (ex.module === 'liberties') {
-    const group = board.stonesOf(ex.anchors[0]!);
-    const liberties = [...new Set(group.flatMap(neighbours).filter((p) => board.get(p) === null))];
+    const liberties = chainLiberties(board, ex.anchors[0]!);
     const count = liberties.length === 1 ? '1 liberté' : `${liberties.length} libertés`;
-    return `La chaîne qui contient ${pointToHuman(ex.anchors[0]!)} a ${count} : ${pointsLabel(liberties.sort((a, b) => a - b))}.`;
+    return `La chaîne qui contient ${pointToHuman(ex.anchors[0]!)} a ${count} : ${pointsLabel(liberties)}.`;
   }
   if (ex.module === 'capture-sequence')
     return `Le groupe en ${pointToHuman(ex.anchors[0]!)} est capturable en trois demi-coups. Toutes les réponses adverses légales ont été vérifiées après le premier coup ; cette preuve locale ne constitue pas un verdict général de vie et mort.`;

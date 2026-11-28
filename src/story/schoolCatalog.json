@@ -8,6 +8,14 @@
     "anchors": [289]
   },
   {
+    "id": "liberties:s001:106",
+    "module": "liberties",
+    "gameId": "s001",
+    "before": 106,
+    "color": "B",
+    "anchors": [109]
+  },
+  {
     "id": "liberties:s021:8",
     "module": "liberties",
     "gameId": "s021",
@@ -22,6 +30,14 @@
     "before": 12,
     "color": "B",
     "anchors": [73]
+  },
+  {
+    "id": "liberties:s002:149",
+    "module": "liberties",
+    "gameId": "s002",
+    "before": 149,
+    "color": "W",
+    "anchors": [218]
   },
   {
     "id": "liberties:s062:13",
@@ -40,6 +56,14 @@
     "anchors": [289]
   },
   {
+    "id": "liberties:s005:36",
+    "module": "liberties",
+    "gameId": "s005",
+    "before": 36,
+    "color": "W",
+    "anchors": [288]
+  },
+  {
     "id": "liberties:s102:14",
     "module": "liberties",
     "gameId": "s102",
@@ -54,6 +78,14 @@
     "before": 9,
     "color": "W",
     "anchors": [110]
+  },
+  {
+    "id": "liberties:s006:86",
+    "module": "liberties",
+    "gameId": "s006",
+    "before": 86,
+    "color": "W",
+    "anchors": [296]
   },
   {
     "id": "liberties:s142:23",
@@ -72,6 +104,14 @@
     "anchors": [41]
   },
   {
+    "id": "liberties:s010:24",
+    "module": "liberties",
+    "gameId": "s010",
+    "before": 24,
+    "color": "W",
+    "anchors": [317]
+  },
+  {
     "id": "liberties:s182:23",
     "module": "liberties",
     "gameId": "s182",
@@ -86,6 +126,14 @@
     "before": 9,
     "color": "B",
     "anchors": [97]
+  },
+  {
+    "id": "liberties:s016:50",
+    "module": "liberties",
+    "gameId": "s016",
+    "before": 50,
+    "color": "W",
+    "anchors": [222]
   },
   {
     "id": "liberties:s223:11",
@@ -104,6 +152,14 @@
     "anchors": [282]
   },
   {
+    "id": "liberties:s019:20",
+    "module": "liberties",
+    "gameId": "s019",
+    "before": 20,
+    "color": "W",
+    "anchors": [72]
+  },
+  {
     "id": "liberties:s262:20",
     "module": "liberties",
     "gameId": "s262",
@@ -118,6 +174,14 @@
     "before": 20,
     "color": "B",
     "anchors": [222]
+  },
+  {
+    "id": "liberties:s017:66",
+    "module": "liberties",
+    "gameId": "s017",
+    "before": 66,
+    "color": "B",
+    "anchors": [52]
   },
   {
     "id": "liberties:s304:19",
@@ -136,6 +200,14 @@
     "anchors": [268]
   },
   {
+    "id": "liberties:s021:109",
+    "module": "liberties",
+    "gameId": "s021",
+    "before": 109,
+    "color": "W",
+    "anchors": [296]
+  },
+  {
     "id": "liberties:s347:34",
     "module": "liberties",
     "gameId": "s347",
@@ -150,6 +222,14 @@
     "before": 17,
     "color": "B",
     "anchors": [116]
+  },
+  {
+    "id": "liberties:s022:40",
+    "module": "liberties",
+    "gameId": "s022",
+    "before": 40,
+    "color": "W",
+    "anchors": [327]
   },
   {
     "id": "liberties:s387:19",
@@ -168,6 +248,14 @@
     "anchors": [53]
   },
   {
+    "id": "liberties:s031:45",
+    "module": "liberties",
+    "gameId": "s031",
+    "before": 45,
+    "color": "B",
+    "anchors": [327]
+  },
+  {
     "id": "liberties:s427:28",
     "module": "liberties",
     "gameId": "s427",
@@ -182,6 +270,14 @@
     "before": 10,
     "color": "W",
     "anchors": [300]
+  },
+  {
+    "id": "liberties:s032:58",
+    "module": "liberties",
+    "gameId": "s032",
+    "before": 58,
+    "color": "B",
+    "anchors": [305]
   },
   {
     "id": "liberties:s467:59",
@@ -1977,6 +2073,15 @@
     "candidate": 50
   },
   {
+    "id": "region-size:s001:149",
+    "module": "region-size",
+    "gameId": "s001",
+    "before": 149,
+    "color": "W",
+    "anchors": [278, 277],
+    "candidate": 278
+  },
+  {
     "id": "region-size:s021:190",
     "module": "region-size",
     "gameId": "s021",
@@ -1993,6 +2098,15 @@
     "color": "B",
     "anchors": [293],
     "candidate": 293
+  },
+  {
+    "id": "region-size:s002:130",
+    "module": "region-size",
+    "gameId": "s002",
+    "before": 130,
+    "color": "B",
+    "anchors": [272, 271, 270, 289],
+    "candidate": 272
   },
   {
     "id": "region-size:s062:121",
@@ -2013,6 +2127,15 @@
     "candidate": 291
   },
   {
+    "id": "region-size:s005:180",
+    "module": "region-size",
+    "gameId": "s005",
+    "before": 180,
+    "color": "W",
+    "anchors": [304, 323, 342],
+    "candidate": 304
+  },
+  {
     "id": "region-size:s182:220",
     "module": "region-size",
     "gameId": "s182",
@@ -2029,6 +2152,15 @@
     "color": "B",
     "anchors": [300, 301],
     "candidate": 300
+  },
+  {
+    "id": "region-size:s006:102",
+    "module": "region-size",
+    "gameId": "s006",
+    "before": 102,
+    "color": "W",
+    "anchors": [281, 280],
+    "candidate": 281
   },
   {
     "id": "region-size:s242:168",
@@ -2049,6 +2181,15 @@
     "candidate": 341
   },
   {
+    "id": "region-size:s016:105",
+    "module": "region-size",
+    "gameId": "s016",
+    "before": 105,
+    "color": "B",
+    "anchors": [251, 232],
+    "candidate": 251
+  },
+  {
     "id": "region-size:s327:217",
     "module": "region-size",
     "gameId": "s327",
@@ -2065,6 +2206,15 @@
     "color": "B",
     "anchors": [282, 263],
     "candidate": 282
+  },
+  {
+    "id": "region-size:s019:149",
+    "module": "region-size",
+    "gameId": "s019",
+    "before": 149,
+    "color": "B",
+    "anchors": [231, 212],
+    "candidate": 231
   },
   {
     "id": "region-size:s224:212",
@@ -2085,6 +2235,15 @@
     "candidate": 63
   },
   {
+    "id": "region-size:s021:113",
+    "module": "region-size",
+    "gameId": "s021",
+    "before": 113,
+    "color": "W",
+    "anchors": [280, 281, 282, 300],
+    "candidate": 280
+  },
+  {
     "id": "region-size:s328:131",
     "module": "region-size",
     "gameId": "s328",
@@ -2101,6 +2260,15 @@
     "color": "B",
     "anchors": [239, 220, 221],
     "candidate": 239
+  },
+  {
+    "id": "region-size:s022:105",
+    "module": "region-size",
+    "gameId": "s022",
+    "before": 105,
+    "color": "B",
+    "anchors": [333, 332, 351, 350, 349],
+    "candidate": 333
   },
   {
     "id": "region-size:s164:181",
@@ -2121,6 +2289,15 @@
     "candidate": 3
   },
   {
+    "id": "region-size:s031:135",
+    "module": "region-size",
+    "gameId": "s031",
+    "before": 135,
+    "color": "B",
+    "anchors": [166, 147],
+    "candidate": 166
+  },
+  {
     "id": "region-size:s349:168",
     "module": "region-size",
     "gameId": "s349",
@@ -2137,6 +2314,15 @@
     "color": "W",
     "anchors": [209, 228, 229, 230, 248],
     "candidate": 209
+  },
+  {
+    "id": "region-size:s033:109",
+    "module": "region-size",
+    "gameId": "s033",
+    "before": 109,
+    "color": "B",
+    "anchors": [69, 88, 107, 108, 127],
+    "candidate": 69
   },
   {
     "id": "region-size:s085:197",
@@ -2157,6 +2343,15 @@
     "candidate": 209
   },
   {
+    "id": "region-size:s035:140",
+    "module": "region-size",
+    "gameId": "s035",
+    "before": 140,
+    "color": "W",
+    "anchors": [299, 300],
+    "candidate": 299
+  },
+  {
     "id": "region-size:s350:217",
     "module": "region-size",
     "gameId": "s350",
@@ -2173,6 +2368,15 @@
     "color": "B",
     "anchors": [283, 284, 302, 265, 303, 246],
     "candidate": 283
+  },
+  {
+    "id": "region-size:s042:160",
+    "module": "region-size",
+    "gameId": "s042",
+    "before": 160,
+    "color": "B",
+    "anchors": [250, 249],
+    "candidate": 250
   },
   {
     "id": "region-size:s166:255",

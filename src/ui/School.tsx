@@ -11,6 +11,7 @@ import {
   SCHOOL_MODULES,
   exerciseAnswer,
   captureProof,
+  countingSolutionPoints,
   finishingCapture,
   isMoveModule,
   schoolPosition,
@@ -181,6 +182,7 @@ function Exercise({
       : [];
   const resultBoard = board.clone();
   for (const move of played) resultBoard.play(move.color, move.point);
+  const solutionPoints = result ? countingSolutionPoints(board, ex) : [];
   const recordedLine = played.every(
     (m, i) =>
       m.color === history[ex.before + i]?.color && m.point === history[ex.before + i]?.point,
@@ -211,6 +213,7 @@ function Exercise({
           game={game}
           before={ex.before}
           anchors={ex.anchors}
+          solutionPoints={solutionPoints}
           candidate={ex.candidate}
           board={board}
           resultBoard={resultBoard}
@@ -222,8 +225,11 @@ function Exercise({
         <p className="school-caption">
           Les numéros indiquent les coups du kifu.{' '}
           {ex.module === 'region-size' || ex.module === 'region-border'
-            ? 'Le point « ? » est le point de départ de la zone vide.'
+            ? solutionPoints.length
+              ? 'La zone vide est maintenant indiquée en vert.'
+              : 'Le point « ? » est le point de départ de la zone vide.'
             : 'Les pierres signalées indiquent les groupes à examiner.'}
+          {solutionPoints.length > 0 && ' Les points entourés en vert constituent la correction.'}
           {played.length > 0 &&
             (recordedLine
               ? ' La suite affichée est celle du kifu.'

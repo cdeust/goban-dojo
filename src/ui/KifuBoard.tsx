@@ -28,6 +28,7 @@ export function KifuBoard({
   anchors,
   candidate,
   choices,
+  solutionPoints,
   windowPoints,
   allowOccupied,
   dead,
@@ -44,6 +45,7 @@ export function KifuBoard({
   anchors: readonly number[];
   candidate?: number;
   choices?: readonly number[];
+  solutionPoints?: readonly number[];
   windowPoints?: readonly number[];
   allowOccupied?: boolean;
   dead?: readonly number[];
@@ -81,6 +83,7 @@ export function KifuBoard({
     (_, i) => (view.y + Math.floor(i / view.size)) * 19 + view.x + (i % view.size),
   );
   const marked = new Set(anchors);
+  const solved = new Set(solutionPoints ?? []);
   return (
     <div
       className="school-board"
@@ -98,7 +101,7 @@ export function KifuBoard({
         const color = resultBoard.get(p);
         const number = numbers.get(p);
         const unavailable = !!done || !onPlay || (allowOccupied ? !color : !!color);
-        const label = `${pointToHuman(p)}${color ? (color === 'B' ? ', noir' : ', blanc') : ', vide'}${number && color ? `, coup ${number}` : ''}${marked.has(p) ? ', groupe à examiner' : ''}${dead?.includes(p) ? ', groupe convenu mort' : ''}${seki?.includes(p) ? ', groupe marqué en seki' : ''}`;
+        const label = `${pointToHuman(p)}${color ? (color === 'B' ? ', noir' : ', blanc') : ', vide'}${number && color ? `, coup ${number}` : ''}${marked.has(p) ? ', groupe à examiner' : ''}${dead?.includes(p) ? ', groupe convenu mort' : ''}${seki?.includes(p) ? ', groupe marqué en seki' : ''}${solved.has(p) ? ', point de la correction' : ''}`;
         return (
           <SchoolCell
             key={p}
@@ -124,7 +127,10 @@ export function KifuBoard({
                   {number || ''}
                 </span>
               )}
-              {!color && (candidate === p || choices?.includes(p)) && (
+              {!color && solved.has(p) && (
+                <span className="school-solution-point" aria-hidden="true" />
+              )}
+              {!color && !solved.has(p) && (candidate === p || choices?.includes(p)) && (
                 <span className="school-candidate" aria-hidden="true">
                   {candidate === p ? '?' : String.fromCharCode(65 + (choices?.indexOf(p) ?? 0))}
                 </span>

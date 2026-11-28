@@ -2720,6 +2720,14 @@ progress {
   outline-offset: 1px;
   box-shadow: 0 0 0.4rem #fff9;
 }
+.school-solution-point {
+  width: 58%;
+  height: 58%;
+  border-radius: 50%;
+  border: 2px solid #17684c;
+  background: radial-gradient(circle, #d5f6dcaa, #49a87644);
+  box-shadow: 0 0 0.3rem #f1ffe999;
+}
 .school-candidate {
   color: #711f11;
   font-size: 0.95rem;
