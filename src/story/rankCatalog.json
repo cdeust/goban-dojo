@@ -6,91 +6,91 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "liberties:s421:16",
+          "id": "liberties:s261:14",
           "module": "liberties",
-          "gameId": "s421",
-          "before": 16,
-          "color": "W",
-          "anchors": [149]
+          "gameId": "s261",
+          "before": 14,
+          "color": "B",
+          "anchors": [87]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-one:s014:104",
+          "id": "capture-one:s399:52",
           "module": "capture-one",
-          "gameId": "s014",
-          "before": 104,
+          "gameId": "s399",
+          "before": 52,
           "color": "W",
-          "anchors": [110]
+          "anchors": [305]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-chain:s218:54",
+          "id": "capture-chain:s321:87",
           "module": "capture-chain",
-          "gameId": "s218",
-          "before": 54,
+          "gameId": "s321",
+          "before": 87,
           "color": "W",
-          "anchors": [130]
+          "anchors": [224]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "escape:s052:47",
+          "id": "escape:s125:8",
           "module": "escape",
-          "gameId": "s052",
-          "before": 47,
+          "gameId": "s125",
+          "before": 8,
           "color": "W",
-          "anchors": [241]
+          "anchors": [300]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "connect:s096:11",
+          "id": "connect:s015:10",
           "module": "connect",
-          "gameId": "s096",
+          "gameId": "s015",
+          "before": 10,
+          "color": "B",
+          "anchors": [310, 292]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "atari:s145:13",
+          "module": "atari",
+          "gameId": "s145",
+          "before": 13,
+          "color": "W",
+          "anchors": [230]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "legality:s098:11",
+          "module": "legality",
+          "gameId": "s098",
           "before": 11,
           "color": "W",
-          "anchors": [289, 291, 309]
+          "anchors": [80],
+          "candidate": 61
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "atari:s384:26",
-          "module": "atari",
-          "gameId": "s384",
-          "before": 26,
-          "color": "B",
-          "anchors": [65]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "legality:s051:22",
-          "module": "legality",
-          "gameId": "s051",
-          "before": 22,
-          "color": "B",
-          "anchors": [61],
-          "candidate": 60
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "region-size:s176:107",
+          "id": "region-size:s458:171",
           "module": "region-size",
-          "gameId": "s176",
-          "before": 107,
+          "gameId": "s458",
+          "before": 171,
           "color": "W",
-          "anchors": [19, 20, 0, 38],
-          "candidate": 19
+          "anchors": [325, 326, 344],
+          "candidate": 325
         }
       }
     ]
@@ -102,45 +102,141 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "liberties:s015:39",
+          "id": "liberties:s197:11",
           "module": "liberties",
-          "gameId": "s015",
-          "before": 39,
+          "gameId": "s197",
+          "before": 11,
           "color": "W",
-          "anchors": [292]
+          "anchors": [224]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-one:s004:16",
+          "id": "capture-one:s111:54",
           "module": "capture-one",
-          "gameId": "s004",
+          "gameId": "s111",
+          "before": 54,
+          "color": "B",
+          "anchors": [33]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "capture-chain:s378:67",
+          "module": "capture-chain",
+          "gameId": "s378",
+          "before": 67,
+          "color": "W",
+          "anchors": [289]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "escape:s469:136",
+          "module": "escape",
+          "gameId": "s469",
+          "before": 136,
+          "color": "B",
+          "anchors": [304]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "connect:s339:31",
+          "module": "connect",
+          "gameId": "s339",
+          "before": 31,
+          "color": "W",
+          "anchors": [70, 50]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "atari:s055:26",
+          "module": "atari",
+          "gameId": "s055",
+          "before": 26,
+          "color": "B",
+          "anchors": [314]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "legality:s014:16",
+          "module": "legality",
+          "gameId": "s014",
           "before": 16,
           "color": "W",
-          "anchors": [318]
+          "anchors": [61],
+          "candidate": 60
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-chain:s295:91",
+          "id": "region-size:s090:186",
+          "module": "region-size",
+          "gameId": "s090",
+          "before": 186,
+          "color": "B",
+          "anchors": [130, 111],
+          "candidate": 130
+        }
+      }
+    ]
+  },
+  {
+    "id": "initiation-3",
+    "band": "initiation",
+    "items": [
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "liberties:s117:8",
+          "module": "liberties",
+          "gameId": "s117",
+          "before": 8,
+          "color": "W",
+          "anchors": [40]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "capture-one:s388:95",
+          "module": "capture-one",
+          "gameId": "s388",
+          "before": 95,
+          "color": "W",
+          "anchors": [219]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "capture-chain:s470:62",
           "module": "capture-chain",
-          "gameId": "s295",
-          "before": 91,
+          "gameId": "s470",
+          "before": 62,
           "color": "W",
-          "anchors": [130]
+          "anchors": [25]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "escape:s431:61",
+          "id": "escape:s228:12",
           "module": "escape",
-          "gameId": "s431",
-          "before": 61,
-          "color": "W",
-          "anchors": [176]
+          "gameId": "s228",
+          "before": 12,
+          "color": "B",
+          "anchors": [72]
         }
       },
       {
@@ -157,132 +253,36 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "atari:s076:36",
+          "id": "atari:s177:20",
           "module": "atari",
-          "gameId": "s076",
-          "before": 36,
+          "gameId": "s177",
+          "before": 20,
           "color": "B",
-          "anchors": [22]
+          "anchors": [230]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "legality:s060:23",
+          "id": "legality:s068:60",
           "module": "legality",
-          "gameId": "s060",
-          "before": 23,
-          "color": "W",
-          "anchors": [301],
-          "candidate": 320
+          "gameId": "s068",
+          "before": 60,
+          "color": "B",
+          "anchors": [174],
+          "candidate": 175
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "region-size:s303:122",
+          "id": "region-size:s340:194",
           "module": "region-size",
-          "gameId": "s303",
-          "before": 122,
-          "color": "W",
-          "anchors": [35, 16, 15, 17, 18],
-          "candidate": 35
-        }
-      }
-    ]
-  },
-  {
-    "id": "initiation-3",
-    "band": "initiation",
-    "items": [
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "liberties:s417:12",
-          "module": "liberties",
-          "gameId": "s417",
-          "before": 12,
+          "gameId": "s340",
+          "before": 194,
           "color": "B",
-          "anchors": [47]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-one:s110:70",
-          "module": "capture-one",
-          "gameId": "s110",
-          "before": 70,
-          "color": "B",
-          "anchors": [43]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-chain:s208:102",
-          "module": "capture-chain",
-          "gameId": "s208",
-          "before": 102,
-          "color": "B",
-          "anchors": [58]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "escape:s302:34",
-          "module": "escape",
-          "gameId": "s302",
-          "before": 34,
-          "color": "W",
-          "anchors": [168]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "connect:s376:23",
-          "module": "connect",
-          "gameId": "s376",
-          "before": 23,
-          "color": "W",
-          "anchors": [69, 52]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "atari:s278:18",
-          "module": "atari",
-          "gameId": "s278",
-          "before": 18,
-          "color": "W",
-          "anchors": [42]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "legality:s144:108",
-          "module": "legality",
-          "gameId": "s144",
-          "before": 108,
-          "color": "B",
-          "anchors": [116],
-          "candidate": 117
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "region-size:s258:190",
-          "module": "region-size",
-          "gameId": "s258",
-          "before": 190,
-          "color": "B",
-          "anchors": [213, 232, 233],
-          "candidate": 213
+          "anchors": [322, 341, 340, 360, 359, 358],
+          "candidate": 322
         }
       }
     ]
@@ -294,65 +294,21 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "liberties:s116:8",
+          "id": "liberties:s219:22",
           "module": "liberties",
-          "gameId": "s116",
-          "before": 8,
-          "color": "W",
-          "anchors": [45]
+          "gameId": "s219",
+          "before": 22,
+          "color": "B",
+          "anchors": [42]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-one:s335:53",
+          "id": "capture-one:s371:28",
           "module": "capture-one",
-          "gameId": "s335",
-          "before": 53,
-          "color": "W",
-          "anchors": [328]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-chain:s444:133",
-          "module": "capture-chain",
-          "gameId": "s444",
-          "before": 133,
-          "color": "B",
-          "anchors": [268]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "escape:s075:71",
-          "module": "escape",
-          "gameId": "s075",
-          "before": 71,
-          "color": "W",
-          "anchors": [238]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "connect:s464:18",
-          "module": "connect",
-          "gameId": "s464",
-          "before": 18,
-          "color": "B",
-          "anchors": [212, 232]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "atari:s366:46",
-          "module": "atari",
-          "gameId": "s366",
-          "before": 46,
+          "gameId": "s371",
+          "before": 28,
           "color": "W",
           "anchors": [320]
         }
@@ -360,25 +316,69 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "legality:s404:27",
-          "module": "legality",
-          "gameId": "s404",
-          "before": 27,
+          "id": "capture-chain:s406:179",
+          "module": "capture-chain",
+          "gameId": "s406",
+          "before": 179,
           "color": "B",
-          "anchors": [118],
-          "candidate": 99
+          "anchors": [143]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "region-size:s061:132",
-          "module": "region-size",
-          "gameId": "s061",
-          "before": 132,
+          "id": "escape:s413:74",
+          "module": "escape",
+          "gameId": "s413",
+          "before": 74,
+          "color": "W",
+          "anchors": [253]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "connect:s455:52",
+          "module": "connect",
+          "gameId": "s455",
+          "before": 52,
           "color": "B",
-          "anchors": [94, 75, 113],
-          "candidate": 94
+          "anchors": [331, 276]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "atari:s273:20",
+          "module": "atari",
+          "gameId": "s273",
+          "before": 20,
+          "color": "W",
+          "anchors": [40]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "legality:s152:39",
+          "module": "legality",
+          "gameId": "s152",
+          "before": 39,
+          "color": "B",
+          "anchors": [245],
+          "candidate": 244
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "region-size:s220:231",
+          "module": "region-size",
+          "gameId": "s220",
+          "before": 231,
+          "color": "W",
+          "anchors": [10, 9, 8, 28, 7, 27],
+          "candidate": 10
         }
       }
     ]
@@ -390,46 +390,149 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "double-atari:s250:35",
+          "id": "double-atari:s056:180",
           "module": "double-atari",
-          "gameId": "s250",
-          "before": 35,
-          "color": "W",
-          "anchors": [20, 38]
+          "gameId": "s056",
+          "before": 180,
+          "color": "B",
+          "anchors": [321, 339]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-sequence:s150:40",
+          "id": "capture-sequence:s112:75",
           "module": "capture-sequence",
-          "gameId": "s150",
-          "before": 40,
-          "color": "B",
-          "anchors": [92]
+          "gameId": "s112",
+          "before": 75,
+          "color": "W",
+          "anchors": [254]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "legality:s175:12",
+          "id": "legality:s235:38",
           "module": "legality",
-          "gameId": "s175",
-          "before": 12,
+          "gameId": "s235",
+          "before": 38,
           "color": "B",
-          "anchors": [301],
-          "candidate": 300
+          "anchors": [259],
+          "candidate": 260
         }
       },
       {
         "kind": "tactic",
         "exercise": {
-          "id": "two-eyes:s287:195",
+          "id": "two-eyes:s354:100",
           "module": "two-eyes",
-          "gameId": "s287",
-          "before": 195,
+          "gameId": "s354",
+          "before": 100,
           "color": "W",
-          "anchors": [59]
+          "anchors": [19]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "make-life:s346:240",
+          "module": "make-life",
+          "gameId": "s346",
+          "before": 240,
+          "color": "B",
+          "anchors": [75],
+          "candidate": 94
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "false-eye:s185:48",
+          "module": "false-eye",
+          "gameId": "s185",
+          "before": 48,
+          "color": "B",
+          "anchors": [358],
+          "candidate": 357
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "fuseki:s012:3",
+          "module": "fuseki",
+          "gameId": "s012",
+          "before": 3,
+          "color": "W",
+          "anchors": [],
+          "historical": 41,
+          "alternatives": [73],
+          "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "approach:s036:3",
+          "module": "approach",
+          "gameId": "s036",
+          "before": 3,
+          "color": "W",
+          "anchors": [42],
+          "historical": 79,
+          "alternatives": [78, 288],
+          "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban."
+        }
+      }
+    ]
+  },
+  {
+    "id": "reading-2",
+    "band": "reading",
+    "items": [
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "double-atari:s146:141",
+          "module": "double-atari",
+          "gameId": "s146",
+          "before": 141,
+          "color": "W",
+          "anchors": [47, 64]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "capture-sequence:s434:117",
+          "module": "capture-sequence",
+          "gameId": "s434",
+          "before": 117,
+          "color": "B",
+          "anchors": [113]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "legality:s308:16",
+          "module": "legality",
+          "gameId": "s308",
+          "before": 16,
+          "color": "B",
+          "anchors": [270],
+          "candidate": 289
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "two-eyes:s288:255",
+          "module": "two-eyes",
+          "gameId": "s288",
+          "before": 255,
+          "color": "W",
+          "anchors": [97]
         }
       },
       {
@@ -447,92 +550,92 @@
       {
         "kind": "tactic",
         "exercise": {
-          "id": "false-eye:s028:77",
+          "id": "false-eye:s376:139",
           "module": "false-eye",
-          "gameId": "s028",
-          "before": 77,
-          "color": "B",
-          "anchors": [276],
-          "candidate": 295
+          "gameId": "s376",
+          "before": 139,
+          "color": "W",
+          "anchors": [289],
+          "candidate": 308
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "fuseki:s074:3",
+          "id": "fuseki:s263:2",
           "module": "fuseki",
-          "gameId": "s074",
-          "before": 3,
-          "color": "W",
+          "gameId": "s263",
+          "before": 2,
+          "color": "B",
           "anchors": [],
-          "historical": 301,
-          "alternatives": [287, 41],
+          "historical": 71,
+          "alternatives": [307, 326],
           "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "approach:s136:3",
+          "id": "approach:s296:4",
           "module": "approach",
-          "gameId": "s136",
-          "before": 3,
-          "color": "W",
-          "anchors": [73],
-          "historical": 52,
-          "alternatives": [308, 230],
+          "gameId": "s296",
+          "before": 4,
+          "color": "B",
+          "anchors": [59],
+          "historical": 42,
+          "alternatives": [73, 269],
           "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban."
         }
       }
     ]
   },
   {
-    "id": "reading-2",
+    "id": "reading-3",
     "band": "reading",
     "items": [
       {
         "kind": "school",
         "exercise": {
-          "id": "double-atari:s394:113",
+          "id": "double-atari:s283:98",
           "module": "double-atari",
-          "gameId": "s394",
-          "before": 113,
+          "gameId": "s283",
+          "before": 98,
           "color": "B",
-          "anchors": [306, 286]
+          "anchors": [174, 138]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-sequence:s140:20",
+          "id": "capture-sequence:s134:108",
           "module": "capture-sequence",
-          "gameId": "s140",
-          "before": 20,
+          "gameId": "s134",
+          "before": 108,
           "color": "B",
-          "anchors": [317]
+          "anchors": [66]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "legality:s193:15",
+          "id": "legality:s252:24",
           "module": "legality",
-          "gameId": "s193",
-          "before": 15,
-          "color": "W",
-          "anchors": [289],
-          "candidate": 288
+          "gameId": "s252",
+          "before": 24,
+          "color": "B",
+          "anchors": [249],
+          "candidate": 268
         }
       },
       {
         "kind": "tactic",
         "exercise": {
-          "id": "two-eyes:s288:255",
+          "id": "two-eyes:s292:260",
           "module": "two-eyes",
-          "gameId": "s288",
-          "before": 255,
-          "color": "W",
-          "anchors": [97]
+          "gameId": "s292",
+          "before": 260,
+          "color": "B",
+          "anchors": [10]
         }
       },
       {
@@ -550,92 +653,92 @@
       {
         "kind": "tactic",
         "exercise": {
-          "id": "false-eye:s231:182",
+          "id": "false-eye:s278:35",
           "module": "false-eye",
-          "gameId": "s231",
-          "before": 182,
+          "gameId": "s278",
+          "before": 35,
           "color": "B",
-          "anchors": [262],
-          "candidate": 261
+          "anchors": [135],
+          "candidate": 134
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "fuseki:s038:3",
+          "id": "fuseki:s290:2",
           "module": "fuseki",
-          "gameId": "s038",
-          "before": 3,
-          "color": "W",
+          "gameId": "s290",
+          "before": 2,
+          "color": "B",
           "anchors": [],
-          "historical": 319,
-          "alternatives": [306, 308],
+          "historical": 301,
+          "alternatives": [78, 61],
           "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "approach:s027:2",
+          "id": "approach:s004:4",
           "module": "approach",
-          "gameId": "s027",
-          "before": 2,
+          "gameId": "s004",
+          "before": 4,
           "color": "W",
           "anchors": [72],
-          "historical": 51,
-          "alternatives": [282, 59],
+          "historical": 111,
+          "alternatives": [313, 299],
           "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban."
         }
       }
     ]
   },
   {
-    "id": "reading-3",
+    "id": "reading-4",
     "band": "reading",
     "items": [
       {
         "kind": "school",
         "exercise": {
-          "id": "double-atari:s279:156",
+          "id": "double-atari:s161:131",
           "module": "double-atari",
-          "gameId": "s279",
-          "before": 156,
-          "color": "B",
-          "anchors": [110, 112]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-sequence:s344:135",
-          "module": "capture-sequence",
-          "gameId": "s344",
-          "before": 135,
+          "gameId": "s161",
+          "before": 131,
           "color": "W",
-          "anchors": [19]
+          "anchors": [334, 336]
         }
       },
       {
         "kind": "school",
         "exercise": {
-          "id": "legality:s109:64",
-          "module": "legality",
-          "gameId": "s109",
-          "before": 64,
+          "id": "capture-sequence:s200:52",
+          "module": "capture-sequence",
+          "gameId": "s200",
+          "before": 52,
           "color": "B",
-          "anchors": [167],
-          "candidate": 148
+          "anchors": [307]
+        }
+      },
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "legality:s178:97",
+          "module": "legality",
+          "gameId": "s178",
+          "before": 97,
+          "color": "W",
+          "anchors": [162],
+          "candidate": 181
         }
       },
       {
         "kind": "tactic",
         "exercise": {
-          "id": "two-eyes:s311:145",
+          "id": "two-eyes:s008:80",
           "module": "two-eyes",
-          "gameId": "s311",
-          "before": 145,
+          "gameId": "s008",
+          "before": 80,
           "color": "W",
-          "anchors": [23]
+          "anchors": [173]
         }
       },
       {
@@ -653,143 +756,40 @@
       {
         "kind": "tactic",
         "exercise": {
-          "id": "false-eye:s034:163",
+          "id": "false-eye:s260:70",
           "module": "false-eye",
-          "gameId": "s034",
-          "before": 163,
-          "color": "W",
-          "anchors": [170],
-          "candidate": 189
+          "gameId": "s260",
+          "before": 70,
+          "color": "B",
+          "anchors": [234],
+          "candidate": 233
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "fuseki:s114:2",
+          "id": "fuseki:s452:2",
           "module": "fuseki",
-          "gameId": "s114",
+          "gameId": "s452",
           "before": 2,
           "color": "B",
           "anchors": [],
-          "historical": 73,
-          "alternatives": [61, 281],
+          "historical": 318,
+          "alternatives": [59, 42],
           "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "approach:s090:3",
+          "id": "approach:s280:9",
           "module": "approach",
-          "gameId": "s090",
-          "before": 3,
+          "gameId": "s280",
+          "before": 9,
           "color": "W",
-          "anchors": [73],
+          "anchors": [91],
           "historical": 52,
-          "alternatives": [282, 298],
-          "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban."
-        }
-      }
-    ]
-  },
-  {
-    "id": "reading-4",
-    "band": "reading",
-    "items": [
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "double-atari:s271:162",
-          "module": "double-atari",
-          "gameId": "s271",
-          "before": 162,
-          "color": "B",
-          "anchors": [41, 79]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-sequence:s026:113",
-          "module": "capture-sequence",
-          "gameId": "s026",
-          "before": 113,
-          "color": "B",
-          "anchors": [268]
-        }
-      },
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "legality:s217:40",
-          "module": "legality",
-          "gameId": "s217",
-          "before": 40,
-          "color": "W",
-          "anchors": [186],
-          "candidate": 187
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "two-eyes:s312:230",
-          "module": "two-eyes",
-          "gameId": "s312",
-          "before": 230,
-          "color": "B",
-          "anchors": [187]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "make-life:s446:264",
-          "module": "make-life",
-          "gameId": "s446",
-          "before": 264,
-          "color": "B",
-          "anchors": [105],
-          "candidate": 124
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "false-eye:s375:27",
-          "module": "false-eye",
-          "gameId": "s375",
-          "before": 27,
-          "color": "W",
-          "anchors": [206],
-          "candidate": 225
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "fuseki:s056:2",
-          "module": "fuseki",
-          "gameId": "s056",
-          "before": 2,
-          "color": "B",
-          "anchors": [],
-          "historical": 41,
-          "alternatives": [319, 111],
-          "prompt": "Quel secteur peu occupé développer maintenant ? Comparez la répartition des forces sur les quatre coins."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "approach:s470:4",
-          "module": "approach",
-          "gameId": "s470",
-          "before": 4,
-          "color": "W",
-          "anchors": [288],
-          "historical": 309,
-          "alternatives": [270, 275],
+          "alternatives": [49, 225],
           "prompt": "Comment aborder ce coin adverse ? Comparez la pression sur la pierre repérée et le développement du reste du goban."
         }
       }
@@ -802,25 +802,25 @@
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-sequence:s226:167",
+          "id": "capture-sequence:s253:102",
           "module": "capture-sequence",
-          "gameId": "s226",
-          "before": 167,
+          "gameId": "s253",
+          "before": 102,
           "color": "W",
-          "anchors": [356]
+          "anchors": [26]
         }
       },
       {
         "kind": "tactic",
         "exercise": {
-          "id": "ladder:s345:44",
+          "id": "ladder:s184:78",
           "module": "ladder",
-          "gameId": "s345",
-          "before": 44,
+          "gameId": "s184",
+          "before": 78,
           "color": "B",
-          "anchors": [40],
-          "candidate": 39,
-          "line": [39, 2, 1, 3, 4]
+          "anchors": [241],
+          "candidate": 260,
+          "line": [260, 242, 261, 223, 224]
         }
       },
       {
@@ -840,296 +840,54 @@
       {
         "kind": "tactic",
         "exercise": {
-          "id": "capture-race:s179:153",
+          "id": "capture-race:s209:94",
           "module": "capture-race",
-          "gameId": "s179",
-          "before": 153,
+          "gameId": "s209",
+          "before": 94,
           "color": "W",
-          "anchors": [146, 127],
-          "candidate": 108
+          "anchors": [319, 318],
+          "candidate": 299
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "direction:s454:20",
+          "id": "direction:s385:19",
           "module": "direction",
-          "gameId": "s454",
-          "before": 20,
-          "color": "B",
-          "anchors": [288],
-          "historical": 231,
-          "alternatives": [282, 279],
-          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "corner-response:s439:8",
-          "module": "corner-response",
-          "gameId": "s439",
-          "before": 8,
-          "color": "W",
-          "anchors": [98, 59],
-          "historical": 97,
-          "alternatives": [117, 99],
-          "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "influence:s423:22",
-          "module": "influence",
-          "gameId": "s423",
-          "before": 22,
-          "color": "B",
-          "anchors": [301],
-          "historical": 279,
-          "alternatives": [244, 241],
-          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-prisoners:s185:155",
-          "module": "yose-prisoners",
-          "gameId": "s185",
-          "before": 155,
-          "color": "W",
-          "anchors": [],
-          "candidate": 54,
-          "input": "choice",
-          "question": "Blanc possède déjà 12 prisonnier(s). Quel est son total après Blanc 156 en R17 ?",
-          "answer": 13,
-          "explanation": "Le coup retire 1 pierre(s). Total : 12 + 1 = 13 prisonniers.",
-          "choices": [
-            { "value": 9, "label": "9" },
-            { "value": 10, "label": "10" },
-            { "value": 11, "label": "11" },
-            { "value": 12, "label": "12" },
-            { "value": 13, "label": "13" }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "development-2",
-    "band": "development",
-    "items": [
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-sequence:s157:105",
-          "module": "capture-sequence",
-          "gameId": "s157",
-          "before": 105,
-          "color": "W",
-          "anchors": [245]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "ladder:s283:62",
-          "module": "ladder",
-          "gameId": "s283",
-          "before": 62,
-          "color": "B",
-          "anchors": [28],
-          "candidate": 27,
-          "line": [27, 9, 8, 10, 11]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "snapback:s169:223",
-          "module": "snapback",
-          "gameId": "s169",
-          "before": 223,
-          "color": "W",
-          "anchors": [39],
-          "candidate": 38,
-          "reply": 57,
-          "finish": 38
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "capture-race:s230:113",
-          "module": "capture-race",
-          "gameId": "s230",
-          "before": 113,
-          "color": "W",
-          "anchors": [263, 264],
-          "candidate": 265
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "direction:s410:10",
-          "module": "direction",
-          "gameId": "s410",
-          "before": 10,
-          "color": "W",
-          "anchors": [282],
-          "historical": 244,
-          "alternatives": [225, 264],
-          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "corner-response:s399:6",
-          "module": "corner-response",
-          "gameId": "s399",
-          "before": 6,
-          "color": "W",
-          "anchors": [61, 42],
-          "historical": 60,
-          "alternatives": [41, 40],
-          "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "influence:s383:43",
-          "module": "influence",
-          "gameId": "s383",
-          "before": 43,
-          "color": "W",
-          "anchors": [136],
-          "historical": 156,
-          "alternatives": [157, 27],
-          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-prisoners:s117:126",
-          "module": "yose-prisoners",
-          "gameId": "s117",
-          "before": 126,
-          "color": "W",
-          "anchors": [],
-          "candidate": 206,
-          "input": "choice",
-          "question": "Blanc possède déjà 2 prisonnier(s). Quel est son total après Blanc 127 en R9 ?",
-          "answer": 3,
-          "explanation": "Le coup retire 1 pierre(s). Total : 2 + 1 = 3 prisonniers.",
-          "choices": [
-            { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" },
-            { "value": 3, "label": "3" },
-            { "value": 4, "label": "4" },
-            { "value": 5, "label": "5" }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "development-3",
-    "band": "development",
-    "items": [
-      {
-        "kind": "school",
-        "exercise": {
-          "id": "capture-sequence:s292:98",
-          "module": "capture-sequence",
-          "gameId": "s292",
-          "before": 98,
-          "color": "B",
-          "anchors": [210]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "ladder:s059:75",
-          "module": "ladder",
-          "gameId": "s059",
-          "before": 75,
-          "color": "W",
-          "anchors": [96],
-          "candidate": 115,
-          "line": [115, 95, 76, 114, 133]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "snapback:s187:257",
-          "module": "snapback",
-          "gameId": "s187",
-          "before": 257,
-          "color": "W",
-          "anchors": [134],
-          "candidate": 133,
-          "reply": 114,
-          "finish": 133
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "capture-race:s373:47",
-          "module": "capture-race",
-          "gameId": "s373",
-          "before": 47,
-          "color": "W",
-          "anchors": [294, 295],
-          "candidate": 314
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "direction:s372:19",
-          "module": "direction",
-          "gameId": "s372",
+          "gameId": "s385",
           "before": 19,
           "color": "W",
-          "anchors": [308],
-          "historical": 310,
-          "alternatives": [321, 315],
+          "anchors": [318],
+          "historical": 316,
+          "alternatives": [205, 63],
           "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "corner-response:s355:5",
+          "id": "corner-response:s456:9",
           "module": "corner-response",
-          "gameId": "s355",
-          "before": 5,
-          "color": "B",
-          "anchors": [263, 301],
-          "historical": 262,
-          "alternatives": [261, 299],
+          "gameId": "s456",
+          "before": 9,
+          "color": "W",
+          "anchors": [320, 300],
+          "historical": 319,
+          "alternatives": [281, 337],
           "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "influence:s341:30",
+          "id": "influence:s193:37",
           "module": "influence",
-          "gameId": "s341",
-          "before": 30,
-          "color": "B",
-          "anchors": [64],
-          "historical": 84,
-          "alternatives": [85, 307],
+          "gameId": "s193",
+          "before": 37,
+          "color": "W",
+          "anchors": [68],
+          "historical": 105,
+          "alternatives": [166, 72],
           "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
         }
       },
@@ -1159,248 +917,115 @@
     ]
   },
   {
-    "id": "development-4",
+    "id": "development-2",
     "band": "development",
     "items": [
       {
         "kind": "school",
         "exercise": {
-          "id": "capture-sequence:s213:106",
+          "id": "capture-sequence:s026:113",
           "module": "capture-sequence",
-          "gameId": "s213",
-          "before": 106,
-          "color": "W",
-          "anchors": [279]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "ladder:s180:55",
-          "module": "ladder",
-          "gameId": "s180",
-          "before": 55,
-          "color": "W",
-          "anchors": [131],
-          "candidate": 150,
-          "line": [150, 132, 113, 151, 170]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "snapback:s346:306",
-          "module": "snapback",
-          "gameId": "s346",
-          "before": 306,
+          "gameId": "s026",
+          "before": 113,
           "color": "B",
-          "anchors": [118],
-          "candidate": 119,
-          "reply": 120,
-          "finish": 119
+          "anchors": [268]
         }
       },
       {
         "kind": "tactic",
         "exercise": {
-          "id": "capture-race:s151:49",
-          "module": "capture-race",
-          "gameId": "s151",
-          "before": 49,
+          "id": "ladder:s416:81",
+          "module": "ladder",
+          "gameId": "s416",
+          "before": 81,
+          "color": "B",
+          "anchors": [276],
+          "candidate": 295,
+          "line": [295, 275, 256, 294, 313]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "snapback:s169:223",
+          "module": "snapback",
+          "gameId": "s169",
+          "before": 223,
           "color": "W",
-          "anchors": [264, 283],
-          "candidate": 284
+          "anchors": [39],
+          "candidate": 38,
+          "reply": 57,
+          "finish": 38
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s130:78",
+          "module": "capture-race",
+          "gameId": "s130",
+          "before": 78,
+          "color": "B",
+          "anchors": [68, 87],
+          "candidate": 86
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "direction:s316:15",
+          "id": "direction:s374:12",
           "module": "direction",
-          "gameId": "s316",
-          "before": 15,
+          "gameId": "s374",
+          "before": 12,
           "color": "W",
-          "anchors": [282],
-          "historical": 225,
-          "alternatives": [311, 259],
+          "anchors": [280],
+          "historical": 242,
+          "alternatives": [313, 294],
           "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "corner-response:s299:17",
+          "id": "corner-response:s443:12",
           "module": "corner-response",
-          "gameId": "s299",
-          "before": 17,
+          "gameId": "s443",
+          "before": 12,
           "color": "W",
-          "anchors": [306, 287],
-          "historical": 305,
-          "alternatives": [307, 289],
+          "anchors": [109, 111],
+          "historical": 92,
+          "alternatives": [46, 70],
           "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "influence:s281:59",
+          "id": "influence:s179:32",
           "module": "influence",
-          "gameId": "s281",
-          "before": 59,
-          "color": "W",
-          "anchors": [289],
-          "historical": 273,
-          "alternatives": [291, 271],
+          "gameId": "s179",
+          "before": 32,
+          "color": "B",
+          "anchors": [73],
+          "historical": 70,
+          "alternatives": [36, 147],
           "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
         }
       },
       {
         "kind": "endgame",
         "exercise": {
-          "id": "yose-prisoners:s300:212",
+          "id": "yose-prisoners:s171:121",
           "module": "yose-prisoners",
-          "gameId": "s300",
-          "before": 212,
-          "color": "B",
+          "gameId": "s171",
+          "before": 121,
+          "color": "W",
           "anchors": [],
-          "candidate": 18,
+          "candidate": 135,
           "input": "choice",
-          "question": "Noir possède déjà 18 prisonnier(s). Quel est son total après Noir 213 en T19 ?",
-          "answer": 22,
-          "explanation": "Le coup retire 4 pierre(s). Total : 18 + 4 = 22 prisonniers.",
-          "choices": [
-            { "value": 22, "label": "22" },
-            { "value": 23, "label": "23" },
-            { "value": 24, "label": "24" },
-            { "value": 25, "label": "25" },
-            { "value": 26, "label": "26" }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "advanced-1",
-    "band": "advanced",
-    "items": [
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "ladder:s128:70",
-          "module": "ladder",
-          "gameId": "s128",
-          "before": 70,
-          "color": "B",
-          "anchors": [112],
-          "candidate": 131,
-          "line": [131, 113, 94, 132, 151]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "capture-race:s152:64",
-          "module": "capture-race",
-          "gameId": "s152",
-          "before": 64,
-          "color": "W",
-          "anchors": [261, 280],
-          "candidate": 279
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "direction:s253:30",
-          "module": "direction",
-          "gameId": "s253",
-          "before": 30,
-          "color": "W",
-          "anchors": [59],
-          "historical": 97,
-          "alternatives": [43, 300],
-          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "influence:s234:20",
-          "module": "influence",
-          "gameId": "s234",
-          "before": 20,
-          "color": "B",
-          "anchors": [311],
-          "historical": 289,
-          "alternatives": [313, 305],
-          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "reduction:s221:41",
-          "module": "reduction",
-          "gameId": "s221",
-          "before": 41,
-          "color": "W",
-          "anchors": [256, 294, 312],
-          "historical": 236,
-          "alternatives": [235, 295],
-          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "initiative:s209:15",
-          "module": "initiative",
-          "gameId": "s209",
-          "before": 15,
-          "color": "B",
-          "anchors": [135],
-          "historical": 25,
-          "alternatives": [137, 211],
-          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-value:s036:134",
-          "module": "yose-value",
-          "gameId": "s036",
-          "before": 134,
-          "color": "B",
-          "anchors": [155],
-          "candidate": 155,
-          "input": "choice",
-          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 135 en D11 ?",
-          "answer": 0,
-          "explanation": "Avant : N 1 / B 3 points vides unicolores ; après : N 1 / B 3. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
-          "choices": [
-            { "value": -4, "label": "-4" },
-            { "value": -3, "label": "-3" },
-            { "value": -2, "label": "-2" },
-            { "value": -1, "label": "-1" },
-            { "value": 0, "label": "0" }
-          ]
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-count:s200:223",
-          "module": "yose-count",
-          "gameId": "s200",
-          "before": 223,
-          "color": "W",
-          "anchors": [98],
-          "candidate": 98,
-          "input": "choice",
-          "question": "À ce stade : Noir 7 points vides unicolores + 3 prisonniers ; Blanc 4 + 4. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+          "question": "Blanc possède déjà 1 prisonnier(s). Quel est son total après Blanc 122 en C12 ?",
           "answer": 2,
-          "explanation": "(7 + 3) − (4 + 4) = 2. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+8 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+          "explanation": "Le coup retire 1 pierre(s). Total : 1 + 1 = 2 prisonniers.",
           "choices": [
             { "value": 1, "label": "1" },
             { "value": 2, "label": "2" },
@@ -1413,275 +1038,20 @@
     ]
   },
   {
-    "id": "advanced-2",
-    "band": "advanced",
+    "id": "development-3",
+    "band": "development",
     "items": [
       {
-        "kind": "tactic",
+        "kind": "school",
         "exercise": {
-          "id": "ladder:s469:81",
-          "module": "ladder",
-          "gameId": "s469",
-          "before": 81,
-          "color": "W",
-          "anchors": [134],
-          "candidate": 115,
-          "line": [115, 133, 114, 152, 171]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "capture-race:s129:28",
-          "module": "capture-race",
-          "gameId": "s129",
-          "before": 28,
+          "id": "capture-sequence:s230:106",
+          "module": "capture-sequence",
+          "gameId": "s230",
+          "before": 106,
           "color": "B",
-          "anchors": [287, 306],
-          "candidate": 305
+          "anchors": [144]
         }
       },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "direction:s191:18",
-          "module": "direction",
-          "gameId": "s191",
-          "before": 18,
-          "color": "B",
-          "anchors": [42],
-          "historical": 46,
-          "alternatives": [316, 225],
-          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "influence:s177:65",
-          "module": "influence",
-          "gameId": "s177",
-          "before": 65,
-          "color": "W",
-          "anchors": [164],
-          "historical": 180,
-          "alternatives": [319, 302],
-          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "reduction:s156:28",
-          "module": "reduction",
-          "gameId": "s156",
-          "before": 28,
-          "color": "B",
-          "anchors": [98, 78, 192],
-          "historical": 136,
-          "alternatives": [174, 269],
-          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "initiative:s146:15",
-          "module": "initiative",
-          "gameId": "s146",
-          "before": 15,
-          "color": "W",
-          "anchors": [315],
-          "historical": 79,
-          "alternatives": [311, 293],
-          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-value:s260:128",
-          "module": "yose-value",
-          "gameId": "s260",
-          "before": 128,
-          "color": "B",
-          "anchors": [289, 290, 270, 291, 309],
-          "candidate": 289,
-          "input": "choice",
-          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 129 en E4 ?",
-          "answer": 0,
-          "explanation": "Avant : N 2 / B 2 points vides unicolores ; après : N 2 / B 2. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
-          "choices": [
-            { "value": -2, "label": "-2" },
-            { "value": -1, "label": "-1" },
-            { "value": 0, "label": "0" },
-            { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" }
-          ]
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-count:s012:177",
-          "module": "yose-count",
-          "gameId": "s012",
-          "before": 177,
-          "color": "W",
-          "anchors": [319],
-          "candidate": 319,
-          "input": "choice",
-          "question": "À ce stade : Noir 5 points vides unicolores + 7 prisonniers ; Blanc 3 + 3. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
-          "answer": 6,
-          "explanation": "(5 + 7) − (3 + 3) = 6. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+2 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
-          "choices": [
-            { "value": 5, "label": "5" },
-            { "value": 6, "label": "6" },
-            { "value": 7, "label": "7" },
-            { "value": 8, "label": "8" },
-            { "value": 9, "label": "9" }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "advanced-3",
-    "band": "advanced",
-    "items": [
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "ladder:s392:92",
-          "module": "ladder",
-          "gameId": "s392",
-          "before": 92,
-          "color": "W",
-          "anchors": [339],
-          "candidate": 338,
-          "line": [338, 358, 357, 360, 341]
-        }
-      },
-      {
-        "kind": "tactic",
-        "exercise": {
-          "id": "capture-race:s100:69",
-          "module": "capture-race",
-          "gameId": "s100",
-          "before": 69,
-          "color": "W",
-          "anchors": [191, 172],
-          "candidate": 171
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "direction:s130:18",
-          "module": "direction",
-          "gameId": "s130",
-          "before": 18,
-          "color": "B",
-          "anchors": [317],
-          "historical": 315,
-          "alternatives": [224, 186],
-          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "influence:s113:25",
-          "module": "influence",
-          "gameId": "s113",
-          "before": 25,
-          "color": "W",
-          "anchors": [52],
-          "historical": 69,
-          "alternatives": [78, 136],
-          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "reduction:s098:44",
-          "module": "reduction",
-          "gameId": "s098",
-          "before": 44,
-          "color": "B",
-          "anchors": [252, 196, 276],
-          "historical": 254,
-          "alternatives": [271, 253],
-          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
-        }
-      },
-      {
-        "kind": "strategy",
-        "exercise": {
-          "id": "initiative:s073:30",
-          "module": "initiative",
-          "gameId": "s073",
-          "before": 30,
-          "color": "B",
-          "anchors": [296],
-          "historical": 225,
-          "alternatives": [258],
-          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-value:s097:218",
-          "module": "yose-value",
-          "gameId": "s097",
-          "before": 218,
-          "color": "B",
-          "anchors": [45],
-          "candidate": 45,
-          "input": "choice",
-          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 219 en H17 ?",
-          "answer": 2,
-          "explanation": "Avant : N 6 / B 6 points vides unicolores ; après : N 7 / B 6. Le coup ajoute aussi 1 prisonnier(s) à Noir. Son bilan change de 2 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
-          "choices": [
-            { "value": -1, "label": "-1" },
-            { "value": 0, "label": "0" },
-            { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" },
-            { "value": 3, "label": "3" }
-          ]
-        }
-      },
-      {
-        "kind": "endgame",
-        "exercise": {
-          "id": "yose-count:s216:219",
-          "module": "yose-count",
-          "gameId": "s216",
-          "before": 219,
-          "color": "W",
-          "anchors": [34],
-          "candidate": 34,
-          "input": "choice",
-          "question": "À ce stade : Noir 6 points vides unicolores + 18 prisonniers ; Blanc 5 + 16. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
-          "answer": 3,
-          "explanation": "(6 + 18) − (5 + 16) = 3. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
-          "choices": [
-            { "value": 0, "label": "0" },
-            { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" },
-            { "value": 3, "label": "3" },
-            { "value": 4, "label": "4" }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "id": "advanced-4",
-    "band": "advanced",
-    "items": [
       {
         "kind": "tactic",
         "exercise": {
@@ -1698,114 +1068,744 @@
       {
         "kind": "tactic",
         "exercise": {
-          "id": "capture-race:s443:50",
-          "module": "capture-race",
-          "gameId": "s443",
-          "before": 50,
+          "id": "snapback:s187:257",
+          "module": "snapback",
+          "gameId": "s187",
+          "before": 257,
           "color": "W",
-          "anchors": [302, 283],
-          "candidate": 284
+          "anchors": [134],
+          "candidate": 133,
+          "reply": 114,
+          "finish": 133
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s154:147",
+          "module": "capture-race",
+          "gameId": "s154",
+          "before": 147,
+          "color": "W",
+          "anchors": [38, 57],
+          "candidate": 76
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "direction:s055:10",
+          "id": "direction:s359:14",
           "module": "direction",
-          "gameId": "s055",
-          "before": 10,
-          "color": "B",
-          "anchors": [244],
-          "historical": 187,
-          "alternatives": [230, 173],
+          "gameId": "s359",
+          "before": 14,
+          "color": "W",
+          "anchors": [301],
+          "historical": 244,
+          "alternatives": [259, 294],
           "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "influence:s037:33",
-          "module": "influence",
-          "gameId": "s037",
-          "before": 33,
+          "id": "corner-response:s425:8",
+          "module": "corner-response",
+          "gameId": "s425",
+          "before": 8,
           "color": "B",
-          "anchors": [52],
-          "historical": 70,
-          "alternatives": [313, 250],
+          "anchors": [281, 318],
+          "historical": 301,
+          "alternatives": [302, 91],
+          "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s160:24",
+          "module": "influence",
+          "gameId": "s160",
+          "before": 24,
+          "color": "W",
+          "anchors": [62],
+          "historical": 138,
+          "alternatives": [120, 192],
+          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-prisoners:s064:126",
+          "module": "yose-prisoners",
+          "gameId": "s064",
+          "before": 126,
+          "color": "B",
+          "anchors": [],
+          "candidate": 228,
+          "input": "choice",
+          "question": "Noir possède déjà 2 prisonnier(s). Quel est son total après Noir 127 en A7 ?",
+          "answer": 3,
+          "explanation": "Le coup retire 1 pierre(s). Total : 2 + 1 = 3 prisonniers.",
+          "choices": [
+            { "value": 0, "label": "0" },
+            { "value": 1, "label": "1" },
+            { "value": 2, "label": "2" },
+            { "value": 3, "label": "3" },
+            { "value": 4, "label": "4" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "development-4",
+    "band": "development",
+    "items": [
+      {
+        "kind": "school",
+        "exercise": {
+          "id": "capture-sequence:s424:70",
+          "module": "capture-sequence",
+          "gameId": "s424",
+          "before": 70,
+          "color": "B",
+          "anchors": [226]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "ladder:s101:50",
+          "module": "ladder",
+          "gameId": "s101",
+          "before": 50,
+          "color": "B",
+          "anchors": [267],
+          "candidate": 248,
+          "line": [248, 266, 247, 285, 304]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "snapback:s446:245",
+          "module": "snapback",
+          "gameId": "s446",
+          "before": 245,
+          "color": "W",
+          "anchors": [279],
+          "candidate": 280,
+          "reply": 261,
+          "finish": 280
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s348:55",
+          "module": "capture-race",
+          "gameId": "s348",
+          "before": 55,
+          "color": "B",
+          "anchors": [218, 237],
+          "candidate": 236
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "direction:s343:11",
+          "module": "direction",
+          "gameId": "s343",
+          "before": 11,
+          "color": "W",
+          "anchors": [92],
+          "historical": 168,
+          "alternatives": [61, 51],
+          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "corner-response:s401:5",
+          "module": "corner-response",
+          "gameId": "s401",
+          "before": 5,
+          "color": "B",
+          "anchors": [109, 72],
+          "historical": 73,
+          "alternatives": [88, 230],
+          "prompt": "Après le dernier coup adverse, quelle réponse locale envisager ? Comparez la sécurité du coin et la sortie vers le centre."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s148:20",
+          "module": "influence",
+          "gameId": "s148",
+          "before": 20,
+          "color": "B",
+          "anchors": [130],
+          "historical": 110,
+          "alternatives": [185, 186],
+          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-prisoners:s379:153",
+          "module": "yose-prisoners",
+          "gameId": "s379",
+          "before": 153,
+          "color": "B",
+          "anchors": [],
+          "candidate": 112,
+          "input": "choice",
+          "question": "Noir possède déjà 7 prisonnier(s). Quel est son total après Noir 154 en S14 ?",
+          "answer": 11,
+          "explanation": "Le coup retire 4 pierre(s). Total : 7 + 4 = 11 prisonniers.",
+          "choices": [
+            { "value": 11, "label": "11" },
+            { "value": 12, "label": "12" },
+            { "value": 13, "label": "13" },
+            { "value": 14, "label": "14" },
+            { "value": 15, "label": "15" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "advanced-1",
+    "band": "advanced",
+    "items": [
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "ladder:s316:32",
+          "module": "ladder",
+          "gameId": "s316",
+          "before": 32,
+          "color": "B",
+          "anchors": [236],
+          "candidate": 235,
+          "line": [235, 255, 254, 256, 257, 275, 276]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s375:27",
+          "module": "capture-race",
+          "gameId": "s375",
+          "before": 27,
+          "color": "W",
+          "anchors": [205, 206],
+          "candidate": 225
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "direction:s323:21",
+          "module": "direction",
+          "gameId": "s323",
+          "before": 21,
+          "color": "W",
+          "anchors": [60],
+          "historical": 117,
+          "alternatives": [263, 310],
+          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s132:45",
+          "module": "influence",
+          "gameId": "s132",
+          "before": 45,
+          "color": "W",
+          "anchors": [213],
+          "historical": 157,
+          "alternatives": [251, 137],
           "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "reduction:s020:26",
+          "id": "reduction:s115:52",
           "module": "reduction",
-          "gameId": "s020",
-          "before": 26,
-          "color": "W",
-          "anchors": [100, 81, 119],
-          "historical": 102,
-          "alternatives": [28, 29],
+          "gameId": "s115",
+          "before": 52,
+          "color": "B",
+          "anchors": [173, 211, 118],
+          "historical": 194,
+          "alternatives": [214, 175],
           "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
         }
       },
       {
         "kind": "strategy",
         "exercise": {
-          "id": "initiative:s003:18",
+          "id": "initiative:s256:22",
           "module": "initiative",
-          "gameId": "s003",
-          "before": 18,
+          "gameId": "s256",
+          "before": 22,
           "color": "B",
           "anchors": [45],
-          "historical": 319,
-          "alternatives": [47, 61],
+          "historical": 115,
+          "alternatives": [47],
           "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
         }
       },
       {
         "kind": "endgame",
         "exercise": {
-          "id": "yose-value:s106:142",
+          "id": "yose-value:s231:149",
           "module": "yose-value",
-          "gameId": "s106",
-          "before": 142,
-          "color": "B",
-          "anchors": [205, 186],
-          "candidate": 205,
+          "gameId": "s231",
+          "before": 149,
+          "color": "W",
+          "anchors": [212, 193],
+          "candidate": 212,
           "input": "choice",
-          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 143 en Q9 ?",
+          "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 150 en D8 ?",
           "answer": 0,
-          "explanation": "Avant : N 2 / B 1 points vides unicolores ; après : N 2 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+          "explanation": "Avant : N 1 / B 6 points vides unicolores ; après : N 1 / B 6. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
           "choices": [
-            { "value": -2, "label": "-2" },
             { "value": -1, "label": "-1" },
             { "value": 0, "label": "0" },
             { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" }
+            { "value": 2, "label": "2" },
+            { "value": 3, "label": "3" }
           ]
         }
       },
       {
         "kind": "endgame",
         "exercise": {
-          "id": "yose-count:s332:121",
+          "id": "yose-count:s311:144",
           "module": "yose-count",
-          "gameId": "s332",
-          "before": 121,
-          "color": "W",
-          "anchors": [124, 123, 105, 104, 85],
-          "candidate": 124,
+          "gameId": "s311",
+          "before": 144,
+          "color": "B",
+          "anchors": [111],
+          "candidate": 111,
           "input": "choice",
-          "question": "À ce stade : Noir 1 points vides unicolores + 0 prisonniers ; Blanc 2 + 1. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
-          "answer": -2,
-          "explanation": "(1 + 0) − (2 + 1) = -2. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+          "question": "À ce stade : Noir 0 points vides unicolores + 0 prisonniers ; Blanc 1 + 0. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+          "answer": -1,
+          "explanation": "(0 + 0) − (1 + 0) = -1. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+R » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
           "choices": [
-            { "value": -2, "label": "-2" },
             { "value": -1, "label": "-1" },
             { "value": 0, "label": "0" },
             { "value": 1, "label": "1" },
-            { "value": 2, "label": "2" }
+            { "value": 2, "label": "2" },
+            { "value": 3, "label": "3" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "advanced-2",
+    "band": "advanced",
+    "items": [
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "ladder:s232:84",
+          "module": "ladder",
+          "gameId": "s232",
+          "before": 84,
+          "color": "B",
+          "anchors": [229],
+          "candidate": 210,
+          "line": [210, 228, 209, 247, 266]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s445:18",
+          "module": "capture-race",
+          "gameId": "s445",
+          "before": 18,
+          "color": "B",
+          "anchors": [48, 49],
+          "candidate": 68
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "direction:s301:25",
+          "module": "direction",
+          "gameId": "s301",
+          "before": 25,
+          "color": "B",
+          "anchors": [44],
+          "historical": 47,
+          "alternatives": [110, 109],
+          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s100:30",
+          "module": "influence",
+          "gameId": "s100",
+          "before": 30,
+          "color": "B",
+          "anchors": [268],
+          "historical": 288,
+          "alternatives": [256, 255],
+          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "reduction:s075:41",
+          "module": "reduction",
+          "gameId": "s075",
+          "before": 41,
+          "color": "W",
+          "anchors": [204, 225, 298],
+          "historical": 242,
+          "alternatives": [186, 241],
+          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "initiative:s236:25",
+          "module": "initiative",
+          "gameId": "s236",
+          "before": 25,
+          "color": "W",
+          "anchors": [230],
+          "historical": 329,
+          "alternatives": [251, 212],
+          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-value:s140:124",
+          "module": "yose-value",
+          "gameId": "s140",
+          "before": 124,
+          "color": "B",
+          "anchors": [140],
+          "candidate": 140,
+          "input": "choice",
+          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 125 en H12 ?",
+          "answer": 0,
+          "explanation": "Avant : N 0 / B 1 points vides unicolores ; après : N 0 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+          "choices": [
+            { "value": -4, "label": "-4" },
+            { "value": -3, "label": "-3" },
+            { "value": -2, "label": "-2" },
+            { "value": -1, "label": "-1" },
+            { "value": 0, "label": "0" }
+          ]
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-count:s094:273",
+          "module": "yose-count",
+          "gameId": "s094",
+          "before": 273,
+          "color": "W",
+          "anchors": [360],
+          "candidate": 360,
+          "input": "choice",
+          "question": "À ce stade : Noir 7 points vides unicolores + 15 prisonniers ; Blanc 31 + 14. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+          "answer": -23,
+          "explanation": "(7 + 15) − (31 + 14) = -23. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+10 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+          "choices": [
+            { "value": -26, "label": "-26" },
+            { "value": -25, "label": "-25" },
+            { "value": -24, "label": "-24" },
+            { "value": -23, "label": "-23" },
+            { "value": -22, "label": "-22" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "advanced-3",
+    "band": "advanced",
+    "items": [
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "ladder:s103:77",
+          "module": "ladder",
+          "gameId": "s103",
+          "before": 77,
+          "color": "W",
+          "anchors": [230],
+          "candidate": 231,
+          "line": [231, 229, 248, 228, 209, 247, 266]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s061:157",
+          "module": "capture-race",
+          "gameId": "s061",
+          "before": 157,
+          "color": "W",
+          "anchors": [253, 254],
+          "candidate": 255
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "direction:s287:19",
+          "module": "direction",
+          "gameId": "s287",
+          "before": 19,
+          "color": "W",
+          "anchors": [137],
+          "historical": 99,
+          "alternatives": [117, 157],
+          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s057:21",
+          "module": "influence",
+          "gameId": "s057",
+          "before": 21,
+          "color": "W",
+          "anchors": [315],
+          "historical": 298,
+          "alternatives": [279, 260],
+          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "reduction:s037:52",
+          "module": "reduction",
+          "gameId": "s037",
+          "before": 52,
+          "color": "W",
+          "anchors": [280, 299, 318],
+          "historical": 260,
+          "alternatives": [339, 259],
+          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "initiative:s225:25",
+          "module": "initiative",
+          "gameId": "s225",
+          "before": 25,
+          "color": "W",
+          "anchors": [312],
+          "historical": 250,
+          "alternatives": [329],
+          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-value:s351:158",
+          "module": "yose-value",
+          "gameId": "s351",
+          "before": 158,
+          "color": "W",
+          "anchors": [160, 161, 141, 122, 103],
+          "candidate": 160,
+          "input": "choice",
+          "question": "Quel changement du bilan géométrique de Blanc (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Blanc 159 en J11 ?",
+          "answer": 0,
+          "explanation": "Avant : N 5 / B 1 points vides unicolores ; après : N 5 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Blanc. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+          "choices": [
+            { "value": -3, "label": "-3" },
+            { "value": -2, "label": "-2" },
+            { "value": -1, "label": "-1" },
+            { "value": 0, "label": "0" },
+            { "value": 1, "label": "1" }
+          ]
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-count:s027:284",
+          "module": "yose-count",
+          "gameId": "s027",
+          "before": 284,
+          "color": "W",
+          "anchors": [174],
+          "candidate": 174,
+          "input": "choice",
+          "question": "À ce stade : Noir 12 points vides unicolores + 17 prisonniers ; Blanc 35 + 24. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+          "answer": -30,
+          "explanation": "(12 + 17) − (35 + 24) = -30. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « B+16 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+          "choices": [
+            { "value": -33, "label": "-33" },
+            { "value": -32, "label": "-32" },
+            { "value": -31, "label": "-31" },
+            { "value": -30, "label": "-30" },
+            { "value": -29, "label": "-29" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "advanced-4",
+    "band": "advanced",
+    "items": [
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "ladder:s028:66",
+          "module": "ladder",
+          "gameId": "s028",
+          "before": 66,
+          "color": "W",
+          "anchors": [207],
+          "candidate": 226,
+          "line": [226, 208, 189, 227, 246]
+        }
+      },
+      {
+        "kind": "tactic",
+        "exercise": {
+          "id": "capture-race:s131:84",
+          "module": "capture-race",
+          "gameId": "s131",
+          "before": 84,
+          "color": "B",
+          "anchors": [309, 290],
+          "candidate": 291
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "direction:s272:32",
+          "module": "direction",
+          "gameId": "s272",
+          "before": 32,
+          "color": "W",
+          "anchors": [168],
+          "historical": 92,
+          "alternatives": [55, 35],
+          "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "influence:s020:20",
+          "module": "influence",
+          "gameId": "s020",
+          "before": 20,
+          "color": "W",
+          "anchors": [60],
+          "historical": 99,
+          "alternatives": [116, 154],
+          "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "reduction:s003:45",
+          "module": "reduction",
+          "gameId": "s003",
+          "before": 45,
+          "color": "W",
+          "anchors": [47, 89, 52],
+          "historical": 68,
+          "alternatives": [105, 82],
+          "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir."
+        }
+      },
+      {
+        "kind": "strategy",
+        "exercise": {
+          "id": "initiative:s212:15",
+          "module": "initiative",
+          "gameId": "s212",
+          "before": 15,
+          "color": "W",
+          "anchors": [61],
+          "historical": 267,
+          "alternatives": [41, 22],
+          "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle."
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-value:s202:123",
+          "module": "yose-value",
+          "gameId": "s202",
+          "before": 123,
+          "color": "B",
+          "anchors": [218],
+          "candidate": 218,
+          "input": "choice",
+          "question": "Quel changement du bilan géométrique de Noir (ses points vides unicolores + prisonniers, moins ceux de l’adversaire) produit Noir 124 en K8 ?",
+          "answer": 0,
+          "explanation": "Avant : N 0 / B 1 points vides unicolores ; après : N 0 / B 1. Le coup ajoute aussi 0 prisonnier(s) à Noir. Son bilan change de 0 point(s). Ceci ne mesure pas la valeur d’un échange complet ni un territoire garanti.",
+          "choices": [
+            { "value": -1, "label": "-1" },
+            { "value": 0, "label": "0" },
+            { "value": 1, "label": "1" },
+            { "value": 2, "label": "2" },
+            { "value": 3, "label": "3" }
+          ]
+        }
+      },
+      {
+        "kind": "endgame",
+        "exercise": {
+          "id": "yose-count:s211:240",
+          "module": "yose-count",
+          "gameId": "s211",
+          "before": 240,
+          "color": "B",
+          "anchors": [185],
+          "candidate": 185,
+          "input": "choice",
+          "question": "À ce stade : Noir 9 points vides unicolores + 1 prisonniers ; Blanc 61 + 3. Quel serait l’écart Noir − Blanc avant komi, si tous les groupes étaient vivants et aucun en seki ?",
+          "answer": -54,
+          "explanation": "(9 + 1) − (61 + 3) = -54. Le komi n’est pas documenté : aucun score final ne peut en être déduit. Le résultat enregistré est « W+1 » ; cette position historique reste intermédiaire, et les hypothèses ne valent pas adjudication.",
+          "choices": [
+            { "value": -54, "label": "-54" },
+            { "value": -53, "label": "-53" },
+            { "value": -52, "label": "-52" },
+            { "value": -51, "label": "-51" },
+            { "value": -50, "label": "-50" }
           ]
         }
       }

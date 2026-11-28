@@ -7,36 +7,55 @@ import { extractAdvancedTactics } from '../src/domain/advancedTactics.ts';
 import { extractEndgame } from '../src/domain/endgameCourse.ts';
 import { extractStrategyCourse } from '../src/story/strategyCourse.ts';
 import { LESSONS } from '../src/story/lessons.ts';
+import { OPENING_CASE_POSITIONS } from '../src/story/openingCases.ts';
 import {
   FORMS_PER_BAND,
   RANK_BANDS,
   type RankForm,
   type RankItem,
 } from '../src/domain/rankAssessment.ts';
-import type { Dataset } from '../src/domain/game.ts';
+import { decodeMoves, type Dataset } from '../src/domain/game.ts';
+import { schoolPosition } from '../src/domain/school.ts';
+import { canonicalPosition } from '../src/domain/positionIdentity.ts';
 const root = join(import.meta.dirname, '..');
 const data = JSON.parse(readFileSync(join(root, 'public/data/games.json'), 'utf8')) as Dataset;
 const training = ['school', 'advanced', 'strategy', 'endgame'].flatMap(
   (name) =>
     JSON.parse(readFileSync(join(root, `src/story/${name}Catalog.json`), 'utf8')) as {
       gameId: string;
+      before: number;
     }[],
 );
 const extraTraining = process.argv
   .slice(2)
-  .flatMap((file) => JSON.parse(readFileSync(file, 'utf8')) as { gameId: string }[]);
-const used = new Set([...training, ...extraTraining, ...LESSONS].map((e) => e.gameId));
+  .flatMap(
+    (file) => JSON.parse(readFileSync(file, 'utf8')) as { gameId: string; before: number }[],
+  );
+const used = new Set(
+  [...training, ...extraTraining, ...LESSONS, ...OPENING_CASE_POSITIONS].map((e) => e.gameId),
+);
+const catalogGames = new Map(data.games.map((game) => [game.id, game]));
+function positionKey(item: { gameId: string; before: number }) {
+  const game = catalogGames.get(item.gameId);
+  const move = game && decodeMoves(game.moves)[item.before];
+  if (!game || !move)
+    throw new Error(`Position source introuvable : ${item.gameId}/${item.before}`);
+  return canonicalPosition(schoolPosition(game, item.before), move.color);
+}
+const trainingKeys = new Set(
+  [...training, ...extraTraining, ...LESSONS, ...OPENING_CASE_POSITIONS].map(positionKey),
+);
 const pool = data.games.filter((g) => !used.has(g.id));
-const all: RankItem[] = [
+const candidates: RankItem[] = [
   ...extractSchools(pool, 48).map((exercise): RankItem => ({ kind: 'school', exercise })),
   ...extractAdvancedTactics(pool).map((exercise): RankItem => ({ kind: 'tactic', exercise })),
   ...extractEndgame(pool, 64).map((exercise): RankItem => ({ kind: 'endgame', exercise })),
   ...[
-    ...extractStrategyCourse(pool, 30),
+    ...extractStrategyCourse(pool, 100),
     ...Array.from({ length: 5 }, (_, i) =>
       extractStrategyCourse(
         pool.filter((_, n) => n % 5 === i),
-        20,
+        80,
       ),
     ).flat(),
   ].map(
@@ -56,6 +75,31 @@ const all: RankItem[] = [
     }),
   ),
 ];
+// Each board shape can be assigned to only one question, even across source games/modules.
+// Prioritize scarce modules before deduplication so common opening shapes cannot crowd them out.
+const required = new Set<string>(RANK_BANDS.flatMap((band) => [...band.modules]));
+const eligible = candidates.flatMap((item) => {
+  if (!required.has(item.exercise.module)) return [];
+  const key = positionKey(item.exercise);
+  return trainingKeys.has(key) ? [] : [{ item, key }];
+});
+const counts = new Map<string, Set<string>>();
+for (const { item, key } of eligible) {
+  const found = counts.get(item.exercise.module) ?? new Set<string>();
+  found.add(key);
+  counts.set(item.exercise.module, found);
+}
+eligible.sort(
+  (a, b) =>
+    (counts.get(a.item.exercise.module)?.size ?? 0) -
+    (counts.get(b.item.exercise.module)?.size ?? 0),
+);
+const uniqueKeys = new Set<string>();
+const all = eligible.flatMap(({ item, key }) => {
+  if (uniqueKeys.has(key)) return [];
+  uniqueKeys.add(key);
+  return [item];
+});
 const slots = RANK_BANDS.flatMap((band) =>
   Array.from({ length: FORMS_PER_BAND }, (_, i) => ({
     id: `${band.id}-${i + 1}`,

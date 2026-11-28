@@ -41,6 +41,8 @@ import {
 import { progressSession, setProgressSession } from '../src/state/sessionProgress.ts';
 import { ALL_EXERCISES } from '../src/story/courseCatalog.ts';
 import { LESSONS } from '../src/story/lessons.ts';
+import { OPENING_CASE_POSITIONS } from '../src/story/openingCases.ts';
+import { canonicalPosition } from '../src/domain/positionIdentity.ts';
 import { RANK_FORMS } from '../src/story/rankCatalog.ts';
 const dataset = JSON.parse(
   readFileSync(new URL('../public/data/games.json', import.meta.url), 'utf8'),
@@ -88,7 +90,9 @@ describe('Épreuves historiques réservées', () => {
     const reserved = RANK_FORMS.flatMap((f) => f.items.map((item) => item.exercise.gameId));
     expect(reserved).toHaveLength(128);
     expect(new Set(reserved).size).toBe(128);
-    const study = new Set([...ALL_EXERCISES, ...LESSONS].map((e) => e.gameId));
+    const study = new Set(
+      [...ALL_EXERCISES, ...LESSONS, ...OPENING_CASE_POSITIONS].map((e) => e.gameId),
+    );
     expect(reserved.filter((id) => study.has(id))).toEqual([]);
     for (const band of RANK_BANDS) {
       const forms = RANK_FORMS.filter((f) => f.band === band.id);
@@ -96,6 +100,20 @@ describe('Épreuves historiques réservées', () => {
       for (const form of forms)
         expect(form.items.map((i) => i.exercise.module)).toEqual([...band.modules]);
     }
+  });
+  it('interdit aussi les fuites de positions, même sous rotation ou réflexion et dans des parties différentes', () => {
+    const key = (item: { gameId: string; before: number }) => {
+      const game = dataset.games.find((g) => g.id === item.gameId)!;
+      return canonicalPosition(
+        schoolPosition(game, item.before),
+        decodeMoves(game.moves)[item.before]!.color,
+      );
+    };
+    const training = new Set([...ALL_EXERCISES, ...LESSONS, ...OPENING_CASE_POSITIONS].map(key));
+    const exams = RANK_FORMS.flatMap((form) => form.items.map((item) => key(item.exercise)));
+    expect(exams).toHaveLength(128);
+    expect(exams.filter((k) => training.has(k))).toEqual([]);
+    expect(new Set(exams).size).toBe(128);
   });
   it('prouve les réponses locales sur les kifus et vérifie le coup et les variantes des questions stratégiques', () => {
     for (const item of RANK_FORMS.flatMap((form) => form.items)) {
