@@ -89,7 +89,7 @@ fichiers PGD sans équivalent sont des fêtes de promotion où il ne joue pas.
   divergence dans le cartouche de la partie.
 - **Total connu.** Wikipédia (fr) cite 388 parties, chiffre d’une édition ancienne des œuvres
   complètes ; le recueil dont dérive ce corpus en compte 471.
-- **Licence.** Ni la collection CWI ni PGD ne déclarent de licence. Les coups de parties jouées
+- **Licence.** [La page générale CWI](https://homepages.cwi.nl/~aeb/go/games/) indique que le compilateur ne revendique aucun droit et présente les parties comme relevant du domaine public ; PGD ne déclare pas de licence. Cela ne vaut pas une licence indépendante pour des annotations ou des fonds tiers. Les coups de parties jouées
   entre 1839 et 1862 sont des faits historiques ; les fichiers sont redistribués ici inchangés,
   avec leur provenance. Tout ayant droit estimant ses droits lésés peut ouvrir un ticket : les
   fichiers seront retirés et `pnpm data:fetch` suffira à les reconstituer localement.

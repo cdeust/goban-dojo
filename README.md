@@ -9,6 +9,17 @@ Le mode « Récit » reste disponible dans le menu autour d’Hon’inbō Shūsa
 
 [Ouvrir Goban Dojo](https://cdeust.github.io/goban-dojo/)
 
+## Le dojo : une boucle d’apprentissage vérifiée
+
+Goban Dojo applique l’ingénierie de la preuve à un jeu de stratégie. Le Sensei (Leela Zero et KataGo) ne remplace pas la décision du joueur : il génère des alternatives, dont les coups sont vérifiés par le moteur de règles, puis en compare les conséquences. Les faits de plateau sont distincts des estimations probabilistes. Les erreurs déterminent les révisions et le prochain exercice du carnet ; des épreuves sur des parties réservées mesurent le transfert sans indice et sans correction intermédiaire.
+
+![Boucle d’apprentissage : kifu authentique, décision de l’apprenti, variantes du Sensei, vérification des règles et estimation KataGo séparées, carnet adapté et épreuves réservées.](docs/diagrams/dojo-learning-loop.svg)
+
+- **748 exercices et études**, 37 chapitres sur 9 niveaux, issus de 172 parties historiques. Les modules d’ouverture construisent progressivement les coins, approches, bases, formes et sorties vers le milieu de partie. [Cursus et preuves](docs/ECOLE.md) · [Approche pédagogique](docs/PEDAGOGIE-DOJO.md).
+- **128 positions d’évaluation réservées**, réparties en 16 épreuves sans aide. Les objectifs kyū/dan sont des jalons pédagogiques, pas des grades officiels. [Protocole d’évaluation](docs/EVALUATION-KYU-DAN.md) · [Sources et méthode d’étalonnage](docs/ETALONNAGE.md).
+- **Sensei d’ouverture** : deux suites de cinq demi-coups, vérifiées légalement, avec réponses réelles de Leela Zero à budget identique et mesures de structure, puis une estimation indépendante de KataGo. [Vérifications et benchmark](docs/BENCHMARK-SENSEI.md).
+- **Progression individuelle** : carnet et école synchronisés par compte Supabase ; mode visiteur sans conservation après rechargement. Aucune clé API du projet n’est envoyé au navigateur. [Architecture des comptes](docs/ACCOUNTS.md).
+
 ![La partie de l’oreille rouge, coup 127](docs/oreille-rouge.png)
 
 ## Ce que fait l’application
@@ -154,7 +165,7 @@ le goban, prisonnière) se déduit du numéro de coup ; Motion anime le passage 
 
 Le code est sous licence MIT. Les textes biographiques sont rédigés à partir du site de
 l’Institut japonais de go et de Wikipédia (CC BY-SA 4.0), cités. Les kifus sont des parties du XIXᵉ siècle ; les fichiers SGF proviennent
-de deux collections qui ne déclarent pas de licence — voir [docs/DONNEES.md](docs/DONNEES.md).
+de deux collections : CWI présente les parties comme relevant du domaine public ; les droits PGD restent distincts et à vérifier — voir [docs/DONNEES.md](docs/DONNEES.md).
 La police Shippori Mincho est sous SIL OFL 1.1. Le moteur physique Rapier est sous Apache-2.0. Le réseau de neurones et le code porté de KataGo
 sont décrits dans [public/engine/LICENCE.txt](public/engine/LICENCE.txt).
 

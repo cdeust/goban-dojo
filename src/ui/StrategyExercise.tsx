@@ -9,6 +9,7 @@ import { STRATEGY_MODULES, type StrategyLesson } from '../story/strategyCourse.t
 import { prettyName, colorName } from '../story/format.ts';
 import { useStore } from '../state/store.ts';
 import { KifuBoard } from './KifuBoard.tsx';
+import { OpeningCoach } from './OpeningCoach.tsx';
 
 interface Row {
   point: number;
@@ -110,6 +111,14 @@ export function StrategyExercise({
   const sourceNumber = game.sources.find((s) => /^cwi:\d{3}$/.test(s))?.slice(4);
   const selectedJudgement = rows?.find((r) => r.point === chosen)?.judgement;
   const kifuJudgement = rows?.find((r) => r.point === ex.historical)?.judgement;
+  const coachAlternative =
+    selectedJudgement && chosen !== undefined
+      ? selectedJudgement.best !== chosen
+        ? selectedJudgement.best
+        : ex.historical !== chosen
+          ? ex.historical
+          : rows?.find((row) => row.point !== chosen)?.point
+      : undefined;
   function openStudy() {
     if (chosen === undefined) return;
     const s = useStore.getState();
@@ -314,6 +323,20 @@ export function StrategyExercise({
               Ce n’est pas une preuve de joseki ou de stratégie optimale.
             </p>
             <p>{ex.observation}</p>
+            {chosen !== undefined && coachAlternative !== undefined && (
+              <OpeningCoach
+                key={`${chosen}:${coachAlternative}`}
+                game={game}
+                before={ex.before}
+                color={ex.color}
+                chosen={chosen}
+                alternative={coachAlternative}
+                alternativeLabel={
+                  coachAlternative === ex.historical ? 'Coup du kifu' : 'Autre candidat'
+                }
+                anchors={ex.anchors}
+              />
+            )}
             <p>
               Les autres hypothèses figurent plus tard dans ce même kifu ; les jouer ici modifie
               l’ordre historique. Elles sont comparées légalement depuis la position initiale.
