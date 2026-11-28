@@ -13,18 +13,18 @@ Le produit doit être une véritable école de go, et non un ensemble de quelque
 
 ## Cursus disponible et preuves (pas une promesse de rang officiel)
 
-| Niveau               | Compétence                                                                        |      Exercices |
-| -------------------- | --------------------------------------------------------------------------------- | -------------: |
-| 1 – Fondations       | Libertés, capture d’une pierre, capture d’une chaîne                              |             72 |
-| 2 – Combat local     | Sortie de l’atari, connexion, atari                                               |             72 |
-| 3 – Lecture tactique | Double atari, capture forcée en trois demi-coups, ko et suicide                   |             72 |
-| 4 – Territoire       | Couleur de la frontière, dénombrement d’une région fermée                         |             48 |
-| 5 – Vie et mort      | Reconnaître et former deux yeux sûrs, démasquer un faux œil                       |             72 |
-| 6 – Tesuji           | Uttegaeshi (sacrifice et reprise), semeai (course de libertés), shichō (escalier) |             72 |
-| 7 – Ouverture        | Fuseki, aborder un coin, lire les échanges du coin, direction de jeu              |             48 |
-| 8 – Stratégie        | Influence, réduction ou invasion, initiative                                      |             36 |
-| 9 – Yose et décompte | Captures tardives, prisonniers, frontière, variation géométrique, points japonais |            160 |
-| Cycle d’application  | Partie 19×19 contre Leela Zero, sauvegarde/historique, analyse KataGo des coups   | Pratique libre |
+| Niveau               | Compétence                                                                           |      Exercices |
+| -------------------- | ------------------------------------------------------------------------------------ | -------------: |
+| 1 – Fondations       | Libertés, capture d’une pierre, capture d’une chaîne                                 |             72 |
+| 2 – Combat local     | Sortie de l’atari, connexion, atari ; premiers coups et coins                        |             84 |
+| 3 – Lecture tactique | Double atari, capture forcée, ko et suicide ; construire un coin (shimari)           |             84 |
+| 4 – Territoire       | Frontières, dénombrement ; extensions, base, approche et réponse                     |             72 |
+| 5 – Vie et mort      | Deux yeux, faux œil ; consolidation de forme et sortie vers le centre                |             96 |
+| 6 – Tesuji           | Uttegaeshi, semeai, shichō ; après un échange et renforcement d’un groupe vulnérable |             96 |
+| 7 – Ouverture        | Fuseki, aborder un coin, lire les échanges du coin, direction de jeu                 |             48 |
+| 8 – Stratégie        | Influence, réduction ou invasion, initiative                                         |             36 |
+| 9 – Yose et décompte | Captures tardives, prisonniers, frontière, variation géométrique, points japonais    |            160 |
+| Cycle d’application  | Partie 19×19 contre Leela Zero, sauvegarde/historique, analyse KataGo des coups      | Pratique libre |
 
 **748 exercices et études, 37 chapitres, 168 parties historiques de 1839 à 1861.** L'ensemble initial de 264 est conservé ; 144 exercices tactiques avancés, 84 études stratégiques, 96 études intermédiaires d’ouverture et de transition, et 160 exercices de yose sont ajoutés. `pnpm data:build` régénère les quatre fichiers de catalogue. Aucune composition, transformation ou variation de la mise en place ne gonfle le catalogue. Une même position peut servir à deux compétences distinctes. Chaque activité est ancrée dans un préfixe exact de kifu et un identifiant stable. Les différences entre coup réel et variante sont affichées.
 
