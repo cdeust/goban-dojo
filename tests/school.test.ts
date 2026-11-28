@@ -69,7 +69,9 @@ describe('Consignes de comptage', () => {
       anchors: [point('A19'), point('B19')],
       candidate: point('A19'),
     };
-    expect(schoolQuestion(board, ex)).toContain('Comptez aussi ce point.');
+    expect(schoolQuestion(board, ex)).toContain(
+      'Comptez aussi ce point (marqué « ? »), une seule fois.',
+    );
     expect(exerciseAnswer(board, ex, 2)).toBe(true);
     expect(schoolSolution(board, ex, 0)).toBe(
       'La zone contient 2 points vides : A19, B19. La zone touche des pierres des deux couleurs. Ce constat ne détermine pas le territoire final.',

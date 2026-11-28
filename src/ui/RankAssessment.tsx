@@ -40,7 +40,7 @@ function question(item: RankItem, game: GameRecord): string {
   const board = schoolPosition(game, item.exercise.before);
   if (item.kind === 'strategy')
     return `${item.exercise.color === 'B' ? 'Noir' : 'Blanc'} au trait. ${item.exercise.prompt} Choisissez votre coup sur le goban.`;
-  if (item.kind === 'school') return schoolQuestion(board, item.exercise);
+  if (item.kind === 'school') return schoolQuestion(board, item.exercise, game);
   if (item.kind === 'tactic') return advancedTacticQuestion(board, item.exercise);
   return item.exercise.question;
 }

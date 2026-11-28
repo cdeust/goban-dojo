@@ -199,7 +199,7 @@ function Exercise({
         <h2 id="school-exercise-title">
           {sequence && line.length === 2 && !result
             ? 'Terminez la capture du groupe.'
-            : schoolQuestion(board, ex)}
+            : schoolQuestion(board, ex, game)}
         </h2>
       </div>
       <div className="school-exercise__board">

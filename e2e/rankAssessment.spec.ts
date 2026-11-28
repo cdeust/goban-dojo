@@ -35,12 +35,17 @@ async function completeInitiation(page: Page, form: RankForm, skipLast = false) 
     const game = data.games.find((g) => g.id === ex.gameId)!;
     const board = schoolPosition(game, ex.before);
     if (ex.module === 'liberties' || ex.module === 'region-size') {
+      if (ex.module === 'region-size')
+        await expect(question.getByRole('heading')).toContainText(
+          'Comptez aussi ce point (marqué « ? »), une seule fois.',
+        );
       const answer =
         ex.module === 'liberties'
           ? board.libertyCount(ex.anchors[0]!)
           : emptyRegion(board, ex.candidate!).points.length;
       await question.getByRole('spinbutton').fill(String(answer));
     } else if (ex.module === 'legality') {
+      await expect(question.getByRole('heading')).toContainText('Aucun coup n’a été joué depuis.');
       const legal = !board.clone().play(ex.color, ex.candidate!).illegal;
       await question
         .getByRole('button', { name: legal ? 'Légal' : 'Interdit', exact: true })
