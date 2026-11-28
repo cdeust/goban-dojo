@@ -391,7 +391,7 @@ test('étudier la position du kifu, comparer les suites et retrouver une capture
   page,
 }) => {
   test.slow();
-  await page.setViewportSize({ width: 390, height: 916 });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enter(page);
   await page.getByRole('button', { name: 'Étudier cette partie' }).click();
@@ -846,7 +846,7 @@ test('le pupitre d’estimation suit le goban sur portable et mobile', async ({ 
   for (const size of [
     { width: 1280, height: 720 },
     { width: 1440, height: 800 },
-    { width: 390, height: 916 },
+    { width: 390, height: 844 },
   ]) {
     await page.setViewportSize(size);
     for (const open of [true, false]) {

@@ -46,7 +46,7 @@ test('un visiteur mobile accède directement à une position partagée après le
   page,
 }) => {
   watchGateway(page);
-  await page.setViewportSize({ width: 390, height: 916 });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/?partie=s126&coup=126');
   await page.getByRole('button', { name: 'Continuer en visiteur' }).click();
