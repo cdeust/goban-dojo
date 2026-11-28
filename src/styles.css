@@ -2972,3 +2972,23 @@ progress {
   width: 100%;
   overflow-wrap: anywhere;
 }
+
+.school-problem-list summary {
+  cursor: pointer;
+  margin-block: 0.7rem;
+}
+.school-problem-list ol {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.school-problem-list li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.school-problem-list li span {
+  font-size: 0.8rem;
+}

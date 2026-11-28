@@ -45,7 +45,15 @@ export const ADVANCED_TACTICS_MODULES = [
       'L’atari se poursuit en escalier lorsque la chaîne adverse s’étend de liberté en liberté. Les pierres lointaines peuvent briser la poursuite. Ici chaque réponse légale est vérifiée à un horizon annoncé : une lecture non concluante ne prouve pas que la chaîne s’échappe.',
   },
 ] as const;
-export type AdvancedModuleId = (typeof ADVANCED_TACTICS_MODULES)[number]['id'];
+export const LONG_LADDER_MODULE = {
+  id: 'long-ladder',
+  level: 6,
+  title: 'Tsumego : lecture longue en escalier',
+  lesson:
+    'Capturez toute la chaîne marquée, en jouant chaque atari. Le dojo choisit une défense légale qui prolonge la résistance. Le nombre de coups est un horizon maximal prouvé, non une garantie générale de vie ou de mort.',
+} as const;
+export const TACTICS_MODULES = [...ADVANCED_TACTICS_MODULES, LONG_LADDER_MODULE] as const;
+export type AdvancedModuleId = (typeof TACTICS_MODULES)[number]['id'];
 export interface AdvancedTacticExercise {
   id: string;
   module: AdvancedModuleId;
@@ -57,6 +65,7 @@ export interface AdvancedTacticExercise {
   reply?: number;
   finish?: number;
   line?: number[];
+  horizon?: number;
 }
 export const advancedIsMove = (module: AdvancedModuleId): boolean => module !== 'two-eyes';
 export const ADVANCED_TACTIC_CHOICES = {
@@ -138,10 +147,25 @@ export function ladderProof(
   first: number,
   horizon = 9,
 ): number[] | null {
+  if (board.libertyCount(target) !== 2) return null;
+  return ladderContinuation(board, color, target, first, horizon);
+}
+
+/** A legal direct-atari continuation from either one or two remaining liberties. */
+export function ladderContinuation(
+  board: Board,
+  color: Color,
+  target: number,
+  first: number,
+  horizon: number,
+): number[] | null {
   if (
     !playable(first) ||
+    !Number.isInteger(horizon) ||
+    horizon < 1 ||
+    horizon > 25 ||
     board.get(target) !== opposite(color) ||
-    board.libertyCount(target) !== 2 ||
+    board.libertyCount(target) > 2 ||
     !liberties(board, target).includes(first)
   )
     return null;
@@ -220,6 +244,8 @@ export function judgeAdvancedTactic(
     }
     case 'false-eye':
       return falseEyeCapture(board, ex.color, answer, target);
+    case 'long-ladder':
+      return ladderProof(board, ex.color, target, answer, ex.horizon) !== null;
     case 'ladder': {
       const proof = ladderProof(board, ex.color, target, answer);
       return (
@@ -251,6 +277,8 @@ export function advancedTacticQuestion(_board: Board, ex: AdvancedTacticExercise
       return `Au trait : ${c}. Trouvez un sacrifice d’une pierre près de ${a}. Si l’adversaire la capture en ${pointToHuman(ex.reply!)}, vous pourrez reprendre au moins deux pierres immédiatement.`;
     case 'false-eye':
       return `Au trait : ${c}. Trouvez le point vide qui paraît un œil adverse, mais est bordé de chaînes distinctes. Jouez-y pour capturer la chaîne en ${a}.`;
+    case 'long-ladder':
+      return `Au trait : ${c}. Capturez en escalier la chaîne en ${a}, en jouant chacun de vos coups. Lecture prouvée en ${ex.horizon} demi-coups au plus.`;
     case 'ladder':
       return `Au trait : ${c}. Lancez une capture en escalier de la chaîne en ${a}. Elle doit rester forcée contre toute réponse légale, en neuf demi-coups au plus.`;
     case 'capture-race':
@@ -282,8 +310,9 @@ export function advancedTacticSolution(
     }
     case 'false-eye':
       return `En ${pointToHuman(answer)}, les chaînes ennemies ne sont pas toutes reliées. Le coup est légal et capture ${result.captures.length} pierre(s) : ce faux œil n’assure pas la vie.`;
+    case 'long-ladder':
     case 'ladder': {
-      const line = ex.line ?? ladderProof(board, ex.color, target, answer)!;
+      const line = ex.line ?? ladderProof(board, ex.color, target, answer, ex.horizon)!;
       return `Variante calculée : ${line.map((p, i) => `${i + 1}. ${pointToHuman(p)}`).join(' · ')}. La chaîne est capturée malgré toutes les réponses légales vérifiées dans cet horizon (ko simple).`;
     }
     case 'capture-race':

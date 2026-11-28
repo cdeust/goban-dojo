@@ -724,6 +724,31 @@ export function School() {
                           Travailler : {m.title}
                         </button>
                       )}
+                      {m.id === 'long-ladder' && (
+                        <details className="school-problem-list">
+                          <summary>Choisir un problème de lecture longue</summary>
+                          <ol>
+                            {exercises.map((ex, index) => {
+                              if (ex.module !== 'long-ladder') return null;
+                              const record = schoolRecord(progress, ex.id);
+                              return (
+                                <li key={ex.id}>
+                                  <button type="button" className="chip" onClick={() => open(ex)}>
+                                    Problème {index + 1} · {ex.horizon} demi-coups
+                                  </button>
+                                  <span>
+                                    {record
+                                      ? record.last === 'exact'
+                                        ? 'Résolu'
+                                        : 'À retravailler'
+                                      : 'Non travaillé'}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                          </ol>
+                        </details>
+                      )}
                     </article>
                   );
                 })}
