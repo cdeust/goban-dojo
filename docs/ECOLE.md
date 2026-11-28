@@ -49,3 +49,9 @@ Le carnet réunit les recommandations de l’école et les rappels de kifu sans 
 L'[archive des championnats européens](https://eurogofed.org/archives/egc/en/stats/games/) expose des parties réelles récentes et historiques, dont les fichiers SGF ; les [parties AlphaGo de Google DeepMind](https://deepmind.google/blog/alphagos-next-move/) sont des pistes de comparaison pédagogique. Ne pas importer ni republier un nouveau fonds sans vérifier la provenance, les termes de réutilisation des fichiers et annotations, et les droits commerciaux. CWI déclare les parties dans le domaine public ; PGD ne déclare pas de licence, voir [DONNEES.md](DONNEES.md). Le stade actuel est gratuit. Aucun contenu d'une école tierce n'est copié.
 
 Le catalogue est chargé à la demande depuis le carnet ou l’école ; il reste séparé du chargement initial du kifu. Voir [la pédagogie et les mesures du dojo](PEDAGOGIE-DOJO.md).
+
+### Libertés, zones vides et territoire
+
+- Une liberté est un point vide qui touche une pierre de la chaîne par une ligne du goban. Une diagonale ne relie pas les pierres. Un point vide partagé par deux pierres de la chaîne se compte une seule fois.
+- Pour dénombrer une zone vide, on inclut le point marqué, puis on suit les lignes de point vide en point vide. Le bord du goban limite la zone sans lui donner de couleur.
+- La bordure visible est une observation sur la position affichée. Elle ne suffit pas à déterminer le territoire en fin de partie. Les corrections donnent les coordonnées des points comptés pour que le joueur puisse les retrouver sur le goban. Les positions et le barème ne changent pas.

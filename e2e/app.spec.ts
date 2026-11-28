@@ -1364,7 +1364,9 @@ test.describe('école de go sur mobile', () => {
     await expect(page.getByText(/748 exercices tirés de 172 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Commencer ma séance' }).click();
     await expect(
-      page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+      page.getByRole('heading', {
+        name: /Combien de libertés a la chaîne qui contient la pierre en E4/,
+      }),
     ).toBeVisible();
     await expect
       .poll(() =>
@@ -1531,10 +1533,12 @@ test('le carnet déclenche une séance réelle de l’école et reprend ses erre
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
   const guided = page.getByRole('region', { name: 'Ma prochaine séance' });
   await expect(guided).toContainText('Niveau conseillé : 1 / 9');
-  await expect(guided).toContainText('Nouvel exercice : Lire les libertés');
+  await expect(guided).toContainText('Nouvel exercice : Compter les libertés');
   await guided.getByRole('button', { name: 'Reprendre mon parcours guidé' }).click();
   await expect(
-    page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+    page.getByRole('heading', {
+      name: /Combien de libertés a la chaîne qui contient la pierre en E4/,
+    }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Voir l’explication' }).click();
   await page.getByRole('button', { name: 'Retour au dojo' }).click();
@@ -1543,11 +1547,32 @@ test('le carnet déclenche une séance réelle de l’école et reprend ses erre
   await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
   await page.evaluate(() => window.dispatchEvent(new Event('focus')));
   await expect(guided).toContainText('1 révision');
-  await expect(guided).toContainText('Révision : Lire les libertés');
+  await expect(guided).toContainText('Révision : Compter les libertés');
   await guided.getByRole('button', { name: 'Reprendre mon parcours guidé' }).click();
   await expect(
-    page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+    page.getByRole('heading', {
+      name: /Combien de libertés a la chaîne qui contient la pierre en E4/,
+    }),
   ).toBeVisible();
   await page.getByRole('button', { name: '4', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+});
+
+test('la correction d’une zone vide montre les points comptés, sans les déclarer territoire', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
+  await page
+    .getByRole('button', { name: 'Travailler : Compter les points d’une zone vide' })
+    .click();
+  await expect(page.getByRole('heading', { name: /Comptez aussi ce point/ })).toBeVisible();
+  await expect(
+    page.getByText('Le point « ? » est le point de départ de la zone vide.', { exact: false }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Voir l’explication' }).click();
+  await expect(page.getByText(/La zone contient \d+ points? vides? : [A-T]\d+/)).toBeVisible();
+  await expect(page.getByText(/Ce constat ne détermine pas le territoire final/)).toBeVisible();
 });

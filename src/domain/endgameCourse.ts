@@ -19,9 +19,9 @@ export const ENDGAME_MODULES = [
   {
     id: 'yose-boundary',
     level: 9,
-    title: 'Dame ou espace fermé ?',
+    title: 'Lire la bordure d’une zone en fin de partie',
     lesson:
-      'Une intersection vide ayant des frontières des deux couleurs est géométriquement neutre. Il faut cependant établir la vie des chaînes avant de parler de dame ou de territoire définitif.',
+      'Suivez les points vides reliés par les lignes, puis regardez quelles pierres touchent la zone. Si elle touche les deux couleurs, elle n’est pas entourée par un seul camp dans cette position. Avant le décompte, il faut déterminer les groupes vivants, morts ou en seki.',
   },
   {
     id: 'yose-value',
@@ -35,7 +35,7 @@ export const ENDGAME_MODULES = [
     level: 9,
     title: 'Compter les points japonais',
     lesson:
-      'Les points japonais comprennent le territoire et les prisonniers, avec le komi ajouté aux Blancs. Sans accord sur les morts et les groupes en seki ou sans komi documenté, le résultat exact n’est pas déterminé.',
+      'En règles japonaises, comptez un point par intersection vide de votre territoire et un par prisonnier. Les pierres mortes retirées s’ajoutent aux prisonniers et le komi s’ajoute aux points de Blanc. Les points vides communs (dame) et ceux qui ne forment pas de territoire à cause d’un seki ne rapportent pas de point.',
   },
 ] as const;
 export type EndgameModuleId = (typeof ENDGAME_MODULES)[number]['id'];
