@@ -28,7 +28,9 @@ describe('Complément de parcours', () => {
     const exams = RANK_FORMS.flatMap((form) => form.items.map((item) => item.exercise));
     const extra = courseSupplement(data.games, training, exams);
     expect(interleaveSupplement(school, extra.school, 2)).toEqual(schoolCatalog);
-    expect(interleaveSupplement(strategy, extra.strategy, 3)).toEqual(strategyCatalog);
+    const initialStrategy = interleaveSupplement(strategy, extra.strategy, 3);
+    const initialStrategyIds = new Set(initialStrategy.map((e) => e.id));
+    expect(initialStrategy).toEqual(strategyCatalog.filter((e) => initialStrategyIds.has(e.id)));
     expect(extra.school).toHaveLength(24);
     for (const module of ['liberties', 'region-size']) {
       const firstTwo = schoolCatalog.filter((e) => e.module === module).slice(0, 2);

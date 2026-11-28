@@ -206,3 +206,10 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
 - Un certificat de deux yeux d'une intersection de la même chaîne suffit à établir sa vie. Le moteur restreint les coups du joueur aux libertés de la chaîne, mais vérifie toutes les réponses adverses légales, y compris passe. Une recherche négative ne constitue pas une preuve de mort. La défense choisie minimise les solutions restantes ; en cas d'égalité elle privilégie moins de libertés, puis la proximité de la chaîne.
 - Les 37 problèmes à deux décisions ne sont comptés comme réussis qu'après la création effective du certificat. Les yeux sont révélés sur le goban après correction. Les annales permettent une sélection libre, et les résultats précédents restent disponibles.
 - Catalogue total : 916 activités. La suite doit traiter les objectifs de capture de groupes non réduits à un shichō, semeai, ko, seki, et élargir les décisions de milieu de partie et de yose.
+
+## Décisions stratégiques après l'ouverture et au yose
+
+- 32 nouvelles études du milieu de partie (huit par module de direction, influence, réduction et initiative), uniquement après le coup 35. Les faits observables restent distincts de toute estimation de force.
+- 24 décisions tardives, dans les derniers 30 % des coups du kifu et après le coup 100. Les trois candidats correspondent à des coups réels ultérieurs ou immédiats du même camp, légaux au préfixe étudié et séparés de cinq intersections orthogonales au moins. Ils concernent de petites captures ou des zones vides mixtes de douze points au plus. Le filtre géométrique n'établit pas le sente ni la valeur finale.
+- Le joueur choisit un coup et utilise les mêmes évaluations KataGo et suites Leela que les études d'ouverture. Le résultat estimé n'est jamais présenté comme une preuve. Les études sont sélectionnables par position historique et état de progression.
+- 972 activités au total sur 172 parties ; 56 positions supplémentaires sans collision avec les 916 activités, les exemples et les 128 questions d'examen, même sous les huit symétries. Tous les anciens identifiants et leurs contenus sont préservés.

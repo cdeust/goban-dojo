@@ -5,7 +5,7 @@ import { schoolPosition } from '../domain/school.ts';
 import type { SchoolGrade } from '../domain/schoolProgress.ts';
 import { evaluate, loadEngine, useEngine } from '../engine/client.ts';
 import { judgeMoves, type Judgement } from '../engine/judge.ts';
-import { STRATEGY_MODULES, type StrategyLesson } from '../story/strategyCourse.ts';
+import { STRATEGY_COURSE_MODULES, type StrategyLesson } from '../story/strategyCourse.ts';
 import { prettyName, colorName } from '../story/format.ts';
 import { useStore } from '../state/store.ts';
 import { KifuBoard } from './KifuBoard.tsx';
@@ -40,7 +40,7 @@ export function StrategyExercise({
     () => [...new Set([ex.historical, ...ex.alternatives])].sort((a, b) => a - b),
     [ex],
   );
-  const module = STRATEGY_MODULES.find((m) => m.id === ex.module)!;
+  const module = STRATEGY_COURSE_MODULES.find((m) => m.id === ex.module)!;
   const status = useEngine((s) => s.status);
   const engineError = useEngine((s) => s.error);
   const engineProgress = useEngine((s) => s.progress);
