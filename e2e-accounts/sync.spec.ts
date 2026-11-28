@@ -76,6 +76,11 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await two.emulateMedia({ reducedMotion: 'reduce' });
     await signIn(two, emails[0]!);
     await expect(two.getByText('1 / 652', { exact: false }).first()).toBeVisible();
+    await two.getByRole('button', { name: 'Retour au dojo' }).click();
+    const guided = two.getByRole('region', { name: 'Ma prochaine séance' });
+    await expect(guided).toContainText('1 / 652 exercices travaillés');
+    await expect(guided).toContainText('Niveau conseillé : 1 / 9');
+    await two.getByRole('button', { name: 'Entrer dans l’école' }).click();
     const download = two.waitForEvent('download');
     await two.getByRole('button', { name: 'Exporter la progression' }).click();
     const backup = await (await download).path();

@@ -52,7 +52,15 @@ export function markSchoolFailure(
   id: string,
   today: number,
 ): SchoolProgress {
-  if (schoolRecord(progress, id)) return progress;
+  const old = schoolRecord(progress, id);
+  if (old && (old.due > today || old.last === 'incomplete')) return progress;
+  if (old)
+    return {
+      version: 1,
+      records: progress.records.map((record) =>
+        record.id === id ? { ...record, last: 'incomplete', stage: 0, due: today } : record,
+      ),
+    };
   return {
     version: 1,
     records: [
@@ -82,40 +90,64 @@ export function moduleProgress(
   };
 }
 
-/** Rappels dus d'abord, puis une position encore inconnue de la compétence la moins consolidée au niveau courant. */
+/** Guided levels depend on distinct unaided successes, not XP or repeated attempts. */
+export function coursePlan<T extends CourseActivity>(
+  exercises: readonly T[],
+  progress: SchoolProgress,
+  today: number,
+  modules: readonly CourseModule[],
+) {
+  const records = new Map(progress.records.map((record) => [record.id, record]));
+  const due = exercises
+    .flatMap((exercise) => {
+      const record = records.get(exercise.id);
+      return record && record.due <= today ? [{ exercise, record }] : [];
+    })
+    .sort((a, b) => a.record.stage - b.record.stage || a.record.due - b.record.due);
+  const categories = modules.flatMap((module) => {
+    const activities = exercises.filter((exercise) => exercise.module === module.id);
+    if (!activities.length) return [];
+    const stats = moduleProgress(exercises, progress, module.id, today);
+    return [
+      {
+        module,
+        stats,
+        threshold: Math.min(12, Math.ceil(activities.length / 2)),
+        next: activities.find((exercise) => !records.has(exercise.id)),
+      },
+    ];
+  });
+  const pending = categories.filter((category) => category.stats.exact < category.threshold);
+  const level = pending.length
+    ? Math.min(...pending.map((category) => category.module.level))
+    : Math.max(1, ...categories.map((category) => category.module.level));
+  const candidates = pending.length
+    ? pending.filter((category) => category.module.level === level)
+    : categories;
+  const ranked = candidates
+    .filter((category) => category.next)
+    .sort(
+      (a, b) =>
+        a.module.level - b.module.level ||
+        a.stats.exact - b.stats.exact ||
+        b.stats.attempted - b.stats.firstTry - (a.stats.attempted - a.stats.firstTry),
+    );
+  return {
+    level,
+    due: due.length,
+    review: due[0]?.exercise,
+    next: due[0]?.exercise ?? ranked[0]?.next,
+  };
+}
+
+/** Due reviews first, then a new exercise at the actual learner level. */
 export function recommendCourse<T extends CourseActivity>(
   exercises: readonly T[],
   progress: SchoolProgress,
   today: number,
   modules: readonly CourseModule[],
 ): T | undefined {
-  const due = exercises
-    .flatMap((exercise) => {
-      const record = schoolRecord(progress, exercise.id);
-      return record && record.due <= today ? [{ exercise, record }] : [];
-    })
-    .sort((a, b) => a.record.stage - b.record.stage || a.record.due - b.record.due);
-  if (due[0]) return due[0].exercise;
-  const categories = modules
-    .map((module) => ({
-      module,
-      stats: moduleProgress(exercises, progress, module.id, today),
-      next: exercises.find((e) => e.module === module.id && !schoolRecord(progress, e.id)),
-    }))
-    .filter((m) => m.next);
-  const pending = categories.filter(
-    (m) =>
-      m.stats.exact <
-      Math.min(12, Math.ceil(exercises.filter((e) => e.module === m.module.id).length / 2)),
-  );
-  // Un niveau est un objectif pédagogique, pas une barrière : tous les exercices restent disponibles.
-  const ranked = (pending.length ? pending : categories).sort(
-    (a, b) =>
-      a.module.level - b.module.level ||
-      a.stats.exact - b.stats.exact ||
-      b.stats.attempted - b.stats.firstTry - (a.stats.attempted - a.stats.firstTry),
-  );
-  return ranked[0]?.next;
+  return coursePlan(exercises, progress, today, modules).next;
 }
 
 export function recommendSchool(
