@@ -1311,7 +1311,7 @@ test.describe('école de go sur mobile', () => {
     hasTouch: true,
     acceptDownloads: true,
   });
-  test('652 exercices réels, capture en trois coups et progression visiteur éphémère', async ({
+  test('748 exercices réels, capture en trois coups et progression visiteur éphémère', async ({
     page,
   }) => {
     test.slow();
@@ -1320,7 +1320,7 @@ test.describe('école de go sur mobile', () => {
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
     await expect(page.getByRole('heading', { name: 'École de go', exact: true })).toBeVisible();
-    await expect(page.getByText(/652 exercices tirés de 161 parties/)).toBeVisible();
+    await expect(page.getByText(/748 exercices tirés de 168 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Commencer ma séance' }).click();
     await expect(
       page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
@@ -1344,7 +1344,7 @@ test.describe('école de go sur mobile', () => {
     await page.getByRole('button', { name: '4', exact: true }).click();
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('1 / 652', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('1 / 748', { exact: false }).first()).toBeVisible();
     await page
       .getByRole('button', { name: 'Travailler : Lire une capture en trois coups' })
       .click();
@@ -1362,13 +1362,13 @@ test.describe('école de go sur mobile', () => {
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
     await expect(grid.getByRole('button', { name: /H6, noir, coup 155/ })).toBeVisible();
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('2 / 652', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('2 / 748', { exact: false }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Exporter la progression' })).toBeDisabled();
     await expect(page.getByLabel('Restaurer une sauvegarde de l’école')).toBeDisabled();
     await page.reload();
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText('0 / 652', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('0 / 748', { exact: false }).first()).toBeVisible();
   });
 });
 
@@ -1381,7 +1381,7 @@ test.describe('cursus avancé et application', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Entrer au dojo' }).click();
     await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(page.getByText(/652 exercices tirés de 161 parties/)).toBeVisible();
+    await expect(page.getByText(/748 exercices tirés de 168 parties/)).toBeVisible();
     await page.getByRole('button', { name: 'Travailler : Reconnaître deux yeux' }).click();
     await page.getByRole('button', { name: 'Non démontré' }).tap();
     await expect(page.getByRole('status')).toContainText('Réussi sans aide');
@@ -1430,7 +1430,7 @@ test.describe('cursus avancé et application', () => {
     await page.getByRole('button', { name: 'Calculer sous ces hypothèses' }).click();
     await expect(page.getByRole('status')).toContainText('Décompte conditionnel');
     await page.getByRole('button', { name: '← Programme' }).click();
-    await expect(page.getByText('5 / 652', { exact: false }).first()).toBeVisible();
+    await expect(page.getByText('5 / 748', { exact: false }).first()).toBeVisible();
     expect(w.problems).toEqual([]);
     expect(w.foreign).toEqual([]);
   });
@@ -1497,7 +1497,7 @@ test('le carnet déclenche une séance réelle de l’école et reprend ses erre
   ).toBeVisible();
   await page.getByRole('button', { name: 'Voir l’explication' }).click();
   await page.getByRole('button', { name: 'Retour au dojo' }).click();
-  await expect(guided).toContainText('1 / 652 exercices travaillés');
+  await expect(guided).toContainText('1 / 748 exercices travaillés');
   await expect(guided).toContainText('0 révisions');
   await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
   await page.evaluate(() => window.dispatchEvent(new Event('focus')));
