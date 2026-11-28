@@ -28,6 +28,7 @@ async function completeInitiation(page: Page, form: RankForm, skipLast = false) 
       question.getByRole('button', { name: /indice|solution|explication/i }),
     ).toHaveCount(0);
     await expect(page.getByRole('region', { name: 'Bilan de l’épreuve' })).toHaveCount(0);
+    await expect(page.getByText('Voir les points de la correction')).toHaveCount(0);
     if (skipLast && index === 7) {
       await question.getByRole('button', { name: 'Passer cette question' }).click();
       continue;
@@ -72,6 +73,19 @@ test('épreuves réelles : partie réservée, réponses sans correction, deux fo
   await expect(page.getByText('Objectif 21 kyū', { exact: false })).toBeVisible();
   const first = await completeInitiation(page, RANK_FORMS[0]!, true);
   await expect(first).toContainText('Épreuve réussie : 7/8');
+  const counting = first.locator('li').filter({ hasText: 'Comptez aussi ce point' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await counting.getByText('Voir les points de la correction').click();
+  const diagram = counting.getByRole('group', { name: 'Position du kifu, goban interactif' });
+  const bounds = await diagram.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(390);
+  const region = RANK_FORMS[0]!.items[7]!.exercise;
+  const regionGame = data.games.find((g) => g.id === region.gameId)!;
+  if (!('candidate' in region)) throw new Error('Position de comptage absente');
+  const count = emptyRegion(schoolPosition(regionGame, region.before), region.candidate!).points
+    .length;
+  await expect(counting.getByRole('button', { name: /point de la correction/ })).toHaveCount(count);
   await expect(first.getByRole('button', { name: 'Réviser cette compétence' })).toHaveCount(1);
   await first.getByRole('button', { name: 'Voir mes jalons' }).click();
   await expect(page.getByText(/1 \/ 2 dates avec réussite/)).toHaveCount(1);
@@ -101,7 +115,16 @@ test('stratégie évaluée par le moteur KataGo réel après la huitième répon
   const form = RANK_FORMS.find((f) => f.band === 'reading')!;
   for (const [index, item] of form.items.entries()) {
     const question = page.getByRole('region', { name: `Question ${index + 1}`, exact: true });
-    if (item.kind === 'strategy' && index === 6) {
+    if (item.kind === 'school' && item.exercise.module === 'capture-sequence') {
+      await expect(question.getByRole('heading')).toContainText(
+        'Choisissez uniquement le premier coup de cette séquence.',
+      );
+      await expect(question.getByText('Voir les points de la correction')).toHaveCount(0);
+      const game = data.games.find((g) => g.id === item.exercise.gameId)!;
+      const point = pointToHuman(decodeMoves(game.moves)[item.exercise.before]!.point);
+      await question.getByRole('button', { name: `${point}, vide`, exact: true }).click();
+      await question.getByRole('button', { name: 'Valider ma réponse' }).click();
+    } else if (item.kind === 'strategy' && index === 6) {
       await question
         .getByRole('button', {
           name: `${pointToHuman(item.exercise.historical)}, vide`,
@@ -116,4 +139,8 @@ test('stratégie évaluée par le moteur KataGo réel après la huitième répon
   const result = page.getByRole('region', { name: 'Bilan de l’épreuve' });
   await expect(result).toBeVisible({ timeout: 90_000 });
   await expect(result).toContainText(/KataGo estime une perte de \d/);
+  const capture = result.locator('li').filter({ hasText: 'Choisissez uniquement le premier coup' });
+  await expect(capture).toContainText('Exemple de variante vérifiée');
+  await capture.getByText('Voir les points de la correction').click();
+  await expect(capture.getByRole('button', { name: /point de la correction/ })).toHaveCount(1);
 });

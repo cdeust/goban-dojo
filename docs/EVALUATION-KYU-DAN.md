@@ -36,3 +36,7 @@ Le carnet du dojo affiche le dernier jalon interne validé, le prochain objectif
 Le dernier coup du kifu (numéro, couleur, intersection et pierres capturées, le cas échéant) est explicitement indiqué pour toutes les questions de légalité, en entraînement comme en évaluation. La règle porte sur la reprise immédiate, pas sur la forme du ko seule. Le comptage indique explicitement que le point marqué « ? » appartient à la zone et doit être compté une seule fois.
 
 Régression documentée : épreuve initiation-3, cwi:068 après 60 coups (Blanc D10 capture E10, reprise immédiate interdite) et cwi:340 après 194 coups (zone de six points comprenant T3). Les positions, règles de notation, réponses et résultats historiques restent inchangés. Les anciennes formulations étaient ambiguës ; les résultats établis sous ces formulations ne justifient pas à eux seuls une conclusion sur la compétence.
+
+### Corrections visuelles et séquences (2026-11-28)
+
+Les huit questions réservées de capture en trois demi-coups demandent explicitement le premier coup, seul coup évalué. Les corrections présentent les dix solutions initiales prouvées (six questions à une solution, deux à deux solutions) et une variante légale numérotée, en privilégiant le premier coup soumis s'il est valide. Les diagrammes de correction des libertés, tailles et bordures de zones et premiers coups de capture affichent les points verts seulement après l'évaluation complète ; aucune modification des réponses, notes ou formulaires.

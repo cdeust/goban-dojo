@@ -27,7 +27,14 @@ import {
   advancedTacticQuestion,
   advancedTacticSolution,
 } from '../domain/advancedTactics.ts';
-import { isMoveModule, schoolPosition, schoolQuestion, schoolSolution } from '../domain/school.ts';
+import {
+  captureSequenceSolutions,
+  countingSolutionPoints,
+  isMoveModule,
+  schoolPosition,
+  schoolQuestion,
+  schoolSolution,
+} from '../domain/school.ts';
 import { decodeMoves, decodePoints, type GameRecord } from '../domain/game.ts';
 import { pointToHuman } from '../domain/board.ts';
 import { practiceDay } from '../domain/practice.ts';
@@ -40,7 +47,12 @@ function question(item: RankItem, game: GameRecord): string {
   const board = schoolPosition(game, item.exercise.before);
   if (item.kind === 'strategy')
     return `${item.exercise.color === 'B' ? 'Noir' : 'Blanc'} au trait. ${item.exercise.prompt} Choisissez votre coup sur le goban.`;
-  if (item.kind === 'school') return schoolQuestion(board, item.exercise, game);
+  if (item.kind === 'school') {
+    const prompt = schoolQuestion(board, item.exercise, game);
+    return item.exercise.module === 'capture-sequence'
+      ? `${prompt} Choisissez uniquement le premier coup de cette séquence.`
+      : prompt;
+  }
   if (item.kind === 'tactic') return advancedTacticQuestion(board, item.exercise);
   return item.exercise.question;
 }
@@ -95,6 +107,42 @@ function correction(
   if (item.kind === 'school')
     return schoolSolution(board, item.exercise, historical, answer === null ? undefined : answer);
   return item.exercise.explanation;
+}
+
+function SchoolCorrectionBoard({ item, game }: { item: RankItem; game: GameRecord }) {
+  if (item.kind !== 'school') return null;
+  const ex = item.exercise;
+  const board = schoolPosition(game, ex.before);
+  const points =
+    ex.module === 'capture-sequence'
+      ? captureSequenceSolutions(board, ex).map((solution) => solution.first)
+      : countingSolutionPoints(board, ex);
+  if (!points.length) return null;
+  return (
+    <details className="school-correction-board">
+      <summary>Voir les points de la correction</summary>
+      <p>
+        Les points verts indiquent{' '}
+        {ex.module === 'capture-sequence'
+          ? 'les premiers coups corrects'
+          : 'les intersections à compter'}
+        .
+      </p>
+      <KifuBoard
+        game={game}
+        before={ex.before}
+        anchors={ex.anchors}
+        candidate={ex.candidate}
+        board={board}
+        resultBoard={board}
+        played={[]}
+        solutionPoints={points}
+        windowPoints={points}
+        done
+        full={false}
+      />
+    </details>
+  );
 }
 
 function RankQuestion({
@@ -431,6 +479,7 @@ export function RankAssessment({
                     Source : {game.black} / {game.white}, {game.date}, après {item.exercise.before}{' '}
                     coups ({game.sources.join(', ')}).
                   </p>
+                  <SchoolCorrectionBoard item={item} game={game} />
                   {!grade.correct && (
                     <button
                       type="button"
