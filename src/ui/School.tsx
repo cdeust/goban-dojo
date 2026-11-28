@@ -359,7 +359,7 @@ export function School() {
     () => useStore.getState().schoolStartExercise,
   );
   const [training, setTraining] = useState(false);
-  const [assessing, setAssessing] = useState(false);
+  const [assessing, setAssessing] = useState(() => useStore.getState().schoolStartAssessment);
   const [counting, setCounting] = useState(false);
   const [session, setSession] = useState(0);
   const [saved, setSaved] = useState(true);

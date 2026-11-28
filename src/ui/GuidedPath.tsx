@@ -1,5 +1,15 @@
 import { useMemo } from 'react';
-import { coursePlan } from '../domain/schoolProgress.ts';
+import { coursePlan, schoolRecord } from '../domain/schoolProgress.ts';
+import {
+  activeRankAttempt,
+  emptyRankProgress,
+  rankBandEvidence,
+  rankLatestWeakModules,
+  rankNextBand,
+  RANK_BANDS,
+  validateRankProgress,
+} from '../domain/rankAssessment.ts';
+import { RANK_FORMS } from '../story/rankCatalog.ts';
 import { dueReviews, type Practice } from '../domain/practice.ts';
 import { PASS } from '../domain/board.ts';
 import { type GameRecord } from '../domain/game.ts';
@@ -23,6 +33,26 @@ export function GuidedPath({
   }, [games]);
   const progress = loadSchoolProgress();
   const plan = coursePlan(catalog, progress, today, ALL_MODULES);
+  const assessment =
+    progress.assessment && validateRankProgress(progress.assessment, RANK_FORMS)
+      ? progress.assessment
+      : emptyRankProgress();
+  const currentBand = RANK_BANDS.findLast(
+    (band) => rankBandEvidence(RANK_FORMS, assessment, band.id).validated,
+  );
+  const nextBand = RANK_BANDS.find((band) => band.id === rankNextBand(RANK_FORMS, assessment));
+  const ongoing = activeRankAttempt(assessment);
+  const weak = rankLatestWeakModules(RANK_FORMS, assessment);
+  const reviewLessons = weak.flatMap((moduleId) => {
+    const items = catalog.filter((ex) => ex.module === moduleId);
+    const next =
+      items.find((item) => {
+        const record = schoolRecord(progress, item.id);
+        return record && record.due <= today;
+      }) ?? items.find((item) => !schoolRecord(progress, item.id));
+    const label = ALL_MODULES.find((item) => item.id === moduleId)?.title;
+    return next && label ? [{ next, label }] : [];
+  });
   const kifuDue = dueReviews(practice, today).filter(({ gameId, before }) => {
     const game = games.find((g) => g.id === gameId);
     const target = game && timelineOf(game).moves[before];
@@ -75,6 +105,40 @@ export function GuidedPath({
         Les rappels passent avant les nouveautés. Le niveau dépend des réussites sans aide dans
         chaque compétence, pas de l’XP ni d’un rang officiel.
       </p>
+      <div className="practice__theme">
+        <h4>Mes objectifs kyū / dan</h4>
+        <p>
+          {currentBand
+            ? `Jalon interne validé : ${currentBand.label}.`
+            : 'Aucun jalon validé pour le moment.'}{' '}
+          {nextBand
+            ? `Prochain objectif pédagogique : ${nextBand.target}.`
+            : 'Tous les jalons internes validés.'}{' '}
+          Aucun grade officiel n’est attribué.
+        </p>
+        <button
+          type="button"
+          className="chip"
+          onClick={() => useStore.getState().openSchoolAssessment()}
+        >
+          {ongoing ? 'Reprendre mon épreuve' : 'Ouvrir mes évaluations'}
+        </button>
+        {reviewLessons.length > 0 && (
+          <>
+            <p>À consolider après votre dernière épreuve :</p>
+            {reviewLessons.map(({ next, label }) => (
+              <button
+                key={next.id}
+                className="chip"
+                type="button"
+                onClick={() => useStore.getState().setSchoolOpen(true, next.id)}
+              >
+                Travailler : {label}
+              </button>
+            ))}
+          </>
+        )}
+      </div>
     </section>
   );
 }

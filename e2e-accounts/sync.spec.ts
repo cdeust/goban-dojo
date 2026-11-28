@@ -88,7 +88,9 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     const guided = two.getByRole('region', { name: 'Ma prochaine séance' });
     await expect(guided).toContainText('1 / 748 exercices travaillés');
     await expect(guided).toContainText('Niveau conseillé : 1 / 9');
-    await two.getByRole('button', { name: 'Entrer dans l’école' }).click();
+    await guided.getByRole('button', { name: 'Reprendre mon épreuve' }).click();
+    await expect(two.getByRole('region', { name: 'Question 2', exact: true })).toBeVisible();
+    await two.getByRole('button', { name: '← Programme' }).click();
     const download = two.waitForEvent('download');
     await two.getByRole('button', { name: 'Exporter la progression' }).click();
     const backup = await (await download).path();

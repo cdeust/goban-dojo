@@ -288,6 +288,27 @@ export function rankNextBand(
   return RANK_BANDS[highest + 1]?.id;
 }
 
+/** The last completed assessment identifies skills worth revisiting, not a cause of low playing strength. */
+export function rankLatestWeakModules(
+  forms: readonly RankForm[],
+  progress: RankProgress,
+): string[] {
+  const recent = progress.attempts
+    .filter((attempt) => attempt.status === 'completed')
+    .slice()
+    .sort((a, b) => (a.ended ?? 0) - (b.ended ?? 0))
+    .at(-1);
+  const form = recent && forms.find((f) => f.id === recent.formId);
+  if (!form || !recent?.graded) return [];
+  return [
+    ...new Set(
+      form.items.flatMap((item, index) =>
+        recent.graded?.[index]?.correct === false ? [item.exercise.module] : [],
+      ),
+    ),
+  ];
+}
+
 /** Shape-only decoding. Catalogue reconciliation is performed when an assessment is read. */
 const dayValid = (value: unknown): value is number =>
   typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 && value <= 100_000;

@@ -13,8 +13,9 @@ const data = JSON.parse(
 async function enterRank(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Entrer au dojo' }).click();
-  await page.getByRole('button', { name: 'Entrer dans l’école' }).click();
-  await page.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
+  const guided = page.getByRole('region', { name: 'Ma prochaine séance' });
+  await expect(guided).toContainText('Prochain objectif pédagogique : Objectif 21 kyū');
+  await guided.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
 }
 async function completeInitiation(page: Page, form: RankForm, skipLast = false) {
   await page.getByRole('button', { name: 'Passer l’épreuve : Initiation' }).click();
@@ -69,6 +70,11 @@ test('épreuves réelles : partie réservée, réponses sans correction, deux fo
   await expect(first.getByRole('button', { name: 'Réviser cette compétence' })).toHaveCount(1);
   await first.getByRole('button', { name: 'Voir mes jalons' }).click();
   await expect(page.getByText(/1 \/ 2 dates avec réussite/)).toHaveCount(1);
+  await page.getByRole('button', { name: 'Retour au dojo' }).click();
+  const guided = page.getByRole('region', { name: 'Ma prochaine séance' });
+  await expect(guided).toContainText('À consolider après votre dernière épreuve');
+  await expect(guided.getByRole('button', { name: /^Travailler : / })).toHaveCount(1);
+  await guided.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
   await page.clock.setFixedTime(new Date(2026, 10, 29, 12));
   const second = await completeInitiation(page, RANK_FORMS[1]!);
   await expect(second).toContainText('Épreuve réussie : 8/8');
@@ -78,6 +84,9 @@ test('épreuves réelles : partie réservée, réponses sans correction, deux fo
   await page.getByRole('button', { name: '← Programme' }).click();
   await page.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
   await expect(page.getByText(/Jalon interne validé/)).toHaveCount(1);
+  await page.getByRole('button', { name: 'Retour au dojo' }).click();
+  await expect(guided).toContainText('Jalon interne validé : Initiation');
+  await expect(guided).toContainText('Objectif 15–10 kyū');
 });
 
 test('stratégie évaluée par le moteur KataGo réel après la huitième réponse', async ({ page }) => {
