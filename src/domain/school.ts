@@ -148,6 +148,18 @@ export function captureProof(
   return results;
 }
 
+/** Every proved first move, with a legal example of the strongest extension. */
+export function captureSequenceSolutions(board: Board, ex: SchoolExercise) {
+  if (ex.module !== 'capture-sequence') return [];
+  const target = ex.anchors[0]!;
+  return chainLiberties(board, target).flatMap((first) => {
+    const proof = captureProof(board, ex.color, target, first);
+    if (!proof?.length) return [];
+    const defense = [...proof].sort((a, b) => b.groupSize - a.groupSize || a.reply - b.reply)[0]!;
+    return [{ first, defense, replies: proof.length }];
+  });
+}
+
 export function emptyRegion(board: Board, start: number): { points: number[]; border: Set<Color> } {
   if (board.get(start) !== null) return { points: [], border: new Set() };
   const points = [start],
@@ -286,8 +298,15 @@ export function schoolSolution(
     const count = liberties.length === 1 ? '1 liberté' : `${liberties.length} libertés`;
     return `La chaîne qui contient ${pointToHuman(ex.anchors[0]!)} a ${count} : ${pointsLabel(liberties)}.`;
   }
-  if (ex.module === 'capture-sequence')
-    return `Le groupe en ${pointToHuman(ex.anchors[0]!)} est capturable en trois demi-coups. Toutes les réponses adverses légales ont été vérifiées après le premier coup ; cette preuve locale ne constitue pas un verdict général de vie et mort.`;
+  if (ex.module === 'capture-sequence') {
+    const solutions = captureSequenceSolutions(board, ex);
+    const example = solutions.find((solution) => solution.first === chosen) ?? solutions[0];
+    if (!example) throw new Error('Séquence de capture sans preuve.');
+    const line = [example.first, example.defense.reply, example.defense.finish]
+      .map((point, i) => `${ex.before + i + 1}. ${pointToHuman(point)}`)
+      .join(' · ');
+    return `Premier(s) coup(s) correct(s) : ${pointsLabel(solutions.map((solution) => solution.first))}. Exemple de variante vérifiée : ${line}. Les ${example.replies} réponses adverses légales à ce premier coup ont été vérifiées ; cette preuve locale ne constitue pas un verdict général de vie et mort.`;
+  }
   if (ex.module === 'legality') {
     const result = board.clone().play(ex.color, ex.candidate!);
     return result.illegal === 'ko'

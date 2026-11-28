@@ -1,8 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { pointToHuman } from '../src/domain/board.ts';
+import { pointToHuman, opposite } from '../src/domain/board.ts';
 import { decodeMoves, type Dataset } from '../src/domain/game.ts';
-import { emptyRegion, isMoveModule, schoolPosition, schoolQuestion } from '../src/domain/school.ts';
+import {
+  captureSequenceSolutions,
+  emptyRegion,
+  isMoveModule,
+  schoolPosition,
+  schoolQuestion,
+  schoolSolution,
+} from '../src/domain/school.ts';
 import { safeEyes } from '../src/domain/advancedTactics.ts';
 import {
   activeRankAttempt,
@@ -103,6 +110,37 @@ describe('Épreuves historiques réservées', () => {
     );
     expect(gradeRule(region, regionGame, 6).correct).toBe(true);
     expect(gradeRule(region, regionGame, 5).correct).toBe(false);
+  });
+  it('prouve les dix premiers coups acceptés dans les huit lectures réservées et explique une variante réelle', () => {
+    const items = RANK_FORMS.flatMap((f) => f.items).filter(
+      (i) => i.kind === 'school' && i.exercise.module === 'capture-sequence',
+    );
+    expect(items).toHaveLength(8);
+    let total = 0;
+    for (const item of items) {
+      if (item.kind !== 'school') throw new Error('Type inattendu');
+      const ex = item.exercise;
+      const g = game(item);
+      const board = schoolPosition(g, ex.before);
+      const solutions = captureSequenceSolutions(board, ex);
+      total += solutions.length;
+      const allAccepted = Array.from({ length: 361 }, (_, point) => point).filter(
+        (point) => gradeRule(item, g, point).correct,
+      );
+      expect(solutions.map((s) => s.first)).toEqual(allAccepted);
+      for (const solution of solutions) {
+        const next = board.clone();
+        expect(next.play(ex.color, solution.first).illegal).toBeUndefined();
+        expect(next.play(opposite(ex.color), solution.defense.reply).illegal).toBeUndefined();
+        const finish = next.play(ex.color, solution.defense.finish);
+        expect(finish.illegal).toBeUndefined();
+        expect(finish.captures).toContain(ex.anchors[0]);
+        const text = schoolSolution(board, ex, correctAnswer(item) as number, solution.first);
+        expect(text).toContain(`${ex.before + 1}. ${pointToHuman(solution.first)}`);
+        expect(text).toContain(`${ex.before + 3}. ${pointToHuman(solution.defense.finish)}`);
+      }
+    }
+    expect(total).toBe(10);
   });
   it('couvre quatre objectifs, quatre formulaires par jalon, huit parties distinctes et aucun kifu scolaire ou micro-leçon', () => {
     expect(RANK_FORMS).toHaveLength(16);
