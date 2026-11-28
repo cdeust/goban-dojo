@@ -699,6 +699,15 @@ export function School() {
                 {ALL_MODULES.filter((m) => m.level === i + 1).map((m) => {
                   const stats = moduleProgress(catalog, progress, m.id, today);
                   const exercises = catalog.filter((e) => e.module === m.id);
+                  const selectionLabel =
+                    m.id === 'long-ladder'
+                      ? 'Choisir un problème de lecture longue'
+                      : m.id === 'life-in-two' || m.id === 'make-life'
+                        ? 'Choisir un problème de vie'
+                        : exercises.some((ex) => 'historical' in ex)
+                          ? 'Choisir une étude de partie'
+                          : undefined;
+
                   const next =
                     exercises.find((e) => {
                       const r = schoolRecord(progress, e.id);
@@ -724,29 +733,25 @@ export function School() {
                           Travailler : {m.title}
                         </button>
                       )}
-                      {(m.id === 'long-ladder' ||
-                        m.id === 'life-in-two' ||
-                        m.id === 'make-life') && (
+                      {selectionLabel && (
                         <details className="school-problem-list">
-                          <summary>
-                            {m.id === 'long-ladder'
-                              ? 'Choisir un problème de lecture longue'
-                              : 'Choisir un problème de vie'}
-                          </summary>
+                          <summary>{selectionLabel}</summary>
                           <ol>
                             {exercises.map((ex, index) => {
-                              if (
-                                ex.module !== 'long-ladder' &&
-                                ex.module !== 'life-in-two' &&
-                                ex.module !== 'make-life'
-                              )
-                                return null;
+                              const label =
+                                'historical' in ex
+                                  ? `Étude ${index + 1} · après le coup ${ex.before}`
+                                  : ex.module === 'long-ladder' ||
+                                      ex.module === 'life-in-two' ||
+                                      ex.module === 'make-life'
+                                    ? `Problème ${index + 1} · ${ex.horizon ?? (ex.module === 'life-in-two' ? 3 : 1)} demi-coups`
+                                    : undefined;
+                              if (!label) return null;
                               const record = schoolRecord(progress, ex.id);
                               return (
                                 <li key={ex.id}>
                                   <button type="button" className="chip" onClick={() => open(ex)}>
-                                    Problème {index + 1} ·{' '}
-                                    {ex.horizon ?? (ex.module === 'life-in-two' ? 3 : 1)} demi-coups
+                                    {label}
                                   </button>
                                   <span>
                                     {record

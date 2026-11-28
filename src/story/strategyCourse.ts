@@ -124,7 +124,15 @@ export const BRIDGE_MODULES = [
 
 export const STRATEGY_MODULES = [...BRIDGE_MODULES, ...EXISTING_STRATEGY_MODULES] as const;
 
-export type StrategyModule = (typeof STRATEGY_MODULES)[number]['id'];
+export const YOSE_STRATEGY_MODULE = {
+  id: 'yose-decision',
+  level: 9,
+  title: 'Choisir le prochain coup de yose',
+  lesson:
+    'Comparez les gains locaux et l’initiative entre plusieurs secteurs réellement disputés. Le bilan géométrique instantané et l’estimation de KataGo ne prouvent ni le sente, ni le gain final : lisez les réponses et comparez les variantes.',
+} as const;
+export const STRATEGY_COURSE_MODULES = [...STRATEGY_MODULES, YOSE_STRATEGY_MODULE] as const;
+export type StrategyModule = (typeof STRATEGY_COURSE_MODULES)[number]['id'];
 
 export interface StrategyLesson {
   id: string;
@@ -547,6 +555,28 @@ export function extractStrategyCourse(games: readonly GameRecord[], quota = 12):
   const historic = extractFindings(games, quota, EXISTING_STRATEGY_MODULES, findings, new Set());
   const occupied = new Set(historic.map((l) => `${l.gameId}:${l.before}`));
   return [...historic, ...extractFindings(games, quota, BRIDGE_MODULES, bridgeFindings, occupied)];
+}
+
+/** Additional cases after the initial opening; same factual detectors, no rank assumptions. */
+export const MIDDLE_STUDY_MODULES = EXISTING_STRATEGY_MODULES.filter(
+  (m) =>
+    m.id === 'direction' || m.id === 'influence' || m.id === 'reduction' || m.id === 'initiative',
+);
+export function extractMiddleGameStudies(
+  games: readonly GameRecord[],
+  quota = 30,
+): StrategyLesson[] {
+  const modules = new Set<StrategyModule>(MIDDLE_STUDY_MODULES.map((m) => m.id));
+  return extractFindings(
+    games,
+    quota,
+    MIDDLE_STUDY_MODULES,
+    (board, moves, before, handicap) =>
+      before >= 35
+        ? findings(board, moves, before, handicap).filter((f) => modules.has(f.module))
+        : [],
+    new Set(),
+  );
 }
 
 function extractFindings(

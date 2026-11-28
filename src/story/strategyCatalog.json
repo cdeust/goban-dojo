@@ -1011,6 +1011,33 @@
     }
   },
   {
+    "id": "direction:s001:52",
+    "module": "direction",
+    "gameId": "s001",
+    "before": 52,
+    "color": "B",
+    "anchors": [78],
+    "historical": 116,
+    "alternatives": [135, 153],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit C13, à 2 intersections de C15, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 135, "before": 54 },
+        { "point": 153, "before": 56 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 116 },
+        { "color": "W", "point": 117 },
+        { "color": "B", "point": 135 },
+        { "color": "W", "point": 136 },
+        { "color": "B", "point": 153 }
+      ]
+    }
+  },
+  {
     "id": "direction:s041:12",
     "module": "direction",
     "gameId": "s041",
@@ -1034,6 +1061,33 @@
         { "color": "B", "point": 148 },
         { "color": "W", "point": 79 },
         { "color": "B", "point": 230 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s017:45",
+    "module": "direction",
+    "gameId": "s017",
+    "before": 45,
+    "color": "W",
+    "anchors": [71],
+    "historical": 68,
+    "alternatives": [106, 92],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit M16, à 3 intersections de P16, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 106, "before": 47 },
+        { "point": 92, "before": 49 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 68 },
+        { "color": "B", "point": 85 },
+        { "color": "W", "point": 106 },
+        { "color": "B", "point": 49 },
+        { "color": "W", "point": 92 }
       ]
     }
   },
@@ -1065,6 +1119,33 @@
     }
   },
   {
+    "id": "direction:s047:47",
+    "module": "direction",
+    "gameId": "s047",
+    "before": 47,
+    "color": "B",
+    "anchors": [288],
+    "historical": 231,
+    "alternatives": [308, 216],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit D7, à 3 intersections de D4, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 308, "before": 49 },
+        { "point": 216, "before": 51 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 231 },
+        { "color": "W", "point": 289 },
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 215 },
+        { "color": "B", "point": 216 }
+      ]
+    }
+  },
+  {
     "id": "direction:s119:11",
     "module": "direction",
     "gameId": "s119",
@@ -1088,6 +1169,33 @@
         { "color": "W", "point": 60 },
         { "color": "B", "point": 43 },
         { "color": "W", "point": 62 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s065:37",
+    "module": "direction",
+    "gameId": "s065",
+    "before": 37,
+    "color": "W",
+    "anchors": [91],
+    "historical": 129,
+    "alternatives": [148, 136],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit Q13, à 2 intersections de Q15, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 148, "before": 39 },
+        { "point": 136, "before": 41 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 129 },
+        { "color": "B", "point": 130 },
+        { "color": "W", "point": 148 },
+        { "color": "B", "point": 143 },
+        { "color": "W", "point": 136 }
       ]
     }
   },
@@ -1119,6 +1227,36 @@
     }
   },
   {
+    "id": "direction:s077:39",
+    "module": "direction",
+    "gameId": "s077",
+    "before": 39,
+    "color": "W",
+    "anchors": [52],
+    "historical": 48,
+    "alternatives": [148, 149],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit L17, à 4 intersections de P17, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 148, "before": 41 },
+        { "point": 149, "before": 43 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 48 },
+        { "color": "B", "point": 116 },
+        { "color": "W", "point": 148 },
+        { "color": "B", "point": 223 },
+        { "color": "W", "point": 149 }
+      ]
+    }
+  },
+  {
     "id": "direction:s198:10",
     "module": "direction",
     "gameId": "s198",
@@ -1142,6 +1280,36 @@
         { "color": "B", "point": 289 },
         { "color": "W", "point": 97 },
         { "color": "B", "point": 224 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s083:36",
+    "module": "direction",
+    "gameId": "s083",
+    "before": 36,
+    "color": "B",
+    "anchors": [70],
+    "historical": 68,
+    "alternatives": [50, 108],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit M16, à 2 intersections de O16, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": [
+        "cwi:083",
+        "pgd:All/1844-03-23_None_Yasuda Shusaku_4p_Mizutani Junsaku_6p_B+16.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 50, "before": 38 },
+        { "point": 108, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 68 },
+        { "color": "W", "point": 127 },
+        { "color": "B", "point": 50 },
+        { "color": "W", "point": 31 },
+        { "color": "B", "point": 108 }
       ]
     }
   },
@@ -1173,6 +1341,33 @@
     }
   },
   {
+    "id": "direction:s092:42",
+    "module": "direction",
+    "gameId": "s092",
+    "before": 42,
+    "color": "B",
+    "anchors": [71],
+    "historical": 67,
+    "alternatives": [120, 27],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit L16, à 4 intersections de P16, sur la même 4e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:092"],
+      "alternativeSources": [
+        { "point": 120, "before": 44 },
+        { "point": 27, "before": 46 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 67 },
+        { "color": "W", "point": 121 },
+        { "color": "B", "point": 120 },
+        { "color": "W", "point": 45 },
+        { "color": "B", "point": 27 }
+      ]
+    }
+  },
+  {
     "id": "direction:s276:15",
     "module": "direction",
     "gameId": "s276",
@@ -1196,6 +1391,33 @@
         { "color": "W", "point": 43 },
         { "color": "B", "point": 61 },
         { "color": "W", "point": 63 }
+      ]
+    }
+  },
+  {
+    "id": "direction:s107:36",
+    "module": "direction",
+    "gameId": "s107",
+    "before": 36,
+    "color": "B",
+    "anchors": [287],
+    "historical": 230,
+    "alternatives": [312, 34],
+    "prompt": "Dans quelle direction développer cette pierre ? Comparez les débouchés du côté et les zones que l’adversaire peut encore occuper.",
+    "observation": "Le kifu choisit C7, à 3 intersections de C4, sur la même 3e ligne. Aucune pierre adverse n’est directement adjacente au point joué.",
+    "rubric": "Comparer les espaces accessibles de chaque côté, les pierres adverses voisines et la solidité du point d’appui.",
+    "evidence": {
+      "sources": ["cwi:107", "pgd:All/1844-11-27_None_Yasuda Shusaku_4p_Ito Matsujiro_6p_W+R.sgf"],
+      "alternativeSources": [
+        { "point": 312, "before": 38 },
+        { "point": 34, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 230 },
+        { "color": "W", "point": 136 },
+        { "color": "B", "point": 312 },
+        { "color": "W", "point": 33 },
+        { "color": "B", "point": 34 }
       ]
     }
   },
@@ -1337,6 +1559,35 @@
     }
   },
   {
+    "id": "influence:s001:36",
+    "module": "influence",
+    "gameId": "s001",
+    "before": 36,
+    "color": "B",
+    "anchors": [295],
+    "historical": 255,
+    "alternatives": [272, 256],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup J6, la chaîne repérée en L4 contient 3 pierres et 5 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 272, "before": 38 },
+        { "point": 256, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 255 },
+        { "color": "W", "point": 274 },
+        { "color": "B", "point": 272 },
+        { "color": "W", "point": 253 },
+        { "color": "B", "point": 256 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 5
+    }
+  },
+  {
     "id": "influence:s041:31",
     "module": "influence",
     "gameId": "s041",
@@ -1366,6 +1617,35 @@
     }
   },
   {
+    "id": "influence:s033:40",
+    "module": "influence",
+    "gameId": "s033",
+    "before": 40,
+    "color": "W",
+    "anchors": [262],
+    "historical": 258,
+    "alternatives": [182, 240],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup M6, la chaîne repérée en Q6 contient 3 pierres et 5 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 182, "before": 42 },
+        { "point": 240, "before": 44 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 258 },
+        { "color": "B", "point": 276 },
+        { "color": "W", "point": 182 },
+        { "color": "B", "point": 201 },
+        { "color": "W", "point": 240 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 5
+    }
+  },
+  {
     "id": "influence:s080:21",
     "module": "influence",
     "gameId": "s080",
@@ -1389,6 +1669,35 @@
         { "color": "W", "point": 49 },
         { "color": "B", "point": 282 },
         { "color": "W", "point": 127 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s047:43",
+    "module": "influence",
+    "gameId": "s047",
+    "before": 43,
+    "color": "B",
+    "anchors": [61],
+    "historical": 137,
+    "alternatives": [138, 231],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup E12, la chaîne repérée en E16 contient 3 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 138, "before": 45 },
+        { "point": 231, "before": 47 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 137 },
+        { "color": "W", "point": 175 },
+        { "color": "B", "point": 138 },
+        { "color": "W", "point": 270 },
+        { "color": "B", "point": 231 }
       ],
       "anchorSize": 3,
       "anchorLiberties": 6
@@ -1424,6 +1733,35 @@
     }
   },
   {
+    "id": "influence:s065:43",
+    "module": "influence",
+    "gameId": "s065",
+    "before": 43,
+    "color": "W",
+    "anchors": [42],
+    "historical": 118,
+    "alternatives": [116, 177],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup E13, la chaîne repérée en E17 contient 4 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 116, "before": 45 },
+        { "point": 177, "before": 47 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 118 },
+        { "color": "B", "point": 155 },
+        { "color": "W", "point": 116 },
+        { "color": "B", "point": 115 },
+        { "color": "W", "point": 177 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 6
+    }
+  },
+  {
     "id": "influence:s158:20",
     "module": "influence",
     "gameId": "s158",
@@ -1450,6 +1788,38 @@
       ],
       "anchorSize": 3,
       "anchorLiberties": 7
+    }
+  },
+  {
+    "id": "influence:s077:42",
+    "module": "influence",
+    "gameId": "s077",
+    "before": 42,
+    "color": "B",
+    "anchors": [243],
+    "historical": 223,
+    "alternatives": [220, 241],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup P8, la chaîne repérée en Q7 contient 4 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 220, "before": 44 },
+        { "point": 241, "before": 46 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 223 },
+        { "color": "W", "point": 149 },
+        { "color": "B", "point": 220 },
+        { "color": "W", "point": 239 },
+        { "color": "B", "point": 241 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 6
     }
   },
   {
@@ -1482,6 +1852,38 @@
     }
   },
   {
+    "id": "influence:s083:88",
+    "module": "influence",
+    "gameId": "s083",
+    "before": 88,
+    "color": "B",
+    "anchors": [92],
+    "historical": 148,
+    "alternatives": [131, 16],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup Q12, la chaîne repérée en R15 contient 4 pierres et 5 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": [
+        "cwi:083",
+        "pgd:All/1844-03-23_None_Yasuda Shusaku_4p_Mizutani Junsaku_6p_B+16.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 131, "before": 90 },
+        { "point": 16, "before": 92 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 148 },
+        { "color": "W", "point": 128 },
+        { "color": "B", "point": 131 },
+        { "color": "W", "point": 37 },
+        { "color": "B", "point": 16 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 5
+    }
+  },
+  {
     "id": "influence:s237:26",
     "module": "influence",
     "gameId": "s237",
@@ -1511,6 +1913,35 @@
     }
   },
   {
+    "id": "influence:s092:35",
+    "module": "influence",
+    "gameId": "s092",
+    "before": 35,
+    "color": "W",
+    "anchors": [41],
+    "historical": 117,
+    "alternatives": [136, 122],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup D13, la chaîne repérée en D17 contient 4 pierres et 6 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:092"],
+      "alternativeSources": [
+        { "point": 136, "before": 37 },
+        { "point": 122, "before": 39 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 117 },
+        { "color": "B", "point": 119 },
+        { "color": "W", "point": 136 },
+        { "color": "B", "point": 103 },
+        { "color": "W", "point": 122 }
+      ],
+      "anchorSize": 4,
+      "anchorLiberties": 6
+    }
+  },
+  {
     "id": "influence:s319:26",
     "module": "influence",
     "gameId": "s319",
@@ -1537,6 +1968,35 @@
       ],
       "anchorSize": 4,
       "anchorLiberties": 6
+    }
+  },
+  {
+    "id": "influence:s107:63",
+    "module": "influence",
+    "gameId": "s107",
+    "before": 63,
+    "color": "W",
+    "anchors": [64],
+    "historical": 102,
+    "alternatives": [125, 84],
+    "prompt": "Comment employer cette chaîne comme point d’appui pour se développer ? Vérifiez ses libertés et distinguez sécurité locale et influence.",
+    "observation": "Avant le coup H14, la chaîne repérée en H16 contient 3 pierres et 5 libertés. Le point joué se situe plus loin du bord que la pierre repérée ; cela ne prouve pas que la chaîne soit vivante ni que son influence soit acquise.",
+    "rubric": "Compter les libertés, rechercher les menaces ou les coupures, puis comparer le développement avec une autre zone.",
+    "evidence": {
+      "sources": ["cwi:107", "pgd:All/1844-11-27_None_Yasuda Shusaku_4p_Ito Matsujiro_6p_W+R.sgf"],
+      "alternativeSources": [
+        { "point": 125, "before": 65 },
+        { "point": 84, "before": 67 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 102 },
+        { "color": "B", "point": 105 },
+        { "color": "W", "point": 125 },
+        { "color": "B", "point": 142 },
+        { "color": "W", "point": 84 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 5
     }
   },
   {
@@ -1683,6 +2143,33 @@
     }
   },
   {
+    "id": "reduction:s001:111",
+    "module": "reduction",
+    "gameId": "s001",
+    "before": 111,
+    "color": "W",
+    "anchors": [186, 167, 187],
+    "historical": 183,
+    "alternatives": [106, 260],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique N10 est à quatre intersections ou moins de 5 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 106, "before": 113 },
+        { "point": 260, "before": 117 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 183 },
+        { "color": "B", "point": 128 },
+        { "color": "W", "point": 106 },
+        { "color": "B", "point": 48 },
+        { "color": "W", "point": 129 }
+      ]
+    }
+  },
+  {
     "id": "reduction:s041:33",
     "module": "reduction",
     "gameId": "s041",
@@ -1706,6 +2193,33 @@
         { "color": "W", "point": 30 },
         { "color": "B", "point": 69 },
         { "color": "W", "point": 31 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s017:49",
+    "module": "reduction",
+    "gameId": "s017",
+    "before": 49,
+    "color": "W",
+    "anchors": [73, 110, 53],
+    "historical": 92,
+    "alternatives": [72, 111],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique R15 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 72, "before": 51 },
+        { "point": 111, "before": 53 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 92 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 72 },
+        { "color": "B", "point": 54 },
+        { "color": "W", "point": 111 }
       ]
     }
   },
@@ -1737,6 +2251,33 @@
     }
   },
   {
+    "id": "reduction:s033:93",
+    "module": "reduction",
+    "gameId": "s033",
+    "before": 93,
+    "color": "B",
+    "anchors": [163, 164, 182],
+    "historical": 161,
+    "alternatives": [122, 106],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique K11 est à quatre intersections ou moins de 6 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 122, "before": 95 },
+        { "point": 106, "before": 97 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 161 },
+        { "color": "W", "point": 181 },
+        { "color": "B", "point": 122 },
+        { "color": "W", "point": 143 },
+        { "color": "B", "point": 106 }
+      ]
+    }
+  },
+  {
     "id": "reduction:s119:70",
     "module": "reduction",
     "gameId": "s119",
@@ -1760,6 +2301,33 @@
         { "color": "B", "point": 292 },
         { "color": "W", "point": 255 },
         { "color": "B", "point": 272 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s065:50",
+    "module": "reduction",
+    "gameId": "s065",
+    "before": 50,
+    "color": "B",
+    "anchors": [122, 101, 177],
+    "historical": 140,
+    "alternatives": [175, 194],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique H12 est à quatre intersections ou moins de 6 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 175, "before": 52 },
+        { "point": 194, "before": 54 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 140 },
+        { "color": "W", "point": 156 },
+        { "color": "B", "point": 175 },
+        { "color": "W", "point": 176 },
+        { "color": "B", "point": 194 }
       ]
     }
   },
@@ -1791,6 +2359,36 @@
     }
   },
   {
+    "id": "reduction:s077:41",
+    "module": "reduction",
+    "gameId": "s077",
+    "before": 41,
+    "color": "W",
+    "anchors": [168, 186, 91],
+    "historical": 148,
+    "alternatives": [149, 239],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique Q12 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 149, "before": 43 },
+        { "point": 239, "before": 45 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 148 },
+        { "color": "B", "point": 223 },
+        { "color": "W", "point": 149 },
+        { "color": "B", "point": 220 },
+        { "color": "W", "point": 239 }
+      ]
+    }
+  },
+  {
     "id": "reduction:s198:44",
     "module": "reduction",
     "gameId": "s198",
@@ -1814,6 +2412,36 @@
         { "color": "B", "point": 256 },
         { "color": "W", "point": 159 },
         { "color": "B", "point": 237 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s083:41",
+    "module": "reduction",
+    "gameId": "s083",
+    "before": 41,
+    "color": "W",
+    "anchors": [50, 68, 64],
+    "historical": 48,
+    "alternatives": [146, 164],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique L17 est à quatre intersections ou moins de 4 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": [
+        "cwi:083",
+        "pgd:All/1844-03-23_None_Yasuda Shusaku_4p_Mizutani Junsaku_6p_B+16.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 146, "before": 43 },
+        { "point": 164, "before": 45 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 48 },
+        { "color": "B", "point": 126 },
+        { "color": "W", "point": 146 },
+        { "color": "B", "point": 145 },
+        { "color": "W", "point": 164 }
       ]
     }
   },
@@ -1845,6 +2473,33 @@
     }
   },
   {
+    "id": "reduction:s092:36",
+    "module": "reduction",
+    "gameId": "s092",
+    "before": 36,
+    "color": "B",
+    "anchors": [117, 97, 123],
+    "historical": 119,
+    "alternatives": [103, 102],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique F13 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:092"],
+      "alternativeSources": [
+        { "point": 103, "before": 38 },
+        { "point": 102, "before": 40 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 119 },
+        { "color": "W", "point": 136 },
+        { "color": "B", "point": 103 },
+        { "color": "W", "point": 122 },
+        { "color": "B", "point": 102 }
+      ]
+    }
+  },
+  {
     "id": "reduction:s276:36",
     "module": "reduction",
     "gameId": "s276",
@@ -1868,6 +2523,33 @@
         { "color": "B", "point": 39 },
         { "color": "W", "point": 58 },
         { "color": "B", "point": 38 }
+      ]
+    }
+  },
+  {
+    "id": "reduction:s107:56",
+    "module": "reduction",
+    "gameId": "s107",
+    "before": 56,
+    "color": "B",
+    "anchors": [46, 69, 121],
+    "historical": 65,
+    "alternatives": [47, 67],
+    "prompt": "Faut-il pénétrer près des pierres adverses ou jouer plus loin ? Comparez une réduction prudente, une intrusion profonde et la possibilité de sortir.",
+    "observation": "Le coup historique J16 est à quatre intersections ou moins de 3 pierres adverses, réparties dans au moins deux directions, sans pierre amie à deux intersections ou moins. Ce relevé de proximité ne constitue pas une mesure de territoire.",
+    "rubric": "Rechercher une base, des voies de sortie et les réponses adverses. Expliquer le risque d’isolement avant de comparer les coups par IA.",
+    "evidence": {
+      "sources": ["cwi:107", "pgd:All/1844-11-27_None_Yasuda Shusaku_4p_Ito Matsujiro_6p_W+R.sgf"],
+      "alternativeSources": [
+        { "point": 47, "before": 58 },
+        { "point": 67, "before": 60 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 65 },
+        { "color": "W", "point": 64 },
+        { "color": "B", "point": 47 },
+        { "color": "W", "point": 45 },
+        { "color": "B", "point": 67 }
       ]
     }
   },
@@ -2008,6 +2690,34 @@
     }
   },
   {
+    "id": "initiative:s001:57",
+    "module": "initiative",
+    "gameId": "s001",
+    "before": 57,
+    "color": "W",
+    "anchors": [153],
+    "historical": 168,
+    "alternatives": [97, 77],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de B11 à R11, à 15 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:001"],
+      "alternativeSources": [
+        { "point": 97, "before": 63 },
+        { "point": 77, "before": 65 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 155 },
+        { "color": "W", "point": 92 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 111 }
+      ],
+      "previous": 153
+    }
+  },
+  {
     "id": "initiative:s041:23",
     "module": "initiative",
     "gameId": "s041",
@@ -2033,6 +2743,31 @@
         { "color": "W", "point": 288 }
       ],
       "previous": 292
+    }
+  },
+  {
+    "id": "initiative:s017:75",
+    "module": "initiative",
+    "gameId": "s017",
+    "before": 75,
+    "color": "W",
+    "anchors": [69],
+    "historical": 18,
+    "alternatives": [51],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de N16 à T19, à 9 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [{ "point": 51, "before": 77 }],
+      "historicalLine": [
+        { "color": "W", "point": 18 },
+        { "color": "B", "point": 90 },
+        { "color": "W", "point": 51 },
+        { "color": "B", "point": 315 },
+        { "color": "W", "point": 295 }
+      ],
+      "previous": 69
     }
   },
   {
@@ -2064,6 +2799,34 @@
     }
   },
   {
+    "id": "initiative:s033:51",
+    "module": "initiative",
+    "gameId": "s033",
+    "before": 51,
+    "color": "B",
+    "anchors": [237],
+    "historical": 145,
+    "alternatives": [238, 259],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de K7 à N12, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 238, "before": 55 },
+        { "point": 259, "before": 57 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 145 },
+        { "color": "W", "point": 164 },
+        { "color": "B", "point": 165 },
+        { "color": "W", "point": 146 },
+        { "color": "B", "point": 238 }
+      ],
+      "previous": 237
+    }
+  },
+  {
     "id": "initiative:s119:38",
     "module": "initiative",
     "gameId": "s119",
@@ -2089,6 +2852,31 @@
         { "color": "B", "point": 90 }
       ],
       "previous": 168
+    }
+  },
+  {
+    "id": "initiative:s047:37",
+    "module": "initiative",
+    "gameId": "s047",
+    "before": 37,
+    "color": "B",
+    "anchors": [312],
+    "historical": 155,
+    "alternatives": [308],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de J3 à D11, à 13 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [{ "point": 308, "before": 49 }],
+      "historicalLine": [
+        { "color": "B", "point": 155 },
+        { "color": "W", "point": 174 },
+        { "color": "B", "point": 173 },
+        { "color": "W", "point": 156 },
+        { "color": "B", "point": 136 }
+      ],
+      "previous": 312
     }
   },
   {
@@ -2120,6 +2908,31 @@
     }
   },
   {
+    "id": "initiative:s065:47",
+    "module": "initiative",
+    "gameId": "s065",
+    "before": 47,
+    "color": "W",
+    "anchors": [115],
+    "historical": 177,
+    "alternatives": [137],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de B13 à G10, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [{ "point": 137, "before": 67 }],
+      "historicalLine": [
+        { "color": "W", "point": 177 },
+        { "color": "B", "point": 161 },
+        { "color": "W", "point": 179 },
+        { "color": "B", "point": 140 },
+        { "color": "W", "point": 156 }
+      ],
+      "previous": 115
+    }
+  },
+  {
     "id": "initiative:s198:15",
     "module": "initiative",
     "gameId": "s198",
@@ -2145,6 +2958,37 @@
         { "color": "W", "point": 300 }
       ],
       "previous": 224
+    }
+  },
+  {
+    "id": "initiative:s077:37",
+    "module": "initiative",
+    "gameId": "s077",
+    "before": 37,
+    "color": "W",
+    "anchors": [168],
+    "historical": 41,
+    "alternatives": [148, 149],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de R11 à D17, à 19 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 148, "before": 41 },
+        { "point": 149, "before": 43 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 154 },
+        { "color": "W", "point": 48 },
+        { "color": "B", "point": 116 },
+        { "color": "W", "point": 148 }
+      ],
+      "previous": 168
     }
   },
   {
@@ -2176,6 +3020,37 @@
     }
   },
   {
+    "id": "initiative:s083:46",
+    "module": "initiative",
+    "gameId": "s083",
+    "before": 46,
+    "color": "B",
+    "anchors": [164],
+    "historical": 30,
+    "alternatives": [88, 107],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de N11 à M18, à 8 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": [
+        "cwi:083",
+        "pgd:All/1844-03-23_None_Yasuda Shusaku_4p_Mizutani Junsaku_6p_B+16.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 88, "before": 48 },
+        { "point": 107, "before": 50 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 30 },
+        { "color": "W", "point": 49 },
+        { "color": "B", "point": 88 },
+        { "color": "W", "point": 106 },
+        { "color": "B", "point": 107 }
+      ],
+      "previous": 164
+    }
+  },
+  {
     "id": "initiative:s276:16",
     "module": "initiative",
     "gameId": "s276",
@@ -2201,6 +3076,34 @@
         { "color": "B", "point": 80 }
       ],
       "previous": 313
+    }
+  },
+  {
+    "id": "initiative:s092:51",
+    "module": "initiative",
+    "gameId": "s092",
+    "before": 51,
+    "color": "W",
+    "anchors": [318],
+    "historical": 308,
+    "alternatives": [282, 299],
+    "prompt": "Faut-il répondre au dernier coup adverse ou jouer ailleurs ? Cherchez d’abord une menace locale réelle.",
+    "observation": "Le kifu passe de P3 à E3, à 10 intersections orthogonales de distance. Il change de secteur sans prouver que le coup précédent soit gote ni que le nouveau soit sente.",
+    "rubric": "Comparer le coût d’une absence de réponse locale et le bénéfice du coup éloigné. Examiner la suite effective avant de conclure sur l’initiative.",
+    "evidence": {
+      "sources": ["cwi:092"],
+      "alternativeSources": [
+        { "point": 282, "before": 53 },
+        { "point": 299, "before": 55 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 308 },
+        { "color": "B", "point": 263 },
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 243 },
+        { "color": "W", "point": 299 }
+      ],
+      "previous": 318
     }
   },
   {
@@ -5928,6 +6831,672 @@
       "anchorLiberties": 3,
       "resultingSize": 3,
       "resultingLiberties": 5
+    }
+  },
+  {
+    "id": "yose-decision:s021:197",
+    "module": "yose-decision",
+    "gameId": "s021",
+    "before": 197,
+    "color": "W",
+    "anchors": [321, 303, 341],
+    "historical": 322,
+    "alternatives": [273, 268],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique T3 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:021"],
+      "alternativeSources": [
+        { "point": 273, "before": 201 },
+        { "point": 268, "before": 211 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 322 },
+        { "color": "B", "point": 256 },
+        { "color": "W", "point": 257 },
+        { "color": "B", "point": 321 },
+        { "color": "W", "point": 273 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s065:179",
+    "module": "yose-decision",
+    "gameId": "s065",
+    "before": 179,
+    "color": "W",
+    "anchors": [185, 187, 167],
+    "historical": 186,
+    "alternatives": [123, 251],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique Q10 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 123, "before": 181 },
+        { "point": 251, "before": 187 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 186 },
+        { "color": "B", "point": 168 },
+        { "color": "W", "point": 123 },
+        { "color": "B", "point": 124 },
+        { "color": "W", "point": 242 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s079:132",
+    "module": "yose-decision",
+    "gameId": "s079",
+    "before": 132,
+    "color": "B",
+    "anchors": [185, 205],
+    "historical": 186,
+    "alternatives": [305, 133],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique Q10 entre dans une zone de 2 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:079"],
+      "alternativeSources": [
+        { "point": 305, "before": 138 },
+        { "point": 133, "before": 152 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 186 },
+        { "color": "W", "point": 222 },
+        { "color": "B", "point": 160 },
+        { "color": "W", "point": 138 },
+        { "color": "B", "point": 156 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s088:188",
+    "module": "yose-decision",
+    "gameId": "s088",
+    "before": 188,
+    "color": "B",
+    "anchors": [88, 70],
+    "historical": 89,
+    "alternatives": [119, 308],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique O15 entre dans une zone de 3 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:088"],
+      "alternativeSources": [
+        { "point": 119, "before": 204 },
+        { "point": 308, "before": 206 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 89 },
+        { "color": "W", "point": 257 },
+        { "color": "B", "point": 225 },
+        { "color": "W", "point": 245 },
+        { "color": "B", "point": 262 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s126:227",
+    "module": "yose-decision",
+    "gameId": "s126",
+    "before": 227,
+    "color": "W",
+    "anchors": [144, 164],
+    "historical": 145,
+    "alternatives": [155, 227],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique N12 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:126",
+        "pgd:All/1846-09-11_None_Yasuda Shusaku_4p_Inoue Genan Inseki_8p_B+2  {B connects the ko}.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 155, "before": 229 },
+        { "point": 227, "before": 235 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 145 },
+        { "color": "B", "point": 126 },
+        { "color": "W", "point": 155 },
+        { "color": "B", "point": 156 },
+        { "color": "W", "point": 125 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s159:212",
+    "module": "yose-decision",
+    "gameId": "s159",
+    "before": 212,
+    "color": "B",
+    "anchors": [146, 164],
+    "historical": 145,
+    "alternatives": [204, 158],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique N12 entre dans une zone de 1 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:159"],
+      "alternativeSources": [
+        { "point": 204, "before": 216 },
+        { "point": 158, "before": 222 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 145 },
+        { "color": "W", "point": 165 },
+        { "color": "B", "point": 260 },
+        { "color": "W", "point": 223 },
+        { "color": "B", "point": 204 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s173:165",
+    "module": "yose-decision",
+    "gameId": "s173",
+    "before": 165,
+    "color": "W",
+    "anchors": [191],
+    "historical": 190,
+    "alternatives": [41, 265],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique A9 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:173", "pgd:All/1847-10-11_None_Yasuda Shusaku_5p_Honinbo Shuwa_7p_B+R.sgf"],
+      "alternativeSources": [
+        { "point": 41, "before": 167 },
+        { "point": 265, "before": 183 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 190 },
+        { "color": "B", "point": 310 },
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 306 },
+        { "color": "W", "point": 268 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s224:156",
+    "module": "yose-decision",
+    "gameId": "s224",
+    "before": 156,
+    "color": "B",
+    "anchors": [269],
+    "historical": 288,
+    "alternatives": [67, 110],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique D4 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:224"],
+      "alternativeSources": [
+        { "point": 67, "before": 162 },
+        { "point": 110, "before": 172 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 288 },
+        { "color": "W", "point": 213 },
+        { "color": "B", "point": 23 },
+        { "color": "W", "point": 24 },
+        { "color": "B", "point": 3 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s243:194",
+    "module": "yose-decision",
+    "gameId": "s243",
+    "before": 194,
+    "color": "B",
+    "anchors": [4, 22],
+    "historical": 3,
+    "alternatives": [218, 105],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique D19 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:243", "pgd:All/1849-12-12_None_Ito Showa_7p_Honinbo Shusaku_6p_W+6.sgf"],
+      "alternativeSources": [
+        { "point": 218, "before": 204 },
+        { "point": 105, "before": 216 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 3 },
+        { "color": "W", "point": 2 },
+        { "color": "B", "point": 200 },
+        { "color": "W", "point": 93 },
+        { "color": "B", "point": 192 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s265:224",
+    "module": "yose-decision",
+    "gameId": "s265",
+    "before": 224,
+    "color": "B",
+    "anchors": [241, 261],
+    "historical": 242,
+    "alternatives": [227, 201],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique P7 entre dans une zone de 7 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:265",
+        "pgd:All/1850-09-15_None_Kishimoto Saichiro_5p_Honinbo Shusaku_6p_W+6 {W connects the ko}.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 227, "before": 230 },
+        { "point": 201, "before": 236 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 242 },
+        { "color": "W", "point": 328 },
+        { "color": "B", "point": 327 },
+        { "color": "W", "point": 348 },
+        { "color": "B", "point": 341 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s293:143",
+    "module": "yose-decision",
+    "gameId": "s293",
+    "before": 143,
+    "color": "W",
+    "anchors": [152],
+    "historical": 153,
+    "alternatives": [58, 176],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique B11 entre dans une zone de 11 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:293",
+        "pgd:All/1851-07-12_20-game match_Sekiyama Sendayu_1p_Honinbo Shusaku_6p_W+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 58, "before": 153 },
+        { "point": 176, "before": 155 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 153 },
+        { "color": "B", "point": 142 },
+        { "color": "W", "point": 146 },
+        { "color": "B", "point": 115 },
+        { "color": "W", "point": 178 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s319:184",
+    "module": "yose-decision",
+    "gameId": "s319",
+    "before": 184,
+    "color": "B",
+    "anchors": [135],
+    "historical": 136,
+    "alternatives": [102, 225],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique D12 entre dans une zone de 1 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:319", "pgd:All/1852-10-11_None_Ota Yuzo_6p_Honinbo Shusaku_6p_B+2.sgf"],
+      "alternativeSources": [
+        { "point": 102, "before": 188 },
+        { "point": 225, "before": 196 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 136 },
+        { "color": "W", "point": 133 },
+        { "color": "B", "point": 98 },
+        { "color": "W", "point": 121 },
+        { "color": "B", "point": 102 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s330:185",
+    "module": "yose-decision",
+    "gameId": "s330",
+    "before": 185,
+    "color": "W",
+    "anchors": [175],
+    "historical": 176,
+    "alternatives": [295, 253],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique F10 entre dans une zone de 6 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:330"],
+      "alternativeSources": [
+        { "point": 295, "before": 187 },
+        { "point": 253, "before": 207 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 176 },
+        { "color": "B", "point": 276 },
+        { "color": "W", "point": 295 },
+        { "color": "B", "point": 330 },
+        { "color": "W", "point": 332 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s381:195",
+    "module": "yose-decision",
+    "gameId": "s381",
+    "before": 195,
+    "color": "W",
+    "anchors": [203],
+    "historical": 222,
+    "alternatives": [116, 121],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique O8 entre dans une zone de 12 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:381",
+        "pgd:All/1856-08-27_None_Hattori Hajime_6p_Honinbo Shusaku_7p_W+10.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 116, "before": 201 },
+        { "point": 121, "before": 219 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 222 },
+        { "color": "B", "point": 166 },
+        { "color": "W", "point": 293 },
+        { "color": "B", "point": 114 },
+        { "color": "W", "point": 154 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s419:186",
+    "module": "yose-decision",
+    "gameId": "s419",
+    "before": 186,
+    "color": "W",
+    "anchors": [14],
+    "historical": 13,
+    "alternatives": [262, 214],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique O19 entre dans une zone de 2 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:419"],
+      "alternativeSources": [
+        { "point": 262, "before": 188 },
+        { "point": 214, "before": 206 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 13 },
+        { "color": "B", "point": 17 },
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 37 },
+        { "color": "W", "point": 244 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s438:190",
+    "module": "yose-decision",
+    "gameId": "s438",
+    "before": 190,
+    "color": "W",
+    "anchors": [],
+    "historical": 94,
+    "alternatives": [66, 275],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique T15 entre dans une zone de 12 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:438",
+        "pgd:All/1859-05-08_10-game match_Ebisawa Kenzo_3p_Honinbo Shusaku_7p_B+4.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 66, "before": 204 },
+        { "point": 275, "before": 214 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 94 },
+        { "color": "B", "point": 55 },
+        { "color": "W", "point": 303 },
+        { "color": "B", "point": 284 },
+        { "color": "W", "point": 322 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s462:205",
+    "module": "yose-decision",
+    "gameId": "s462",
+    "before": 205,
+    "color": "W",
+    "anchors": [157, 159, 139, 177],
+    "historical": 158,
+    "alternatives": [145, 259],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique G11 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": [
+        "cwi:462",
+        "pgd:All/1861-10-15_10-game match_Murase Shuho_5p_Honinbo Shusaku_7p_Jigo.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 145, "before": 207 },
+        { "point": 259, "before": 223 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 158 },
+        { "color": "B", "point": 83 },
+        { "color": "W", "point": 145 },
+        { "color": "B", "point": 188 },
+        { "color": "W", "point": 82 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s002:170",
+    "module": "yose-decision",
+    "gameId": "s002",
+    "before": 170,
+    "color": "B",
+    "anchors": [304, 306, 286, 324],
+    "historical": 305,
+    "alternatives": [328, 54],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique B3 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:002"],
+      "alternativeSources": [
+        { "point": 328, "before": 180 },
+        { "point": 54, "before": 182 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 305 },
+        { "color": "W", "point": 347 },
+        { "color": "B", "point": 349 },
+        { "color": "W", "point": 304 },
+        { "color": "B", "point": 208 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s066:178",
+    "module": "yose-decision",
+    "gameId": "s066",
+    "before": 178,
+    "color": "B",
+    "anchors": [247],
+    "historical": 228,
+    "alternatives": [132, 235],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique A7 entre dans une zone de 9 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:066"],
+      "alternativeSources": [
+        { "point": 132, "before": 186 },
+        { "point": 235, "before": 198 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 228 },
+        { "color": "W", "point": 156 },
+        { "color": "B", "point": 190 },
+        { "color": "W", "point": 114 },
+        { "color": "B", "point": 210 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s089:217",
+    "module": "yose-decision",
+    "gameId": "s089",
+    "before": 217,
+    "color": "W",
+    "anchors": [64, 82],
+    "historical": 63,
+    "alternatives": [206, 76],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique G16 entre dans une zone de 3 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:089"],
+      "alternativeSources": [
+        { "point": 206, "before": 231 },
+        { "point": 76, "before": 235 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 63 },
+        { "color": "B", "point": 100 },
+        { "color": "W", "point": 99 },
+        { "color": "B", "point": 84 },
+        { "color": "W", "point": 119 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s108:171",
+    "module": "yose-decision",
+    "gameId": "s108",
+    "before": 171,
+    "color": "W",
+    "anchors": [],
+    "historical": 333,
+    "alternatives": [347, 261],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique L2 entre dans une zone de 8 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:108"],
+      "alternativeSources": [
+        { "point": 347, "before": 175 },
+        { "point": 261, "before": 177 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 333 },
+        { "color": "B", "point": 296 },
+        { "color": "W", "point": 277 },
+        { "color": "B", "point": 348 },
+        { "color": "W", "point": 347 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s133:199",
+    "module": "yose-decision",
+    "gameId": "s133",
+    "before": 199,
+    "color": "W",
+    "anchors": [105],
+    "historical": 124,
+    "alternatives": [273, 101],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique L13 entre dans une zone de 1 intersections vides, bordée par les deux couleurs. Cette taille géométrique n’est pas une valeur de yose.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:133"],
+      "alternativeSources": [
+        { "point": 273, "before": 207 },
+        { "point": 101, "before": 221 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 124 },
+        { "color": "B", "point": 120 },
+        { "color": "W", "point": 11 },
+        { "color": "B", "point": 28 },
+        { "color": "W", "point": 326 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s174:224",
+    "module": "yose-decision",
+    "gameId": "s174",
+    "before": 224,
+    "color": "B",
+    "anchors": [252, 254, 234, 272],
+    "historical": 253,
+    "alternatives": [72, 161],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique G6 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:174", "pgd:All/1847-10-16_None_Yasuda Shusaku_5p_Ota Yuzo_6p_B+1.sgf"],
+      "alternativeSources": [
+        { "point": 72, "before": 226 },
+        { "point": 161, "before": 232 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 253 },
+        { "color": "W", "point": 91 },
+        { "color": "B", "point": 72 },
+        { "color": "W", "point": 272 },
+        { "color": "B", "point": 150 }
+      ]
+    }
+  },
+  {
+    "id": "yose-decision:s229:197",
+    "module": "yose-decision",
+    "gameId": "s229",
+    "before": 197,
+    "color": "W",
+    "anchors": [53, 55, 35, 73],
+    "historical": 54,
+    "alternatives": [8, 42],
+    "prompt": "Quel secteur de yose traiter en premier ? Comparez les trois choix légaux, les gains locaux et les réponses possibles.",
+    "observation": "Le coup historique R17 capture 1 pierre(s). Les autres points sont des coups ultérieurs du même camp dans des secteurs différents. Leur ordre peut modifier les réponses et le bilan final.",
+    "rubric": "Comparer les captures et les frontières de chaque alternative, vérifier les réponses adverses avant de parler de sente, puis examiner l’estimation de score à horizon identique.",
+    "evidence": {
+      "sources": ["cwi:229"],
+      "alternativeSources": [
+        { "point": 8, "before": 211 },
+        { "point": 42, "before": 221 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 54 },
+        { "color": "B", "point": 145 },
+        { "color": "W", "point": 160 },
+        { "color": "B", "point": 35 },
+        { "color": "W", "point": 159 }
+      ]
     }
   }
 ]

@@ -4,7 +4,7 @@
 
 Compléter l’apprentissage tactique par quinze modules d’observation stratégique : huit modules intermédiaires, du niveau interne 2 au niveau interne 6, puis les sept modules historiques (quatre d’ouverture au niveau 7 et trois de milieu de partie au niveau 8). Ces niveaux organisent le parcours ; ils ne correspondent pas à une certification kyu/dan.
 
-Critère quantitatif : 12 études par module stratégique et 16 par module intermédiaire, soit 212 positions distinctes (180 existantes conservées et 32 nouvelles), vérifiées contre le corpus
+Critère quantitatif : 12 études par module stratégique initial, 20 pour les quatre modules de milieu de partie, 16 par module intermédiaire et 24 pour le nouveau module de yose, soit 268 positions distinctes (212 existantes conservées, 32 nouvelles études de milieu de partie et 24 décisions de yose), vérifiées contre le corpus
 historique distribué par l’application. Chaque position comporte un coup historique et un ou deux
 autres coups à comparer. L’objectif pédagogique est d'apprendre à formuler et tester un choix
 stratégique, non de mémoriser le premier coup d'une partie.

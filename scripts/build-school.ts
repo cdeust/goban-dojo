@@ -5,7 +5,11 @@ import { format, resolveConfig } from 'prettier';
 import { extractSchools, SCHOOL_MODULES } from '../src/domain/school.ts';
 import { extractAdvancedTactics, ADVANCED_TACTICS_MODULES } from '../src/domain/advancedTactics.ts';
 import { extractEndgame, ENDGAME_MODULES } from '../src/domain/endgameCourse.ts';
-import { extractStrategyCourse, STRATEGY_MODULES } from '../src/story/strategyCourse.ts';
+import {
+  extractStrategyCourse,
+  STRATEGY_MODULES,
+  MIDDLE_STUDY_MODULES,
+} from '../src/story/strategyCourse.ts';
 import {
   courseSupplement,
   interleaveSupplement,
@@ -18,6 +22,7 @@ import { longLadderCatalog } from './long-ladder-catalog.ts';
 import { LONG_LADDER_CASES } from './long-ladder-cases.ts';
 import { LIFE_IN_ONE_CASES, LIFE_IN_TWO_CASES } from './life-reading-cases.ts';
 import { lifeReadingCatalog } from './life-reading-catalog.ts';
+import { phaseStudies, MIDDLE_STUDIES_PER_MODULE, YOSE_STUDIES } from './phase-studies.ts';
 import type { RankForm } from '../src/domain/rankAssessment.ts';
 import type { Dataset } from '../src/domain/game.ts';
 const root = join(import.meta.dirname, '..');
@@ -52,6 +57,20 @@ const lifeCases = lifeReadingCatalog(
   ],
   exams,
 );
+const phases = phaseStudies(
+  data.games,
+  [
+    ...school,
+    ...advanced,
+    ...strategy,
+    ...endgame,
+    ...extra.school,
+    ...extra.strategy,
+    ...longLadders,
+    ...lifeCases,
+  ],
+  exams,
+);
 const catalogs = [
   {
     filename: 'schoolCatalog.json',
@@ -69,8 +88,19 @@ const catalogs = [
   },
   {
     filename: 'strategyCatalog.json',
-    items: interleaveSupplement(strategy, extra.strategy, 3),
-    expected: STRATEGY_MODULES.length * 12 + BRIDGE_MODULES.length * EXTRA_BRIDGE_PER_MODULE,
+    items: [
+      ...interleaveSupplement(
+        interleaveSupplement(strategy, extra.strategy, 3),
+        phases.filter((e) => e.module !== 'yose-decision'),
+        1,
+      ),
+      ...phases.filter((e) => e.module === 'yose-decision'),
+    ],
+    expected:
+      STRATEGY_MODULES.length * 12 +
+      BRIDGE_MODULES.length * EXTRA_BRIDGE_PER_MODULE +
+      MIDDLE_STUDY_MODULES.length * MIDDLE_STUDIES_PER_MODULE +
+      YOSE_STUDIES,
   },
   {
     filename: 'endgameCatalog.json',
