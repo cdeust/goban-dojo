@@ -43,7 +43,8 @@ export function App() {
   const load = useStore((s) => s.load);
 
   useEffect(() => {
-    void load();
+    // App only mounts once AccountGate has selected a guest or account session.
+    void load(window.location.search);
   }, [load]);
   usePlayback();
   useGuessDriver();

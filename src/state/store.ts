@@ -14,6 +14,7 @@ import {
   type Timeline,
 } from '../domain/game.ts';
 import { practiceDay, recordRecall, type Practice, type Recall } from '../domain/practice.ts';
+import { resolvePositionLink } from '../domain/positionLink.ts';
 import { trappedStones, type EnginePosition } from '../engine/features.ts';
 import { isLegalZeroMove } from '../engine/zeroSearch.ts';
 import { FIRST_LESSON, LESSONS, type Lesson } from '../story/lessons.ts';
@@ -161,7 +162,7 @@ interface State {
   /** Message bref à l'utilisateur (coup refusé, etc.). */
   notice: string | null;
 
-  load: () => Promise<void>;
+  load: (positionSearch?: string) => Promise<void>;
   enter: (panel?: PanelName) => void;
   setSchoolOpen: (open: boolean, exercise?: string) => void;
   openSchoolAssessment: () => void;
@@ -411,21 +412,33 @@ export const useStore = create<State>((set, get) => ({
   readingOwnership: null,
   notice: null,
 
-  load: async () => {
+  load: async (positionSearch = '') => {
     try {
       const res = await fetch(`${import.meta.env.BASE_URL}data/games.json`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: unknown = await res.json();
       if (!isDataset(json)) throw new Error('format de données inattendu');
+      // Strict Mode can start two requests. A later response must not reset a position being played.
+      if (get().status === 'ready') return;
+      const linked = resolvePositionLink(positionSearch, json.games);
       set({
         dataset: { ...json, games: [...json.games, ...localGames()] },
         practice: loadPractice(),
         status: 'ready',
-        gameIndex: 0,
-        guessColor: json.games[0]?.shusaku ?? 'B',
+        gameIndex: linked?.gameIndex ?? 0,
+        guessColor: json.games[linked?.gameIndex ?? 0]?.shusaku ?? 'B',
+        ...(linked && {
+          move: linked.move,
+          entered: true,
+          mode: 'explorer',
+          view: 'dessus',
+          panel: null,
+          playing: false,
+        }),
       });
     } catch (e) {
-      set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
+      if (get().status !== 'ready')
+        set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
     }
   },
 
