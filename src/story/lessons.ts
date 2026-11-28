@@ -92,5 +92,14 @@ export function recommendedLesson(practice: Practice, today: number): Lesson | u
   const pending = LESSONS.map((lesson) => ({ lesson, card: lessonCard(lesson, practice) }))
     .filter(({ card }) => card && card.due <= today)
     .sort((a, b) => a.card!.due - b.card!.due || a.card!.stage - b.card!.stage);
-  return pending[0]?.lesson ?? LESSONS.find((lesson) => !lessonCard(lesson, practice));
+  return (
+    pending[0]?.lesson ??
+    LESSONS.find(
+      (lesson) =>
+        !lessonCard(lesson, practice) &&
+        LESSONS.filter(
+          (previous) => previous.theme === lesson.theme && previous.difficulty < lesson.difficulty,
+        ).every((previous) => (lessonCard(previous, practice)?.stage ?? 0) > 0),
+    )
+  );
 }

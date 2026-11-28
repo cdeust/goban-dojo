@@ -1,6 +1,6 @@
 import { AccountControls } from './AccountControls.tsx';
 import { progressSession } from '../state/sessionProgress.ts';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { PASS } from '../domain/board.ts';
 import {
   dueReviews,
@@ -9,15 +9,11 @@ import {
   practiceDay,
   recentDays,
 } from '../domain/practice.ts';
-import {
-  FIRST_LESSON,
-  LESSONS,
-  LESSON_THEMES,
-  lessonCard,
-  recommendedLesson,
-} from '../story/lessons.ts';
+import { LESSONS, LESSON_THEMES, lessonCard, recommendedLesson } from '../story/lessons.ts';
 import { prettyName } from '../story/format.ts';
 import { timelineOf, useStore } from '../state/store.ts';
+
+const GuidedPath = lazy(() => import('./GuidedPath.tsx').then((m) => ({ default: m.GuidedPath })));
 
 const weekday = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', timeZone: 'UTC' });
 
@@ -73,6 +69,11 @@ export function PracticePanel() {
         Devinez le prochain coup d’un kifu, puis retrouvez-le de mémoire quelques jours plus tard.
       </p>
 
+      {dataset && (
+        <Suspense fallback={<p role="status">Préparation de votre parcours…</p>}>
+          <GuidedPath games={dataset.games} practice={practice} today={today} />
+        </Suspense>
+      )}
       <section className="practice__card practice__school">
         <p className="chapter__index">École de go · 9 niveaux</p>
         <h3>Apprendre, pratiquer, progresser</h3>
@@ -92,18 +93,22 @@ export function PracticePanel() {
           Entrer dans l’école
         </button>
       </section>
-      <section className="practice__card">
-        <p className="chapter__index">Leçon guidée · Libertés et capture</p>
-        <h3>{FIRST_LESSON.title}</h3>
-        <p>Un kifu de 1839, un coup à jouer. La règle d’abord, les suites du moteur ensuite.</p>
-        <button
-          type="button"
-          className="chip chip--accent"
-          onClick={() => startLesson(FIRST_LESSON.id)}
-        >
-          Commencer la leçon
-        </button>
-      </section>
+      {recommended && (
+        <section className="practice__card">
+          <p className="chapter__index">Leçon guidée · {LESSON_THEMES[recommended.theme]}</p>
+          <h3>{recommended.title}</h3>
+          <p>
+            La règle d’abord, les suites du moteur ensuite. Une position choisie selon votre carnet.
+          </p>
+          <button
+            type="button"
+            className="chip chip--accent"
+            onClick={() => startLesson(recommended.id)}
+          >
+            Commencer la leçon
+          </button>
+        </section>
+      )}
 
       <section className="practice__card" aria-labelledby="curriculum-title">
         <h3 id="curriculum-title">Parcours personnalisé</h3>

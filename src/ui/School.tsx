@@ -19,7 +19,7 @@ import {
 import {
   moduleProgress,
   markSchoolFailure,
-  recommendCourse,
+  coursePlan,
   recordSchool,
   schoolRecord,
   type SchoolProgress,
@@ -32,35 +32,13 @@ import {
 } from '../state/schoolProgress.ts';
 import { useStore } from '../state/store.ts';
 import { prettyName } from '../story/format.ts';
-import schoolCatalog from '../story/schoolCatalog.json';
 import { KifuBoard } from './KifuBoard.tsx';
-import {
-  ADVANCED_TACTICS_MODULES,
-  type AdvancedTacticExercise,
-} from '../domain/advancedTactics.ts';
-import { ENDGAME_MODULES, type EndgameExercise } from '../domain/endgameCourse.ts';
-import { STRATEGY_MODULES, type StrategyLesson } from '../story/strategyCourse.ts';
-import advancedCatalog from '../story/advancedCatalog.json';
-import strategyCatalog from '../story/strategyCatalog.json';
-import endgameCatalog from '../story/endgameCatalog.json';
+import { ALL_MODULES, ALL_EXERCISES, type CourseExercise } from '../story/courseCatalog.ts';
 import { StrategyExercise } from './StrategyExercise.tsx';
 import { RuleCourseExercise } from './RuleCourseExercise.tsx';
 import { TrainingGame } from './TrainingGame.tsx';
 import { JapaneseCountWorkshop } from './JapaneseCountWorkshop.tsx';
 
-type CourseExercise = SchoolExercise | AdvancedTacticExercise | StrategyLesson | EndgameExercise;
-const ALL_MODULES = [
-  ...SCHOOL_MODULES,
-  ...ADVANCED_TACTICS_MODULES,
-  ...STRATEGY_MODULES,
-  ...ENDGAME_MODULES,
-];
-const ALL_EXERCISES: CourseExercise[] = [
-  ...(schoolCatalog as SchoolExercise[]),
-  ...(advancedCatalog as AdvancedTacticExercise[]),
-  ...(strategyCatalog as StrategyLesson[]),
-  ...(endgameCatalog as EndgameExercise[]),
-];
 function foundation(ex: CourseExercise): ex is SchoolExercise {
   return SCHOOL_MODULES.some((m) => m.id === ex.module);
 }
@@ -374,7 +352,9 @@ export function School() {
   );
   const visitor = progressSession().status === 'visitor';
   const [progress, setProgress] = useState(loadSchoolProgress);
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<string | null>(
+    () => useStore.getState().schoolStartExercise,
+  );
   const [training, setTraining] = useState(false);
   const [counting, setCounting] = useState(false);
   const [session, setSession] = useState(0);
@@ -383,7 +363,8 @@ export function School() {
   const [message, setMessage] = useState('');
   const scroller = useRef<HTMLElement>(null);
   const today = practiceDay();
-  const recommendation = recommendCourse(catalog, progress, today, ALL_MODULES);
+  const plan = coursePlan(catalog, progress, today, ALL_MODULES);
+  const recommendation = plan.next;
   const selected = catalog.find((e) => e.id === active);
   const source = selected && games?.find((g) => g.id === selected.gameId);
   const activeCount = catalog.filter((ex) => schoolRecord(progress, ex.id)).length;
@@ -436,7 +417,7 @@ export function School() {
     scroller.current?.scrollTo({ top: 0 });
   }
   function next() {
-    const activity = recommendCourse(catalog, progress, today, ALL_MODULES);
+    const activity = coursePlan(catalog, progress, today, ALL_MODULES).next;
     if (activity) open(activity);
     else back();
   }
@@ -537,6 +518,9 @@ export function School() {
               max={catalog.length || 1}
               value={activeCount}
             />
+            <p>
+              Niveau conseillé : {plan.level} / 9 · {plan.due} révision(s) due(s).
+            </p>
             {recommendation && (
               <>
                 <p>
@@ -551,6 +535,12 @@ export function School() {
                   Commencer ma séance
                 </button>
               </>
+            )}
+            {!recommendation && (
+              <p>
+                Les rappels de ce niveau ne sont pas encore dus. Vous pouvez travailler librement
+                les chapitres ci-dessous.
+              </p>
             )}
             <p className="school-note">
               Les révisions dues passent en premier ; les positions inédites travaillent les

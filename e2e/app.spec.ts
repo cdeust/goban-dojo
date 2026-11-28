@@ -1480,3 +1480,33 @@ test.describe('cursus avancé et application', () => {
     expect(w.foreign).toEqual([]);
   });
 });
+
+test('le carnet déclenche une séance réelle de l’école et reprend ses erreurs à échéance', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.setFixedTime(new Date(2026, 10, 27, 12));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Entrer au dojo' }).click();
+  const guided = page.getByRole('region', { name: 'Ma prochaine séance' });
+  await expect(guided).toContainText('Niveau conseillé : 1 / 9');
+  await expect(guided).toContainText('Nouvel exercice : Lire les libertés');
+  await guided.getByRole('button', { name: 'Reprendre mon parcours guidé' }).click();
+  await expect(
+    page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Voir l’explication' }).click();
+  await page.getByRole('button', { name: 'Retour au dojo' }).click();
+  await expect(guided).toContainText('1 / 652 exercices travaillés');
+  await expect(guided).toContainText('0 révisions');
+  await page.clock.setFixedTime(new Date(2026, 10, 28, 12));
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await expect(guided).toContainText('1 révision');
+  await expect(guided).toContainText('Révision : Lire les libertés');
+  await guided.getByRole('button', { name: 'Reprendre mon parcours guidé' }).click();
+  await expect(
+    page.getByRole('heading', { name: /Combien de libertés possède le groupe de E4/ }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: '4', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Réussi sans aide');
+});
