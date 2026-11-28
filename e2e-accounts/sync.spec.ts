@@ -42,6 +42,24 @@ async function signIn(page: Page, email: string) {
   checkGateway(page);
 }
 
+test('un visiteur mobile accède directement à une position partagée après le choix de session', async ({
+  page,
+}) => {
+  watchGateway(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?partie=s126&coup=126');
+  await page.getByRole('button', { name: 'Continuer en visiteur' }).click();
+  const panel = page.getByRole('region', { name: 'Explorer une autre suite' });
+  await expect(panel).toBeVisible({ timeout: 45_000 });
+  await expect(page.getByTestId('live')).toContainText(/Coup 126 .*Blanc J5/);
+  await expect(panel).toContainText('À vous de jouer avec Noir.');
+  await expect(panel).toContainText('Dans la partie, noir a joué K11');
+  await expect(page.getByRole('button', { name: 'Entrer au dojo' })).toHaveCount(0);
+  await expect(page.locator('canvas[data-rendered="true"]')).toBeVisible({ timeout: 45_000 });
+  checkGateway(page);
+});
+
 test('une progression réelle est retrouvée sur un autre navigateur, mais pas sur un autre compte', async ({
   browser,
 }) => {
@@ -104,6 +122,11 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await two.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles(backup);
     await two.getByRole('button', { name: 'Remplacer la progression' }).click();
     await expect(two.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await expect(two.getByText('Progression synchronisée')).toBeVisible();
+    await two.goto('/?partie=s126&coup=126');
+    await expect(two.getByRole('region', { name: 'Explorer une autre suite' })).toBeVisible();
+    await expect(two.getByTestId('live')).toContainText(/Coup 126 .*Blanc J5/);
+    await expect(two.getByText('Progression synchronisée')).toBeVisible();
 
     const third = await browser.newContext();
     contexts.push(third);
