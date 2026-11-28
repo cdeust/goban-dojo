@@ -724,17 +724,29 @@ export function School() {
                           Travailler : {m.title}
                         </button>
                       )}
-                      {m.id === 'long-ladder' && (
+                      {(m.id === 'long-ladder' ||
+                        m.id === 'life-in-two' ||
+                        m.id === 'make-life') && (
                         <details className="school-problem-list">
-                          <summary>Choisir un problème de lecture longue</summary>
+                          <summary>
+                            {m.id === 'long-ladder'
+                              ? 'Choisir un problème de lecture longue'
+                              : 'Choisir un problème de vie'}
+                          </summary>
                           <ol>
                             {exercises.map((ex, index) => {
-                              if (ex.module !== 'long-ladder') return null;
+                              if (
+                                ex.module !== 'long-ladder' &&
+                                ex.module !== 'life-in-two' &&
+                                ex.module !== 'make-life'
+                              )
+                                return null;
                               const record = schoolRecord(progress, ex.id);
                               return (
                                 <li key={ex.id}>
                                   <button type="button" className="chip" onClick={() => open(ex)}>
-                                    Problème {index + 1} · {ex.horizon} demi-coups
+                                    Problème {index + 1} ·{' '}
+                                    {ex.horizon ?? (ex.module === 'life-in-two' ? 3 : 1)} demi-coups
                                   </button>
                                   <span>
                                     {record

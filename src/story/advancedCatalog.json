@@ -1796,5 +1796,690 @@
       99, 98, 80, 61, 79, 60
     ],
     "horizon": 25
+  },
+  {
+    "id": "make-life:s133:242",
+    "module": "make-life",
+    "gameId": "s133",
+    "before": 242,
+    "color": "B",
+    "anchors": [131],
+    "candidate": 132
+  },
+  {
+    "id": "make-life:s241:189",
+    "module": "make-life",
+    "gameId": "s241",
+    "before": 189,
+    "color": "W",
+    "anchors": [324],
+    "candidate": 323
+  },
+  {
+    "id": "make-life:s254:224",
+    "module": "make-life",
+    "gameId": "s254",
+    "before": 224,
+    "color": "B",
+    "anchors": [296],
+    "candidate": 297
+  },
+  {
+    "id": "make-life:s306:220",
+    "module": "make-life",
+    "gameId": "s306",
+    "before": 220,
+    "color": "B",
+    "anchors": [20],
+    "candidate": 1
+  },
+  {
+    "id": "make-life:s360:190",
+    "module": "make-life",
+    "gameId": "s360",
+    "before": 190,
+    "color": "W",
+    "anchors": [273],
+    "candidate": 272
+  },
+  {
+    "id": "make-life:s462:259",
+    "module": "make-life",
+    "gameId": "s462",
+    "before": 259,
+    "color": "W",
+    "anchors": [176],
+    "candidate": 177
+  },
+  {
+    "id": "make-life:s016:207",
+    "module": "make-life",
+    "gameId": "s016",
+    "before": 207,
+    "color": "B",
+    "anchors": [143],
+    "candidate": 10
+  },
+  {
+    "id": "make-life:s021:216",
+    "module": "make-life",
+    "gameId": "s021",
+    "before": 216,
+    "color": "B",
+    "anchors": [182],
+    "candidate": 162
+  },
+  {
+    "id": "make-life:s031:250",
+    "module": "make-life",
+    "gameId": "s031",
+    "before": 250,
+    "color": "W",
+    "anchors": [307],
+    "candidate": 349
+  },
+  {
+    "id": "make-life:s035:241",
+    "module": "make-life",
+    "gameId": "s035",
+    "before": 241,
+    "color": "B",
+    "anchors": [294],
+    "candidate": 348
+  },
+  {
+    "id": "make-life:s047:135",
+    "module": "make-life",
+    "gameId": "s047",
+    "before": 135,
+    "color": "B",
+    "anchors": [182],
+    "candidate": 257
+  },
+  {
+    "id": "make-life:s065:253",
+    "module": "make-life",
+    "gameId": "s065",
+    "before": 253,
+    "color": "W",
+    "anchors": [296],
+    "candidate": 295
+  },
+  {
+    "id": "make-life:s084:277",
+    "module": "make-life",
+    "gameId": "s084",
+    "before": 277,
+    "color": "W",
+    "anchors": [115],
+    "candidate": 195
+  },
+  {
+    "id": "make-life:s105:239",
+    "module": "make-life",
+    "gameId": "s105",
+    "before": 239,
+    "color": "W",
+    "anchors": [331],
+    "candidate": 235
+  },
+  {
+    "id": "make-life:s119:265",
+    "module": "make-life",
+    "gameId": "s119",
+    "before": 265,
+    "color": "W",
+    "anchors": [238],
+    "candidate": 239
+  },
+  {
+    "id": "make-life:s126:291",
+    "module": "make-life",
+    "gameId": "s126",
+    "before": 291,
+    "color": "W",
+    "anchors": [52],
+    "candidate": 30
+  },
+  {
+    "id": "make-life:s142:199",
+    "module": "make-life",
+    "gameId": "s142",
+    "before": 199,
+    "color": "W",
+    "anchors": [21],
+    "candidate": 61
+  },
+  {
+    "id": "make-life:s159:203",
+    "module": "make-life",
+    "gameId": "s159",
+    "before": 203,
+    "color": "W",
+    "anchors": [131],
+    "candidate": 129
+  },
+  {
+    "id": "make-life:s166:254",
+    "module": "make-life",
+    "gameId": "s166",
+    "before": 254,
+    "color": "B",
+    "anchors": [80],
+    "candidate": 175
+  },
+  {
+    "id": "make-life:s182:207",
+    "module": "make-life",
+    "gameId": "s182",
+    "before": 207,
+    "color": "W",
+    "anchors": [182],
+    "candidate": 159
+  },
+  {
+    "id": "make-life:s242:186",
+    "module": "make-life",
+    "gameId": "s242",
+    "before": 186,
+    "color": "B",
+    "anchors": [131],
+    "candidate": 94
+  },
+  {
+    "id": "make-life:s264:175",
+    "module": "make-life",
+    "gameId": "s264",
+    "before": 175,
+    "color": "B",
+    "anchors": [270],
+    "candidate": 324
+  },
+  {
+    "id": "make-life:s284:289",
+    "module": "make-life",
+    "gameId": "s284",
+    "before": 289,
+    "color": "W",
+    "anchors": [111],
+    "candidate": 147
+  },
+  {
+    "id": "make-life:s286:215",
+    "module": "make-life",
+    "gameId": "s286",
+    "before": 215,
+    "color": "W",
+    "anchors": [163],
+    "candidate": 239
+  },
+  {
+    "id": "make-life:s289:228",
+    "module": "make-life",
+    "gameId": "s289",
+    "before": 228,
+    "color": "B",
+    "anchors": [177],
+    "candidate": 254
+  },
+  {
+    "id": "make-life:s305:226",
+    "module": "make-life",
+    "gameId": "s305",
+    "before": 226,
+    "color": "B",
+    "anchors": [64],
+    "candidate": 29
+  },
+  {
+    "id": "make-life:s324:217",
+    "module": "make-life",
+    "gameId": "s324",
+    "before": 217,
+    "color": "W",
+    "anchors": [239],
+    "candidate": 354
+  },
+  {
+    "id": "make-life:s325:123",
+    "module": "make-life",
+    "gameId": "s325",
+    "before": 123,
+    "color": "W",
+    "anchors": [90],
+    "candidate": 69
+  },
+  {
+    "id": "make-life:s327:225",
+    "module": "make-life",
+    "gameId": "s327",
+    "before": 225,
+    "color": "W",
+    "anchors": [26],
+    "candidate": 84
+  },
+  {
+    "id": "make-life:s350:219",
+    "module": "make-life",
+    "gameId": "s350",
+    "before": 219,
+    "color": "B",
+    "anchors": [278],
+    "candidate": 351
+  },
+  {
+    "id": "make-life:s368:244",
+    "module": "make-life",
+    "gameId": "s368",
+    "before": 244,
+    "color": "B",
+    "anchors": [129],
+    "candidate": 148
+  },
+  {
+    "id": "make-life:s436:243",
+    "module": "make-life",
+    "gameId": "s436",
+    "before": 243,
+    "color": "B",
+    "anchors": [302],
+    "candidate": 360
+  },
+  {
+    "id": "make-life:s437:267",
+    "module": "make-life",
+    "gameId": "s437",
+    "before": 267,
+    "color": "B",
+    "anchors": [96],
+    "candidate": 212
+  },
+  {
+    "id": "make-life:s442:179",
+    "module": "make-life",
+    "gameId": "s442",
+    "before": 179,
+    "color": "W",
+    "anchors": [165],
+    "candidate": 206
+  },
+  {
+    "id": "make-life:s457:274",
+    "module": "make-life",
+    "gameId": "s457",
+    "before": 274,
+    "color": "B",
+    "anchors": [81],
+    "candidate": 120
+  },
+  {
+    "id": "life-in-two:s005:242",
+    "module": "life-in-two",
+    "gameId": "s005",
+    "before": 242,
+    "color": "W",
+    "anchors": [148],
+    "candidate": 129,
+    "line": [129, 205, 187]
+  },
+  {
+    "id": "life-in-two:s010:112",
+    "module": "life-in-two",
+    "gameId": "s010",
+    "before": 112,
+    "color": "W",
+    "anchors": [153],
+    "candidate": 152,
+    "line": [152, 136, 137]
+  },
+  {
+    "id": "life-in-two:s016:205",
+    "module": "life-in-two",
+    "gameId": "s016",
+    "before": 205,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 68,
+    "line": [68, 66, 10]
+  },
+  {
+    "id": "life-in-two:s021:204",
+    "module": "life-in-two",
+    "gameId": "s021",
+    "before": 204,
+    "color": "B",
+    "anchors": [144],
+    "candidate": 163,
+    "line": [163, 143, 162]
+  },
+  {
+    "id": "life-in-two:s065:247",
+    "module": "life-in-two",
+    "gameId": "s065",
+    "before": 247,
+    "color": "W",
+    "anchors": [351],
+    "candidate": 352,
+    "line": [352, 294, 295]
+  },
+  {
+    "id": "life-in-two:s072:103",
+    "module": "life-in-two",
+    "gameId": "s072",
+    "before": 103,
+    "color": "W",
+    "anchors": [9],
+    "candidate": 8,
+    "line": [8, 10, 46]
+  },
+  {
+    "id": "life-in-two:s078:242",
+    "module": "life-in-two",
+    "gameId": "s078",
+    "before": 242,
+    "color": "B",
+    "anchors": [177],
+    "candidate": 178,
+    "line": [178, 175, 174]
+  },
+  {
+    "id": "life-in-two:s083:239",
+    "module": "life-in-two",
+    "gameId": "s083",
+    "before": 239,
+    "color": "W",
+    "anchors": [74],
+    "candidate": 75,
+    "line": [75, 72, 36]
+  },
+  {
+    "id": "life-in-two:s084:269",
+    "module": "life-in-two",
+    "gameId": "s084",
+    "before": 269,
+    "color": "W",
+    "anchors": [232],
+    "candidate": 233,
+    "line": [233, 214, 195]
+  },
+  {
+    "id": "life-in-two:s095:192",
+    "module": "life-in-two",
+    "gameId": "s095",
+    "before": 192,
+    "color": "B",
+    "anchors": [9],
+    "candidate": 10,
+    "line": [10, 11, 12]
+  },
+  {
+    "id": "life-in-two:s121:289",
+    "module": "life-in-two",
+    "gameId": "s121",
+    "before": 289,
+    "color": "W",
+    "anchors": [78],
+    "candidate": 97,
+    "line": [97, 4, 114]
+  },
+  {
+    "id": "life-in-two:s124:257",
+    "module": "life-in-two",
+    "gameId": "s124",
+    "before": 257,
+    "color": "W",
+    "anchors": [154],
+    "candidate": 155,
+    "line": [155, 118, 99]
+  },
+  {
+    "id": "life-in-two:s126:289",
+    "module": "life-in-two",
+    "gameId": "s126",
+    "before": 289,
+    "color": "W",
+    "anchors": [32],
+    "candidate": 13,
+    "line": [13, 71, 30]
+  },
+  {
+    "id": "life-in-two:s142:241",
+    "module": "life-in-two",
+    "gameId": "s142",
+    "before": 241,
+    "color": "W",
+    "anchors": [109],
+    "candidate": 110,
+    "line": [110, 169, 170]
+  },
+  {
+    "id": "life-in-two:s159:201",
+    "module": "life-in-two",
+    "gameId": "s159",
+    "before": 201,
+    "color": "W",
+    "anchors": [130],
+    "candidate": 131,
+    "line": [131, 149, 129]
+  },
+  {
+    "id": "life-in-two:s166:250",
+    "module": "life-in-two",
+    "gameId": "s166",
+    "before": 250,
+    "color": "B",
+    "anchors": [155],
+    "candidate": 156,
+    "line": [156, 81, 175]
+  },
+  {
+    "id": "life-in-two:s174:279",
+    "module": "life-in-two",
+    "gameId": "s174",
+    "before": 279,
+    "color": "W",
+    "anchors": [153],
+    "candidate": 152,
+    "line": [152, 133, 190]
+  },
+  {
+    "id": "life-in-two:s181:281",
+    "module": "life-in-two",
+    "gameId": "s181",
+    "before": 281,
+    "color": "W",
+    "anchors": [195],
+    "candidate": 196,
+    "line": [196, 138, 256]
+  },
+  {
+    "id": "life-in-two:s182:185",
+    "module": "life-in-two",
+    "gameId": "s182",
+    "before": 185,
+    "color": "W",
+    "anchors": [88],
+    "candidate": 69,
+    "line": [69, 107, 67]
+  },
+  {
+    "id": "life-in-two:s239:279",
+    "module": "life-in-two",
+    "gameId": "s239",
+    "before": 279,
+    "color": "W",
+    "anchors": [340],
+    "candidate": 341,
+    "line": [341, 360, 261]
+  },
+  {
+    "id": "life-in-two:s264:177",
+    "module": "life-in-two",
+    "gameId": "s264",
+    "before": 177,
+    "color": "B",
+    "anchors": [250],
+    "candidate": 269,
+    "line": [269, 266, 324]
+  },
+  {
+    "id": "life-in-two:s269:209",
+    "module": "life-in-two",
+    "gameId": "s269",
+    "before": 209,
+    "color": "W",
+    "anchors": [216],
+    "candidate": 197,
+    "line": [197, 214, 176]
+  },
+  {
+    "id": "life-in-two:s286:187",
+    "module": "life-in-two",
+    "gameId": "s286",
+    "before": 187,
+    "color": "W",
+    "anchors": [220],
+    "candidate": 221,
+    "line": [221, 239, 240]
+  },
+  {
+    "id": "life-in-two:s305:217",
+    "module": "life-in-two",
+    "gameId": "s305",
+    "before": 217,
+    "color": "W",
+    "anchors": [256],
+    "candidate": 275,
+    "line": [275, 238, 274]
+  },
+  {
+    "id": "life-in-two:s306:246",
+    "module": "life-in-two",
+    "gameId": "s306",
+    "before": 246,
+    "color": "B",
+    "anchors": [192],
+    "candidate": 191,
+    "line": [191, 135, 172]
+  },
+  {
+    "id": "life-in-two:s322:247",
+    "module": "life-in-two",
+    "gameId": "s322",
+    "before": 247,
+    "color": "W",
+    "anchors": [345],
+    "candidate": 346,
+    "line": [346, 309, 310]
+  },
+  {
+    "id": "life-in-two:s325:73",
+    "module": "life-in-two",
+    "gameId": "s325",
+    "before": 73,
+    "color": "W",
+    "anchors": [67],
+    "candidate": 68,
+    "line": [68, 49, 69]
+  },
+  {
+    "id": "life-in-two:s333:276",
+    "module": "life-in-two",
+    "gameId": "s333",
+    "before": 276,
+    "color": "B",
+    "anchors": [328],
+    "candidate": 347,
+    "line": [347, 255, 236]
+  },
+  {
+    "id": "life-in-two:s336:217",
+    "module": "life-in-two",
+    "gameId": "s336",
+    "before": 217,
+    "color": "W",
+    "anchors": [181],
+    "candidate": 182,
+    "line": [182, 124, 126]
+  },
+  {
+    "id": "life-in-two:s337:267",
+    "module": "life-in-two",
+    "gameId": "s337",
+    "before": 267,
+    "color": "W",
+    "anchors": [81],
+    "candidate": 100,
+    "line": [100, 5, 44]
+  },
+  {
+    "id": "life-in-two:s381:270",
+    "module": "life-in-two",
+    "gameId": "s381",
+    "before": 270,
+    "color": "B",
+    "anchors": [243],
+    "candidate": 242,
+    "line": [242, 359, 360]
+  },
+  {
+    "id": "life-in-two:s436:99",
+    "module": "life-in-two",
+    "gameId": "s436",
+    "before": 99,
+    "color": "B",
+    "anchors": [302],
+    "candidate": 303,
+    "line": [303, 284, 360]
+  },
+  {
+    "id": "life-in-two:s437:271",
+    "module": "life-in-two",
+    "gameId": "s437",
+    "before": 271,
+    "color": "B",
+    "anchors": [3],
+    "candidate": 2,
+    "line": [2, 1, 58]
+  },
+  {
+    "id": "life-in-two:s441:256",
+    "module": "life-in-two",
+    "gameId": "s441",
+    "before": 256,
+    "color": "W",
+    "anchors": [346],
+    "candidate": 347,
+    "line": [347, 329, 345]
+  },
+  {
+    "id": "life-in-two:s457:272",
+    "module": "life-in-two",
+    "gameId": "s457",
+    "before": 272,
+    "color": "B",
+    "anchors": [141],
+    "candidate": 142,
+    "line": [142, 120, 125]
+  },
+  {
+    "id": "life-in-two:s462:261",
+    "module": "life-in-two",
+    "gameId": "s462",
+    "before": 261,
+    "color": "W",
+    "anchors": [147],
+    "candidate": 148,
+    "line": [148, 109, 149]
+  },
+  {
+    "id": "life-in-two:s468:242",
+    "module": "life-in-two",
+    "gameId": "s468",
+    "before": 242,
+    "color": "B",
+    "anchors": [261],
+    "candidate": 260,
+    "line": [260, 221, 202]
   }
 ]

@@ -16,6 +16,8 @@ import {
 import { BRIDGE_MODULES } from '../src/story/strategyCourse.ts';
 import { longLadderCatalog } from './long-ladder-catalog.ts';
 import { LONG_LADDER_CASES } from './long-ladder-cases.ts';
+import { LIFE_IN_ONE_CASES, LIFE_IN_TWO_CASES } from './life-reading-cases.ts';
+import { lifeReadingCatalog } from './life-reading-catalog.ts';
 import type { RankForm } from '../src/domain/rankAssessment.ts';
 import type { Dataset } from '../src/domain/game.ts';
 const root = join(import.meta.dirname, '..');
@@ -37,6 +39,19 @@ const longLadders = longLadderCatalog(
   [...school, ...advanced, ...strategy, ...endgame, ...extra.school, ...extra.strategy],
   exams,
 );
+const lifeCases = lifeReadingCatalog(
+  data.games,
+  [
+    ...school,
+    ...advanced,
+    ...strategy,
+    ...endgame,
+    ...extra.school,
+    ...extra.strategy,
+    ...longLadders,
+  ],
+  exams,
+);
 const catalogs = [
   {
     filename: 'schoolCatalog.json',
@@ -45,8 +60,12 @@ const catalogs = [
   },
   {
     filename: 'advancedCatalog.json',
-    items: [...advanced, ...longLadders],
-    expected: ADVANCED_TACTICS_MODULES.length * 24 + LONG_LADDER_CASES.length,
+    items: [...advanced, ...longLadders, ...lifeCases],
+    expected:
+      ADVANCED_TACTICS_MODULES.length * 24 +
+      LONG_LADDER_CASES.length +
+      LIFE_IN_ONE_CASES.length +
+      LIFE_IN_TWO_CASES.length,
   },
   {
     filename: 'strategyCatalog.json',

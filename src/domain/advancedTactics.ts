@@ -1,5 +1,6 @@
 import { Board, PASS, POINTS, neighbours, opposite, pointToHuman, type Color } from './board.ts';
 import { decodeMoves, decodePoints, type GameRecord } from './game.ts';
+import { certifiedEyes, lifeReadingProof } from './lifeReading.ts';
 
 export const ADVANCED_TACTICS_MODULES = [
   {
@@ -52,7 +53,18 @@ export const LONG_LADDER_MODULE = {
   lesson:
     'Capturez toute la chaîne marquée, en jouant chaque atari. Le dojo choisit une défense légale qui prolonge la résistance. Le nombre de coups est un horizon maximal prouvé, non une garantie générale de vie ou de mort.',
 } as const;
-export const TACTICS_MODULES = [...ADVANCED_TACTICS_MODULES, LONG_LADDER_MODULE] as const;
+export const LIFE_READING_MODULE = {
+  id: 'life-in-two',
+  level: 5,
+  title: 'Tsumego : vivre en deux coups',
+  lesson:
+    'Créez deux yeux sûrs avec deux coups de votre camp. Le dojo examine toutes les réponses adverses légales, puis choisit une défense qui réduit vos possibilités ; jouez vous-même le coup décisif. L’absence de preuve ne signifie pas que la chaîne est morte.',
+} as const;
+export const TACTICS_MODULES = [
+  ...ADVANCED_TACTICS_MODULES,
+  LIFE_READING_MODULE,
+  LONG_LADDER_MODULE,
+] as const;
 export type AdvancedModuleId = (typeof TACTICS_MODULES)[number]['id'];
 export interface AdvancedTacticExercise {
   id: string;
@@ -88,8 +100,7 @@ function liberties(board: Board, target: number): number[] {
 
 /** Strict geometric sufficient certificate, for a single connected chain. */
 export function safeEyes(board: Board, target: number): number[] {
-  const chain = new Set(board.stonesOf(target));
-  return liberties(board, target).filter((p) => neighbours(p).every((q) => chain.has(q)));
+  return certifiedEyes(board, target);
 }
 
 export function snapbackProof(
@@ -244,6 +255,8 @@ export function judgeAdvancedTactic(
     }
     case 'false-eye':
       return falseEyeCapture(board, ex.color, answer, target);
+    case 'life-in-two':
+      return lifeReadingProof(board, ex.color, target, answer) !== null;
     case 'long-ladder':
       return ladderProof(board, ex.color, target, answer, ex.horizon) !== null;
     case 'ladder': {
@@ -277,6 +290,8 @@ export function advancedTacticQuestion(_board: Board, ex: AdvancedTacticExercise
       return `Au trait : ${c}. Trouvez un sacrifice d’une pierre près de ${a}. Si l’adversaire la capture en ${pointToHuman(ex.reply!)}, vous pourrez reprendre au moins deux pierres immédiatement.`;
     case 'false-eye':
       return `Au trait : ${c}. Trouvez le point vide qui paraît un œil adverse, mais est bordé de chaînes distinctes. Jouez-y pour capturer la chaîne en ${a}.`;
+    case 'life-in-two':
+      return `Au trait : ${c}. Formez deux yeux sûrs pour la chaîne en ${a} en jouant deux coups, malgré la défense.`;
     case 'long-ladder':
       return `Au trait : ${c}. Capturez en escalier la chaîne en ${a}, en jouant chacun de vos coups. Lecture prouvée en ${ex.horizon} demi-coups au plus.`;
     case 'ladder':
@@ -310,6 +325,14 @@ export function advancedTacticSolution(
     }
     case 'false-eye':
       return `En ${pointToHuman(answer)}, les chaînes ennemies ne sont pas toutes reliées. Le coup est légal et capture ${result.captures.length} pierre(s) : ce faux œil n’assure pas la vie.`;
+    case 'life-in-two': {
+      const proof = lifeReadingProof(board, ex.color, target, answer)!;
+      const line = ex.line ?? [answer, proof.reply, proof.finishes[0]!];
+      const finalBoard = board.clone();
+      for (const [i, p] of line.entries())
+        finalBoard.play(i % 2 === 0 ? ex.color : opposite(ex.color), p);
+      return `Variante calculée : ${line.map((p, i) => `${i + 1}. ${p === PASS ? 'Passe' : pointToHuman(p)}`).join(' · ')}. Deux yeux sûrs en ${certifiedEyes(finalBoard, target).map(pointToHuman).join(' et ')}. Les ${proof.legalReplies} réponses légales ont été vérifiées à cet horizon.`;
+    }
     case 'long-ladder':
     case 'ladder': {
       const line = ex.line ?? ladderProof(board, ex.color, target, answer, ex.horizon)!;
