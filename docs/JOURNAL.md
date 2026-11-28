@@ -190,3 +190,11 @@ Une ligne par expérience, une seule variable à la fois, échecs compris. Dates
 - Les nouvelles questions sont intercalées dès la deuxième activité du chapitre, sans enlever ni réécrire les identifiants des 748 exercices existants. Le carnet et les sauvegardes précédentes restent utilisables. Le nombre de réussites guidées est calculé sur le catalogue étendu.
 - Les points de correction sont entourés d'un halo vert après une réponse correcte ou une révélation volontaire, jamais pendant la recherche. Les numéros du kifu restent visibles. Les zones mixtes ne sont jamais décrites comme un territoire acquis.
 - Reproduction : `pnpm data:build`, tests de génération et de séparation sous les huit symétries, preuves de légalité des choix et tests de correction sur Chromium.
+
+## Annales de lecture longue : 40 problèmes historiques
+
+- Objectif : remplacer une validation du premier atari suivie d'un film par une résolution interactive jusqu'à la capture, sans modifier les anciens exercices ni leurs résultats.
+- 40 nouveaux préfixes exacts issus de 40 parties de l'école, hors des parties réservées aux examens et sans collision canonique avec les 804 positions étudiées ou les 128 questions d'examen. 11 à 25 demi-coups ; six problèmes nécessitent au moins dix décisions d'attaque contre la défense la plus résistante.
+- Le moteur de règles prouve toutes les réponses légales dans l'horizon borné pour une attaque par atari direct. Il rejette une autre liberté initiale sans preuve ; il ne déduit aucune vie/mort générale d'une recherche infructueuse. Chaque préfixe est reproduit, les solutions et leur profondeur minimale sont vérifiées lors de la génération.
+- L'apprenti choisit n'importe quel problème dans les annales, joue chaque coup d'attaque, reçoit une défense légale et ne reçoit le crédit qu'après capture de la chaîne. La continuation est recalculée sur le plateau courant ; les variantes légales sont jouées et numérotées. Les anciens shichō courts conservent leur validation et leur replay.
+- Le chapitre de lecture longue est une première série spécialisée, pas encore une anthologie exhaustive de vie et mort. Les prochaines séries doivent distinguer formation des yeux, vie inconditionnelle, tuer, semeai, ko et seki, selon des preuves et des sources réutilisables.

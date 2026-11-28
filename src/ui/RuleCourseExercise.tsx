@@ -3,7 +3,7 @@ import { opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
 import { decodeMoves, type GameRecord, type Move } from '../domain/game.ts';
 import { schoolPosition } from '../domain/school.ts';
 import {
-  ADVANCED_TACTICS_MODULES,
+  TACTICS_MODULES,
   ADVANCED_TACTIC_CHOICES,
   advancedIsMove,
   advancedTacticQuestion,
@@ -11,6 +11,7 @@ import {
   judgeAdvancedTactic,
   snapbackProof,
   ladderProof,
+  ladderContinuation,
   type AdvancedTacticExercise,
 } from '../domain/advancedTactics.ts';
 import { ENDGAME_MODULES, judgeEndgame, type EndgameExercise } from '../domain/endgameCourse.ts';
@@ -38,9 +39,7 @@ export function RuleCourseExercise({
   const history = decodeMoves(game.moves);
   const historical = history[ex.before]!;
   const endgame = 'input' in ex;
-  const module = (endgame ? ENDGAME_MODULES : ADVANCED_TACTICS_MODULES).find(
-    (m) => m.id === ex.module,
-  )!;
+  const module = (endgame ? ENDGAME_MODULES : TACTICS_MODULES).find((m) => m.id === ex.module)!;
   const choices = endgame
     ? ex.choices
     : ex.module === 'two-eyes'
@@ -49,6 +48,7 @@ export function RuleCourseExercise({
   const moving = !endgame && advancedIsMove(ex.module);
   const snapback = !endgame && ex.module === 'snapback';
   const ladder = !endgame && ex.module === 'ladder';
+  const longLadder = !endgame && ex.module === 'long-ladder';
   const [attempted, setAttempted] = useState(false);
   const [result, setResult] = useState<SchoolGrade | null>(null);
   const [feedback, setFeedback] = useState('');
@@ -56,7 +56,7 @@ export function RuleCourseExercise({
   const [replayStep, setReplayStep] = useState<number | null>(null);
   const [coordinate, setCoordinate] = useState('');
   const [full, setFull] = useState(
-    endgame && ex.module !== 'yose-captures' && ex.module !== 'yose-boundary',
+    longLadder || (endgame && ex.module !== 'yose-captures' && ex.module !== 'yose-boundary'),
   );
   const [showAfter, setShowAfter] = useState(false);
   const [chosen, setChosen] = useState<number | boolean>();
@@ -93,6 +93,36 @@ export function RuleCourseExercise({
         return;
       }
       fail();
+      return;
+    }
+    if (longLadder && typeof value === 'number') {
+      const position = board.clone();
+      for (const move of line) position.play(move.color, move.point);
+      const proof = ladderContinuation(
+        position,
+        ex.color,
+        ex.anchors[0]!,
+        value,
+        ex.horizon! - line.length,
+      );
+      if (!proof) {
+        fail();
+        return;
+      }
+      const next = [...line, { color: ex.color, point: value }];
+      const attack = position.play(ex.color, value);
+      if (attack.captures.includes(ex.anchors[0]!)) {
+        setLine(next);
+        complete(next[0]!.point, attempted ? 'assisted' : 'exact');
+        return;
+      }
+      const reply = proof[1]!;
+      next.push({ color: opposite(ex.color), point: reply });
+      setLine(next);
+      setCoordinate('');
+      setFeedback(
+        `Atari correct. Défense adversaire en ${pointToHuman(reply)}. Poursuivez la capture.`,
+      );
       return;
     }
     if (ladder && typeof value === 'number') {
@@ -133,7 +163,7 @@ export function RuleCourseExercise({
         { color: opposite(ex.color), point: proof.reply },
         { color: ex.color, point: proof.finish },
       ]);
-    } else if (ladder && ex.line) {
+    } else if ((ladder || longLadder) && ex.line) {
       setLine(
         ex.line.map((point, index) => ({
           point,
@@ -159,17 +189,19 @@ export function RuleCourseExercise({
       history[ex.before + i]?.point === m.point && history[ex.before + i]?.color === m.color,
   );
   const sourceNumber = game.sources.find((s) => /^cwi:\d{3}$/.test(s))?.slice(4);
-  const explanation = endgame
-    ? ex.explanation
-    : advancedTacticSolution(
-        board,
-        {
-          ...ex,
-          candidate: moving ? (line[0]?.point ?? candidate) : ex.candidate,
-          ...(ladder && line.length ? { line: line.map((m) => m.point) } : {}),
-        },
-        historical.point,
-      );
+  const explanation = !result
+    ? ''
+    : endgame
+      ? ex.explanation
+      : advancedTacticSolution(
+          board,
+          {
+            ...ex,
+            candidate: moving ? (line[0]?.point ?? candidate) : ex.candidate,
+            ...((ladder || longLadder) && line.length ? { line: line.map((m) => m.point) } : {}),
+          },
+          historical.point,
+        );
   function submit(e: FormEvent) {
     e.preventDefault();
     const p = pointFromHuman(coordinate);
@@ -198,9 +230,11 @@ export function RuleCourseExercise({
         <h2 id="rule-course-title">
           {snapback && line.length === 2 && !result
             ? 'Reprenez les pierres adverses.'
-            : endgame
-              ? ex.question
-              : advancedTacticQuestion(board, ex)}
+            : longLadder && line.length > 0 && !result
+              ? 'Poursuivez la capture en escalier.'
+              : endgame
+                ? ex.question
+                : advancedTacticQuestion(board, ex)}
         </h2>
       </div>
       <div className="school-exercise__board">
@@ -227,6 +261,11 @@ export function RuleCourseExercise({
           done={!!result}
           full={full}
         />
+        {longLadder && !result && (
+          <p className="school-caption" aria-label="Lecture en cours">
+            {Math.ceil(line.length / 2)} coups joués par vous · horizon {ex.horizon} demi-coups
+          </p>
+        )}
         {result && line.length > 1 && (
           <div className="school-answer-grid" aria-label="Lire la preuve numérotée">
             <button
@@ -341,6 +380,12 @@ export function RuleCourseExercise({
                 <p>
                   Votre coup {pointToHuman(chosen)} est une hypothèse légale, distincte du coup du
                   kifu.
+                </p>
+              )}
+              {longLadder && result !== 'shown' && (
+                <p>
+                  Vous avez joué chacun des coups d’attaque jusqu’à la capture effective de la
+                  chaîne.
                 </p>
               )}
               {ladder && (

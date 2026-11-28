@@ -1,6 +1,6 @@
 # Parcours individualisé du dojo
 
-Ce document décrit le premier incrément. Le cursus actuel, élargi à 804 exercices et études, est décrit dans [ECOLE.md](ECOLE.md).
+Ce document décrit le premier incrément. Le cursus actuel, élargi à 844 exercices et études, est décrit dans [ECOLE.md](ECOLE.md).
 
 Le but est qu’un joueur apprenne effectivement le go, sache où progresser et retrouve son travail, indépendamment du nombre de parties visionnées.
 

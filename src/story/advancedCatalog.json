@@ -1342,5 +1342,459 @@
     "anchors": [309],
     "candidate": 328,
     "line": [328, 308, 327, 289, 270]
+  },
+  {
+    "id": "long-ladder:s240:20",
+    "module": "long-ladder",
+    "gameId": "s240",
+    "before": 20,
+    "color": "B",
+    "anchors": [62],
+    "candidate": 63,
+    "line": [63, 43, 24, 44, 45, 25, 26, 6, 5, 7, 8],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s310:20",
+    "module": "long-ladder",
+    "gameId": "s310",
+    "before": 20,
+    "color": "B",
+    "anchors": [298],
+    "candidate": 297,
+    "line": [297, 317, 336, 316, 315, 335, 334, 354, 353, 355, 356],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s447:24",
+    "module": "long-ladder",
+    "gameId": "s447",
+    "before": 24,
+    "color": "W",
+    "anchors": [98],
+    "candidate": 117,
+    "line": [117, 97, 96, 116, 135, 115, 114, 134, 153, 133, 152],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s120:30",
+    "module": "long-ladder",
+    "gameId": "s120",
+    "before": 30,
+    "color": "B",
+    "anchors": [205],
+    "candidate": 224,
+    "line": [224, 206, 207, 225, 244, 226, 227, 245, 264, 246, 265],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s108:36",
+    "module": "long-ladder",
+    "gameId": "s108",
+    "before": 36,
+    "color": "B",
+    "anchors": [167],
+    "candidate": 148,
+    "line": [148, 168, 169, 149, 130, 150, 151, 131, 112, 132, 113],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s257:38",
+    "module": "long-ladder",
+    "gameId": "s257",
+    "before": 38,
+    "color": "B",
+    "anchors": [44],
+    "candidate": 63,
+    "line": [63, 45, 64, 46, 47, 27, 28, 8, 7, 9, 10],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s021:45",
+    "module": "long-ladder",
+    "gameId": "s021",
+    "before": 45,
+    "color": "W",
+    "anchors": [64],
+    "candidate": 65,
+    "line": [65, 63, 62, 82, 101, 81, 100, 80, 99, 61, 42],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s042:55",
+    "module": "long-ladder",
+    "gameId": "s042",
+    "before": 55,
+    "color": "W",
+    "anchors": [70],
+    "candidate": 89,
+    "line": [89, 51, 32, 50, 49, 31, 30, 12, 11, 13, 14],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s087:61",
+    "module": "long-ladder",
+    "gameId": "s087",
+    "before": 61,
+    "color": "W",
+    "anchors": [157],
+    "candidate": 158,
+    "line": [158, 138, 139, 119, 120, 118, 117, 99, 98, 80, 81],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s293:72",
+    "module": "long-ladder",
+    "gameId": "s293",
+    "before": 72,
+    "color": "B",
+    "anchors": [67],
+    "candidate": 66,
+    "line": [66, 68, 69, 87, 106, 88, 89, 107, 126, 108, 127],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s141:74",
+    "module": "long-ladder",
+    "gameId": "s141",
+    "before": 74,
+    "color": "B",
+    "anchors": [290],
+    "candidate": 291,
+    "line": [291, 309, 328, 310, 311, 329, 330, 348, 347, 349, 350],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s214:83",
+    "module": "long-ladder",
+    "gameId": "s214",
+    "before": 83,
+    "color": "W",
+    "anchors": [205],
+    "candidate": 186,
+    "line": [186, 206, 207, 187, 168, 188, 189, 169, 150, 170, 151],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s139:84",
+    "module": "long-ladder",
+    "gameId": "s139",
+    "before": 84,
+    "color": "B",
+    "anchors": [223],
+    "candidate": 224,
+    "line": [224, 242, 261, 241, 260, 240, 239, 259, 278, 258, 277],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s210:86",
+    "module": "long-ladder",
+    "gameId": "s210",
+    "before": 86,
+    "color": "W",
+    "anchors": [234],
+    "candidate": 215,
+    "line": [215, 233, 214, 232, 231, 213, 194, 212, 211, 193, 174],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s207:87",
+    "module": "long-ladder",
+    "gameId": "s207",
+    "before": 87,
+    "color": "W",
+    "anchors": [69],
+    "candidate": 68,
+    "line": [68, 50, 31, 49, 48, 30, 29, 11, 10, 12, 13],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s195:89",
+    "module": "long-ladder",
+    "gameId": "s195",
+    "before": 89,
+    "color": "W",
+    "anchors": [184],
+    "candidate": 183,
+    "line": [183, 203, 222, 202, 201, 221, 220, 240, 239, 241, 242],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s305:92",
+    "module": "long-ladder",
+    "gameId": "s305",
+    "before": 92,
+    "color": "B",
+    "anchors": [212],
+    "candidate": 213,
+    "line": [213, 211, 210, 192, 173, 191, 190, 172, 153, 171, 152],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s041:104",
+    "module": "long-ladder",
+    "gameId": "s041",
+    "before": 104,
+    "color": "B",
+    "anchors": [65],
+    "candidate": 64,
+    "line": [64, 84, 103, 83, 82, 102, 121, 101, 100, 120, 139],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s204:111",
+    "module": "long-ladder",
+    "gameId": "s204",
+    "before": 111,
+    "color": "B",
+    "anchors": [299],
+    "candidate": 280,
+    "line": [280, 318, 337, 317, 316, 336, 335, 355, 354, 356, 357],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s001:119",
+    "module": "long-ladder",
+    "gameId": "s001",
+    "before": 119,
+    "color": "W",
+    "anchors": [279],
+    "candidate": 278,
+    "line": [278, 280, 281, 261, 242, 262, 243, 263, 264, 282, 283],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s243:142",
+    "module": "long-ladder",
+    "gameId": "s243",
+    "before": 142,
+    "color": "B",
+    "anchors": [143],
+    "candidate": 124,
+    "line": [124, 142, 123, 161, 180, 160, 159, 179, 178, 198, 197],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s381:142",
+    "module": "long-ladder",
+    "gameId": "s381",
+    "before": 142,
+    "color": "B",
+    "anchors": [271],
+    "candidate": 272,
+    "line": [272, 270, 289, 251, 232, 250, 249, 231, 230, 212, 213],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s389:150",
+    "module": "long-ladder",
+    "gameId": "s389",
+    "before": 150,
+    "color": "W",
+    "anchors": [300],
+    "candidate": 281,
+    "line": [281, 319, 338, 320, 321, 339, 340, 358, 357, 359, 360],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s358:153",
+    "module": "long-ladder",
+    "gameId": "s358",
+    "before": 153,
+    "color": "W",
+    "anchors": [8],
+    "candidate": 27,
+    "line": [27, 9, 28, 10, 29, 11, 12, 30, 49, 31, 32],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s168:154",
+    "module": "long-ladder",
+    "gameId": "s168",
+    "before": 154,
+    "color": "B",
+    "anchors": [177],
+    "candidate": 179,
+    "line": [179, 158, 139, 157, 156, 138, 119, 137, 136, 118, 117],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s019:156",
+    "module": "long-ladder",
+    "gameId": "s019",
+    "before": 156,
+    "color": "W",
+    "anchors": [117],
+    "candidate": 98,
+    "line": [98, 116, 115, 97, 78, 96, 95, 77, 58, 76, 57],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s092:156",
+    "module": "long-ladder",
+    "gameId": "s092",
+    "before": 156,
+    "color": "B",
+    "anchors": [176],
+    "candidate": 175,
+    "line": [175, 195, 214, 194, 193, 213, 232, 212, 211, 231, 230],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s142:161",
+    "module": "long-ladder",
+    "gameId": "s142",
+    "before": 161,
+    "color": "W",
+    "anchors": [232],
+    "candidate": 231,
+    "line": [231, 213, 214, 212, 211, 193, 192, 174, 175, 173, 172],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s123:163",
+    "module": "long-ladder",
+    "gameId": "s123",
+    "before": 163,
+    "color": "W",
+    "anchors": [194],
+    "candidate": 175,
+    "line": [175, 193, 174, 192, 154, 172, 171, 153, 134, 152, 133],
+    "horizon": 11
+  },
+  {
+    "id": "long-ladder:s325:38",
+    "module": "long-ladder",
+    "gameId": "s325",
+    "before": 38,
+    "color": "B",
+    "anchors": [167],
+    "candidate": 148,
+    "line": [148, 186, 205, 187, 188, 206, 225, 207, 208, 226, 245, 227, 246],
+    "horizon": 13
+  },
+  {
+    "id": "long-ladder:s327:30",
+    "module": "long-ladder",
+    "gameId": "s327",
+    "before": 30,
+    "color": "B",
+    "anchors": [253],
+    "candidate": 254,
+    "line": [254, 272, 273, 291, 292, 310, 329, 311, 312, 330, 331, 349, 348, 350, 351],
+    "horizon": 15
+  },
+  {
+    "id": "long-ladder:s164:44",
+    "module": "long-ladder",
+    "gameId": "s164",
+    "before": 44,
+    "color": "B",
+    "anchors": [137],
+    "candidate": 156,
+    "line": [156, 136, 135, 155, 174, 154, 153, 173, 192, 172, 171, 191, 210, 190, 209],
+    "horizon": 15
+  },
+  {
+    "id": "long-ladder:s238:33",
+    "module": "long-ladder",
+    "gameId": "s238",
+    "before": 33,
+    "color": "W",
+    "anchors": [102],
+    "candidate": 103,
+    "line": [103, 83, 84, 64, 45, 65, 66, 46, 27, 47, 48, 28, 29, 9, 8, 10, 11],
+    "horizon": 17
+  },
+  {
+    "id": "long-ladder:s336:40",
+    "module": "long-ladder",
+    "gameId": "s336",
+    "before": 40,
+    "color": "B",
+    "anchors": [88],
+    "candidate": 107,
+    "line": [107, 89, 90, 108, 127, 109, 110, 128, 147, 129, 130, 148, 167, 149, 150, 168, 169],
+    "horizon": 17
+  },
+  {
+    "id": "long-ladder:s066:27",
+    "module": "long-ladder",
+    "gameId": "s066",
+    "before": 27,
+    "color": "W",
+    "anchors": [101],
+    "candidate": 102,
+    "line": [102, 82, 63, 83, 84, 64, 45, 65, 66, 46, 27, 47, 48, 28, 29, 9, 8, 10, 11],
+    "horizon": 19
+  },
+  {
+    "id": "long-ladder:s449:50",
+    "module": "long-ladder",
+    "gameId": "s449",
+    "before": 50,
+    "color": "B",
+    "anchors": [122],
+    "candidate": 141,
+    "line": [
+      141, 121, 120, 140, 159, 139, 138, 158, 177, 157, 156, 176, 195, 175, 174, 194, 213, 193, 212
+    ],
+    "horizon": 19
+  },
+  {
+    "id": "long-ladder:s198:42",
+    "module": "long-ladder",
+    "gameId": "s198",
+    "before": 42,
+    "color": "B",
+    "anchors": [252],
+    "candidate": 271,
+    "line": [
+      271, 253, 254, 272, 291, 273, 274, 292, 311, 293, 294, 312, 331, 313, 314, 332, 333, 351, 350,
+      352, 353
+    ],
+    "horizon": 21
+  },
+  {
+    "id": "long-ladder:s005:83",
+    "module": "long-ladder",
+    "gameId": "s005",
+    "before": 83,
+    "color": "B",
+    "anchors": [198],
+    "candidate": 217,
+    "line": [
+      217, 199, 218, 180, 161, 181, 182, 162, 143, 163, 164, 144, 125, 145, 146, 126, 107, 127, 128,
+      108, 89, 109, 90
+    ],
+    "horizon": 23
+  },
+  {
+    "id": "long-ladder:s322:140",
+    "module": "long-ladder",
+    "gameId": "s322",
+    "before": 140,
+    "color": "B",
+    "anchors": [280],
+    "candidate": 279,
+    "line": [
+      279, 261, 242, 260, 259, 241, 222, 240, 239, 221, 202, 220, 219, 201, 182, 200, 199, 181, 180,
+      162, 161, 163, 164
+    ],
+    "horizon": 23
+  },
+  {
+    "id": "long-ladder:s237:91",
+    "module": "long-ladder",
+    "gameId": "s237",
+    "before": 91,
+    "color": "W",
+    "anchors": [199],
+    "candidate": 200,
+    "line": [
+      200, 180, 161, 179, 178, 160, 141, 159, 158, 140, 121, 139, 138, 120, 101, 119, 118, 100, 81,
+      99, 98, 80, 61, 79, 60
+    ],
+    "horizon": 25
   }
 ]
