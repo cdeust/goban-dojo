@@ -7,7 +7,8 @@ const strategyCatalog = JSON.parse(
   readFileSync('src/story/strategyCatalog.json', 'utf8'),
 ) as StrategyLesson[];
 
-const opening = strategyCatalog.find((lesson) => lesson.module === 'opening-lines')!;
+const openings = strategyCatalog.filter((lesson) => lesson.module === 'opening-lines');
+const opening = openings[0]!;
 const title = 'Premiers coups : coins, côtés et centre';
 
 test('l’ouverture se travaille dès le niveau 2 et la suite historique se rejoue sans moteur', async ({
@@ -48,7 +49,7 @@ test('l’ouverture se travaille dès le niveau 2 et la suite historique se rejo
   const moduleCard = page
     .locator('article')
     .filter({ has: page.getByRole('heading', { name: title }) });
-  await expect(moduleCard).toContainText('1 / 12 travaillés · 0 au premier essai');
+  await expect(moduleCard).toContainText(`1 / ${openings.length} travaillés · 0 au premier essai`);
 });
 
 test('les nouvelles décisions de fuseki font une comparaison réelle KataGo et permettent de revoir le choix historique', async ({
