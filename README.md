@@ -15,7 +15,7 @@ Goban Dojo applique l’ingénierie de la preuve à un jeu de stratégie. Le Sen
 
 ![Boucle d’apprentissage : kifu authentique, décision de l’apprenti, variantes du Sensei, vérification des règles et estimation KataGo séparées, carnet adapté et épreuves réservées.](docs/diagrams/dojo-learning-loop.svg)
 
-- **748 exercices et études**, 37 chapitres sur 9 niveaux, issus de 172 parties historiques. Les modules d’ouverture construisent progressivement les coins, approches, bases, formes et sorties vers le milieu de partie. [Cursus et preuves](docs/ECOLE.md) · [Approche pédagogique](docs/PEDAGOGIE-DOJO.md).
+- **804 exercices et études**, 37 chapitres sur 9 niveaux, issus de 172 parties historiques. Les modules d’ouverture construisent progressivement les coins, approches, bases, formes et sorties vers le milieu de partie. [Cursus et preuves](docs/ECOLE.md) · [Approche pédagogique](docs/PEDAGOGIE-DOJO.md).
 - **128 positions d’évaluation réservées**, réparties en 16 épreuves sans aide. Les objectifs kyū/dan sont des jalons pédagogiques, pas des grades officiels. [Protocole d’évaluation](docs/EVALUATION-KYU-DAN.md) · [Sources et méthode d’étalonnage](docs/ETALONNAGE.md).
 - **Sensei d’ouverture** : deux suites de cinq demi-coups, vérifiées légalement, avec réponses réelles de Leela Zero à budget identique et mesures de structure, puis une estimation indépendante de KataGo. [Vérifications et benchmark](docs/BENCHMARK-SENSEI.md).
 - **Progression individuelle** : carnet et école synchronisés par compte Supabase ; mode visiteur sans conservation après rechargement. Aucune clé API du projet n’est envoyé au navigateur. [Architecture des comptes](docs/ACCOUNTS.md).

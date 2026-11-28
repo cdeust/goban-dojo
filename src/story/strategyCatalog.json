@@ -2340,6 +2340,36 @@
     }
   },
   {
+    "id": "opening-lines:s142:2",
+    "module": "opening-lines",
+    "gameId": "s142",
+    "before": 2,
+    "color": "B",
+    "anchors": [],
+    "historical": 319,
+    "alternatives": [52, 281],
+    "prompt": "Quel premier point choisir pour développer un coin libre ? Comparez son emplacement avec celui des autres hypothèses.",
+    "observation": "Le coup Q3 occupe un coin qui ne contenait aucune pierre (secteur 6 × 6). Il se trouve à 3 et 4 lignes des deux bords ; ce sont deux appuis géométriques, pas un territoire déjà conquis.",
+    "rubric": "Identifier les coins libres et compter les lignes depuis le bord. Expliquer les possibilités de développement le long des deux côtés.",
+    "evidence": {
+      "sources": [
+        "cwi:142",
+        "pgd:All/1846-12-27_None_Yasuda Shusaku_5p_Ota Yuzo_6p_Jigo {W connects the ko}.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 52, "before": 4 },
+        { "point": 281, "before": 6 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 268 },
+        { "color": "B", "point": 52 },
+        { "color": "W", "point": 307 },
+        { "color": "B", "point": 281 }
+      ]
+    }
+  },
+  {
     "id": "opening-lines:s237:2",
     "module": "opening-lines",
     "gameId": "s237",
@@ -2424,6 +2454,33 @@
     }
   },
   {
+    "id": "opening-lines:s198:3",
+    "module": "opening-lines",
+    "gameId": "s198",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 41,
+    "alternatives": [52, 299],
+    "prompt": "Quel premier point choisir pour développer un coin libre ? Comparez son emplacement avec celui des autres hypothèses.",
+    "observation": "Le coup D17 occupe un coin qui ne contenait aucune pierre (secteur 6 × 6). Il se trouve à 3 et 4 lignes des deux bords ; ce sont deux appuis géométriques, pas un territoire déjà conquis.",
+    "rubric": "Identifier les coins libres et compter les lignes depuis le bord. Expliquer les possibilités de développement le long des deux côtés.",
+    "evidence": {
+      "sources": ["cwi:198"],
+      "alternativeSources": [
+        { "point": 52, "before": 5 },
+        { "point": 299, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 319 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 299 }
+      ]
+    }
+  },
+  {
     "id": "opening-lines:s043:2",
     "module": "opening-lines",
     "gameId": "s043",
@@ -2504,6 +2561,36 @@
         { "color": "W", "point": 52 },
         { "color": "B", "point": 287 },
         { "color": "W", "point": 282 }
+      ]
+    }
+  },
+  {
+    "id": "opening-lines:s466:3",
+    "module": "opening-lines",
+    "gameId": "s466",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 287,
+    "alternatives": [52, 54],
+    "prompt": "Quel premier point choisir pour développer un coin libre ? Comparez son emplacement avec celui des autres hypothèses.",
+    "observation": "Le coup C4 occupe un coin qui ne contenait aucune pierre (secteur 6 × 6). Il se trouve à 3 et 4 lignes des deux bords ; ce sont deux appuis géométriques, pas un territoire déjà conquis.",
+    "rubric": "Identifier les coins libres et compter les lignes depuis le bord. Expliquer les possibilités de développement le long des deux côtés.",
+    "evidence": {
+      "sources": [
+        "cwi:466",
+        "pgd:All/1861-11-30_10-game match_Murase Shuho_5p_Honinbo Shusaku_7p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 52, "before": 5 },
+        { "point": 54, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 287 },
+        { "color": "B", "point": 301 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 48 },
+        { "color": "W", "point": 54 }
       ]
     }
   },
@@ -2595,6 +2682,36 @@
     }
   },
   {
+    "id": "opening-lines:s467:3",
+    "module": "opening-lines",
+    "gameId": "s467",
+    "before": 3,
+    "color": "W",
+    "anchors": [],
+    "historical": 301,
+    "alternatives": [287, 299],
+    "prompt": "Quel premier point choisir pour développer un coin libre ? Comparez son emplacement avec celui des autres hypothèses.",
+    "observation": "Le coup R4 occupe un coin qui ne contenait aucune pierre (secteur 6 × 6). Il se trouve à 3 et 4 lignes des deux bords ; ce sont deux appuis géométriques, pas un territoire déjà conquis.",
+    "rubric": "Identifier les coins libres et compter les lignes depuis le bord. Expliquer les possibilités de développement le long des deux côtés.",
+    "evidence": {
+      "sources": [
+        "cwi:467",
+        "pgd:All/1861-12-08_10-game match_Murase Shuho_5p_Honinbo Shusaku_7p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 287, "before": 5 },
+        { "point": 299, "before": 7 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 301 },
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 287 },
+        { "color": "B", "point": 312 },
+        { "color": "W", "point": 299 }
+      ]
+    }
+  },
+  {
     "id": "opening-lines:s442:2",
     "module": "opening-lines",
     "gameId": "s442",
@@ -2675,6 +2792,33 @@
         { "color": "B", "point": 312 },
         { "color": "W", "point": 314 },
         { "color": "B", "point": 274 }
+      ]
+    }
+  },
+  {
+    "id": "corner-enclosure:s017:4",
+    "module": "corner-enclosure",
+    "gameId": "s017",
+    "before": 4,
+    "color": "B",
+    "anchors": [287],
+    "historical": 308,
+    "alternatives": [301, 321],
+    "prompt": "Comment associer les deux pierres pour esquisser un cadre de coin ? Cherchez aussi les faiblesses que pourrait exploiter une invasion.",
+    "observation": "Avant E3, seule la pierre amie C4 occupe ce secteur de coin. Les deux pierres forment un saut de cavalier ; elles ne sont pas solidement connectées et le cadre reste ouvert.",
+    "rubric": "Repérer le saut de cavalier et les espaces non fermés. Comparer une esquisse de coin aux autres développements possibles.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 301, "before": 6 },
+        { "point": 321, "before": 8 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 308 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 301 },
+        { "color": "W", "point": 320 },
+        { "color": "B", "point": 321 }
       ]
     }
   },
@@ -2760,6 +2904,33 @@
     }
   },
   {
+    "id": "corner-enclosure:s065:4",
+    "module": "corner-enclosure",
+    "gameId": "s065",
+    "before": 4,
+    "color": "B",
+    "anchors": [308],
+    "historical": 287,
+    "alternatives": [59, 46],
+    "prompt": "Comment associer les deux pierres pour esquisser un cadre de coin ? Cherchez aussi les faiblesses que pourrait exploiter une invasion.",
+    "observation": "Avant C4, seule la pierre amie E3 occupe ce secteur de coin. Les deux pierres forment un saut de cavalier ; elles ne sont pas solidement connectées et le cadre reste ouvert.",
+    "rubric": "Repérer le saut de cavalier et les espaces non fermés. Comparer une esquisse de coin aux autres développements possibles.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 59, "before": 6 },
+        { "point": 46, "before": 8 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 287 },
+        { "color": "W", "point": 52 },
+        { "color": "B", "point": 59 },
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 46 }
+      ]
+    }
+  },
+  {
     "id": "corner-enclosure:s042:16",
     "module": "corner-enclosure",
     "gameId": "s042",
@@ -2840,6 +3011,33 @@
         { "color": "B", "point": 306 },
         { "color": "W", "point": 305 },
         { "color": "B", "point": 307 }
+      ]
+    }
+  },
+  {
+    "id": "corner-enclosure:s107:9",
+    "module": "corner-enclosure",
+    "gameId": "s107",
+    "before": 9,
+    "color": "W",
+    "anchors": [41],
+    "historical": 78,
+    "alternatives": [50, 192],
+    "prompt": "Comment associer les deux pierres pour esquisser un cadre de coin ? Cherchez aussi les faiblesses que pourrait exploiter une invasion.",
+    "observation": "Avant C15, seule la pierre amie D17 occupe ce secteur de coin. Les deux pierres forment un saut de cavalier ; elles ne sont pas solidement connectées et le cadre reste ouvert.",
+    "rubric": "Repérer le saut de cavalier et les espaces non fermés. Comparer une esquisse de coin aux autres développements possibles.",
+    "evidence": {
+      "sources": ["cwi:107", "pgd:All/1844-11-27_None_Yasuda Shusaku_4p_Ito Matsujiro_6p_W+R.sgf"],
+      "alternativeSources": [
+        { "point": 50, "before": 11 },
+        { "point": 192, "before": 13 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 78 },
+        { "color": "B", "point": 70 },
+        { "color": "W", "point": 50 },
+        { "color": "B", "point": 316 },
+        { "color": "W", "point": 192 }
       ]
     }
   },
@@ -2931,6 +3129,36 @@
     }
   },
   {
+    "id": "corner-enclosure:s123:12",
+    "module": "corner-enclosure",
+    "gameId": "s123",
+    "before": 12,
+    "color": "B",
+    "anchors": [92],
+    "historical": 53,
+    "alternatives": [250, 251],
+    "prompt": "Comment associer les deux pierres pour esquisser un cadre de coin ? Cherchez aussi les faiblesses que pourrait exploiter une invasion.",
+    "observation": "Avant Q17, seule la pierre amie R15 occupe ce secteur de coin. Les deux pierres forment un saut de cavalier ; elles ne sont pas solidement connectées et le cadre reste ouvert.",
+    "rubric": "Repérer le saut de cavalier et les espaces non fermés. Comparer une esquisse de coin aux autres développements possibles.",
+    "evidence": {
+      "sources": [
+        "cwi:123",
+        "pgd:All/1846-06-02_None_Nakagawa Junsetsu_5p_Yasuda Shusaku_4p_W+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 250, "before": 14 },
+        { "point": 251, "before": 16 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 53 },
+        { "color": "W", "point": 249 },
+        { "color": "B", "point": 250 },
+        { "color": "W", "point": 231 },
+        { "color": "B", "point": 251 }
+      ]
+    }
+  },
+  {
     "id": "corner-enclosure:s121:27",
     "module": "corner-enclosure",
     "gameId": "s121",
@@ -3011,6 +3239,33 @@
         { "color": "B", "point": 295 },
         { "color": "W", "point": 258 },
         { "color": "B", "point": 296 }
+      ]
+    }
+  },
+  {
+    "id": "side-base:s017:11",
+    "module": "side-base",
+    "gameId": "s017",
+    "before": 11,
+    "color": "W",
+    "anchors": [319],
+    "historical": 314,
+    "alternatives": [154, 59],
+    "prompt": "Où étendre cette pierre pour garder de la place sur le côté ? Cherchez les espaces où l’adversaire pourrait s’interposer.",
+    "observation": "Avec L3, le kifu laisse 4 intersections vides entre ce point et Q3, sur la même ligne 3. Ce vide offre de l’espace mais demeure contestable ; il ne prouve pas une base vivante.",
+    "rubric": "Compter la largeur de l’extension, rechercher les coupures et comparer le volume d’espace avec le risque de séparation.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 154, "before": 13 },
+        { "point": 59, "before": 15 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 314 },
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 45 },
+        { "color": "W", "point": 59 }
       ]
     }
   },
@@ -3096,6 +3351,33 @@
     }
   },
   {
+    "id": "side-base:s033:9",
+    "module": "side-base",
+    "gameId": "s033",
+    "before": 9,
+    "color": "B",
+    "anchors": [318],
+    "historical": 315,
+    "alternatives": [130, 206],
+    "prompt": "Où étendre cette pierre pour garder de la place sur le côté ? Cherchez les espaces où l’adversaire pourrait s’interposer.",
+    "observation": "Avec M3, le kifu laisse 2 intersections vides entre ce point et P3, sur la même ligne 3. Ce vide offre de l’espace mais demeure contestable ; il ne prouve pas une base vivante.",
+    "rubric": "Compter la largeur de l’extension, rechercher les coupures et comparer le volume d’espace avec le risque de séparation.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 130, "before": 11 },
+        { "point": 206, "before": 13 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 315 },
+        { "color": "W", "point": 168 },
+        { "color": "B", "point": 130 },
+        { "color": "W", "point": 279 },
+        { "color": "B", "point": 206 }
+      ]
+    }
+  },
+  {
     "id": "side-base:s158:38",
     "module": "side-base",
     "gameId": "s158",
@@ -3173,6 +3455,33 @@
         { "color": "W", "point": 288 },
         { "color": "B", "point": 206 },
         { "color": "W", "point": 316 }
+      ]
+    }
+  },
+  {
+    "id": "side-base:s047:8",
+    "module": "side-base",
+    "gameId": "s047",
+    "before": 8,
+    "color": "W",
+    "anchors": [317],
+    "historical": 313,
+    "alternatives": [41, 22],
+    "prompt": "Où étendre cette pierre pour garder de la place sur le côté ? Cherchez les espaces où l’adversaire pourrait s’interposer.",
+    "observation": "Avec K3, le kifu laisse 3 intersections vides entre ce point et O3, sur la même ligne 3. Ce vide offre de l’espace mais demeure contestable ; il ne prouve pas une base vivante.",
+    "rubric": "Compter la largeur de l’extension, rechercher les coupures et comparer le volume d’espace avec le risque de séparation.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 41, "before": 10 },
+        { "point": 22, "before": 12 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 313 },
+        { "color": "B", "point": 61 },
+        { "color": "W", "point": 41 },
+        { "color": "B", "point": 42 },
+        { "color": "W", "point": 22 }
       ]
     }
   },
@@ -3258,6 +3567,36 @@
     }
   },
   {
+    "id": "side-base:s077:24",
+    "module": "side-base",
+    "gameId": "s077",
+    "before": 24,
+    "color": "B",
+    "anchors": [91],
+    "historical": 186,
+    "alternatives": [277, 243],
+    "prompt": "Où étendre cette pierre pour garder de la place sur le côté ? Cherchez les espaces où l’adversaire pourrait s’interposer.",
+    "observation": "Avec Q10, le kifu laisse 4 intersections vides entre ce point et Q15, sur la même ligne 4. Ce vide offre de l’espace mais demeure contestable ; il ne prouve pas une base vivante.",
+    "rubric": "Compter la largeur de l’extension, rechercher les coupures et comparer le volume d’espace avec le risque de séparation.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 277, "before": 26 },
+        { "point": 243, "before": 28 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 186 },
+        { "color": "W", "point": 312 },
+        { "color": "B", "point": 277 },
+        { "color": "W", "point": 242 },
+        { "color": "B", "point": 243 }
+      ]
+    }
+  },
+  {
     "id": "side-base:s436:19",
     "module": "side-base",
     "gameId": "s436",
@@ -3335,6 +3674,33 @@
         { "color": "W", "point": 89 },
         { "color": "B", "point": 148 },
         { "color": "W", "point": 79 }
+      ]
+    }
+  },
+  {
+    "id": "opening-approach:s017:12",
+    "module": "opening-approach",
+    "gameId": "s017",
+    "before": 12,
+    "color": "B",
+    "anchors": [41],
+    "historical": 78,
+    "alternatives": [45, 79],
+    "prompt": "Comment approcher la pierre adverse de ce coin ? Anticipez une réponse et la direction dans laquelle vous pourriez vous développer.",
+    "observation": "Le coup C15 est en saut de cavalier par rapport à D17, et aucune pierre amie ne se trouvait dans ce secteur avant le coup. L’approche conteste l’espace sans démontrer une menace forcée.",
+    "rubric": "Rechercher des soutiens voisins, imaginer une réponse adverse et trouver une voie de sortie. Examiner ensuite les coups réellement joués.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 45, "before": 14 },
+        { "point": 79, "before": 16 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 78 },
+        { "color": "W", "point": 154 },
+        { "color": "B", "point": 45 },
+        { "color": "W", "point": 59 },
+        { "color": "B", "point": 79 }
       ]
     }
   },
@@ -3420,6 +3786,33 @@
     }
   },
   {
+    "id": "opening-approach:s065:6",
+    "module": "opening-approach",
+    "gameId": "s065",
+    "before": 6,
+    "color": "B",
+    "anchors": [42],
+    "historical": 59,
+    "alternatives": [46, 61],
+    "prompt": "Comment approcher la pierre adverse de ce coin ? Anticipez une réponse et la direction dans laquelle vous pourriez vous développer.",
+    "observation": "Le coup C16 est en saut de cavalier par rapport à E17, et aucune pierre amie ne se trouvait dans ce secteur avant le coup. L’approche conteste l’espace sans démontrer une menace forcée.",
+    "rubric": "Rechercher des soutiens voisins, imaginer une réponse adverse et trouver une voie de sortie. Examiner ensuite les coups réellement joués.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 46, "before": 8 },
+        { "point": 61, "before": 10 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 59 },
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 46 },
+        { "color": "W", "point": 98 },
+        { "color": "B", "point": 61 }
+      ]
+    }
+  },
+  {
     "id": "opening-approach:s237:5",
     "module": "opening-approach",
     "gameId": "s237",
@@ -3497,6 +3890,36 @@
         { "color": "B", "point": 78 },
         { "color": "W", "point": 58 },
         { "color": "B", "point": 154 }
+      ]
+    }
+  },
+  {
+    "id": "opening-approach:s077:5",
+    "module": "opening-approach",
+    "gameId": "s077",
+    "before": 5,
+    "color": "W",
+    "anchors": [319],
+    "historical": 282,
+    "alternatives": [298, 300],
+    "prompt": "Comment approcher la pierre adverse de ce coin ? Anticipez une réponse et la direction dans laquelle vous pourriez vous développer.",
+    "observation": "Le coup R5 est en saut de cavalier par rapport à Q3, et aucune pierre amie ne se trouvait dans ce secteur avant le coup. L’approche conteste l’espace sans démontrer une menace forcée.",
+    "rubric": "Rechercher des soutiens voisins, imaginer une réponse adverse et trouver une voie de sortie. Examiner ensuite les coups réellement joués.",
+    "evidence": {
+      "sources": [
+        "cwi:077",
+        "pgd:All/1844-02-02_None_Yasuda Shusaku_4p_Kishimoto Saichiro_4p_B+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 298, "before": 7 },
+        { "point": 300, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 282 },
+        { "color": "B", "point": 91 },
+        { "color": "W", "point": 298 },
+        { "color": "B", "point": 281 },
+        { "color": "W", "point": 300 }
       ]
     }
   },
@@ -3585,6 +4008,36 @@
     }
   },
   {
+    "id": "opening-approach:s083:5",
+    "module": "opening-approach",
+    "gameId": "s083",
+    "before": 5,
+    "color": "W",
+    "anchors": [308],
+    "historical": 287,
+    "alternatives": [319, 338],
+    "prompt": "Comment approcher la pierre adverse de ce coin ? Anticipez une réponse et la direction dans laquelle vous pourriez vous développer.",
+    "observation": "Le coup C4 est en saut de cavalier par rapport à E3, et aucune pierre amie ne se trouvait dans ce secteur avant le coup. L’approche conteste l’espace sans démontrer une menace forcée.",
+    "rubric": "Rechercher des soutiens voisins, imaginer une réponse adverse et trouver une voie de sortie. Examiner ensuite les coups réellement joués.",
+    "evidence": {
+      "sources": [
+        "cwi:083",
+        "pgd:All/1844-03-23_None_Yasuda Shusaku_4p_Mizutani Junsaku_6p_B+16.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 319, "before": 7 },
+        { "point": 338, "before": 9 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 287 },
+        { "color": "B", "point": 299 },
+        { "color": "W", "point": 319 },
+        { "color": "B", "point": 318 },
+        { "color": "W", "point": 338 }
+      ]
+    }
+  },
+  {
     "id": "opening-approach:s081:5",
     "module": "opening-approach",
     "gameId": "s081",
@@ -3665,6 +4118,35 @@
       ],
       "resultingSize": 3,
       "resultingLiberties": 5
+    }
+  },
+  {
+    "id": "shape-connection:s017:25",
+    "module": "shape-connection",
+    "gameId": "s017",
+    "before": 25,
+    "color": "W",
+    "anchors": [154, 156],
+    "historical": 155,
+    "alternatives": [157, 212],
+    "prompt": "Quel coup réunit les chaînes repérées, et vaut-il mieux les relier maintenant que développer un autre secteur ?",
+    "observation": "Le coup D11 connecte 2 chaînes distinctes. La chaîne résultante compte 3 pierres et 6 libertés. Ni la vie ni l’efficacité stratégique ne sont déduites de cette seule connexion.",
+    "rubric": "Identifier les chaînes distinctes, le point liant et leurs libertés après la pose. Comparer le bénéfice de ce renforcement à une autre décision.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 157, "before": 27 },
+        { "point": 212, "before": 29 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 155 },
+        { "color": "B", "point": 138 },
+        { "color": "W", "point": 157 },
+        { "color": "B", "point": 139 },
+        { "color": "W", "point": 212 }
+      ],
+      "resultingSize": 3,
+      "resultingLiberties": 6
     }
   },
   {
@@ -3755,6 +4237,35 @@
     }
   },
   {
+    "id": "shape-connection:s033:23",
+    "module": "shape-connection",
+    "gameId": "s033",
+    "before": 23,
+    "color": "B",
+    "anchors": [206, 244],
+    "historical": 225,
+    "alternatives": [184, 110],
+    "prompt": "Quel coup réunit les chaînes repérées, et vaut-il mieux les relier maintenant que développer un autre secteur ?",
+    "observation": "Le coup R8 connecte 2 chaînes distinctes. La chaîne résultante compte 4 pierres et 7 libertés. Ni la vie ni l’efficacité stratégique ne sont déduites de cette seule connexion.",
+    "rubric": "Identifier les chaînes distinctes, le point liant et leurs libertés après la pose. Comparer le bénéfice de ce renforcement à une autre décision.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 184, "before": 25 },
+        { "point": 110, "before": 27 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 225 },
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 184 },
+        { "color": "W", "point": 111 },
+        { "color": "B", "point": 110 }
+      ],
+      "resultingSize": 4,
+      "resultingLiberties": 7
+    }
+  },
+  {
     "id": "shape-connection:s158:18",
     "module": "shape-connection",
     "gameId": "s158",
@@ -3839,6 +4350,35 @@
       ],
       "resultingSize": 4,
       "resultingLiberties": 5
+    }
+  },
+  {
+    "id": "shape-connection:s047:31",
+    "module": "shape-connection",
+    "gameId": "s047",
+    "before": 31,
+    "color": "B",
+    "anchors": [235, 273],
+    "historical": 254,
+    "alternatives": [291, 290],
+    "prompt": "Quel coup réunit les chaînes repérées, et vaut-il mieux les relier maintenant que développer un autre secteur ?",
+    "observation": "Le coup H6 connecte 2 chaînes distinctes. La chaîne résultante compte 3 pierres et 7 libertés. Ni la vie ni l’efficacité stratégique ne sont déduites de cette seule connexion.",
+    "rubric": "Identifier les chaînes distinctes, le point liant et leurs libertés après la pose. Comparer le bénéfice de ce renforcement à une autre décision.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 291, "before": 33 },
+        { "point": 290, "before": 35 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 254 },
+        { "color": "W", "point": 330 },
+        { "color": "B", "point": 291 },
+        { "color": "W", "point": 310 },
+        { "color": "B", "point": 290 }
+      ],
+      "resultingSize": 3,
+      "resultingLiberties": 7
     }
   },
   {
@@ -3929,6 +4469,35 @@
     }
   },
   {
+    "id": "shape-connection:s065:67",
+    "module": "shape-connection",
+    "gameId": "s065",
+    "before": 67,
+    "color": "W",
+    "anchors": [136, 118, 156],
+    "historical": 137,
+    "alternatives": [270, 139],
+    "prompt": "Quel coup réunit les chaînes repérées, et vaut-il mieux les relier maintenant que développer un autre secteur ?",
+    "observation": "Le coup E12 connecte 3 chaînes distinctes. La chaîne résultante compte 6 pierres et 5 libertés. Ni la vie ni l’efficacité stratégique ne sont déduites de cette seule connexion.",
+    "rubric": "Identifier les chaînes distinctes, le point liant et leurs libertés après la pose. Comparer le bénéfice de ce renforcement à une autre décision.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 270, "before": 69 },
+        { "point": 139, "before": 71 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 137 },
+        { "color": "B", "point": 217 },
+        { "color": "W", "point": 270 },
+        { "color": "B", "point": 288 },
+        { "color": "W", "point": 139 }
+      ],
+      "resultingSize": 6,
+      "resultingLiberties": 5
+    }
+  },
+  {
     "id": "shape-connection:s397:42",
     "module": "shape-connection",
     "gameId": "s397",
@@ -4014,6 +4583,33 @@
     }
   },
   {
+    "id": "central-exit:s017:23",
+    "module": "central-exit",
+    "gameId": "s017",
+    "before": 23,
+    "color": "W",
+    "anchors": [154],
+    "historical": 156,
+    "alternatives": [155, 157],
+    "prompt": "Comment développer la pierre repérée vers l’intérieur du goban sans négliger une coupure éventuelle ?",
+    "observation": "E11 est plus loin du bord de deux lignes que C11, exactement à un saut rectiligne d’une intersection ; le point intermédiaire D11 est vide. Les pierres ne sont pas directement reliées.",
+    "rubric": "Tracer le saut et repérer le point vulnérable. Chercher une autre pierre d’appui si l’adversaire coupe.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 155, "before": 25 },
+        { "point": 157, "before": 27 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 156 },
+        { "color": "B", "point": 136 },
+        { "color": "W", "point": 155 },
+        { "color": "B", "point": 138 },
+        { "color": "W", "point": 157 }
+      ]
+    }
+  },
+  {
     "id": "central-exit:s041:17",
     "module": "central-exit",
     "gameId": "s041",
@@ -4091,6 +4687,33 @@
         { "color": "W", "point": 301 },
         { "color": "B", "point": 320 },
         { "color": "W", "point": 281 }
+      ]
+    }
+  },
+  {
+    "id": "central-exit:s033:14",
+    "module": "central-exit",
+    "gameId": "s033",
+    "before": 14,
+    "color": "W",
+    "anchors": [168],
+    "historical": 166,
+    "alternatives": [128, 231],
+    "prompt": "Comment développer la pierre repérée vers l’intérieur du goban sans négliger une coupure éventuelle ?",
+    "observation": "P11 est plus loin du bord de deux lignes que R11, exactement à un saut rectiligne d’une intersection ; le point intermédiaire Q11 est vide. Les pierres ne sont pas directement reliées.",
+    "rubric": "Tracer le saut et repérer le point vulnérable. Chercher une autre pierre d’appui si l’adversaire coupe.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 128, "before": 16 },
+        { "point": 231, "before": 18 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 166 },
+        { "color": "B", "point": 222 },
+        { "color": "W", "point": 128 },
+        { "color": "B", "point": 277 },
+        { "color": "W", "point": 231 }
       ]
     }
   },
@@ -4176,6 +4799,33 @@
     }
   },
   {
+    "id": "central-exit:s047:24",
+    "module": "central-exit",
+    "gameId": "s047",
+    "before": 24,
+    "color": "W",
+    "anchors": [309],
+    "historical": 271,
+    "alternatives": [233, 261],
+    "prompt": "Comment développer la pierre repérée vers l’intérieur du goban sans négliger une coupure éventuelle ?",
+    "observation": "F5 est plus loin du bord de deux lignes que F3, exactement à un saut rectiligne d’une intersection ; le point intermédiaire F4 est vide. Les pierres ne sont pas directement reliées.",
+    "rubric": "Tracer le saut et repérer le point vulnérable. Chercher une autre pierre d’appui si l’adversaire coupe.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 233, "before": 26 },
+        { "point": 261, "before": 28 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 271 },
+        { "color": "B", "point": 273 },
+        { "color": "W", "point": 233 },
+        { "color": "B", "point": 275 },
+        { "color": "W", "point": 261 }
+      ]
+    }
+  },
+  {
     "id": "central-exit:s276:23",
     "module": "central-exit",
     "gameId": "s276",
@@ -4253,6 +4903,33 @@
         { "color": "B", "point": 251 },
         { "color": "W", "point": 230 },
         { "color": "B", "point": 294 }
+      ]
+    }
+  },
+  {
+    "id": "central-exit:s065:40",
+    "module": "central-exit",
+    "gameId": "s065",
+    "before": 40,
+    "color": "B",
+    "anchors": [105],
+    "historical": 143,
+    "alternatives": [135, 155],
+    "prompt": "Comment développer la pierre repérée vers l’intérieur du goban sans négliger une coupure éventuelle ?",
+    "observation": "L12 est plus loin du bord de deux lignes que L14, exactement à un saut rectiligne d’une intersection ; le point intermédiaire L13 est vide. Les pierres ne sont pas directement reliées.",
+    "rubric": "Tracer le saut et repérer le point vulnérable. Chercher une autre pierre d’appui si l’adversaire coupe.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 135, "before": 42 },
+        { "point": 155, "before": 44 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 143 },
+        { "color": "W", "point": 136 },
+        { "color": "B", "point": 135 },
+        { "color": "W", "point": 118 },
+        { "color": "B", "point": 155 }
       ]
     }
   },
@@ -4338,6 +5015,33 @@
     }
   },
   {
+    "id": "opening-transition:s047:66",
+    "module": "opening-transition",
+    "gameId": "s047",
+    "before": 66,
+    "color": "W",
+    "anchors": [79],
+    "historical": 211,
+    "alternatives": [194, 118],
+    "prompt": "Après ces trois échanges dans un coin, quelle nouvelle zone travailler ? Vérifiez ce qu’on laisse derrière soi avant de changer de secteur.",
+    "observation": "Les coups 64, 65 et 66 appartiennent au même secteur de coin. Le coup suivant, C8, se trouve à 8 intersections orthogonales du dernier coup et à quatre ou moins d’une pierre amie. Il change de secteur ; l’échange local n’est pas déclaré résolu.",
+    "rubric": "Observer les formes du coin, rechercher les menaces qui restent et les soutiens dans les autres secteurs. Rejouer la continuation plutôt que mémoriser un ordre universel.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 194, "before": 68 },
+        { "point": 118, "before": 70 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 211 },
+        { "color": "B", "point": 193 },
+        { "color": "W", "point": 194 },
+        { "color": "B", "point": 212 },
+        { "color": "W", "point": 118 }
+      ]
+    }
+  },
+  {
     "id": "opening-transition:s041:29",
     "module": "opening-transition",
     "gameId": "s041",
@@ -4415,6 +5119,33 @@
         { "color": "B", "point": 145 },
         { "color": "W", "point": 146 },
         { "color": "B", "point": 164 }
+      ]
+    }
+  },
+  {
+    "id": "opening-transition:s092:66",
+    "module": "opening-transition",
+    "gameId": "s092",
+    "before": 66,
+    "color": "B",
+    "anchors": [302],
+    "historical": 177,
+    "alternatives": [160, 179],
+    "prompt": "Après ces trois échanges dans un coin, quelle nouvelle zone travailler ? Vérifiez ce qu’on laisse derrière soi avant de changer de secteur.",
+    "observation": "Les coups 64, 65 et 66 appartiennent au même secteur de coin. Le coup suivant, G10, se trouve à 17 intersections orthogonales du dernier coup et à quatre ou moins d’une pierre amie. Il change de secteur ; l’échange local n’est pas déclaré résolu.",
+    "rubric": "Observer les formes du coin, rechercher les menaces qui restent et les soutiens dans les autres secteurs. Rejouer la continuation plutôt que mémoriser un ordre universel.",
+    "evidence": {
+      "sources": ["cwi:092"],
+      "alternativeSources": [
+        { "point": 160, "before": 68 },
+        { "point": 179, "before": 70 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 177 },
+        { "color": "W", "point": 162 },
+        { "color": "B", "point": 160 },
+        { "color": "W", "point": 161 },
+        { "color": "B", "point": 179 }
       ]
     }
   },
@@ -4503,6 +5234,33 @@
     }
   },
   {
+    "id": "opening-transition:s107:25",
+    "module": "opening-transition",
+    "gameId": "s107",
+    "before": 25,
+    "color": "W",
+    "anchors": [321],
+    "historical": 259,
+    "alternatives": [46, 307],
+    "prompt": "Après ces trois échanges dans un coin, quelle nouvelle zone travailler ? Vérifiez ce qu’on laisse derrière soi avant de changer de secteur.",
+    "observation": "Les coups 23, 24 et 25 appartiennent au même secteur de coin. Le coup suivant, N6, se trouve à 8 intersections orthogonales du dernier coup et à quatre ou moins d’une pierre amie. Il change de secteur ; l’échange local n’est pas déclaré résolu.",
+    "rubric": "Observer les formes du coin, rechercher les menaces qui restent et les soutiens dans les autres secteurs. Rejouer la continuation plutôt que mémoriser un ordre universel.",
+    "evidence": {
+      "sources": ["cwi:107", "pgd:All/1844-11-27_None_Yasuda Shusaku_4p_Ito Matsujiro_6p_W+R.sgf"],
+      "alternativeSources": [
+        { "point": 46, "before": 27 },
+        { "point": 307, "before": 29 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 259 },
+        { "color": "B", "point": 261 },
+        { "color": "W", "point": 46 },
+        { "color": "B", "point": 298 },
+        { "color": "W", "point": 307 }
+      ]
+    }
+  },
+  {
     "id": "opening-transition:s120:63",
     "module": "opening-transition",
     "gameId": "s120",
@@ -4583,6 +5341,36 @@
         { "color": "B", "point": 58 },
         { "color": "W", "point": 59 },
         { "color": "B", "point": 269 }
+      ]
+    }
+  },
+  {
+    "id": "opening-transition:s123:40",
+    "module": "opening-transition",
+    "gameId": "s123",
+    "before": 40,
+    "color": "B",
+    "anchors": [341],
+    "historical": 240,
+    "alternatives": [262, 224],
+    "prompt": "Après ces trois échanges dans un coin, quelle nouvelle zone travailler ? Vérifiez ce qu’on laisse derrière soi avant de changer de secteur.",
+    "observation": "Les coups 38, 39 et 40 appartiennent au même secteur de coin. Le coup suivant, N7, se trouve à 11 intersections orthogonales du dernier coup et à quatre ou moins d’une pierre amie. Il change de secteur ; l’échange local n’est pas déclaré résolu.",
+    "rubric": "Observer les formes du coin, rechercher les menaces qui restent et les soutiens dans les autres secteurs. Rejouer la continuation plutôt que mémoriser un ordre universel.",
+    "evidence": {
+      "sources": [
+        "cwi:123",
+        "pgd:All/1846-06-02_None_Nakagawa Junsetsu_5p_Yasuda Shusaku_4p_W+R.sgf"
+      ],
+      "alternativeSources": [
+        { "point": 262, "before": 42 },
+        { "point": 224, "before": 44 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 240 },
+        { "color": "W", "point": 239 },
+        { "color": "B", "point": 262 },
+        { "color": "W", "point": 263 },
+        { "color": "B", "point": 224 }
       ]
     }
   },
@@ -4672,6 +5460,37 @@
       "anchorLiberties": 3,
       "resultingSize": 7,
       "resultingLiberties": 6
+    }
+  },
+  {
+    "id": "weak-group:s017:54",
+    "module": "weak-group",
+    "gameId": "s017",
+    "before": 54,
+    "color": "B",
+    "anchors": [110],
+    "historical": 129,
+    "alternatives": [55, 89],
+    "prompt": "Ce groupe a peu de libertés. Faut-il le consolider avant de développer ailleurs ? Comptez les libertés avant et après le coup envisagé.",
+    "observation": "La chaîne de Q14 contient 2 pierres et 3 libertés. Après Q13, la chaîne reliée contient 3 pierres et 5 libertés. L'amélioration est vérifiable, sans conclusion automatique sur sa vie.",
+    "rubric": "Compter les libertés sans les compter deux fois, identifier le renforcement et rechercher la prochaine menace. Comparer la priorité avec une autre hypothèse.",
+    "evidence": {
+      "sources": ["cwi:017"],
+      "alternativeSources": [
+        { "point": 55, "before": 56 },
+        { "point": 89, "before": 58 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 129 },
+        { "color": "W", "point": 74 },
+        { "color": "B", "point": 55 },
+        { "color": "W", "point": 150 },
+        { "color": "B", "point": 89 }
+      ],
+      "anchorSize": 2,
+      "anchorLiberties": 3,
+      "resultingSize": 3,
+      "resultingLiberties": 5
     }
   },
   {
@@ -4768,6 +5587,37 @@
     }
   },
   {
+    "id": "weak-group:s033:24",
+    "module": "weak-group",
+    "gameId": "s033",
+    "before": 24,
+    "color": "W",
+    "anchors": [243],
+    "historical": 262,
+    "alternatives": [111, 129],
+    "prompt": "Ce groupe a peu de libertés. Faut-il le consolider avant de développer ailleurs ? Comptez les libertés avant et après le coup envisagé.",
+    "observation": "La chaîne de Q7 contient 2 pierres et 3 libertés. Après Q6, la chaîne reliée contient 3 pierres et 5 libertés. L'amélioration est vérifiable, sans conclusion automatique sur sa vie.",
+    "rubric": "Compter les libertés sans les compter deux fois, identifier le renforcement et rechercher la prochaine menace. Comparer la priorité avec une autre hypothèse.",
+    "evidence": {
+      "sources": ["cwi:033"],
+      "alternativeSources": [
+        { "point": 111, "before": 26 },
+        { "point": 129, "before": 28 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 262 },
+        { "color": "B", "point": 184 },
+        { "color": "W", "point": 111 },
+        { "color": "B", "point": 110 },
+        { "color": "W", "point": 129 }
+      ],
+      "anchorSize": 2,
+      "anchorLiberties": 3,
+      "resultingSize": 3,
+      "resultingLiberties": 5
+    }
+  },
+  {
     "id": "weak-group:s198:57",
     "module": "weak-group",
     "gameId": "s198",
@@ -4857,6 +5707,37 @@
       "anchorSize": 2,
       "anchorLiberties": 3,
       "resultingSize": 3,
+      "resultingLiberties": 5
+    }
+  },
+  {
+    "id": "weak-group:s047:45",
+    "module": "weak-group",
+    "gameId": "s047",
+    "before": 45,
+    "color": "B",
+    "anchors": [137],
+    "historical": 138,
+    "alternatives": [231, 308],
+    "prompt": "Ce groupe a peu de libertés. Faut-il le consolider avant de développer ailleurs ? Comptez les libertés avant et après le coup envisagé.",
+    "observation": "La chaîne de E12 contient 3 pierres et 3 libertés. Après F12, la chaîne reliée contient 4 pierres et 5 libertés. L'amélioration est vérifiable, sans conclusion automatique sur sa vie.",
+    "rubric": "Compter les libertés sans les compter deux fois, identifier le renforcement et rechercher la prochaine menace. Comparer la priorité avec une autre hypothèse.",
+    "evidence": {
+      "sources": ["cwi:047"],
+      "alternativeSources": [
+        { "point": 231, "before": 47 },
+        { "point": 308, "before": 49 }
+      ],
+      "historicalLine": [
+        { "color": "B", "point": 138 },
+        { "color": "W", "point": 270 },
+        { "color": "B", "point": 231 },
+        { "color": "W", "point": 289 },
+        { "color": "B", "point": 308 }
+      ],
+      "anchorSize": 3,
+      "anchorLiberties": 3,
+      "resultingSize": 4,
       "resultingLiberties": 5
     }
   },
@@ -4954,6 +5835,37 @@
       "anchorLiberties": 3,
       "resultingSize": 3,
       "resultingLiberties": 5
+    }
+  },
+  {
+    "id": "weak-group:s065:77",
+    "module": "weak-group",
+    "gameId": "s065",
+    "before": 77,
+    "color": "W",
+    "anchors": [58],
+    "historical": 39,
+    "alternatives": [210, 195],
+    "prompt": "Ce groupe a peu de libertés. Faut-il le consolider avant de développer ailleurs ? Comptez les libertés avant et après le coup envisagé.",
+    "observation": "La chaîne de B16 contient 2 pierres et 2 libertés. Après B17, la chaîne reliée contient 7 pierres et 7 libertés. L'amélioration est vérifiable, sans conclusion automatique sur sa vie.",
+    "rubric": "Compter les libertés sans les compter deux fois, identifier le renforcement et rechercher la prochaine menace. Comparer la priorité avec une autre hypothèse.",
+    "evidence": {
+      "sources": ["cwi:065"],
+      "alternativeSources": [
+        { "point": 210, "before": 79 },
+        { "point": 195, "before": 81 }
+      ],
+      "historicalLine": [
+        { "color": "W", "point": 39 },
+        { "color": "B", "point": 191 },
+        { "color": "W", "point": 210 },
+        { "color": "B", "point": 172 },
+        { "color": "W", "point": 195 }
+      ],
+      "anchorSize": 2,
+      "anchorLiberties": 2,
+      "resultingSize": 7,
+      "resultingLiberties": 7
     }
   },
   {

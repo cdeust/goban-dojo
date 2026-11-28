@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { Board, POINTS, opposite, pointFromHuman } from '../src/domain/board.ts';
+import { Board, POINTS, neighbours, opposite, pointFromHuman } from '../src/domain/board.ts';
 import { decodeMoves, type Dataset } from '../src/domain/game.ts';
 import {
   exerciseAnswer,
+  countingSolutionPoints,
   emptyRegion,
   extractSchools,
   isMoveModule,
@@ -28,6 +29,9 @@ const data = JSON.parse(
   readFileSync(new URL('../public/data/games.json', import.meta.url), 'utf8'),
 ) as Dataset;
 const games = new Map(data.games.map((g) => [g.id, g]));
+const original = extractSchools(data.games);
+const originalIds = new Set(original.map((ex) => ex.id));
+const initial = catalog.filter((ex) => originalIds.has(ex.id));
 
 describe('Consignes de comptage', () => {
   const point = (label: string) => pointFromHuman(label)!;
@@ -78,12 +82,14 @@ describe('Consignes de comptage', () => {
 });
 
 describe('École basée sur de vrais kifus', () => {
-  it('reproduit exactement les 264 exercices, 24 par module, sur la carrière entière', () => {
-    expect(extractSchools(data.games)).toEqual(catalog);
-    expect(catalog).toHaveLength(264);
+  it('conserve les 264 exercices initiaux et ajoute 24 exercices de transfert', () => {
+    expect(original).toEqual(initial);
+    expect(catalog).toHaveLength(288);
     expect(new Set(catalog.map((e) => e.id)).size).toBe(catalog.length);
     for (const module of SCHOOL_MODULES)
-      expect(catalog.filter((e) => e.module === module.id)).toHaveLength(24);
+      expect(catalog.filter((e) => e.module === module.id)).toHaveLength(
+        module.id === 'liberties' || module.id === 'region-size' ? 36 : 24,
+      );
     expect(new Set(catalog.map((e) => e.gameId)).size).toBeGreaterThanOrEqual(40);
     const years = catalog.map((e) => Number(games.get(e.gameId)!.date.slice(0, 4)));
     expect(Math.min(...years)).toBeLessThanOrEqual(1840);
@@ -94,7 +100,7 @@ describe('École basée sur de vrais kifus', () => {
     const liberty: Record<number, number> = {};
     const borders: Record<number, number> = {};
     const regionSizes: Record<number, number> = {};
-    for (const ex of catalog) {
+    for (const ex of initial) {
       const game = games.get(ex.gameId)!;
       expect(game.sources.length).toBeGreaterThan(0);
       const board = schoolPosition(game, ex.before);
@@ -159,6 +165,38 @@ describe('École basée sur de vrais kifus', () => {
     expect(legality).toEqual({ legal: 12, ko: 6, suicide: 6 });
     expect(borders).toEqual({ 1: 8, 2: 8, 3: 8 });
     expect(regionSizes).toEqual({ 1: 4, 2: 4, 3: 4, 4: 4, 5: 4, 6: 4 });
+  });
+  it('valide les nouveaux exercices : double comptage discriminant et zones mixtes', () => {
+    const extras = catalog.filter((ex) => !originalIds.has(ex.id));
+    expect(extras.filter((e) => e.module === 'liberties')).toHaveLength(12);
+    expect(extras.filter((e) => e.module === 'region-size')).toHaveLength(12);
+    for (const ex of extras) {
+      const board = schoolPosition(games.get(ex.gameId)!, ex.before);
+      const points = countingSolutionPoints(board, ex);
+      expect(points.length).toBeGreaterThanOrEqual(2);
+      expect(new Set(points).size).toBe(points.length);
+      expect(points.every((p) => board.get(p) === null)).toBe(true);
+      const win = schoolWindow(board, ex);
+      for (const p of points) {
+        expect(p % 19).toBeGreaterThanOrEqual(win.x);
+        expect(p % 19).toBeLessThan(win.x + win.size);
+        expect(Math.floor(p / 19)).toBeGreaterThanOrEqual(win.y);
+        expect(Math.floor(p / 19)).toBeLessThan(win.y + win.size);
+      }
+      expect(exerciseAnswer(board, ex, points.length)).toBe(true);
+      if (ex.module === 'liberties') {
+        const mistaken = board
+          .stonesOf(ex.anchors[0]!)
+          .flatMap(neighbours)
+          .filter((p) => board.get(p) === null).length;
+        expect(mistaken).toBeGreaterThan(points.length);
+        expect(mistaken).toBeLessThanOrEqual(6);
+        expect(exerciseAnswer(board, ex, mistaken)).toBe(false);
+      } else {
+        expect(emptyRegion(board, ex.candidate!).border.size).toBe(2);
+        expect(points).toContain(ex.candidate);
+      }
+    }
   });
   it('conserve la réussite de transfert initiale et personnalise les recommandations même à nombre de résultats égal', () => {
     const day = 20_000;
