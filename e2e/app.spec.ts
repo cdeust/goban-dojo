@@ -692,6 +692,28 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
       }
     });
     observer.observe(live, { childList: true, characterData: true, subtree: true });
+
+    // Journaliser les transitions réelles, même si un clic Playwright dure
+    // plus longtemps qu'une variante sur un runner au rendu logiciel.
+    const seen: string[] = [];
+    const record = (value: string | null) => {
+      if (value && value !== seen.at(-1)) seen.push(value);
+    };
+    const branches = new MutationObserver((changes) => {
+      const frames = changes.filter(({ target }) =>
+        (target as Element).matches('.simulation__view'),
+      );
+      for (const frame of frames) record(frame.oldValue);
+      record((frames.at(-1)?.target as Element | undefined)?.getAttribute('data-branch') ?? null);
+      document.body.dataset.simulatedBranches = seen.join(',');
+      if (seen.includes('10')) branches.disconnect();
+    });
+    branches.observe(document.body, {
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: ['data-branch'],
+      subtree: true,
+    });
   });
   await page.getByRole('button', { name: 'Lecture', exact: true }).click();
   const simulation = page.locator('.simulation');
@@ -719,8 +741,18 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   );
   await expect(slider).toHaveValue('86');
   await simulation.getByRole('button', { name: 'Pause des variantes' }).click();
+  await expect(simulation.getByRole('button', { name: 'Lire les variantes' })).toBeVisible();
+  // La pause peut tomber entre deux variantes, quand aucun coup n'est
+  // affiché. Avancer d'un coup en restant en pause avant la comparaison.
+  if ((await variant.getAttribute('data-step')) === '0') {
+    await simulation
+      .getByRole('button', { name: 'Coup simulé suivant' })
+      .click({ timeout: 60_000 });
+  }
+  await expect(variant).toHaveAttribute('data-step', /^(?:[1-9]|1[0-9]|20)$/);
   const pausedStep = await variant.getAttribute('data-step');
   const compare = simulation.getByRole('button', { name: 'Position initiale' });
+  await expect(compare).toBeEnabled();
   await compare.click();
   await expect(compare).toHaveAttribute('aria-pressed', 'true');
   await expect(variant).toHaveAttribute('data-step', '0');
@@ -731,8 +763,17 @@ test('les simulations se succèdent sur le même goban puis la réponse ouvre sa
   await expect(variant).toContainText(`Coup simulé ${86 + Number(pausedStep)} ·`);
   await expect(simulation.getByRole('button', { name: 'Coup simulé suivant' })).toBeVisible();
   await simulation.getByRole('button', { name: 'Lire les variantes' }).click();
+  const body = page.locator('body');
   for (let i = 2; i <= 10; i++) {
-    await expect(variant).toHaveAttribute('data-branch', String(i), { timeout: 60_000 });
+    const sequence = Array.from({ length: i }, (_, index) => String(index + 1));
+    await expect
+      .poll(
+        async () => (await body.getAttribute('data-simulated-branches'))?.split(',').slice(0, i),
+        {
+          timeout: 60_000,
+        },
+      )
+      .toEqual(sequence);
   }
   await expect(simulation.getByRole('heading')).toContainText('Blanc · avant le coup 88', {
     timeout: 90_000,
