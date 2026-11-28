@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { pointToHuman } from '../src/domain/board.ts';
 import { decodeMoves, type Dataset } from '../src/domain/game.ts';
-import { emptyRegion, isMoveModule, schoolPosition } from '../src/domain/school.ts';
+import { emptyRegion, isMoveModule, schoolPosition, schoolQuestion } from '../src/domain/school.ts';
 import { safeEyes } from '../src/domain/advancedTactics.ts';
 import {
   activeRankAttempt,
@@ -85,6 +85,25 @@ function pass(progress: RankProgress, form: RankForm, day: number, skips = 0) {
 }
 
 describe('Épreuves historiques réservées', () => {
+  it('explicite le dernier coup et le point inclus dans les deux questions historiques signalées', () => {
+    const form = RANK_FORMS.find((f) => f.id === 'initiation-3')!;
+    const ko = form.items[6]!;
+    const region = form.items[7]!;
+    if (ko.kind !== 'school' || region.kind !== 'school') throw new Error('Épreuve modifiée');
+    const koGame = game(ko);
+    const koBoard = schoolPosition(koGame, ko.exercise.before);
+    expect(schoolQuestion(koBoard, ko.exercise, koGame)).toContain(
+      'Au dernier coup (n°60), Blanc a joué en D10 et a capturé la pierre en E10. Aucun coup n’a été joué depuis.',
+    );
+    expect(gradeRule(ko, koGame, false).correct).toBe(true);
+    const regionGame = game(region);
+    const regionBoard = schoolPosition(regionGame, region.exercise.before);
+    expect(schoolQuestion(regionBoard, region.exercise, regionGame)).toContain(
+      'T3 ? Comptez aussi ce point (marqué « ? »), une seule fois.',
+    );
+    expect(gradeRule(region, regionGame, 6).correct).toBe(true);
+    expect(gradeRule(region, regionGame, 5).correct).toBe(false);
+  });
   it('couvre quatre objectifs, quatre formulaires par jalon, huit parties distinctes et aucun kifu scolaire ou micro-leçon', () => {
     expect(RANK_FORMS).toHaveLength(16);
     const reserved = RANK_FORMS.flatMap((f) => f.items.map((item) => item.exercise.gameId));

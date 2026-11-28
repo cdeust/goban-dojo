@@ -222,14 +222,14 @@ export function exerciseAnswer(board: Board, ex: SchoolExercise, answer: SchoolA
 }
 
 const pointsLabel = (points: readonly number[]) => points.map(pointToHuman).join(', ');
-export function schoolQuestion(board: Board, ex: SchoolExercise): string {
+export function schoolQuestion(board: Board, ex: SchoolExercise, game?: GameRecord): string {
   const stones = pointsLabel(ex.anchors);
   const player = ex.color === 'B' ? 'Noir' : 'Blanc';
   switch (ex.module) {
     case 'region-border':
       return `Quelles pierres touchent la zone vide qui part de ${pointToHuman(ex.candidate!)} : des pierres noires, blanches ou des deux couleurs ?`;
     case 'region-size':
-      return `Combien de points vides compte la zone qui part de ${pointToHuman(ex.candidate!)} ? Comptez aussi ce point.`;
+      return `Combien de points vides compte la zone qui part de ${pointToHuman(ex.candidate!)} ? Comptez aussi ce point (marqué « ? »), une seule fois.`;
     case 'liberties':
       return `Combien de libertés a la chaîne qui contient la pierre en ${pointToHuman(ex.anchors[0]!)} ?`;
     case 'capture-one':
@@ -246,8 +246,19 @@ export function schoolQuestion(board: Board, ex: SchoolExercise): string {
       return `Mettez simultanément les deux groupes en ${stones} en atari, sans les capturer. ${player} au trait.`;
     case 'capture-sequence':
       return `Forcez la capture du groupe en ${stones} en trois demi-coups (votre coup, sa défense, votre capture). ${player} au trait.`;
-    case 'legality':
-      return `${player} peut-il jouer légalement en ${pointToHuman(ex.candidate!)} dans la position affichée (ko simple) ?`;
+    case 'legality': {
+      if (!game || game.id !== ex.gameId || ex.before < 1)
+        throw new Error('La question de légalité exige le dernier coup du kifu.');
+      const last = decodeMoves(game.moves)[ex.before - 1]!;
+      const prior = schoolPosition(game, ex.before - 1);
+      const { captures } = prior.play(last.color, last.point);
+      const previousPlayer = last.color === 'B' ? 'Noir' : 'Blanc';
+      const action = last.point === PASS ? 'a passé' : `a joué en ${pointToHuman(last.point)}`;
+      const capture = captures.length
+        ? ` et a capturé ${captures.length === 1 ? 'la pierre' : 'les pierres'} en ${pointsLabel(captures)}`
+        : ' sans capturer de pierre';
+      return `Au dernier coup (n°${ex.before}), ${previousPlayer} ${action}${capture}. Aucun coup n’a été joué depuis. ${player} peut-il maintenant jouer légalement en ${pointToHuman(ex.candidate!)} (règle du ko simple) ?`;
+    }
   }
 }
 
