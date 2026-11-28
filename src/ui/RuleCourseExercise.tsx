@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { opposite, pointFromHuman, pointToHuman } from '../domain/board.ts';
+import { opposite, pointFromHuman, pointToHuman, PASS } from '../domain/board.ts';
 import { decodeMoves, type GameRecord, type Move } from '../domain/game.ts';
 import { schoolPosition } from '../domain/school.ts';
 import {
@@ -14,6 +14,7 @@ import {
   ladderContinuation,
   type AdvancedTacticExercise,
 } from '../domain/advancedTactics.ts';
+import { lifeReadingProof, lifeFinishes, certifiedEyes } from '../domain/lifeReading.ts';
 import { ENDGAME_MODULES, judgeEndgame, type EndgameExercise } from '../domain/endgameCourse.ts';
 import type { SchoolGrade } from '../domain/schoolProgress.ts';
 import { prettyName } from '../story/format.ts';
@@ -49,6 +50,7 @@ export function RuleCourseExercise({
   const snapback = !endgame && ex.module === 'snapback';
   const ladder = !endgame && ex.module === 'ladder';
   const longLadder = !endgame && ex.module === 'long-ladder';
+  const lifeInTwo = !endgame && ex.module === 'life-in-two';
   const [attempted, setAttempted] = useState(false);
   const [result, setResult] = useState<SchoolGrade | null>(null);
   const [feedback, setFeedback] = useState('');
@@ -93,6 +95,34 @@ export function RuleCourseExercise({
         return;
       }
       fail();
+      return;
+    }
+    if (lifeInTwo && typeof value === 'number') {
+      const target = ex.anchors[0]!;
+      if (!line.length) {
+        const proof = lifeReadingProof(board, ex.color, target, value);
+        if (!proof) {
+          fail();
+          return;
+        }
+        setLine([
+          { color: ex.color, point: value },
+          { color: opposite(ex.color), point: proof.reply },
+        ]);
+        setCoordinate('');
+        setFeedback(
+          `Premier coup correct. ${proof.reply === PASS ? 'L’adversaire passe.' : `Défense en ${pointToHuman(proof.reply)}.`} Formez maintenant deux yeux sûrs.`,
+        );
+        return;
+      }
+      const defended = board.clone();
+      for (const move of line) defended.play(move.color, move.point);
+      if (!lifeFinishes(defended, ex.color, target).includes(value)) {
+        fail();
+        return;
+      }
+      setLine([...line, { color: ex.color, point: value }]);
+      complete(line[0]!.point, attempted ? 'assisted' : 'exact');
       return;
     }
     if (longLadder && typeof value === 'number') {
@@ -163,7 +193,7 @@ export function RuleCourseExercise({
         { color: opposite(ex.color), point: proof.reply },
         { color: ex.color, point: proof.finish },
       ]);
-    } else if ((ladder || longLadder) && ex.line) {
+    } else if ((ladder || longLadder || lifeInTwo) && ex.line) {
       setLine(
         ex.line.map((point, index) => ({
           point,
@@ -198,7 +228,9 @@ export function RuleCourseExercise({
           {
             ...ex,
             candidate: moving ? (line[0]?.point ?? candidate) : ex.candidate,
-            ...((ladder || longLadder) && line.length ? { line: line.map((m) => m.point) } : {}),
+            ...((ladder || longLadder || lifeInTwo) && line.length
+              ? { line: line.map((m) => m.point) }
+              : {}),
           },
           historical.point,
         );
@@ -232,9 +264,11 @@ export function RuleCourseExercise({
             ? 'Reprenez les pierres adverses.'
             : longLadder && line.length > 0 && !result
               ? 'Poursuivez la capture en escalier.'
-              : endgame
-                ? ex.question
-                : advancedTacticQuestion(board, ex)}
+              : lifeInTwo && line.length > 0 && !result
+                ? 'Formez maintenant deux yeux sûrs.'
+                : endgame
+                  ? ex.question
+                  : advancedTacticQuestion(board, ex)}
         </h2>
       </div>
       <div className="school-exercise__board">
@@ -248,6 +282,11 @@ export function RuleCourseExercise({
           game={game}
           before={ex.before}
           anchors={ex.anchors}
+          solutionPoints={
+            lifeInTwo && result && played.length === line.length
+              ? certifiedEyes(resultBoard, ex.anchors[0]!)
+              : undefined
+          }
           candidate={endgame ? ex.candidate : undefined}
           windowPoints={
             moving
