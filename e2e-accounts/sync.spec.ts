@@ -85,7 +85,7 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await one.getByRole('button', { name: '4', exact: true }).click();
     await expect(one.getByRole('status')).toContainText('Réussi sans aide');
     await one.getByRole('button', { name: '← Programme' }).click();
-    await expect(one.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await expect(one.getByText('1 / 804', { exact: false }).first()).toBeVisible();
     await expect(one.getByText('Progression synchronisée')).toBeVisible();
     await one.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
     await one.getByRole('button', { name: 'Passer l’épreuve : Initiation' }).click();
@@ -98,13 +98,13 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     const two = await second.newPage();
     await two.emulateMedia({ reducedMotion: 'reduce' });
     await signIn(two, emails[0]!);
-    await expect(two.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await expect(two.getByText('1 / 804', { exact: false }).first()).toBeVisible();
     await two.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
     await expect(two.getByRole('region', { name: 'Question 2', exact: true })).toBeVisible();
     await two.getByRole('button', { name: '← Programme' }).click();
     await two.getByRole('button', { name: 'Retour au dojo' }).click();
     const guided = two.getByRole('region', { name: 'Ma prochaine séance' });
-    await expect(guided).toContainText('1 / 748 exercices travaillés');
+    await expect(guided).toContainText('1 / 804 exercices travaillés');
     await expect(guided).toContainText('Niveau conseillé : 1 / 9');
     await guided.getByRole('button', { name: 'Reprendre mon épreuve' }).click();
     await expect(two.getByRole('region', { name: 'Question 2', exact: true })).toBeVisible();
@@ -121,7 +121,7 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await expect(two.getByRole('status')).toContainText('Votre progression n’a pas changé');
     await two.getByLabel('Restaurer une sauvegarde de l’école').setInputFiles(backup);
     await two.getByRole('button', { name: 'Remplacer la progression' }).click();
-    await expect(two.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await expect(two.getByText('1 / 804', { exact: false }).first()).toBeVisible();
     await expect(two.getByText('Progression synchronisée')).toBeVisible();
     await two.goto('/?partie=s126&coup=126');
     await expect(two.getByRole('region', { name: 'Explorer une autre suite' })).toBeVisible();
@@ -133,7 +133,7 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     const three = await third.newPage();
     await three.emulateMedia({ reducedMotion: 'reduce' });
     await signIn(three, emails[1]!);
-    await expect(three.getByText('0 / 748', { exact: false }).first()).toBeVisible();
+    await expect(three.getByText('0 / 804', { exact: false }).first()).toBeVisible();
     await three.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
     await expect(three.getByText('Aucune épreuve passée.')).toBeVisible();
     await three.getByRole('button', { name: '← Programme' }).click();
@@ -142,7 +142,7 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await three.getByRole('button', { name: 'Continuer en visiteur' }).click();
     await three.getByRole('button', { name: 'Entrer au dojo' }).click();
     await three.getByRole('button', { name: 'Entrer dans l’école' }).click();
-    await expect(three.getByText('0 / 748', { exact: false }).first()).toBeVisible();
+    await expect(three.getByText('0 / 804', { exact: false }).first()).toBeVisible();
     await expect(three.getByRole('button', { name: 'Exporter la progression' })).toBeDisabled();
     for (const page of [one, two, three]) checkGateway(page);
   } finally {
