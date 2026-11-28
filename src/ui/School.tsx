@@ -1,3 +1,6 @@
+import { RankAssessment } from './RankAssessment.tsx';
+import { RANK_FORMS } from '../story/rankCatalog.ts';
+import { validateRankProgress } from '../domain/rankAssessment.ts';
 import { AccountControls } from './AccountControls.tsx';
 import { progressSession } from '../state/sessionProgress.ts';
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
@@ -356,6 +359,7 @@ export function School() {
     () => useStore.getState().schoolStartExercise,
   );
   const [training, setTraining] = useState(false);
+  const [assessing, setAssessing] = useState(false);
   const [counting, setCounting] = useState(false);
   const [session, setSession] = useState(0);
   const [saved, setSaved] = useState(true);
@@ -396,7 +400,11 @@ export function School() {
     setRestore(null);
     try {
       const next = file.size > 1_000_000 ? null : decodeSchoolProgress(await file.text());
-      if (!next || next.records.some((r) => !catalog.some((e) => e.id === r.id))) {
+      if (
+        !next ||
+        next.records.some((r) => !catalog.some((e) => e.id === r.id)) ||
+        (next.assessment && !validateRankProgress(next.assessment, RANK_FORMS, games ?? []))
+      ) {
         setMessage('Fichier invalide pour ce catalogue. Votre progression n’a pas changé.');
         return;
       }
@@ -437,7 +445,31 @@ export function School() {
           <AccountControls />
         </div>
       </header>
-      {counting ? (
+      {assessing ? (
+        <RankAssessment
+          games={games ?? []}
+          progress={progress.assessment}
+          onChange={(assessment) => persist({ ...progress, assessment })}
+          onBack={() => {
+            setAssessing(false);
+            scroller.current?.scrollTo({ top: 0 });
+          }}
+          onReview={(module) => {
+            const items = catalog.filter((item) => item.module === module);
+            const activity =
+              items.find((item) => {
+                const record = schoolRecord(progress, item.id);
+                return record && record.due <= today;
+              }) ??
+              items.find((item) => !schoolRecord(progress, item.id)) ??
+              items[0];
+            if (activity) {
+              setAssessing(false);
+              open(activity);
+            }
+          }}
+        />
+      ) : counting ? (
         <JapaneseCountWorkshop
           games={games ?? []}
           onBack={() => {
@@ -548,6 +580,24 @@ export function School() {
               d’incertitude de KataGo, pas une solution unique. Les niveaux du dojo ne sont pas des
               grades kyu ou dan.
             </p>
+          </section>
+          <section className="school-welcome" aria-labelledby="rank-heading">
+            <p className="chapter__index">Évaluation · Objectifs kyū et dan</p>
+            <h2 id="rank-heading">Mes épreuves de progression</h2>
+            <p>
+              Mesurez vos acquis sur des positions réservées, sans indice ni résultat avant la fin.
+              Les jalons de préparation sont distincts des grades officiels.
+            </p>
+            <button
+              className="chip chip--accent"
+              type="button"
+              onClick={() => {
+                setAssessing(true);
+                scroller.current?.scrollTo({ top: 0 });
+              }}
+            >
+              Ouvrir mes évaluations
+            </button>
           </section>
           <section className="school-welcome" aria-labelledby="training-heading">
             <p className="chapter__index">Cycle d’application · Partie complète</p>

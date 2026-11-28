@@ -69,6 +69,11 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await one.getByRole('button', { name: '← Programme' }).click();
     await expect(one.getByText('1 / 748', { exact: false }).first()).toBeVisible();
     await expect(one.getByText('Progression synchronisée')).toBeVisible();
+    await one.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
+    await one.getByRole('button', { name: 'Passer l’épreuve : Initiation' }).click();
+    await one.getByRole('button', { name: 'Passer cette question' }).click();
+    await expect(one.getByRole('region', { name: 'Question 2', exact: true })).toBeVisible();
+    await expect(one.getByText('Progression synchronisée')).toBeVisible();
     // A truly separate browser context, with no copied browser storage.
     const second = await browser.newContext();
     contexts.push(second);
@@ -76,6 +81,9 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await two.emulateMedia({ reducedMotion: 'reduce' });
     await signIn(two, emails[0]!);
     await expect(two.getByText('1 / 748', { exact: false }).first()).toBeVisible();
+    await two.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
+    await expect(two.getByRole('region', { name: 'Question 2', exact: true })).toBeVisible();
+    await two.getByRole('button', { name: '← Programme' }).click();
     await two.getByRole('button', { name: 'Retour au dojo' }).click();
     const guided = two.getByRole('region', { name: 'Ma prochaine séance' });
     await expect(guided).toContainText('1 / 748 exercices travaillés');
@@ -101,6 +109,9 @@ test('une progression réelle est retrouvée sur un autre navigateur, mais pas s
     await three.emulateMedia({ reducedMotion: 'reduce' });
     await signIn(three, emails[1]!);
     await expect(three.getByText('0 / 748', { exact: false }).first()).toBeVisible();
+    await three.getByRole('button', { name: 'Ouvrir mes évaluations' }).click();
+    await expect(three.getByText('Aucune épreuve passée.')).toBeVisible();
+    await three.getByRole('button', { name: '← Programme' }).click();
     await three.getByRole('button', { name: 'Se déconnecter' }).click();
     await expect(three.getByRole('heading', { name: 'Retrouver ma progression' })).toBeVisible();
     await three.getByRole('button', { name: 'Continuer en visiteur' }).click();
