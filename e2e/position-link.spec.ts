@@ -38,10 +38,12 @@ test('un lien mobile ouvre une position jouable, sans exiger le coup du kifu', a
     camera.updateMatrixWorld();
     const [x, z] = pointToWorld(pointFromHuman('G4')!);
     const projected = new Vector3(x, BOARD_TOP, z).project(camera);
-    await page.touchscreen.tap(
-      box.x + ((projected.x + 1) * box.width) / 2,
-      box.y + ((1 - projected.y) * box.height) / 2,
-    );
+    await canvas.tap({
+      position: {
+        x: ((projected.x + 1) * box.width) / 2,
+        y: ((1 - projected.y) * box.height) / 2,
+      },
+    });
     await expect(live).toContainText('Exploration, coup 127 : Noir G4.');
     await expect(panel).toContainText('Dans la partie, noir a joué K11');
     await panel.getByRole('button', { name: 'Revenir à la partie' }).click();
